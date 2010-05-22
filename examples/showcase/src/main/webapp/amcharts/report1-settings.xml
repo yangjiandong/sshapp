@@ -1,0 +1,112 @@
+<settings>
+	<data_type>csv</data_type>
+	<font>Tahoma</font>
+	<text_size>15</text_size>
+	<hide_bullets_count>30</hide_bullets_count>
+	<decimals_separator>.</decimals_separator>
+	<background>
+		<border_color>#000000</border_color>
+		<border_alpha>10</border_alpha>
+	</background>
+
+	<plot_area>
+		<margins>
+			<left>50</left>
+			<top>60</top>
+			<right>40</right>
+			<bottom>65</bottom>
+		</margins>
+	</plot_area>
+
+	<grid>
+		<x>
+			<alpha>10</alpha>
+			<approx_count>9</approx_count>
+		</x>
+		<y_left>
+			<alpha>10</alpha>
+			<fill_color>000000</fill_color>
+			<fill_alpha>5</fill_alpha>
+		</y_left>
+	</grid>
+
+	<values>
+		<y_left>
+			<unit>亿</unit>
+		</y_left>
+	</values>
+
+	<axes>
+		<x>
+			<color>#0D8ECF</color>
+			<width>1</width>
+		</x>
+		<y_left>
+			<color>#0D8ECF</color>
+			<width>1</width>
+		</y_left>
+	</axes>
+
+	<indicator>
+		<color>#0D8ECF</color>
+		<line_alpha>50</line_alpha>
+		<selection_color>#0D8ECF</selection_color>
+		<selection_alpha>20</selection_alpha>
+		<x_balloon_text_color>#FFFFFF</x_balloon_text_color>
+	</indicator>
+
+	<legend>
+		<text_color_hover>#FF6600</text_color_hover>
+	</legend>
+
+	<zoom_out_button>
+		<text_color_hover>#FF6600</text_color_hover>
+	</zoom_out_button>
+
+	<labels>
+		<label>
+			<x>0</x>
+			<y>25</y>
+			<align>center</align>
+			<text_size></text_size>
+			<text>
+				<![CDATA[<b>Temperature anomaly</b>]]>
+			</text>
+		</label>
+
+		<label>
+			<x>0</x>
+			<y>390</y>
+			<width>607</width>
+			<align>right</align>
+			<text_color>#999999</text_color>
+			<text_size>12</text_size>
+			<text>
+				<![CDATA[Amcharts曲线图演示]]>
+			</text>
+		</label>
+	</labels>
+
+
+	<graphs>
+		<graph gid="1">
+			<title>Anomaly</title>
+			<unit>C</unit>
+			<color>#0D8ECF</color>
+			<color_hover>#FF6600</color_hover>
+			<line_width>2</line_width>
+			<bullet>round_outline</bullet>
+			<selected>true</selected>
+		</graph>
+
+		<graph gid="2">
+			<title>Smoothed</title>
+			<unit>C</unit>
+			<color>#B0DE09</color>
+			<color_hover>#FF6600</color_hover>
+			<line_width>2</line_width>
+			<fill_alpha>30</fill_alpha>
+			<selected>false</selected>
+		</graph>
+	</graphs>
+</settings>

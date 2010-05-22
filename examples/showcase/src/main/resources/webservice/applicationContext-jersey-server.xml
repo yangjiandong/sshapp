@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+	default-lazy-init="true">
+
+	<description>Jersey的REST配置</description>
+
+	<!-- REST的实现Bean -->
+	<bean id="userResourceService" class="org.springside.examples.showcase.rs.server.UserResourceService" />
+</beans>

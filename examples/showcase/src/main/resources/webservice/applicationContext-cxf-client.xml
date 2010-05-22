@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:cxf="http://cxf.apache.org/core"
+	xsi:schemaLocation="http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+	default-lazy-init="true">
+
+	<description>Apache CXF Web Service Client端配置</description>
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+
+	<!-- 使用WS-Security中的明文密码认证机制的客户端 -->
+	<jaxws:client id="userServiceWithPlainPassword" serviceClass="org.springside.examples.showcase.ws.server.UserWebService"
+		address="http://localhost:8080/showcase/services/UserServiceWithPlainPassword">
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+				<property name="properties">
+					<map>
+						<entry key="action" value="UsernameToken" />
+						<entry key="user" value="admin" />
+						<entry key="passwordType" value="PasswordText" />
+						<entry key="passwordCallbackRef" value-ref="passwordCallback" />
+					</map>
+				</property>
+			</bean>
+		</jaxws:outInterceptors>
+	</jaxws:client>
+
+	<!-- 使用WS-Security中的Digest密码认证机制的客户端, 不使用本XML直接在代码中直接定义. -->
+
+	<!-- 使用WS-Security中的明文密码认证机制访问与SpringSecurity结合EndPoint的客户端 -->
+	<jaxws:client id="userServiceWithSpringSecurity" serviceClass="org.springside.examples.showcase.ws.server.UserWebService"
+		address="http://localhost:8080/showcase/services/UserServiceWithSpringSecurity">
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor">
+				<property name="properties">
+					<map>
+						<entry key="action" value="UsernameToken" />
+						<entry key="user" value="admin" />
+						<entry key="passwordType" value="PasswordText" />
+						<entry key="passwordCallbackRef" value-ref="passwordCallback" />
+					</map>
+				</property>
+			</bean>
+		</jaxws:outInterceptors>
+	</jaxws:client>
+
+	<!-- 客户端密码配置Bean定义 -->
+	<bean id="passwordCallback" class="org.springside.examples.showcase.ws.client.PasswordCallback" />
+</beans>

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project name="showcase" resourceRoot="" soapui-version="2.5.1" xmlns:con="http://eviware.com/soapui/config"><con:settings><con:setting id="ProjectSettings@projectRoot">C:\Users\ehuaxio\Documents\Springside3\examples\showcase\src\test\soapui</con:setting></con:settings><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="UserServiceSoapBinding" type="wsdl" bindingName="{http://showcase.examples.springside.org}UserServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8080/showcase/services/UserServiceWithDigestPassword?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8080/showcase/services/UserServiceWithDigestPassword?wsdl"><con:part><con:url>http://localhost:8080/showcase/services/UserServiceWithDigestPassword?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="UserService" targetNamespace="http://showcase.examples.springside.org" xmlns:ns1="http://cxf.apache.org/bindings/xformat" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://showcase.examples.springside.org" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xs:schema elementFormDefault="unqualified" targetNamespace="http://showcase.examples.springside.org" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="getAllUser" type="tns:getAllUser"/>
+      <xs:element name="getAllUserResponse" type="tns:getAllUserResponse"/>
+      <xs:complexType name="getAllUser">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="getAllUserResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:GetAllUserResult"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GetAllUserResult">
+        <xs:complexContent>
+          <xs:extension base="tns:WSResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="userList">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" minOccurs="0" name="user" type="tns:User"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="WSResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="code" type="xs:string"/>
+          <xs:element minOccurs="0" name="message" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="User">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="id" type="xs:long"/>
+          <xs:element minOccurs="0" name="loginName" type="xs:string"/>
+          <xs:element minOccurs="0" name="name" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getAllUser">
+    <wsdl:part element="tns:getAllUser" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getAllUserResponse">
+    <wsdl:part element="tns:getAllUserResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="UserService">
+    <wsdl:operation name="getAllUser">
+      <wsdl:input message="tns:getAllUser" name="getAllUser"></wsdl:input>
+      <wsdl:output message="tns:getAllUserResponse" name="getAllUserResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="UserServiceSoapBinding" type="tns:UserService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getAllUser">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getAllUser">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getAllUserResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="UserService">
+    <wsdl:port binding="tns:UserServiceSoapBinding" name="UserServicePort">
+      <soap:address location="http://localhost:8080/showcase/services/UserServiceWithDigestPassword"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/showcase/services/UserServiceWithPlainPassword</con:endpoint><con:endpoint>http://localhost:8080/showcase/services/UserServiceWithDigestPassword</con:endpoint></con:endpoints><con:operation isOneWay="false" action="" name="getAllUser" bindingOperationName="getAllUser" type="Request-Response" outputName="getAllUserResponse" inputName="getAllUser" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="RequestWithPlainPassword" wssPasswordType="PasswordText"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/showcase/services/UserServiceWithPlainPassword</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:show="http://showcase.examples.springside.org">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <show:getAllUser/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:username>admin</con:username><con:password>admin</con:password></con:credentials><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://showcase.examples.springside.org/UserService/getAllUser"/></con:call><con:call name="RequestWithDigestPassword" wssPasswordType="PasswordDigest"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/showcase/services/UserServiceWithDigestPassword</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:show="http://showcase.examples.springside.org">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <show:getAllUser/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:username>admin</con:username><con:password>admin</con:password></con:credentials><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://showcase.examples.springside.org/UserService/getAllUser"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="LittleImageServiceSoapBinding" type="wsdl" bindingName="{http://showcase.examples.springside.org}LittleImageServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8080/showcase/services/LittleImageService?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8080/showcase/services/LittleImageService?wsdl"><con:part><con:url>http://localhost:8080/showcase/services/LittleImageService?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="LittleImageService" targetNamespace="http://showcase.examples.springside.org" xmlns:ns1="http://cxf.apache.org/bindings/xformat" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://showcase.examples.springside.org" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xs:schema elementFormDefault="unqualified" targetNamespace="http://showcase.examples.springside.org" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="getImage" type="tns:getImage"/>
+      <xs:element name="getImageResponse" type="tns:getImageResponse"/>
+      <xs:complexType name="getImage">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="getImageResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:GetLittleImageResult"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="GetLittleImageResult">
+        <xs:complexContent>
+          <xs:extension base="tns:WSResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="imageData" type="xs:base64Binary"/>
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="WSResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="code" type="xs:string"/>
+          <xs:element minOccurs="0" name="message" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getImage">
+    <wsdl:part element="tns:getImage" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getImageResponse">
+    <wsdl:part element="tns:getImageResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="LittleImageWebService">
+    <wsdl:operation name="getImage">
+      <wsdl:input message="tns:getImage" name="getImage"></wsdl:input>
+      <wsdl:output message="tns:getImageResponse" name="getImageResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="LittleImageServiceSoapBinding" type="tns:LittleImageWebService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getImage">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getImage">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getImageResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="LittleImageService">
+    <wsdl:port binding="tns:LittleImageServiceSoapBinding" name="LittleImageServicePort">
+      <soap:address location="http://localhost:8080/showcase/services/LittleImageService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/showcase/services/LittleImageService</con:endpoint></con:endpoints><con:operation isOneWay="false" action="" name="getImage" bindingOperationName="getImage" type="Request-Response" outputName="getImageResponse" inputName="getImage" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/showcase/services/LittleImageService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:show="http://showcase.examples.springside.org">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <show:getImage/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://showcase.examples.springside.org/LittleImageWebService/getImage"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="LargeImageServiceSoapBinding" type="wsdl" bindingName="{http://showcase.examples.springside.org}LargeImageServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8080/showcase/services/LargeImageService?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8080/showcase/services/LargeImageService?wsdl"><con:part><con:url>http://localhost:8080/showcase/services/LargeImageService?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="LargeImageService" targetNamespace="http://showcase.examples.springside.org" xmlns:ns1="http://cxf.apache.org/bindings/xformat" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://showcase.examples.springside.org" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <xs:schema elementFormDefault="unqualified" targetNamespace="http://showcase.examples.springside.org" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="getImage" type="tns:getImage"/>
+      <xs:element name="getImageResponse" type="tns:getImageResponse"/>
+      <xs:complexType name="getImage">
+        <xs:sequence/>
+      </xs:complexType>
+      <xs:complexType name="getImageResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:LargeImageResult"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="LargeImageResult">
+        <xs:complexContent>
+          <xs:extension base="tns:WSResult">
+            <xs:sequence>
+              <xs:element minOccurs="0" name="imageData" ns1:expectedContentTypes="application/octet-stream" type="xs:base64Binary" xmlns:ns1="http://www.w3.org/2005/05/xmlmime"/>
+            </xs:sequence>
+          </xs:extension>
+        </xs:complexContent>
+      </xs:complexType>
+      <xs:complexType name="WSResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="code" type="xs:string"/>
+          <xs:element minOccurs="0" name="message" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getImage">
+    <wsdl:part element="tns:getImage" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getImageResponse">
+    <wsdl:part element="tns:getImageResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="LargeImageWebService">
+    <wsdl:operation name="getImage">
+      <wsdl:input message="tns:getImage" name="getImage"></wsdl:input>
+      <wsdl:output message="tns:getImageResponse" name="getImageResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="LargeImageServiceSoapBinding" type="tns:LargeImageWebService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getImage">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getImage">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getImageResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="LargeImageService">
+    <wsdl:port binding="tns:LargeImageServiceSoapBinding" name="LargeImageServicePort">
+      <soap:address location="http://localhost:8080/showcase/services/LargeImageService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://localhost:8080/showcase/services/LargeImageService</con:endpoint></con:endpoints><con:operation isOneWay="false" action="" name="getImage" bindingOperationName="getImage" type="Request-Response" outputName="getImageResponse" inputName="getImage" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/showcase/services/LargeImageService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:show="http://showcase.examples.springside.org">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <show:getImage/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://showcase.examples.springside.org/LargeImageWebService/getImage"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/></con:soapui-project>

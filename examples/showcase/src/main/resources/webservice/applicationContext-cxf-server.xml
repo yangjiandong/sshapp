@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:cxf="http://cxf.apache.org/core"
+	xsi:schemaLocation="http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+	default-lazy-init="true">
+
+	<description>Apache CXF Web Service服务端配置</description>
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+
+	<!-- jax-ws endpoint定义  -->
+	<!-- 使用WS-Security中的明文密码认证机制的Endpoint -->
+	<jaxws:endpoint id="userServiceWithPlainPasswordEP" address="/UserServiceWithPlainPassword">
+		<jaxws:implementor ref="userWebService" />
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<property name="properties">
+					<map>
+						<entry key="action" value="UsernameToken" />
+						<entry key="passwordType" value="PasswordText" />
+						<entry key="passwordCallbackRef" value-ref="plainPasswordCallback" />
+					</map>
+				</property>
+			</bean>
+		</jaxws:inInterceptors>
+	</jaxws:endpoint>
+
+	<!-- 使用WS-Security中的Digest密码认证机制的Endpoint -->
+	<jaxws:endpoint id="userServiceWithDigestPasswordEP" address="/UserServiceWithDigestPassword">
+		<jaxws:implementor ref="userWebService" />
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<property name="properties">
+					<map>
+						<entry key="action" value="UsernameToken" />
+						<entry key="passwordType" value="PasswordDigest" />
+						<entry key="passwordCallbackRef" value-ref="digestPasswordCallback" />
+					</map>
+				</property>
+			</bean>
+		</jaxws:inInterceptors>
+	</jaxws:endpoint>
+
+	<!-- 使用WS-Security中的明文密码认证机制并结合SpringSecurity的Endpoint -->
+	<jaxws:endpoint id="userServiceWithSpringSecurityEP" address="/UserServiceWithSpringSecurity">
+		<jaxws:implementor ref="userWebService" />
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.ws.security.wss4j.WSS4JInInterceptor">
+				<property name="properties">
+					<map>
+						<entry key="action" value="UsernameToken" />
+						<entry key="passwordType" value="PasswordText" />
+						<entry key="passwordCallbackRef" value-ref="plainPasswordCallback" />
+					</map>
+				</property>
+			</bean>
+			<bean class="org.springside.modules.security.springsecurity.cxf.SpringSecurityInInterceptor">
+				<property name="userDetailsService" ref="userDetailsService" />
+			</bean>
+			<bean class="org.springside.modules.security.springsecurity.cxf.SpringSecurityOutInterceptor" />
+		</jaxws:inInterceptors>
+	</jaxws:endpoint>
+
+	<!-- 使用Base64Binary传输二进制内容的endpoint定义  -->
+	<jaxws:endpoint id="smallImageServiceEP" address="/SmallImageService">
+		<jaxws:implementor ref="smallImageWebService" />
+	</jaxws:endpoint>
+
+	<!-- 使用MTOM传输二进制内容的endpoint定义  -->
+	<jaxws:endpoint id="largeimageServiceEP" address="/LargeImageService">
+		<jaxws:implementor ref="largeImageWebService" />
+		<jaxws:properties>
+			<entry key="mtom-enabled" value="true" />
+		</jaxws:properties>
+	</jaxws:endpoint>
+
+	<!-- UserWebService的实现Bean定义 -->
+	<bean id="userWebService" class="org.springside.examples.showcase.ws.server.impl.UserWebServiceImpl" />
+
+	<!-- SmallImageWebService的实现Bean定义 -->
+	<bean id="smallImageWebService" class="org.springside.examples.showcase.ws.server.impl.SmallImageWebServiceImpl" />
+
+	<!-- LargeImageWebService的实现Bean定义 -->
+	<bean id="largeImageWebService" class="org.springside.examples.showcase.ws.server.impl.LargeImageWebServiceImpl" />
+
+
+	<!-- dozer DTO复制工具类定义 -->
+	<bean id="dozer" class="org.dozer.DozerBeanMapper" />
+
+	<!-- 明文密码处理Bean定义 -->
+	<bean id="plainPasswordCallback" class="org.springside.examples.showcase.ws.server.impl.security.PlainPasswordCallback" />
+
+	<!-- Digest密码处理Bean定义 -->
+	<bean id="digestPasswordCallback" class="org.springside.examples.showcase.ws.server.impl.security.DigestPasswordCallback" />
+</beans>

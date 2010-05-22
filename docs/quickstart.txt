@@ -1,0 +1,60 @@
+
+
+Add Labels
+	
+Wait Image 
+Enter labels to add to this page:
+Tip: Looking for a label? Just start typing.
+	
+		
+1. 开场前十分钟
+
+    * 安装 JDK6.0以上版本，设置环境变量JAVA_HOME与path.
+    * 阅读SpringSide3的项目总述和目录说明 ，了解SpringSide概貌.
+
+2. 一站式快速安装
+
+     又见springsdide2.0式的傻瓜式快速安装，双击 springside3-all-in-one 解压目录/quick-start.bat，将step by step的自动执行：
+
+   1. 启动自带的H2示例数据库。(等同执行tools/h2/start-db.bat)
+   2. 将tools/maven/central-repository中的jar文件拷贝到本地仓库, 如C:/Document and Setting/用户名/.m2/repository
+   3. 为所有子项目生成Eclipse项目文件。(等同执行每个项目中的bin/eclipse.bat)
+   4. 编译安装所有子项目。(等同执行项目中的bin/install.bat)
+   5. 为三个Examples项目分别执行初始化数据库，并使用Jetty运行。(等同执行每个项目中的bin/db-init.bat 与 jetty.bat)
+
+3. 环保源码版
+
+   如果已经是SpringSide的老用户，那就不必每个版本都下载一百多M的all in one版，下个几百K的源码版就足够了。
+
+   配好ant和maven的path后(保证在ant的lib目录中放了maven-ant-task.jar), 手工执行上述过程中等同部分的命令就行.
+4. 在Eclipse中....
+
+     如果你是坚定的版权意识者，这时候使用的应该是Eclipse 3.5.x for Java EE Developers，SpringSide 的项目文件也是基于它之上。如果你使用的是其他IDE如MyEclipse、Netbeans，可跳到下一节。
+
+     实在烦了m2eclipse插件老出这样那样的问题，建议用eclipse:eclipse生成项目文件。
+4.1 浏览源码
+
+     打开Eclipse，选择file->import，选择General->Existing Projects into Workspace，选择下载的SpringsideSide3根目录，钩选所有项目。
+
+     刷新项目，大家可以畅快的浏览源码了......
+4.2 运行项目
+
+    * option1: 点击bin/jetty.bat
+    * option2: 执行src/test/java/.../tools/Start.java
+    * option3: 使用run-jetty-run插件.
+
+5. 不在Eclipse中...
+
+      如果你使用是MyEclipse，Netbeans之类的其他IDE，就需要自行为每个项目新建项目文件，配置如下：
+
+    * 源码目录为src/main/java和src/main/resources，测试代码目录为src/test/java 和 src/test/resources。
+    * Web应用目录为src/main/webapp。
+    * 用mvn dependency:copy-dependencies初始化依赖jar到target/dependency目录，设定依赖。
+    * 项目编码为UTF-8，JDK为1.5以上版本(需要按1.5语法编译)，Servlet为2.4版本。
+
+6. 接下来...
+
+    * 阅读示例项目的架构风格说明
+    * 阅读详细技术参考手册
+    * 阅读开发过程、开发实践建议
+

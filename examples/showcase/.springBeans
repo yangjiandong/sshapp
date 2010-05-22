@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beansProjectDescription>
+	<version>1</version>
+	<pluginVersion><![CDATA[2.3.0.200912170948-RELEASE]]></pluginVersion>
+	<configSuffixes>
+		<configSuffix><![CDATA[xml]]></configSuffix>
+	</configSuffixes>
+	<enableImports><![CDATA[true]]></enableImports>
+	<configs>
+		<config>src/main/resources/applicationContext.xml</config>
+		<config>src/main/resources/jmx/applicationContext-jmx-client.xml</config>
+		<config>src/main/resources/jmx/applicationContext-jmx-server.xml</config>
+		<config>src/main/resources/security/applicationContext-security.xml</config>
+		<config>src/main/resources/email/applicationContext-email.xml</config>
+		<config>src/main/resources/schedule/applicationContext-executor.xml</config>
+		<config>src/main/resources/log/applicationContext-log.xml</config>
+		<config>src/main/resources/webservice/applicationContext-cxf-server.xml</config>
+		<config>src/main/resources/schedule/applicationContext-quartz-cron-local.xml</config>
+		<config>src/main/resources/schedule/applicationContext-quartz-timer-cluster.xml</config>
+		<config>src/main/resources/webservice/applicationContext-cxf-client.xml</config>
+		<config>src/main/resources/jms/applicationContext-advanced.xml</config>
+		<config>src/main/resources/jms/applicationContext-simple.xml</config>
+		<config>src/main/resources/cache/applicationContext-ehcache.xml</config>
+		<config>src/main/resources/webservice/applicationContext-jersey-server.xml</config>
+	</configs>
+	<configSets>
+	</configSets>
+</beansProjectDescription>
