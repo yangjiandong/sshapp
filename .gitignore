@@ -9,15 +9,16 @@ syntax: glob
 .DS_Store
 
 # logs
+logs
 derby.log
 lift_example
 
 # eclipse conf file
-#.settings
-#.classpath
-#.project
+.settings
+.classpath
+.project
 .manager
-#.externalToolBuilders
+.externalToolBuilders
 
 # building
 target
