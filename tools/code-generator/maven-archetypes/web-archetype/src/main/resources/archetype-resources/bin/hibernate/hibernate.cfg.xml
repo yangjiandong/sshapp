@@ -1,0 +1,35 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<!-- SQL dialect for generate.pojo and ddl-->
+		<property name="dialect">org.hibernate.dialect.DerbyDialect</property>
+		<!-- <property name="dialect">org.hibernate.dialect.Oracle10gDialect</property> -->
+
+		<!-- jdbc properties for generate.pojo -->
+		<property name="hibernate.connection.driver_class">org.apache.derby.jdbc.ClientDriver</property>
+		<property name="hibernate.connection.url">jdbc:derby://localhost:1527/springside-miniweb;create=true</property>
+		<property name="hibernate.connection.username">APP</property>
+		<property name="hibernate.connection.password">APP</property>
+
+		<!-- 
+		<property name="hibernate.connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+		<property name="hibernate.connection.url">jdbc:oracle:thin:@127.0.0.1:1521:XE</property>
+		<property name="hibernate.connection.username">miniweb</property>
+		<property name="hibernate.connection.password">miniweb</property>
+		-->
+		
+		<!-- pojos for  generate.code -->
+		<mapping class="${package}.entity.IdEntity" />
+		<mapping class="${package}.entity.security.User" />
+		<mapping class="${package}.entity.security.Role" />
+		<mapping class="${package}.entity.security.Authority" />
+		<mapping class="${package}.entity.security.Resource" />
+
+	</session-factory>
+</hibernate-configuration>

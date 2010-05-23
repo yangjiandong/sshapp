@@ -1,0 +1,28 @@
+body {
+	font-size: 10pt;
+}
+
+a:link,a:visited,a:active,a:hover {
+	color: #4d87ce;
+}
+
+div#listContent,div#footer {
+	margin-top:10px
+}
+	
+div#listContent table {
+	border-collapse: collapse;
+	border: none;
+}
+
+div#listContent th,div#listContent td {
+	border: solid #999 1px;
+}
+
+.actionMessage {
+	font-weight: bold;
+}
+
+div#comment {
+	margin-top:20px
+}

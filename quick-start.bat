@@ -2,7 +2,7 @@
 echo [INFO] 确保默认JDK版本为JDK5.0及以上版本.
 
 echo [INFO] 如不能连接Maven官方网站, 修改本文件去掉下面一行的注释.
-rem set OFF_LINE=-o
+set OFF_LINE=-o
 
 set MVN=mvn
 set ANT=ant

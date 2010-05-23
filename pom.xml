@@ -6,7 +6,7 @@
 	<version>3.3.2</version>
 	<name>Springside3's Project</name>
 	<packaging>pom</packaging>
-	
+
 	<modules>
 		<module>modules/parent</module>
 		<module>modules/core</module>

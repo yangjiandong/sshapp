@@ -1,0 +1,20 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="save-wsdl" default="save-wsdl">
+	<target name="save-wsdl">
+		<!-- 保存cxf生成的WSDL -->
+		<concat destfile="../../webapp/wsdl/${artifactId}.wsdl">
+			<url url="http://localhost:8080/${artifactId}/services/UserService?wsdl" />
+		</concat>
+
+		<!-- 替换address路径为生产环境路径,请修改replacevalue的值 -->
+		<replace file="../../webapp/wsdl/${artifactId}.wsdl">
+			<replacetoken>
+				<![CDATA[<soap:address location="http://localhost:8080/${artifactId}/services/UserService" />]]></replacetoken>
+			<replacevalue>
+				<![CDATA[<soap:address location="http://localhost:8080/${artifactId}/services/UserService" />]]></replacevalue>
+		</replace>
+	</target>
+</project>

@@ -1,0 +1,99 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <table name="SS_ROLE">
+    <column>ID</column>
+    <column>NAME</column>
+    <row>
+      <value>1</value>
+      <value>管理员</value>
+    </row>
+    <row>
+      <value>2</value>
+      <value>用户</value>
+    </row>
+  </table>
+  <table name="SS_USER">
+    <column>ID</column>
+    <column>LOGIN_NAME</column>
+    <column>PASSWORD</column>
+    <column>NAME</column>
+    <column>EMAIL</column>
+    <row>
+      <value>1</value>
+      <value>admin</value>
+      <value>admin</value>
+      <value>Admin</value>
+      <value>admin@springside.org.cn</value>
+    </row>
+    <row>
+      <value>2</value>
+      <value>user</value>
+      <value>user</value>
+      <value>User</value>
+      <value>user@springside.org.cn</value>
+    </row>
+    <row>
+      <value>3</value>
+      <value>user2</value>
+      <value>user2</value>
+      <value>Jack</value>
+      <value>jack@springside.org.cn</value>
+    </row>
+    <row>
+      <value>4</value>
+      <value>user3</value>
+      <value>user3</value>
+      <value>Kate</value>
+      <value>kate@springside.org.cn</value>
+    </row>
+    <row>
+      <value>5</value>
+      <value>user4</value>
+      <value>user4</value>
+      <value>Sawyer</value>
+      <value>sawyer@springside.org.cn</value>
+    </row>
+    <row>
+      <value>6</value>
+      <value>user5</value>
+      <value>user5</value>
+      <value>Ben</value>
+      <value>ben@springside.org.cn</value>
+    </row>
+  </table>
+  <table name="SS_USER_ROLE">
+    <column>USER_ID</column>
+    <column>ROLE_ID</column>
+    <row>
+      <value>1</value>
+      <value>1</value>
+    </row>
+    <row>
+      <value>1</value>
+      <value>2</value>
+    </row>
+    <row>
+      <value>2</value>
+      <value>2</value>
+    </row>
+    <row>
+      <value>3</value>
+      <value>2</value>
+    </row>
+    <row>
+      <value>4</value>
+      <value>2</value>
+    </row>
+    <row>
+      <value>5</value>
+      <value>2</value>
+    </row>
+    <row>
+      <value>6</value>
+      <value>2</value>
+    </row>
+  </table>
+</dataset>

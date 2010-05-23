@@ -1,0 +1,29 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:cxf="http://cxf.apache.org/core"
+	xsi:schemaLocation="http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
+	default-autowire="byType" default-lazy-init="true">
+
+	<description>使用Apache CXF的Web Service配置文件</description>
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+
+	<!-- jax-ws endpoint定义  -->
+	<jaxws:endpoint id="userServiceEP" address="/UserService">
+		<jaxws:implementor ref="userWebService" />
+	</jaxws:endpoint>
+
+	<!-- WebService的实现Bean定义 -->
+	<bean id="userWebService" class="${package}.ws.impl.UserWebServiceImpl" />
+	
+	<!-- dozer DTO复制类 -->
+	<bean id="dozer" class="org.dozer.DozerBeanMapper"/>
+
+	<!-- 设定由slf4j处理cxf中java.util.logging打印的日志 -->
+	<bean id="JulOverSlf4j" class="org.springside.modules.utils.JulOverSlf4j" lazy-init="false" />
+</beans>
