@@ -15,7 +15,17 @@ springside3
 
 4、怎样建立标准的springside项目，
 
-   
+   cd tools
+   new-project.bat
+   --Confirm properties configuration:
+   --groupId: org.sshapp
+   --artifactId: sshapp
+   --version: 1.0-SNAPSHOT
+   --package: org.sshapp
+
+   生成后，拷贝到application下
+   修改pom.xml
+
 2010.05.22
 ----------
 
