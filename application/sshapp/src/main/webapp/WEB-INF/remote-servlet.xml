@@ -1,0 +1,15 @@
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN"
+"http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<bean id="defaultHandlerMapping"
+		class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
+
+	<!--
+		  <bean name="/myservice"
+			class="org.springframework.remoting.caucho.HessianServiceExporter">
+			<property name="service" ref="myService" />
+			<property name="serviceInterface" value="com.ekingsoft.supapp.service.remote.MyService" />
+		  </bean>
+-->
+</beans>

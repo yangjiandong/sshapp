@@ -5,12 +5,15 @@ springside3
 ----------
 
 1、hsql 嵌入式启动
-   save/
+   save/HSQLDBStartListerner
+   --暂时不用，h2已能自启动
 
 2、mvn + jetty + debug + eclipse
 
    application/sshapp/bin/jetty-debug.bat
    sshapp-jetty-debug.launch
+
+3、按现在状况，lift要掌握有难度，先花时间搞定ssh
 
 2010.05.23
 -----------

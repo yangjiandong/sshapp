@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+	default-lazy-init="true">
+
+	<description>使用JDK ScheduledExecutorService的定时任务配置</description>
+
+	<!-- ScheduledThreadPoolExecutor集成工厂 -->
+	<bean class="org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean" lazy-init="false">
+		<property name="continueScheduledExecutionAfterException" value="true" />
+		<property name="scheduledExecutorTasks">
+			<list>
+				<ref bean="scheduledExecutorTask" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- Task的封装 -->
+	<bean id="scheduledExecutorTask" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">
+		<property name="runnable" ref="executorJob" />
+		<!-- 首次执行延期2秒 -->
+		<property name="delay" value="2000" />
+		<!-- 每次执行间隔1小时 -->
+		<property name="period" value="3600000" />
+		<!-- 固定间隔,否则默认fixDelay会等到前一个任务完成后才开始计时. -->
+		<property name="fixedRate" value="true" />
+	</bean>
+
+	<!-- 定期执行的业务类 -->
+	<bean id="executorJob" class="org.springside.examples.showcase.schedule.ExecutorJob"/>
+</beans>

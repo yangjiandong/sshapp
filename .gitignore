@@ -53,3 +53,6 @@ project/boot
 runner
 my.zip
 lift_proto.db.*
+
+# h2 database
+application/sshapp/sshappdatas.*

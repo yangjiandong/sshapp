@@ -4,9 +4,10 @@
   xmlns:context="http://www.springframework.org/schema/context"
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-  <description>导入ShowCase中的applicationContext文件列表</description>
+  <description>导入sshapp中的applicationContext文件列表</description>
 
   <import resource="cache/applicationContext-ehcache.xml" />
+  <!--
   <import resource="email/applicationContext-email.xml" />
   <import resource="jms/applicationContext-simple.xml" />
   <import resource="jms/applicationContext-advanced.xml" />
@@ -19,5 +20,5 @@
   <import resource="security/applicationContext-security.xml" />
   <import resource="webservice/applicationContext-cxf-server.xml" />
   <import resource="webservice/applicationContext-jersey-server.xml" />
-
+  -->
 </beans>

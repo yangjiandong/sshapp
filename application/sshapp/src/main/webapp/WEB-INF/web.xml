@@ -4,23 +4,111 @@
   xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
   <display-name>spring side app</display-name>
-<!--
+
+  <!-- Spring ApplicationContext配置文件的路径,可使用通配符,多个路径用,号分隔
+      此参数用于后面的Spring Context Loader -->
   <context-param>
-    <param-name>hsql.dbPath</param-name>
-    <param-value>d:/apps/db/</param-value>
-  </context-param>
-  <context-param>
-    <param-name>hsql.dbName</param-name>
-    <param-value>mydb</param-value>
-  </context-param>
-  <context-param>
-    <param-name>hsql.port</param-name>
-    <param-value>9999</param-value>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath*:/applicationContext.xml,classpath*:/applicationContext-sshapp.xml</param-value>
   </context-param>
 
   <listener>
-    <listener-class>org.ssh.app.web.HSQLDBStartListener</listener-class>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
- -->
 
+  <!-- Character Encoding filter -->
+  <filter>
+    <filter-name>encodingFilter</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+    <init-param>
+      <param-name>forceEncoding</param-name>
+      <param-value>true</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>encodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!-- multiple configure Hibernate Open Session In View filter-->
+  <filter>
+    <filter-name>hibernateOpenSessionInViewFilter</filter-name>
+    <filter-class>
+      org.ssh.app.orm.hibernate.OpenSessionInViewFilter</filter-class>
+    <init-param>
+      <param-name>excludeSuffixs</param-name>
+      <param-value>js,css,jpg,gif</param-value>
+    </init-param>
+    <init-param>
+      <param-name>sessionFactoryBeanName</param-name>
+      <param-value>sessionFactory</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>hibernateOpenSessionInViewFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!-- Spring MVC's Servlet -->
+  <servlet>
+    <servlet-name>app</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <load-on-startup>2</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>app</servlet-name>
+    <url-pattern>*.htm</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>remote</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <load-on-startup>3</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>remote</servlet-name>
+    <url-pattern>/remote/*</url-pattern>
+  </servlet-mapping>
+
+  <!-- Spring refresh Introspector to prevent memory leaks  -->
+  <listener>
+    <listener-class>
+      org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+  </listener>
+
+  <!-- SpringSecuirty 控制并发Session -->
+  <listener>
+    <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+  </listener>
+
+  <!-- define error pages -->
+  <error-page>
+    <exception-type>java.lang.Throwable</exception-type>
+    <location>/commons/500.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>500</error-code>
+    <location>/commons/500.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/commons/404.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>403</error-code>
+    <location>/commons/403.jsp</location>
+  </error-page>
+  <error-page>
+    <error-code>405</error-code>
+    <location>/commons/405.jsp</location>
+  </error-page>
+
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
 </web-app>
