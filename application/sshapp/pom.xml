@@ -17,6 +17,11 @@
 
   <!-- 项目属性 -->
   <properties>
+    <!--
+    <jdbc.driver.groupId>org.hsqldb</jdbc.driver.groupId>
+    <jdbc.driver.artifactId>com.springsource.org.hsqldb</jdbc.driver.artifactId>
+    <jdbc.driver.version>1.8.0.9</jdbc.driver.version>
+    -->
     <jdbc.driver.groupId>com.h2database</jdbc.driver.groupId>
     <jdbc.driver.artifactId>h2</jdbc.driver.artifactId>
     <jdbc.driver.version>${h2.version}</jdbc.driver.version>

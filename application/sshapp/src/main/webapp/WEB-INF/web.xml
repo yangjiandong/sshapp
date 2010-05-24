@@ -1,7 +1,26 @@
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
-<web-app>
-  <display-name>Archetype Created Web Application</display-name>
+  <display-name>spring side app</display-name>
+<!--
+  <context-param>
+    <param-name>hsql.dbPath</param-name>
+    <param-value>d:/apps/db/</param-value>
+  </context-param>
+  <context-param>
+    <param-name>hsql.dbName</param-name>
+    <param-value>mydb</param-value>
+  </context-param>
+  <context-param>
+    <param-name>hsql.port</param-name>
+    <param-value>9999</param-value>
+  </context-param>
+
+  <listener>
+    <listener-class>org.ssh.app.web.HSQLDBStartListener</listener-class>
+  </listener>
+ -->
+
 </web-app>

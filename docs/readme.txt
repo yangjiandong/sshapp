@@ -1,6 +1,17 @@
 springside3
 ------------
 
+2010.05.24
+----------
+
+1、hsql 嵌入式启动
+   save/
+
+2、mvn + jetty + debug + eclipse
+
+   application/sshapp/bin/jetty-debug.bat
+   sshapp-jetty-debug.launch
+
 2010.05.23
 -----------
 
