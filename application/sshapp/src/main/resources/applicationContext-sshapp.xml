@@ -6,8 +6,9 @@
 
   <description>导入sshapp中的applicationContext文件列表</description>
 
-  <import resource="cache/applicationContext-ehcache.xml" />
   <!--
+  <import resource="cache/applicationContext-ehcache.xml" />
+
   <import resource="email/applicationContext-email.xml" />
   <import resource="jms/applicationContext-simple.xml" />
   <import resource="jms/applicationContext-advanced.xml" />

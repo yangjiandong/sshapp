@@ -15,10 +15,12 @@
       <list>
         <!-- 标准配置 -->
         <value>classpath*:/application.properties</value>
-        <!-- 本地开发环境配置 -->
+        <!-- 本地开发环境配置
         <value>classpath*:/application.local.properties</value>
-        <!-- 服务器生产环境配置 -->
+        -->
+        <!-- 服务器生产环境配置
         <value>file:/var/springside/application.server.properties</value>
+        -->
       </list>
     </property>
   </bean>
@@ -57,6 +59,10 @@
         <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
         <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
         <prop key="hibernate.generate_statistics">${hibernate.generate_statistics}</prop>
+        <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
+        <prop key="hibernate.cache.provider_class">${hibernate.cache_provider_class}</prop>
+        <prop key="hibernate.cache.use_query_cache">${hibernate.cache_use_query_cache}</prop>
+        <prop key="hibernate.cache.provider_configuration_file_resource_path">${hibernate.ehcache_config_file}</prop>
       </props>
     </property>
     <property name="packagesToScan" value="org.ssh.app.common.entity" />

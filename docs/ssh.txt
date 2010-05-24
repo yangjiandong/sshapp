@@ -6,7 +6,12 @@ ssh
 
 1、19:00  -- 20:25
    21:00  -- 21:13
-   21:17
+   21:17  -- 21:46
+   22:10  -- 22：44
+
+   --3.3.2中如何使用cache，方法与以前不同了，
+   --Ehcache,showcase/cache，可用于页面缓存 StaticContentServlet，
+   --以前采用hibernate 配置，只能用于数据库表缓存
 
 
 
