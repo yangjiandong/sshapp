@@ -251,6 +251,11 @@
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
     </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>0.9.21</version>
+    </dependency>
     <!-- logging end -->
 
     <!-- email begin -->

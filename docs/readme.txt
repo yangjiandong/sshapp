@@ -6,6 +6,31 @@ springside3
 
 1、save/h2-Tutorial.pdf
 
+2、改用c3po，取消dbcp
+   pom.xml
+    <dependency>
+      <groupId>c3p0</groupId>
+      <artifactId>c3p0</artifactId>
+      <version>0.9.1.2</version>
+    </dependency>
+
+    增加hibernate-ehcache
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-ehcache</artifactId>
+    </dependency>
+
+3、增加logback
+   pom.xml
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>0.9.21</version>
+    </dependency>
+    logback.xml
+
+    save/How to setup SLF4J and LOGB..pdf
+
 2010.05.24
 ----------
 
