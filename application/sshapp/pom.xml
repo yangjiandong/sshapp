@@ -18,10 +18,10 @@
   <!-- 项目属性 -->
   <properties>
     <!--
-    <jdbc.driver.groupId>org.hsqldb</jdbc.driver.groupId>
-    <jdbc.driver.artifactId>com.springsource.org.hsqldb</jdbc.driver.artifactId>
-    <jdbc.driver.version>1.8.0.9</jdbc.driver.version>
-    -->
+      <jdbc.driver.groupId>org.hsqldb</jdbc.driver.groupId>
+      <jdbc.driver.artifactId>com.springsource.org.hsqldb</jdbc.driver.artifactId>
+      <jdbc.driver.version>1.8.0.9</jdbc.driver.version>
+      -->
     <jdbc.driver.groupId>com.h2database</jdbc.driver.groupId>
     <jdbc.driver.artifactId>h2</jdbc.driver.artifactId>
     <jdbc.driver.version>${h2.version}</jdbc.driver.version>
@@ -75,6 +75,10 @@
       <artifactId>hibernate-jmx</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-ehcache</artifactId>
+    </dependency>
+    <dependency>
       <groupId>javassist</groupId>
       <artifactId>javassist</artifactId>
     </dependency>
@@ -89,10 +93,17 @@
       <artifactId>spring-jdbc</artifactId>
     </dependency>
 
-    <!-- dbcp -->
+    <!-- dbcp
+      <dependency>
+        <groupId>commons-dbcp</groupId>
+        <artifactId>commons-dbcp</artifactId>
+      </dependency>
+      -->
+
     <dependency>
-      <groupId>commons-dbcp</groupId>
-      <artifactId>commons-dbcp</artifactId>
+      <groupId>c3p0</groupId>
+      <artifactId>c3p0</artifactId>
+      <version>0.9.1.2</version>
     </dependency>
 
     <!-- jdbc driver -->

@@ -16,11 +16,11 @@
         <!-- 标准配置 -->
         <value>classpath*:/application.properties</value>
         <!-- 本地开发环境配置
-        <value>classpath*:/application.local.properties</value>
-        -->
+          <value>classpath*:/application.local.properties</value>
+          -->
         <!-- 服务器生产环境配置
-        <value>file:/var/springside/application.server.properties</value>
-        -->
+          <value>file:/var/springside/application.server.properties</value>
+          -->
       </list>
     </property>
   </bean>
@@ -31,13 +31,29 @@
   <!-- 以静态变量保存ApplicationContext -->
   <bean class="org.springside.modules.utils.SpringContextHolder" lazy-init="false" />
 
-  <!-- 数据源配置,使用应用内的DBCP数据库连接池 -->
-  <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-    <!-- Connection Info -->
-    <property name="driverClassName" value="${jdbc.driver}" />
-    <property name="url" value="${jdbc.url}" />
-    <property name="username" value="${jdbc.username}" />
+  <!-- 数据源配置,使用应用内的DBCP数据库连接池
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+      <property name="driverClassName" value="${jdbc.driver}" />
+      <property name="url" value="${jdbc.url}" />
+      <property name="username" value="${jdbc.username}" />
+      <property name="password" value="${jdbc.password}" />
+
+     -->
+  <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+    <property name="driverClass" value="${jdbc.driver}" />
+    <property name="jdbcUrl" value="${jdbc.url}" />
+    <property name="user" value="${jdbc.username}" />
     <property name="password" value="${jdbc.password}" />
+    <property name="minPoolSize" value="10" />
+    <property name="maxPoolSize" value="100" />
+    <property name="maxIdleTime" value="1800" />
+    <property name="acquireIncrement" value="5" />
+    <property name="maxStatements" value="0" />
+    <property name="initialPoolSize" value="5" />
+    <property name="idleConnectionTestPeriod" value="1800" />
+    <property name="acquireRetryAttempts" value="30" />
+    <property name="breakAfterAcquireFailure" value="true" />
+    <property name="testConnectionOnCheckout" value="false" />
   </bean>
 
   <bean id="quartzDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
