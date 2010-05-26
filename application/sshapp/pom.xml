@@ -116,6 +116,7 @@
     <!-- database end -->
 
     <!-- web begin -->
+    <!-- no struts
     <dependency>
       <groupId>org.apache.struts</groupId>
       <artifactId>struts2-core</artifactId>
@@ -129,6 +130,7 @@
       <groupId>org.apache.struts</groupId>
       <artifactId>struts2-spring-plugin</artifactId>
     </dependency>
+    -->
 
     <dependency>
       <groupId>org.springframework</groupId>

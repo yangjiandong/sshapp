@@ -1,0 +1,91 @@
+/* CSS Document */
+body {
+	margin: 0;
+	font-family: "trebuchet ms", arial, verdana;
+	font-size: 12px;
+	color: #555555;
+	background-color: #ffffff;
+	text-align: left;
+}
+
+a {
+	color: #4d87ce;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #2a65ad;
+}
+
+ol,ul {
+	margin-top:10px;
+}
+
+li {
+	line-height: 22px;
+	text-align: left;
+}
+
+#content {
+	width: 1004px;
+	margin: 0 auto 0 auto;
+	text-align: left;
+}
+
+#leftbar {
+	width: 180px;
+	float: left;
+	font-size: 12px;
+	color: #6c534a;
+	text-align: left;
+}
+
+#leftbar h2 {
+	font-family: "trebuchet ms", "century gothic", "arial narrow", arial, sans-serif;
+	font-size: 16px;
+	text-transform: uppercase;
+	font-weight: bold;
+	border-bottom: 1px solid #eeeeee;
+	color: #4a8c04;
+	text-align: right;
+}
+#leftbar a {
+	display: block;
+	width: 100%;
+	background-position: right;
+	background-repeat: no-repeat;
+	padding: 5px;
+	padding-right: 0;
+	border-bottom: 1px dashed #eeeeee;
+}
+
+#leftbar a:hover {
+	background-color: #eeeeee;
+	background-repeat: repeat-y;
+}
+
+
+#mainbar {
+	margin-left: 10px;
+	padding-right: 140px;
+	padding-left: 200px;
+	padding-right: 0px;
+}
+
+#mainbar h2 {
+	font-family:  "trebuchet ms","century gothic", "arial narrow", arial, sans-serif;
+	font-size: 32px;
+	text-transform: uppercase;
+	font-weight: bold;
+	border-bottom: 1px solid #eeeeee;
+}
+
+#mainbar h4 {
+	font-weight:bold;
+}
+
+#mainbar p {
+	padding: 10px;
+	line-height: 20px;
+}

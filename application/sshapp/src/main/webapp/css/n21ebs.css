@@ -1,0 +1,33 @@
+.title { font-size: 14px; line-height: 20px; color: #083772; margin-bottom: 15px; font-weight: normal; }
+/*.product-name { font-size: 26px; line-height: 50px; color: #CCDDFF; padding-left: 25px; font-weight: bold; }*/
+.product-name { font-size: 26px; line-height: 42px; color: #CCDDFF; padding-left: 25px; vertical-align: bottom; font-weight: bold; }
+
+.intro-title {font-size:16px; font-family: tahoma,arial,helvetica,sans-serif; color:#006EC7; margin-bottom: 20px; font-weight: bold;}
+.intro-text {font-size:14px; font-family: tahoma,arial,helvetica,sans-serif; color:#3764A0; margin-bottom: 15px; font-weight: normal;}
+
+.x-form-text,textarea.x-form-field{background:#fff;border-color:#B5B8C8; }
+.x-form-focus,textarea.x-form-focus{ background:#FFF6AA;background-color: #FFF6AA; border-color:#7eadd9; border:1px solid orange;}
+.x-form-invalid,textarea.x-form-invalid{background:#fff ;border-color:#dd7870;}
+.x-grid3-cell-selected{background:#FFF6AA;background-color:#FFF6AA!important;color:black;}
+
+
+span.dcName { color:red;padding-right:4px; font-size:10px; }
+span.uiName { color:red;padding-right:4px; font-size:10px; }
+
+.gui_title {
+  background-color:#dfe8f6;
+  font-family: arial,sans-serif,tahoma,verdana,arial;
+  font-size:16px;
+  height:22px;
+  padding-top:4px;
+  font-weight:bold;
+}
+.field_important_1  {
+  background-color: #CFF6BA!important;
+  background: #CFF6BA!important;
+  font-weight:bold;
+}
+.cellClsAlignTop {
+  vertical-align:top;
+  padding-right:10px;
+}

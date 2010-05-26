@@ -1,0 +1,28 @@
+ #n21-loading{
+        position:absolute;
+        left:40%;
+        top:40%;
+        padding:2px;
+        z-index:20001;
+        height:auto;
+    }
+    #n21-loading-msg {
+        font: normal 10px arial,tahoma,sans-serif;
+    }
+    #n21-loading-logo{
+        background:white;
+        color:#444;
+        font:bold 13px tahoma,arial,helvetica;
+        padding:5px;
+    }
+    #n21-loading-logo-text{
+        background:white;
+        color:#444;
+        font:bold 13px tahoma,arial,helvetica;
+        padding:5px;
+    }
+    #n21-loading .n21-loading-indicator{
+        text-align:center;
+        background:white;
+        height:auto;
+    }
