@@ -1,6 +1,12 @@
 springside3
 ------------
 
+2010.05.27
+----------
+
+1、spring3.0 rest
+http://stsmedia.net/spring-finance-part-2-spring-mvc-spring-30-rest-integration/
+
 2010.05.25
 ----------
 
