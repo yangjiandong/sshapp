@@ -23,7 +23,6 @@
       document.writeln('<script type="text/javascript" src="'+CFG_PATH_EXTJS+'/ext-lang-zh_CN.js" ><\/script>');
 </script>
 
-<script type="text/javascript"  src="app/Api.js"  ></script>
 <script type="text/javascript"  src="./js/labels_srv.js" ></script>
 <link rel="stylesheet" href="<c:url value='css/n21ebs.css'/>" type="text/css"  />
 
@@ -37,7 +36,7 @@
 
 </script>
 <script type="text/javascript" src="./js/app/UiLoadingHelper.js"></script>
-<script type="text/javascript" src="./DcIncludesMap.js"></script>
+<script type="text/javascript" src="./js/DcIncludesMap.js"></script>
 
 <link rel="stylesheet" type="text/css" href="css/loading.css" />
 <script>
@@ -79,7 +78,7 @@
   FRAMEBORDER="no"></iframe></div>
 
 <script type="text/javascript">document.getElementById('n21-loading-msg').innerHTML = '装载资源...';</script>
-<script type="text/javascript" src="<c:url value='js/n21ExtjsLib/lib.js'/>"></script>
+<script type="text/javascript" src="<c:url value='js/lib/lib.js'/>"></script>
 <script type="text/javascript" src="<c:url value='js/app/DcLogin.js'/>"></script>
 <script type="text/javascript" src="<c:url value='js/app/DcMenuTree.js'/>"></script>
 <script>
@@ -89,7 +88,7 @@
 </script>
 <script type="text/javascript">document.getElementById('n21-loading-msg').innerHTML = '初始化...';</script>
 
-<script type="text/javascript" src="./main.js"></script>
+<script type="text/javascript" src="./js/main.js"></script>
 
 <script>
 </script>

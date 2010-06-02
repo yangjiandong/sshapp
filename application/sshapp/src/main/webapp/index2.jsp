@@ -11,7 +11,7 @@
 </head>
 
 <body>
-<a href="<c:url value="/initData.do"/>">初始数据</a>
+<a href="<c:url value="/initData.do"/>">初始数据dd</a>
 <br><br>
 
   <FORM METHOD=POST ACTION="user/login">
