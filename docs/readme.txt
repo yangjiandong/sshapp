@@ -83,6 +83,9 @@ urlrewrite.xml
   </rule>
 当然也要定义一些例外，如静态文件，还有remote 访问(以后有可能用到)
 
+3、mvn jetty:run
+html,js文件不能编辑
+
 2010.05.27
 ----------
 

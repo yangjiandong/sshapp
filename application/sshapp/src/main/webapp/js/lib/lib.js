@@ -9,8 +9,6 @@ Object.prototype.hasOwnProperty = function(prop) {
 }
   */
 
-Ext.Direct.addProvider(Ext.appsys.REMOTING_API);
-
 function getCurUser() {
   var name;
         AppSysAction.doEcho('', function(result, e){
