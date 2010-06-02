@@ -63,6 +63,17 @@
     <servlet-name>Rests</servlet-name>
   </filter-mapping>
 
+  <!-- Enables clean URLs with JSP views e.g. /welcome instead of /app/welcome -->
+  <filter>
+    <filter-name>UrlRewriteFilter</filter-name>
+    <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+  </filter>
+
+  <filter-mapping>
+    <filter-name>UrlRewriteFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
   <!-- Spring MVC's Servlet -->
   <servlet>
     <servlet-name>app</servlet-name>
@@ -71,7 +82,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>app</servlet-name>
-    <url-pattern>*.do</url-pattern>
+    <url-pattern>/app/*</url-pattern>
   </servlet-mapping>
 
   <servlet>

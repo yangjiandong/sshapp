@@ -62,6 +62,26 @@ jsp:
 
  --所有的连接必须以.do为后缀
 
+2、取消do后缀，感觉do不是很美观
+
+web.xml
+  <filter-mapping>
+    <filter-name>UrlRewriteFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <servlet-mapping>
+    <servlet-name>app</servlet-name>
+    <url-pattern>/app/*</url-pattern>
+  </servlet-mapping>
+
+urlrewrite.xml
+所有连接都转为/app
+  <rule>
+    <from>/**</from>
+    <to>/app/$1</to>
+  </rule>
+当然也要定义一些例外，如静态文件，还有remote 访问(以后有可能用到)
 
 2010.05.27
 ----------

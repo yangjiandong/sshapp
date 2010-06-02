@@ -27,7 +27,7 @@ public class CoreController {
 
         this.accountManager.initData();
 
-        return new ModelAndView("redirect:index2.jsp");
+        return new ModelAndView("redirect:/index2.jsp");
 
     }
 }

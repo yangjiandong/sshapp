@@ -14,14 +14,14 @@
 <a href="<c:url value="/initData.do"/>">初始数据</a>
 <br><br>
 
-  <FORM METHOD=POST ACTION="user/login.do">
+  <FORM METHOD=POST ACTION="user/login">
     <INPUT TYPE="text" NAME="loginName" value="登录名"><br><br>
     <INPUT TYPE="text" NAME="plainPassword" value="密码"><br><br>
     <INPUT TYPE="submit">
  <br>
- <A HREF="topic/add.do" target="_blank" >add</A>
+ <A HREF="topic/add" target="_blank" >add</A>
       <br>
-    <A HREF="topic/1234567.do" target="_blank">id:1234567</A>
+    <A HREF="topic/1234567" target="_blank">id:1234567</A>
  </FORM>
 </body>
 </html>
