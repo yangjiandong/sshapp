@@ -23,7 +23,7 @@
       document.writeln('<script type="text/javascript" src="'+CFG_PATH_EXTJS+'/ext-lang-zh_CN.js" ><\/script>');
 </script>
 
-<script type="text/javascript"  src="./app/Api.js"  ></script>
+<script type="text/javascript"  src="app/Api.js"  ></script>
 <script type="text/javascript"  src="./js/labels_srv.js" ></script>
 <link rel="stylesheet" href="<c:url value='css/n21ebs.css'/>" type="text/css"  />
 

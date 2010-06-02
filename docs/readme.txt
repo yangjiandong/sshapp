@@ -1,6 +1,68 @@
 springside3
 ------------
 
+2010.06.02
+----------
+
+1、spring 3 mvc + rest 
+
+配置 web.xml
+<servlet>
+    <servlet-name>app</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <load-on-startup>2</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>app</servlet-name>
+    <url-pattern>*.do</url-pattern>
+  </servlet-mapping>
+--指出以.do为mvc
+
+配置app-servlet.xml
+
+  <!--define Spring MVC's view resource(*.jsp or other file) -->
+  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    <!-- to support JSTL -->
+    <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+    <!-- path of view resource files -->
+    <property name="prefix" value="/views/" />
+    <!-- suffix of view resource files -->
+    <property name="suffix" value=".jsp" />
+  </bean>
+
+所有页面文件以.jsp为后缀，文件存放在webapp/views下
+
+controller:
+参看 UserController
+@RequestMapping("/user")
+    @RequestMapping(value = "/login.do")
+    public String login(HttpServletRequest request, HttpServletResponse response, User userinfo) {
+        logger.info("user login..");
+        logger.info(userinfo.toString());
+
+        if (userinfo.getLoginName().equals("admin") && userinfo.getPlainPassword().equals("123")) {
+            request.setAttribute("user", userinfo);
+            return "users/list";//不能用/users/list,否则页面文件指到webapp/user/views/users/list.jsp
+        } else {
+            return "users/loginerr";
+        }
+
+    }
+
+jsp:
+  <FORM METHOD=POST ACTION="user/login.do">
+    <INPUT TYPE="text" NAME="loginName" value="loginName"><br><br>
+    <INPUT TYPE="text" NAME="plainPassword" value="plainPassword"><br><br>
+    <INPUT TYPE="submit">
+ <br>
+ <A HREF="topic/add.do" target="_blank" >add</A>
+      <br>
+    <A HREF="topic/1234567.do" target="_blank">id:1234567</A>
+ </FORM>
+
+ --所有的连接必须以.do为后缀
+
+
 2010.05.27
 ----------
 

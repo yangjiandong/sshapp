@@ -31,7 +31,7 @@
     <!-- to support JSTL -->
     <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
     <!-- path of view resource files -->
-    <property name="prefix" value="views/" />
+    <property name="prefix" value="/views/" />
     <!-- suffix of view resource files -->
     <property name="suffix" value=".jsp" />
   </bean>

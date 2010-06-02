@@ -71,7 +71,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>app</servlet-name>
-    <url-pattern>*.htm</url-pattern>
+    <url-pattern>*.do</url-pattern>
   </servlet-mapping>
 
   <servlet>
@@ -98,23 +98,23 @@
   <!-- define error pages -->
   <error-page>
     <exception-type>java.lang.Throwable</exception-type>
-    <location>/commons/500.jsp</location>
+    <location>/common/500.jsp</location>
   </error-page>
   <error-page>
     <error-code>500</error-code>
-    <location>/commons/500.jsp</location>
+    <location>/common/500.jsp</location>
   </error-page>
   <error-page>
     <error-code>404</error-code>
-    <location>/commons/404.jsp</location>
+    <location>/common/404.jsp</location>
   </error-page>
   <error-page>
     <error-code>403</error-code>
-    <location>/commons/403.jsp</location>
+    <location>/common/403.jsp</location>
   </error-page>
   <error-page>
     <error-code>405</error-code>
-    <location>/commons/405.jsp</location>
+    <location>/common/405.jsp</location>
   </error-page>
 
   <welcome-file-list>

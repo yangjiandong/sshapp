@@ -142,4 +142,21 @@ public class AccountManager {
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
     }
+
+    //初始
+    public void initData() {
+        if (this.userDao.getUserCount().longValue() != 0) {
+            return;
+        }
+
+        User u = new User();
+        u.setName("管理员");
+        u.setLoginName("Admin");
+        u.setPlainPassword("123");
+        u.setEmail("young.jiandong@gmail.com");
+        u.setCreateBy("测试用");
+        u.setStatus("enabled");
+        saveUser(u);
+
+    }
 }
