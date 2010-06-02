@@ -74,6 +74,17 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
+  <!-- Files are locked on Windows and can't be replaced -->
+  <servlet>
+    <servlet-name>default</servlet-name>
+    <servlet-class>org.mortbay.jetty.servlet.DefaultServlet</servlet-class>
+    <init-param>
+      <param-name>useFileMappedBuffer</param-name>
+      <param-value>false</param-value>
+    </init-param>
+    <load-on-startup>0</load-on-startup>
+  </servlet>
+
   <!-- Spring MVC's Servlet -->
   <servlet>
     <servlet-name>app</servlet-name>

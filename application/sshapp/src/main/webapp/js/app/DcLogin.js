@@ -98,7 +98,7 @@ N21.Other.DcLogin = Ext.extend(Ext.Window, {
                 }))
 
         Ext.apply(this, {
-              title		: '用户登录',
+              title		: '用户登录?',
               width		: 300,
               autoHeight	: true,
               layout		: "form",

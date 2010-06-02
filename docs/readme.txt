@@ -85,6 +85,18 @@ urlrewrite.xml
 
 3、mvn jetty:run
 html,js文件不能编辑
+Files are locked on Windows and can't be replaced
+http://docs.codehaus.org/display/JETTY/Files+locked+on+Windows
+
+   <servlet>
+    <servlet-name>default</servlet-name>
+    <servlet-class>org.mortbay.jetty.servlet.DefaultServlet</servlet-class>
+    <init-param>
+      <param-name>useFileMappedBuffer</param-name>
+      <param-value>false</param-value>
+    </init-param>
+    <load-on-startup>0</load-on-startup>
+  </servlet>
 
 2010.05.27
 ----------
