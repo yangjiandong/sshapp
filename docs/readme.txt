@@ -1,6 +1,12 @@
 springside3
 ------------
 
+2010.06.03
+----------
+
+1、spring3 + mvc out xml,json
+http://stsmedia.net/spring-finance-part-7-adding-support-for-json-and-xml-views/
+
 2010.06.02
 ----------
 
@@ -82,6 +88,35 @@ urlrewrite.xml
     <to>/app/$1</to>
   </rule>
 当然也要定义一些例外，如静态文件，还有remote 访问(以后有可能用到)
+
+或：
+http://www.javabloger.com/article/no-mapping-found-for-http-request-with-uri.html
+
+<servlet-mapping>  
+     <servlet-name>springmvc</servlet-name>  
+     <url-pattern>/</url-pattern>  
+ </servlet-mapping>   
+
+ 将默认的过滤器选项激活，世界又恢复平静，css、js、gif、jpg 等一切显示正常。
+     <servlet-mapping>
+         <servlet-name>default</servlet-name>
+         <url-pattern>*.css</url-pattern>
+     </servlet-mapping>
+ 
+      <servlet-mapping>
+         <servlet-name>default</servlet-name>
+         <url-pattern>*.gif</url-pattern>
+     </servlet-mapping>
+    
+    <servlet-mapping>
+         <servlet-name>default</servlet-name>
+         <url-pattern>*.jpg</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+         <servlet-name>default</servlet-name>
+         <url-pattern>*.js</url-pattern>
+    </servlet-mapping>
 
 3、mvn jetty:run
 html,js文件不能编辑

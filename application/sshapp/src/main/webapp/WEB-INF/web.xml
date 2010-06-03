@@ -53,16 +53,6 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
-  <!--spring rest-->
-  <filter>
-    <filter-name>httpMethodFilter</filter-name>
-    <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
-  </filter>
-  <filter-mapping>
-    <filter-name>httpMethodFilter</filter-name>
-    <servlet-name>Rests</servlet-name>
-  </filter-mapping>
-
   <!-- Enables clean URLs with JSP views e.g. /welcome instead of /app/welcome -->
   <filter>
     <filter-name>UrlRewriteFilter</filter-name>
@@ -105,6 +95,19 @@
     <servlet-name>remote</servlet-name>
     <url-pattern>/remote/*</url-pattern>
   </servlet-mapping>
+
+  <!--spring rest-->
+  <!--
+      浏览器不支持put,delete等 method,由该filter将/blog?_method=delete转换为标准的http  delete 方法
+  -->
+  <filter>
+    <filter-name>httpMethodFilter</filter-name>
+    <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>httpMethodFilter</filter-name>
+    <servlet-name>app</servlet-name>
+  </filter-mapping>
 
   <!-- Spring refresh Introspector to prevent memory leaks  -->
   <listener>
