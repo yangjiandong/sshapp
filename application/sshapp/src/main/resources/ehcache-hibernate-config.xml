@@ -21,6 +21,20 @@
     memoryStoreEvictionPolicy="LRU"
     />
 
+  <!-- http://ehcache.org/documentation/hibernate.html -->
+  <cache
+    name="org.hibernate.cache.StandardQueryCache"
+    maxElementsInMemory="5"
+    eternal="false"
+    timeToLiveSeconds="120"
+    overflowToDisk="true"/>
+
+  <cache
+    name="org.hibernate.cache.UpdateTimestampsCache"
+    maxElementsInMemory="5000"
+    eternal="true"
+    overflowToDisk="true"/>
+
   <!--
   <cache name="com.ekingsoft.system.entities.Hz"
     maxElementsInMemory="8000"
