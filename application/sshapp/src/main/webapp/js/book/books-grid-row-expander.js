@@ -1,5 +1,9 @@
 Ext.onReady(function(){
 
+  var writer = new Ext.data.JsonWriter({
+    encode: false   // <-- don't return encoded JSON -- causes Ext.Ajax#request to send data using jsonData config rather than HTTP params
+});
+
   var store = new Ext.data.Store({
     restful:true,
     proxy: new Ext.data.HttpProxy({
@@ -14,8 +18,11 @@ Ext.onReady(function(){
      {name: 'isbn'},
      {name: 'edition'},
      {name: 'pages'}
-    ])
+    ]),
+    writer: writer
   });
+
+  store.load();
 
   // row expander
     var expander = new Ext.ux.grid.RowExpander({
@@ -46,5 +53,4 @@ Ext.onReady(function(){
         renderTo: 'gridBooks'
     });
 
-    gridBooks.getStore().load();
 });

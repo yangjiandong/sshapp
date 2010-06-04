@@ -17,6 +17,10 @@
     <from>/css/**</from>
     <to>/css/$1</to>
   </rule>
+  <rule>
+    <from>/lbClassicStatus</from>
+    <to>/lbClassicStatus</to>
+  </rule>
 
   <rule>
     <from>/book/**</from>

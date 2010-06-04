@@ -112,7 +112,7 @@
   </filter>
   <filter-mapping>
     <filter-name>httpMethodFilter</filter-name>
-    <servlet-name>app</servlet-name>
+    <servlet-name>rest</servlet-name>
   </filter-mapping>
 
   <!-- Spring refresh Introspector to prevent memory leaks  -->
@@ -125,6 +125,18 @@
   <listener>
     <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
   </listener>
+
+  <!-- http://logback.qos.ch/manual/configuration.html -->
+  <!--http://host/yourWebapp/lbClassicStatus-->
+  <servlet>
+    <servlet-name>ViewStatusMessages</servlet-name>
+    <servlet-class>ch.qos.logback.classic.ViewStatusMessagesServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ViewStatusMessages</servlet-name>
+    <url-pattern>/lbClassicStatus</url-pattern>
+  </servlet-mapping>
 
   <!-- define error pages -->
   <error-page>
