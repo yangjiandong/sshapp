@@ -81,7 +81,7 @@
         <prop key="hibernate.cache.provider_configuration_file_resource_path">${hibernate.ehcache_config_file}</prop>
       </props>
     </property>
-    <property name="packagesToScan" value="org.ssh.app.common.entity" />
+    <property name="packagesToScan" value="org.ssh.app.*.entity" />
     <property name="eventListeners">
       <map>
         <entry key="save-update">

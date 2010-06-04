@@ -11,6 +11,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.ssh.app.common.service.AccountManager;
+import org.ssh.app.example.service.BookService;
 
 //http://stsmedia.net/spring-finance-part-2-spring-mvc-spring-30-rest-integration/
 @Controller
@@ -20,12 +21,16 @@ public class CoreController {
     @Autowired
     private AccountManager accountManager;
 
+    @Autowired
+    private BookService bookService;
+
     @RequestMapping("/initData.do")
     public ModelAndView initData(ModelMap modelMap, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
         logger.info("开始初始化数据...");
 
         this.accountManager.initData();
+        this.bookService.initData();
 
         return new ModelAndView("redirect:/index2.jsp");
 

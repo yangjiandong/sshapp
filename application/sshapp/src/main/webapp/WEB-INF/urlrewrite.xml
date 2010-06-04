@@ -13,11 +13,17 @@
     <from>/ext/**</from>
     <to>/ext/$1</to>
   </rule>
-
   <rule>
     <from>/css/**</from>
     <to>/css/$1</to>
   </rule>
+
+  <rule>
+    <from>/book/**</from>
+    <to>/book/$1</to>
+  </rule>
+
+
   <rule>
     <from>/index2.jsp</from>
     <to>/index2.jsp</to>
@@ -33,10 +39,10 @@
 
   <rule>
     <from>/**</from>
-    <to>/app/$1</to>
+    <to>/rest/$1</to>
   </rule>
   <outbound-rule>
-    <from>/app/**</from>
+    <from>/rest/**</from>
     <to>/$1</to>
   </outbound-rule>
 </urlrewrite>

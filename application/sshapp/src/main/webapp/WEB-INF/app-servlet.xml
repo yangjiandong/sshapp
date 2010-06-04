@@ -29,6 +29,7 @@
   </bean>
 
   <!-- Forwards requests to the "/" resource to the "welcome" view -->
+  <mvc:annotation-driven />
   <mvc:view-controller path="/" view-name="index"/>
 
   <!--define Spring MVC's view resource(*.jsp or other file) -->

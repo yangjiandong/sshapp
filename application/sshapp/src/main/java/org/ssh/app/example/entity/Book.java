@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.ssh.app.common.entity.IdEntity;
 
 /**
@@ -12,6 +13,7 @@ import org.ssh.app.common.entity.IdEntity;
  */
 @Entity
 @Table(name = "t_book")
+@JsonAutoDetect
 public class Book extends IdEntity {
 
     private String isbn;
@@ -32,5 +34,37 @@ public class Book extends IdEntity {
 
     public void setIsbn(String isbn) {
         this.isbn = isbn;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public int getEdition() {
+        return edition;
+    }
+
+    public void setEdition(int edition) {
+        this.edition = edition;
+    }
+
+    public int getPages() {
+        return pages;
+    }
+
+    public void setPages(int pages) {
+        this.pages = pages;
+    }
+
+    public String getPublished() {
+        return published;
+    }
+
+    public void setPublished(String published) {
+        this.published = published;
     }
 }
