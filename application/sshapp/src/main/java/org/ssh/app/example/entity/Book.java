@@ -13,7 +13,7 @@ import org.ssh.app.common.entity.IdEntity;
  */
 @Entity
 @Table(name = "t_book")
-@JsonAutoDetect
+//@JsonAutoDetect
 public class Book extends IdEntity {
 
     private String isbn;

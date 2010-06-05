@@ -1,7 +1,7 @@
 springside3
 ------------
 
-2010.06.04
+2010.06.05
 ----------
 
 1、ubuntu10.4下建立开发环境
@@ -54,6 +54,15 @@ sudo gedit nm-system-settings.conf
 sudo /etc/init.d/network-manager stop
 重新啟動 NetworkManager
 sudo /etc/init.d/network-manager start 
+
+3、没体会到spring3 rest 风格，简单的连接测试成功，
+
+  采用json返回的测试没成功，只能采用以前的方式，
+  如 http://loianegroner.com/tag/json-lib-ext-spring/，方式与公司采用的拼字符输出类似
+  --JsonController.java
+  --test: curl -i -X GET http://localhost:8089/sshapp/jsons/getBooks
+   
+  需要解决的是dwr如何用restful方式替代
 
 2010.06.03
 ----------

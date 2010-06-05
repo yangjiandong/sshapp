@@ -21,12 +21,17 @@
     <from>/lbClassicStatus</from>
     <to>/lbClassicStatus</to>
   </rule>
-
+  <!--example book-->
   <rule>
     <from>/book/**</from>
     <to>/book/$1</to>
   </rule>
 
+  <!--remote-->
+  <rule>
+    <from>/remote/**</from>
+    <to>/remote/$1</to>
+  </rule>
 
   <rule>
     <from>/index2.jsp</from>

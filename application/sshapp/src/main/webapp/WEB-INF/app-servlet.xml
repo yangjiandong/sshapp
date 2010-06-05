@@ -34,33 +34,52 @@
 
   <!--define Spring MVC's view resource(*.jsp or other file) -->
   <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-    <!-- to support JSTL -->
     <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-    <!-- path of view resource files -->
     <property name="prefix" value="/views/" />
-    <!-- suffix of view resource files -->
     <property name="suffix" value=".jsp" />
   </bean>
 
-  <!--? 用处 http://www.rickherrick.com/?q=node/63 -->
-  <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver" >
-    <property name="mediaTypes">
-      <map>
-        <entry key="json" value="application/json"/>
-        <entry key="xml" value="application/xml"/>
-      </map>
+  <!--? 用处 http://www.rickherrick.com/?q=node/63
+    http://blog.anthonychaves.net/2010/02/01/spring-3-0-web-mvc-and-json/
+     -->
+  <!--
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver" >
+      <property name="mediaTypes">
+        <map>
+          <entry key="html" value="text/html"/>
+          <entry key="json" value="application/json"/>
+          <entry key="xml" value="application/xml"/>
+        </map>
+      </property>
+
+      <property name="viewResolvers">
+        <list>
+          <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+            <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+            <property name="prefix" value="/views/" />
+            <property name="suffix" value=".jsp" />
+          </bean>
+        </list>
+      </property>
+
+      <property name="defaultViews">
+        <list>
+          <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" >
+            <property name="prefixJson" value="true"/>
+          </bean>
+        </list>
+      </property>
+    </bean>
+    -->
+
+  <!-- json -->
+  <bean id="xmlFileViewResolver" class="org.springframework.web.servlet.view.XmlViewResolver">
+    <property name="location">
+      <value>/WEB-INF/views.xml</value>
     </property>
-    <property name="defaultViews">
-      <list>
-        <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
-        <bean class="org.springframework.web.servlet.view.xml.MarshallingView">
-          <constructor-arg>
-            <bean class="org.springframework.oxm.xstream.XStreamMarshaller" />
-          </constructor-arg>
-        </bean>
-      </list>
+    <property name="order">
+      <value>1</value>
     </property>
-    <property name="ignoreAcceptHeader" value="true" />
   </bean>
 
 </beans>
