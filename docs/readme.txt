@@ -1,6 +1,20 @@
 springside3
 ------------
 
+2010.06.04
+----------
+
+1、ubuntu10.4下建立开发环境
+
+   a.jetty.sh 中设置 MAVEN_OPS 没成功，只能在命令行中用
+   mvn -o jetty:run -Djetty.port=8089 -Dmaven.test.skip=true -Dmaven.findbugs.jvmargs=-Xmx512m
+
+   b.将mvn仓库设到d盘，
+   先查看具体位置
+   gedit /etc/fstab
+   设置mvn/conf/setting.xml
+   <localRepository>/media/54485D16CE623524/HOME/local/repo</localRepository>
+   
 2010.06.03
 ----------
 
@@ -216,7 +230,19 @@ http://stsmedia.net/spring-finance-part-2-spring-mvc-spring-30-rest-integration/
 
    git push origin master:refs/heads/master
 
+   $ ssh-keygen
+    (ssh-keygen -C "你的email地址" -t rsa)
+    Generating public/private rsa key pair.
+    Enter file in which to save the key (/Users/schacon/.ssh/id_rsa):
+    Enter passphrase (empty for no passphrase):
+    Enter same passphrase again:
+    Your identification has been saved in /Users/schacon/.ssh/id_rsa.
+    Your public key has been saved in /Users/schacon/.ssh/id_rsa.pub.
+    The key fingerprint is:
+    43:c5:5b:5f:b1:f1:50:43:ad:20:a6:92:6a:1f:9a:3a schacon@agadorlaptop.local
+
    提交时，需将ssh-key 加到 github
+
    github user:yangjiandong,123456789,young.jiandong@gmail.com
 
 2、建立branch 3.3.2
