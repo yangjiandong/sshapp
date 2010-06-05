@@ -15,6 +15,46 @@ springside3
    设置mvn/conf/setting.xml
    <localRepository>/media/54485D16CE623524/HOME/local/repo</localRepository>
    
+   c.eclipse
+gedit ~/.gtkrc-2.0
+style "gtkcompact" {
+GtkButton::default_border={0,0,0,0}
+GtkButton::default_outside_border={0,0,0,0}
+GtkButtonBox::child_min_width=0
+GtkButtonBox::child_min_heigth=0
+GtkButtonBox::child_internal_pad_x=0
+GtkButtonBox::child_internal_pad_y=0
+GtkMenu::vertical-padding=1
+GtkMenuBar::internal_padding=0
+GtkMenuItem::horizontal_padding=4
+GtkToolbar::internal-padding=0
+GtkToolbar::space-size=0
+GtkOptionMenu::indicator_size=0
+GtkOptionMenu::indicator_spacing=0
+GtkPaned::handle_size=4
+GtkRange::trough_border=0
+GtkRange::stepper_spacing=0
+GtkScale::value_spacing=0
+GtkScrolledWindow::scrollbar_spacing=0
+GtkTreeView::vertical-separator=0
+GtkTreeView::horizontal-separator=0
+GtkTreeView::fixed-height-mode=TRUE
+GtkWidget::focus_padding=0
+}
+class "GtkWidget" style "gtkcompact"
+
+2、ubuntu下 图标 网络连接  消失 解决办法
+
+cd /etc
+cd NetworkManager
+sudo gedit nm-system-settings.conf
+把 里面的 false 改成 true.
+
+停止 NetworkManager
+sudo /etc/init.d/network-manager stop
+重新啟動 NetworkManager
+sudo /etc/init.d/network-manager start 
+
 2010.06.03
 ----------
 
