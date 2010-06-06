@@ -1,6 +1,8 @@
 package org.ssh.app.example.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,7 +36,7 @@ public class JsonController extends MultiActionController {
 
         try {
             List<Book> books = bookService.getBooks();
-            return JsonViewUtil.getModelMap(books);
+            return getModelMap(books);
 
         } catch (Exception e) {
 
@@ -43,6 +45,20 @@ public class JsonController extends MultiActionController {
         }
     }
 
+    /**
+     * Generates modelMap to return in the modelAndView
+     * @param contacts
+     * @return
+     */
+    private ModelAndView getModelMap(List<Book> contacts){
+
+        Map<String,Object> modelMap = new HashMap<String,Object>(3);
+        modelMap.put("total", contacts.size());
+        modelMap.put("data", contacts);
+        modelMap.put("success", true);
+
+        return new ModelAndView("jsonView", modelMap);
+    }
 //    public ModelAndView create(HttpServletRequest request,
 //            HttpServletResponse response) throws Exception {
 //

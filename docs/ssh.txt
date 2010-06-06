@@ -1,6 +1,20 @@
 ssh
 ======
 
+2010.06.06
+----------
+
+1、19:36 - 19:39
+   20:23 - 20:27
+   20:43 - 20:53
+   21:12 - 22:57
+
+   相关文件
+   webapp/book/index.jsp
+         /js/book
+
+   奇怪，昨天正常的测试curl -i -X GET http://localhost:8089/sshapp/jsons/getBooks ,现在不正常了，换了mysql数据库也没用。
+
 2010.06.05
 ----------
 
