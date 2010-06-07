@@ -28,7 +28,7 @@ public abstract class Post extends IdEntity {
     protected String title;
     protected String content;
     protected User user;
-    protected Date modifyTime;
+    protected String modifyTime;
 
     @Column(nullable = false)
     public String getTitle() {
@@ -61,11 +61,11 @@ public abstract class Post extends IdEntity {
         this.user = user;
     }
 
-    public Date getModifyTime() {
+    public String getModifyTime() {
         return modifyTime;
     }
 
-    public void setModifyTime(Date modifyTime) {
+    public void setModifyTime(String modifyTime) {
         this.modifyTime = modifyTime;
     }
 }

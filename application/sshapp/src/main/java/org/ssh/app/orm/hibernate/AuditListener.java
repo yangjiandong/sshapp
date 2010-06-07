@@ -31,11 +31,11 @@ public class AuditListener implements SaveOrUpdateEventListener {
 
             if (entity.getId() == null) {
                 //创建新对象
-                entity.setCreateTime(new Date());
+                entity.setCreateTime(org.ssh.app.util.UtilDateTime.nowDateString());
                 entity.setCreateBy(loginName);
             } else {
                 //修改旧对象
-                entity.setLastModifyTime(new Date());
+                entity.setLastModifyTime(org.ssh.app.util.UtilDateTime.nowDateString());
                 entity.setLastModifyBy(loginName);
 
                 logger.info("{}对象(ID:{}) 被 {} 在 {} 修改", new Object[] { event.getEntityName(), entity.getId(),

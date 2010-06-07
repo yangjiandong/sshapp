@@ -15,9 +15,9 @@ import org.ssh.app.common.entity.IdEntity;
 @MappedSuperclass
 public class AuditableEntity extends IdEntity {
 
-    protected Date createTime;
+    protected String createTime;
     protected String createBy;
-    protected Date lastModifyTime;
+    protected String lastModifyTime;
     protected String lastModifyBy;
 
     /**
@@ -25,11 +25,11 @@ public class AuditableEntity extends IdEntity {
      */
     //本属性只在save时有效,update时无效.
     @Column(updatable = false)
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -50,11 +50,11 @@ public class AuditableEntity extends IdEntity {
      */
     //本属性只在update时有效,save时无效.
     @Column(insertable = false)
-    public Date getLastModifyTime() {
+    public String getLastModifyTime() {
         return lastModifyTime;
     }
 
-    public void setLastModifyTime(Date lastModifyTime) {
+    public void setLastModifyTime(String lastModifyTime) {
         this.lastModifyTime = lastModifyTime;
     }
 

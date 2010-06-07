@@ -1,6 +1,23 @@
 springside3
 ------------
 
+2010.06.07
+----------
+
+1、json-lib 对数据datatime 转换有问题，取消表date字段属性，采用string
+net.sf.json.JSONException: java.lang.reflect.InvocationTargetException
+
+2、Hibernate中缓存的统计策略 -generate_statistics
+
+  http://blog.163.com/qqabc20082006@126/blog/static/2292852520091120112719561/
+  
+  // 创建Statistics对象，并通过SessionFactory对象获得统计信息
+  Statistics st =  sf.getStatistics();
+  // 打印全部统计信息
+  System.out.println(st);
+  // 打印二级缓存信息
+  System.out.println(st.getSecondLevelCacheHitCount());
+
 2010.06.05
 ----------
 

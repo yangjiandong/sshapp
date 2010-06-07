@@ -76,6 +76,16 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+
+		<repository>
+			<id>jarvana</id>
+			<name>www.jarvana.com/jarvana</name>
+			<url>http://www.jarvana.com/jarvana/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+
 	</repositories>
 
 	<pluginRepositories>
