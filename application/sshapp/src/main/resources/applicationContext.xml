@@ -29,7 +29,6 @@
     </property>
   </bean>
 
-
   <!--
     数据源配置,使用应用内的DBCP数据库连接池 <bean id="dataSource"
     class="org.apache.commons.dbcp.BasicDataSource"

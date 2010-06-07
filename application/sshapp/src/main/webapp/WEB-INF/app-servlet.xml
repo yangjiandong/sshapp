@@ -1,5 +1,6 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:p="http://www.springframework.org/schema/p"
   xmlns:context="http://www.springframework.org/schema/context"
   xmlns:tx="http://www.springframework.org/schema/tx"
   xmlns:aop="http://www.springframework.org/schema/aop"
@@ -32,21 +33,55 @@
   <mvc:annotation-driven />
   <mvc:view-controller path="/" view-name="index"/>
 
-  <!--define Spring MVC's view resource(*.jsp or other file) -->
-  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-    <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-    <property name="prefix" value="/views/" />
-    <property name="suffix" value=".jsp" />
+  <!--
+  http://www.wetfeetblog.com/goolge-app-engine-java-spring-rest-json-flex-part-1/87
+
+  <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+    <property name="messageConverters">
+      <list>
+        <ref bean="jsonHttpMessageConverter"/>
+      </list>
+    </property>
   </bean>
+
+  <bean id="jsonHttpMessageConverter"  class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+
+  <bean class="org.ssh.app.util.MyContentNegotiatingViewResolver">
+    <property name="mediaTypes">
+      <map>
+        <entry key="json" value="application/json" />
+      </map>
+    </property>
+    <property name="defaultContentType" value="application/json" />
+    <property name="defaultViews">
+      <list>
+        <bean class="org.ssh.app.util.JsonView" />
+      </list>
+    </property>
+  </bean>
+  -->
+
+  <!--define Spring MVC's view resource(*.jsp or other file) -->
+  <!--
+      <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/views/" />
+        <property name="suffix" value=".jsp" />
+      </bean>
+      -->
+
+    <bean name="viewResolver" class="org.springframework.web.servlet.view.XmlViewResolver" p:order="1"/>
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/views/" p:suffix=".jsp" p:order="10"/>
+
+
 
   <!--? 用处 http://www.rickherrick.com/?q=node/63
     http://blog.anthonychaves.net/2010/02/01/spring-3-0-web-mvc-and-json/
      -->
   <!--
-    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver" >
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver" p:order="1">
       <property name="mediaTypes">
         <map>
-          <entry key="html" value="text/html"/>
           <entry key="json" value="application/json"/>
           <entry key="xml" value="application/xml"/>
         </map>
@@ -61,25 +96,28 @@
           </bean>
         </list>
       </property>
-
       <property name="defaultViews">
         <list>
-          <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" >
-            <property name="prefixJson" value="true"/>
+          <bean class="org.springframework.web.servlet.view.xml.MarshallingView">
+            <property name="marshaller">
+              <bean class="org.springframework.oxm.xstream.XStreamMarshaller"
+                p:autodetectAnnotations="true" />
+            </property>
           </bean>
         </list>
       </property>
     </bean>
     -->
 
-  <!-- json -->
-  <bean id="xmlFileViewResolver" class="org.springframework.web.servlet.view.XmlViewResolver">
-    <property name="location">
-      <value>/WEB-INF/views.xml</value>
-    </property>
-    <property name="order">
-      <value>1</value>
-    </property>
-  </bean>
+  <!-- json
+    <bean id="xmlFileViewResolver" class="org.springframework.web.servlet.view.XmlViewResolver">
+      <property name="location">
+        <value>/WEB-INF/views.xml</value>
+      </property>
+      <property name="order">
+        <value>1</value>
+      </property>
+    </bean>
+    -->
 
 </beans>
