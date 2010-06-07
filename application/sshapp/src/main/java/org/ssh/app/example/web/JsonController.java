@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -43,6 +44,17 @@ public class JsonController extends MultiActionController {
             return JsonViewUtil
                     .getModelMapError("Error trying to retrieve contacts.");
         }
+    }
+
+    @RequestMapping(value = "/getBook2s", method = RequestMethod.GET)
+    public void view2(ModelMap map, HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+
+        logger.info("json,list...");
+            List<Book> books = bookService.getBooks();
+            JsonViewUtil.buildJSONDataResponse(response, books,
+                    (long) books.size());
+
     }
 
     /**

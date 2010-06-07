@@ -21,7 +21,7 @@
       <jdbc.driver.groupId>org.hsqldb</jdbc.driver.groupId>
       <jdbc.driver.artifactId>com.springsource.org.hsqldb</jdbc.driver.artifactId>
       <jdbc.driver.version>1.8.0.9</jdbc.driver.version>
-      -->
+    -->
     <jdbc.driver.groupId>com.h2database</jdbc.driver.groupId>
     <jdbc.driver.artifactId>h2</jdbc.driver.artifactId>
     <jdbc.driver.version>${h2.version}</jdbc.driver.version>
@@ -94,7 +94,8 @@
     <dependency>
       <groupId>net.sf.json-lib</groupId>
       <artifactId>json-lib</artifactId>
-      <version>2.2.3</version>
+      <version>2.3</version>
+      <classifier>jdk15</classifier>
     </dependency>
 
     <dependency>
@@ -132,12 +133,10 @@
       <artifactId>javassist</artifactId>
     </dependency>
 
-    <!-- dbcp
-      <dependency>
-        <groupId>commons-dbcp</groupId>
-        <artifactId>commons-dbcp</artifactId>
-      </dependency>
-      -->
+    <!--
+      dbcp <dependency> <groupId>commons-dbcp</groupId>
+      <artifactId>commons-dbcp</artifactId> </dependency>
+    -->
 
     <dependency>
       <groupId>c3p0</groupId>
@@ -157,25 +156,27 @@
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
       <version>5.1.6</version>
+      <scope>runtime</scope>
     </dependency>
+
+    <dependency>
+      <groupId>net.sourceforge.jtds</groupId>
+      <artifactId>jtds</artifactId>
+      <version>1.2.2</version>
+      <scope>runtime</scope>
+    </dependency>
+
     <!-- database end -->
 
     <!-- web begin -->
-    <!-- no struts
-      <dependency>
-        <groupId>org.apache.struts</groupId>
-        <artifactId>struts2-core</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.struts</groupId>
-        <artifactId>struts2-convention-plugin
-        </artifactId>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.struts</groupId>
-        <artifactId>struts2-spring-plugin</artifactId>
-      </dependency>
-      -->
+    <!--
+      no struts <dependency> <groupId>org.apache.struts</groupId>
+      <artifactId>struts2-core</artifactId> </dependency> <dependency>
+      <groupId>org.apache.struts</groupId>
+      <artifactId>struts2-convention-plugin </artifactId> </dependency>
+      <dependency> <groupId>org.apache.struts</groupId>
+      <artifactId>struts2-spring-plugin</artifactId> </dependency>
+    -->
     <dependency>
       <groupId>org.freemarker</groupId>
       <artifactId>freemarker</artifactId>
@@ -453,6 +454,14 @@
 
   <build>
     <plugins>
+
+      <!-- compiler插件, 设定JDK版本 -->
+      <!--
+        <plugin> <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3</version> <configuration> <source>1.6</source>
+        <target>1.6</target> </configuration> </plugin>
+      -->
       <!-- eclipse插件 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -485,7 +494,8 @@
         </executions>
         <configuration>
           <tasks>
-            <taskdef name="instrument" classname="org.hibernate.tool.instrument.javassist.InstrumentTask">
+            <taskdef name="instrument"
+              classname="org.hibernate.tool.instrument.javassist.InstrumentTask">
               <classpath>
                 <path refid="maven.runtime.classpath" />
                 <path refid="maven.plugin.classpath" />
