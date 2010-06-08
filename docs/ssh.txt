@@ -1,6 +1,53 @@
 ssh
 ======
 
+2010.06.08
+-----------
+
+1、9：30 - 11：00
+   14：30 - 15：32
+
+   找到原因了，实体下定义必须采用类属性，不能用Int
+    private Long edition;
+    private Long pages;
+
+2010.06.07
+----------
+
+1、14：30 - 17：00
+   
+   json-lib 还是不行
+   还是报net.sf.json.JSONException: java.lang.reflect.InvocationTargetException
+   网上资料一般是表中采用了Date字段，或hibernate有lazy，才有以上报错。
+
+   19:00 - 19:52
+
+   开始以List<String> 做测试，json正常
+   取消Book中 
+//    public String toString() {
+//        return ToStringBuilder.reflectionToString(this);
+//    }
+   json正常。妈的，想骂人。
+
+   json-lib-2.3-jdk1.5
+    * jakarta commons-lang 2.4
+    * jakarta commons-beanutils 1.7.0
+    * jakarta commons-collections 3.2
+    * jakarta commons-logging 1.1.1
+    * ezmorph 1.0.6
+
+   就是不能采用以上toString方法
+
+   20:00 - 22:42
+
+   好象还不行。
+   json-lib + spring 是否只适用于 2.5?
+
+   结合 http://stackoverflow.com/questions/2038642/help-with-spring-json-using-annotated-controllers 配置，采用ModelAndView,
+   JsonController
+   curl -i -X GET http://localhost:8080/sshapp/jsons/getBooks4
+
+
 2010.06.06
 ----------
 
@@ -13,7 +60,9 @@ ssh
    webapp/book/index.jsp
          /js/book
 
-   奇怪，昨天正常的测试curl -i -X GET http://localhost:8089/sshapp/jsons/getBooks ,现在不正常了，换了mysql数据库也没用。
+   奇怪，昨天正常的测试curl -i -X GET http://localhost:8089/sshapp/jsons/getBooks ,
+   报：net.sf.json.JSONException: java.lang.reflect.InvocationTargetException
+   现在不正常了，换了mysql数据库也没用。
 
 2010.06.05
 ----------

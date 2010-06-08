@@ -31,14 +31,13 @@ public class ContactController extends MultiActionController {
     @RequestMapping(value = "/getContacts", method = RequestMethod.GET)
     public ModelAndView view(HttpServletRequest request,
             HttpServletResponse response) throws Exception {
-        logger.info("json,list...");
+        logger.info("json,contacts list...");
 
         try {
             List<Contact> books = contactService.getAlls();
             return JsonViewUtil.getModelMap(books);
 
         } catch (Exception e) {
-
             return JsonViewUtil
                     .getModelMapError("Error trying to retrieve contacts.");
         }

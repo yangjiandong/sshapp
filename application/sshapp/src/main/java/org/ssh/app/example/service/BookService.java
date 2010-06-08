@@ -2,6 +2,7 @@ package org.ssh.app.example.service;
 
 import java.util.List;
 
+import org.hibernate.SQLQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,18 @@ public class BookService {
         return bookDao.getAll();
     }
 
+    @Transactional(readOnly = true)
+    public List<Book> loadBooks(String sysName) {
+
+        StringBuffer bf = new StringBuffer();
+        bf.append("select oid,isbn,title,published ");
+        bf.append(" from  t_Book ");
+
+        SQLQuery query = this.bookDao.getSession().createSQLQuery(bf.toString());
+        //query.setParameter(0, sysName);
+        return query.list();
+    }
+
     public void initData() {
         if (this.bookDao.getBookCount().longValue() != 0) {
             return;
@@ -35,24 +48,24 @@ public class BookService {
         Book b = new Book();
         b.setIsbn("comto ok");
         b.setTitle("goto American");
-        b.setEdition(10);
-        b.setPages(200);
+        b.setEdition(10L);
+        b.setPages(200L);
         b.setPublished("AM");
         bookDao.save(b);
 
         b = new Book();
         b.setIsbn("omoo");
         b.setTitle("计划生育");
-        b.setEdition(10);
-        b.setPages(2000);
+        b.setEdition(10L);
+        b.setPages(2000L);
         b.setPublished("AM");
         bookDao.save(b);
 
         b = new Book();
         b.setIsbn("comtosadfad ok");
         b.setTitle("同要有 面goto American");
-        b.setEdition(910);
-        b.setPages(5300);
+        b.setEdition(910L);
+        b.setPages(5300L);
         b.setPublished("AM");
         bookDao.save(b);
     }

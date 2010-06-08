@@ -26,8 +26,8 @@ public class Book {
     private Long oid;
     private String isbn;
     private String title;
-    private int edition;
-    private int pages;
+    private Long edition;
+    private Long pages;
     private String published;
 
 
@@ -64,19 +64,19 @@ public class Book {
         this.title = title;
     }
 
-    public int getEdition() {
+    public Long getEdition() {
         return edition;
     }
 
-    public void setEdition(int edition) {
+    public void setEdition(Long edition) {
         this.edition = edition;
     }
 
-    public int getPages() {
+    public Long getPages() {
         return pages;
     }
 
-    public void setPages(int pages) {
+    public void setPages(Long pages) {
         this.pages = pages;
     }
 
