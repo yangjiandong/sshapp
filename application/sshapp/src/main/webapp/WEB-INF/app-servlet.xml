@@ -33,47 +33,17 @@
   <mvc:annotation-driven />
   <mvc:view-controller path="/" view-name="index"/>
 
-  <!--
-  http://www.wetfeetblog.com/goolge-app-engine-java-spring-rest-json-flex-part-1/87
-
-  <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
-    <property name="messageConverters">
-      <list>
-        <ref bean="jsonHttpMessageConverter"/>
-      </list>
-    </property>
-  </bean>
-
-  <bean id="jsonHttpMessageConverter"  class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
-
-  <bean class="org.ssh.app.util.MyContentNegotiatingViewResolver">
-    <property name="mediaTypes">
-      <map>
-        <entry key="json" value="application/json" />
-      </map>
-    </property>
-    <property name="defaultContentType" value="application/json" />
-    <property name="defaultViews">
-      <list>
-        <bean class="org.ssh.app.util.JsonView" />
-      </list>
-    </property>
-  </bean>
-  -->
-
   <!--define Spring MVC's view resource(*.jsp or other file) -->
   <!--
-      <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-        <property name="prefix" value="/views/" />
-        <property name="suffix" value=".jsp" />
-      </bean>
-      -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+      <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+      <property name="prefix" value="/views/" />
+      <property name="suffix" value=".jsp" />
+    </bean>
+    -->
 
-    <bean name="viewResolver" class="org.springframework.web.servlet.view.XmlViewResolver" p:order="1"/>
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/views/" p:suffix=".jsp" p:order="10"/>
-
-
+  <bean name="viewResolver" class="org.springframework.web.servlet.view.XmlViewResolver" p:order="1"/>
+  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/views/" p:suffix=".jsp" p:order="10"/>
 
   <!--? 用处 http://www.rickherrick.com/?q=node/63
     http://blog.anthonychaves.net/2010/02/01/spring-3-0-web-mvc-and-json/

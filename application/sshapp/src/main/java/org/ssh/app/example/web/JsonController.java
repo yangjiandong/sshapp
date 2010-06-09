@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONArray;
 import net.sf.json.JsonConfig;
 import net.sf.json.util.CycleDetectionStrategy;
-import net.sf.json.util.PropertyFilter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +21,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springside.modules.orm.Page;
+import org.springside.modules.orm.PropertyFilter;
 import org.ssh.app.example.entity.Book;
 import org.ssh.app.example.service.BookService;
 import org.ssh.app.util.JsonViewUtil;
@@ -49,29 +50,34 @@ public class JsonController {
     public void view2(ModelMap map, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
 
-        logger.info("json,list2...");
-        // List<Book> books = bookService.getBooks();
-        List<String> books = new ArrayList<String>();
-        books.add("oen book");
-        books.add("two bool");
-        JsonViewUtil.buildJSONDataResponse(response, books, (long) books.size());
+//        logger.info("json,list2...");
+//        // List<Book> books = bookService.getBooks();
+//        List<String> books = new ArrayList<String>();
+//        books.add("oen book");
+//        books.add("two bool");
+        Page<Book> page = new Page<Book>();
+        List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
+        Page<Book> books = bookService.search(page,filters);
+
+        JsonViewUtil.buildJSONDataResponse(response, books.getResult(), (long) books.getTotalCount());
 
     }
 
     @RequestMapping(value = "/getBooks3", method = RequestMethod.GET)
     public ModelAndView view3() throws Exception {
         logger.info("json,list3...");
-
-        List<Book> books = bookService.getBooks();
+        Page<Book> page = new Page<Book>();
+        List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
+        Page<Book> books = bookService.search(page,filters);
         Map<String, Object> modelMap = new HashMap<String, Object>(3);
-        modelMap.put("total", books.size());
-        modelMap.put("data", books);
+        modelMap.put("total", books.getTotalCount());
+        modelMap.put("data", books.getResult());
         modelMap.put("success", true);
 
         // ModelAndView modelAndView = new ModelAndView();
         // modelAndView.setViewName("jsonView");
         // modelAndView.addObject(books);
-        return new ModelAndView("jsonView3", modelMap);
+        return new ModelAndView("jsonView", modelMap);
     }
 
     @RequestMapping(value = "/getBooks4", method = RequestMethod.GET)

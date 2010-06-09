@@ -78,25 +78,25 @@ public class JsonViewUtil {
      */
     public static void buildJSONDataResponse(HttpServletResponse response,
             List<? extends Object> data, Long total) throws Exception {
-//        JsonConfig cfg = new JsonConfig();
-//
-//        cfg.setJsonPropertyFilter(new PropertyFilter() {
-//            public boolean apply(Object arg0, String arg1, Object arg2) {
-//                System.out.println("oo:" + arg1);
-//
-//                if (arg1.equals("childs") || arg1.equals("parent")) {
-//                    return true;
-//                } else {
-//                    return false;
-//                }
-//            }
-//        });
+        JsonConfig cfg = new JsonConfig();
 
-        //cfg.setExcludes(new String[]{"handler","hibernateLazyInitializer"});
+        cfg.setJsonPropertyFilter(new PropertyFilter() {
+            public boolean apply(Object arg0, String arg1, Object arg2) {
+                System.out.println("oo:" + arg1);
+
+                if (arg1.equals("childs") || arg1.equals("parent")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
+        cfg.setExcludes(new String[]{"handler","hibernateLazyInitializer"});
         //cfg.registerJsonValueProcessor(java.util.Date.class, new JsonValueProcessorImpl());
         //cfg.registerJsonValueProcessor(java.sql.Date.class, new JsonValueProcessorImpl());
 
-        JSONArray jsonArray = JSONArray.fromObject(data);//, cfg);
+        JSONArray jsonArray = JSONArray.fromObject(data, cfg);
 
         StringBuffer sb = new StringBuffer();
         sb.append("{\"totalCount\":" + total + ",\"rows\":");

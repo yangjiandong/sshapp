@@ -1,6 +1,13 @@
 ssh
 ======
 
+2010.06.09
+----------
+
+1、21:00
+
+   取消json-lib（需spring2.5.6支持）, 更改jackson 版本为1.4.2，1.5.2在spring3.0.2下有问题(http://jira.springframework.org/browse/SPR-7063?page=com.atlassian.jira.plugin.system.issuetabpanels%3Achangehistory-tabpanel)
+
 2010.06.08
 -----------
 
@@ -15,7 +22,7 @@ ssh
 ----------
 
 1、14：30 - 17：00
-   
+
    json-lib 还是不行
    还是报net.sf.json.JSONException: java.lang.reflect.InvocationTargetException
    网上资料一般是表中采用了Date字段，或hibernate有lazy，才有以上报错。
@@ -23,7 +30,7 @@ ssh
    19:00 - 19:52
 
    开始以List<String> 做测试，json正常
-   取消Book中 
+   取消Book中
 //    public String toString() {
 //        return ToStringBuilder.reflectionToString(this);
 //    }
@@ -75,7 +82,7 @@ ssh
 
    http://loianegroner.com/tag/json-lib-ext-spring/
 
-   22:00 - 2:30 
+   22:00 - 2:30
 
    继续关注以上这个项目，争取改写成功
 
@@ -84,7 +91,7 @@ ssh
 ----------
 
 1、20:30 - 23:06
-   
+
    extjs restful spring
    http://loianegroner.com/2010/05/populating-an-extjs-datagrid-rowexpander-using-spring-mvc-3/
 

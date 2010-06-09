@@ -37,6 +37,11 @@
   <!-- multiple configure Hibernate Open Session In View filter-->
   <filter>
     <filter-name>hibernateOpenSessionInViewFilter</filter-name>
+    <filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+  </filter>
+  <!--
+  <filter>
+    <filter-name>hibernateOpenSessionInViewFilter</filter-name>
     <filter-class>
       org.ssh.app.orm.hibernate.OpenSessionInViewFilter</filter-class>
     <init-param>
@@ -48,6 +53,7 @@
       <param-value>sessionFactory</param-value>
     </init-param>
   </filter>
+  -->
   <filter-mapping>
     <filter-name>hibernateOpenSessionInViewFilter</filter-name>
     <url-pattern>/*</url-pattern>

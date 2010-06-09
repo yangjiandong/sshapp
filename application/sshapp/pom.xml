@@ -17,12 +17,6 @@
 
   <!-- 项目属性 -->
   <properties>
-    <!--
-      <jdbc.driver.groupId>org.hsqldb</jdbc.driver.groupId>
-      <jdbc.driver.artifactId>com.springsource.org.hsqldb</jdbc.driver.artifactId>
-      <jdbc.driver.version>1.8.0.9</jdbc.driver.version>
-    -->
-
     <jdbc.driver.groupId>com.h2database</jdbc.driver.groupId>
     <jdbc.driver.artifactId>h2</jdbc.driver.artifactId>
     <jdbc.driver.version>${h2.version}</jdbc.driver.version>
@@ -91,6 +85,7 @@
 
     <!-- spring end -->
 
+    <!-- dependency spring2.5.6-->
     <dependency>
       <groupId>net.sf.json-lib</groupId>
       <artifactId>json-lib</artifactId>
@@ -98,6 +93,7 @@
       <classifier>jdk15</classifier>
     </dependency>
 
+    <!--
     <dependency>
       <groupId>net.sf.json-lib</groupId>
       <artifactId>json-lib-ext-spring</artifactId>
@@ -115,6 +111,7 @@
       <artifactId>ezmorph</artifactId>
       <version>1.0.6</version>
     </dependency>
+    -->
 
     <dependency>
       <groupId>com.thoughtworks.xstream</groupId>
@@ -195,10 +192,6 @@
       <version>2.3.16</version>
     </dependency>
 
-    <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-mapper-asl</artifactId>
-    </dependency>
     <dependency>
       <groupId>org.tuckey</groupId>
       <artifactId>urlrewritefilter</artifactId>

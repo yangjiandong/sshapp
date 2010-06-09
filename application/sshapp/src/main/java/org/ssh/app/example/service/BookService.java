@@ -1,13 +1,17 @@
 package org.ssh.app.example.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.poi.hssf.record.formula.functions.T;
 import org.hibernate.SQLQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springside.modules.orm.Page;
+import org.springside.modules.orm.PropertyFilter;
 import org.ssh.app.example.dao.BookDao;
 import org.ssh.app.example.entity.Book;
 
@@ -38,6 +42,11 @@ public class BookService {
         SQLQuery query = this.bookDao.getSession().createSQLQuery(bf.toString());
         //query.setParameter(0, sysName);
         return query.list();
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Book> search(final Page<Book> page, List<PropertyFilter> filters) {
+        return bookDao.findPage(page, filters);
     }
 
     public void initData() {
