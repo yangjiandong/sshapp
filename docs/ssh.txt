@@ -1,10 +1,16 @@
 ssh
 ======
 
+2010.06.10
+-----------
+
+1、还原json-lib,
+   jackson 1.5.2
+
 2010.06.09
 ----------
 
-1、21:00
+1、21:00 - 22:30
 
    取消json-lib（需spring2.5.6支持）, 更改jackson 版本为1.4.2，1.5.2在spring3.0.2下有问题(http://jira.springframework.org/browse/SPR-7063?page=com.atlassian.jira.plugin.system.issuetabpanels%3Achangehistory-tabpanel)
 

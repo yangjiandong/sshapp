@@ -46,6 +46,16 @@ public class JsonController {
          .buildJSONDataResponse(response, books, (long) books.size());
     }
 
+    @RequestMapping(value = "/getBookvs", method = RequestMethod.GET)
+    public void viewv(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        logger.info("json,list...");
+
+        List<Book> books = bookService.loadBooks(null);
+
+        JsonViewUtil
+         .buildJSONDataResponse(response, books, (long) books.size());
+    }
+    
     @RequestMapping(value = "/getBook2s", method = RequestMethod.GET)
     public void view2(ModelMap map, HttpServletRequest request, HttpServletResponse response)
             throws Exception {

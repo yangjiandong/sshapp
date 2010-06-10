@@ -15,6 +15,7 @@ import net.sf.json.JsonConfig;
 import net.sf.json.processors.JsonValueProcessor;
 import net.sf.json.util.PropertyFilter;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
@@ -107,6 +108,23 @@ public class JsonViewUtil {
         PrintWriter out = response.getWriter();
         out.write(sb.toString());
     }
+
+    //http://hjg1988.javaeye.com/blog/561368
+    //jackson 性能
+    public static void buildJacksonDataResponse(HttpServletResponse response,
+            List<? extends Object> data, Long total) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        
+        StringBuffer sb = new StringBuffer();
+        sb.append("{\"totalCount\":" + total + ",\"rows\":");
+        //sb.append(jsonArray.toString());
+        sb.append("}");
+
+        response.setContentType("text/json; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        out.write(sb.toString());
+    }
+    
 
     /**
      * 响应生成Grid格式的JSON数据集 <br>
