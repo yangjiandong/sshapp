@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:util="http://www.springframework.org/schema/util"
+  xsi:schemaLocation= "http://www.springframework.org/schema/beans
+  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+  http://www.springframework.org/schema/util
+  http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+  <bean name="jsonView" class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
+
+  <!--
+  <bean name="jsonLibView" class="net.sf.json.spring.web.servlet.view.JsonView" />
+  -->
+  <!--
+  <bean name="jsonView" class="org.springframework.web.servlet.view.json.JsonView">
+    <property name="encoding">
+      <value>UTF-8</value>
+    </property>
+    <property name="contentType">
+      <value>application/json</value>
+    </property>
+    <property name="jsonWriter">
+      <ref bean="sojoJsonWriter"/>
+    </property>
+    <property name="jsonErrors">
+      <list>
+        <ref bean="statusError"/>
+        <ref bean="modelflagError"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean name="sojoJsonWriter" class="org.springframework.web.servlet.view.json.writer.sojo.SojoJsonStringWriter">
+    <property name="convertAllMapValues">
+      <value>false</value>
+    </property>
+  </bean>
+
+  <bean name="statusError" class="org.springframework.web.servlet.view.json.error.HttpStatusError">
+    <property name="errorCode">
+      <value>311</value>
+    </property>
+  </bean>
+  <bean name="modelflagError" class="org.springframework.web.servlet.view.json.error.ModelFlagError">
+    <property name="name">
+      <value>failure</value>
+    </property>
+    <property name="value">
+      <value>true</value>
+    </property>
+  </bean>
+  -->
+
+</beans>
+
+
+
