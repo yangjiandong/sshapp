@@ -26,7 +26,7 @@
 
     <root>
         <level value="INFO"/>
-        <appender-ref ref="CONSOLE,FILE"/>
+        <appender-ref ref="CONSOLE"/>
     </root>
 
 
