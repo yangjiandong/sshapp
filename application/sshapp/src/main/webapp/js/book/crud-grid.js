@@ -23,10 +23,10 @@ Ext.onReady(function() {
 
       var proxy = new Ext.data.HttpProxy({
             api : {
-              read : 'contact/getContacts',
-              create : 'contact/create',
-              update : 'contact/update',
-              destroy : 'contact/delete'
+              read : '/contact/getContacts',
+              create : '/contact/create',
+              update : '/contact/update',
+              destroy : '/contact/delete'
             }
           });
 
