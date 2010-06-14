@@ -1,5 +1,8 @@
 package org.ssh.app.example.dao;
 
+import java.util.List;
+
+import org.hibernate.Criteria;
 import org.springframework.stereotype.Component;
 import org.springside.modules.orm.hibernate.HibernateDao;
 import org.ssh.app.example.entity.Book;
@@ -13,5 +16,11 @@ public class BookDao extends HibernateDao<Book, String> {
      */
     public Long getBookCount() {
         return findUnique(COUNT_BOOKS);
+    }
+
+    public List<Book> getAll2() {
+        Criteria criteria = getSession().createCriteria(entityClass);
+        criteria.setCacheable(true);
+        return criteria.list();
     }
 }

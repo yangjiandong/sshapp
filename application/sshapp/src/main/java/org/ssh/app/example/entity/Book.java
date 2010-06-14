@@ -1,7 +1,5 @@
 package org.ssh.app.example.entity;
 
-import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,17 +9,16 @@ import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.ssh.app.common.entity.IdEntity;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * book
  */
 @Entity
 @Table(name = "t_book")
-//@JsonAutoDetect
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Book {
-
-    //private static final long serialVersionUID = 5005023969695261864L;
 
     private Long oid;
     private String isbn;
@@ -29,7 +26,6 @@ public class Book {
     private Long edition;
     private Long pages;
     private String published;
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "Id_Generator")

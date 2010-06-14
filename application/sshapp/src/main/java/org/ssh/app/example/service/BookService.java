@@ -1,9 +1,7 @@
 package org.ssh.app.example.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.poi.hssf.record.formula.functions.T;
 import org.hibernate.SQLQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +27,7 @@ public class BookService {
 
     @Transactional(readOnly = true)
     public List<Book> getBooks(){
-        return bookDao.getAll();
+        return bookDao.getAll2();
     }
 
     @Transactional(readOnly = true)
