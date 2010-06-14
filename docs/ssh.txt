@@ -1,6 +1,15 @@
 ssh
 ======
 
+2010.06.14
+----------
+
+1、mvn 方式,json报错找到原因
+pom.xml 中对jetyy方式运行,hibearnat采用了lazy,暂时注释掉
+
+2、加入javamelody，
+只引入的pom.xml中dependency,还没完成
+
 2010.06.13
 ----------
 

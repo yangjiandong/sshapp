@@ -28,6 +28,7 @@
     <jackson.version>1.5.2</jackson.version>
     <slf4j.version>1.6.0</slf4j.version>
     <selenium.version>2.0a2</selenium.version>
+	<org.jrobin.version>1.5.9</org.jrobin.version>
 
     <!-- Plugin的属性定义  -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -80,7 +81,7 @@
       </snapshots>
     </repository>
 
-       <repository>
+    <repository>
       <id>spring-json</id>
       <name>spring-json</name>
       <url>http://spring-json.sourceforge.net/repository</url>
@@ -88,6 +89,16 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
+
+    <!-- for jrobin -->
+    <repository>
+                        <id>opennms-repo</id>
+                        <name>OpenNMS Repository</name>
+                        <url>http://repo.opennms.org/maven2</url>
+                        <snapshots>
+                                <enabled>false</enabled>
+                        </snapshots>
+                </repository>
 
 
     </repositories>
@@ -733,6 +744,13 @@
         <artifactId>ant</artifactId>
         <version>1.7.0</version>
       </dependency>
+
+      <dependency>
+                <groupId>org.jrobin</groupId>
+                <artifactId>jrobin</artifactId>
+                <version>${org.jrobin.version}</version>
+       </dependency>
+
     </dependencies>
   </dependencyManagement>
 
