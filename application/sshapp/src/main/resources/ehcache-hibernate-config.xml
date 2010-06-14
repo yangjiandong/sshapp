@@ -1,6 +1,6 @@
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ehcache.xsd">
 
-  <diskStore path="java.io.tmpdir/hibernate/finance" />
+  <diskStore path="java.io.tmpdir/sshapp" />
 
   <cacheManagerPeerListenerFactory
     class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"/>
@@ -11,7 +11,7 @@
       Use ehcache default for memoryStoreEvictionPolicy,diskPersistent.
     -->
   <defaultCache
-    maxElementsInMemory="500"
+    maxElementsInMemory="100000"
     eternal="false"
     timeToIdleSeconds="120"
     timeToLiveSeconds="300"
@@ -34,6 +34,8 @@
     maxElementsInMemory="5000"
     eternal="true"
     overflowToDisk="true"/>
+
+  <cache name="contentInfoCache" overflowToDisk="false" eternal="false" diskPersistent="false" timeToLiveSeconds="3600" timeToIdleSeconds="3600" maxElementsInMemory="10000" memoryStoreEvictionPolicy="LRU"/>
 
   <!--
   <cache name="com.ekingsoft.system.entities.Hz"

@@ -7,12 +7,12 @@ Ext.onReady(function(){
   var store = new Ext.data.Store({
     restful:true,
     proxy: new Ext.data.HttpProxy({
-      url: 'books/getBooks'
+      url: 'http://localhost:8089/sshapp/books/getBooks'
     }),
     reader: new Ext.data.JsonReader({
-      root:'books'
+      root:'data'
     },
-    [{name: 'id'},
+    [{name: 'oid'},
      {name: 'title'},
      {name: 'published'},
      {name: 'isbn'},
