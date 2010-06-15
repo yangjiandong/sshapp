@@ -6,6 +6,7 @@
 
   <description>导入sshapp中的applicationContext文件列表</description>
 
+  <bean id="springContextHolder" class="org.springside.modules.utils.SpringContextHolder"/>
 
   <import resource="cache/applicationContext-ehcache.xml" />
   <!--

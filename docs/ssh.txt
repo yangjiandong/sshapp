@@ -1,6 +1,20 @@
 ssh
 ======
 
+2010.06.15
+----------
+
+1、手工配置spring 方法缓存
+   resources/cache/applicationContext-ehcache.xml
+   --需手工指定bean及方法
+
+2、增加 ehcache.annotations
+   http://code.google.com/p/ehcache-spring-annotations/
+   --暂时不用
+
+3、增加CacheUtil
+   手工处理ehcache
+
 2010.06.14
 ----------
 

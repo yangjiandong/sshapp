@@ -40,7 +40,7 @@ public class JsonController {
     public void view(HttpServletRequest request, HttpServletResponse response) throws Exception {
         logger.info("json,list get books...");
 
-        List<Book> books = bookService.getBooks();
+        List<Book> books = bookService.getBooksOnMethodCache();
 
         JsonViewUtil
          .buildJSONDataResponse(response, books, (long) books.size());
@@ -94,7 +94,7 @@ public class JsonController {
     public ModelAndView view4() throws Exception {
         logger.info("json,list4...");
 
-        List<Book> books = bookService.getBooks();
+        List<Book> books = bookService.getBooksOnMethodCache();
         Map<String, Object> modelMap = new HashMap<String, Object>(3);
         modelMap.put("total", books.size());
         modelMap.put("data", books);

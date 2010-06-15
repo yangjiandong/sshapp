@@ -1,8 +1,6 @@
 package org.ssh.app.util;
 
 import java.io.PrintWriter;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,9 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
-import net.sf.json.processors.JsonValueProcessor;
-import net.sf.json.util.PropertyFilter;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
@@ -35,7 +30,7 @@ public class JsonViewUtil {
         modelMap.put("data", data);
         modelMap.put("success", true);
 
-        logger.info("json,getModelMap...");
+        //logger.info("json,getModelMap...");
 
         return new ModelAndView("jsonView", modelMap);
     }

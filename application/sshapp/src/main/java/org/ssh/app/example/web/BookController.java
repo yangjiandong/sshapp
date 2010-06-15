@@ -1,11 +1,14 @@
 package org.ssh.app.example.web;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import net.sf.ehcache.Cache;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.ssh.app.cache.CacheUtil;
 import org.ssh.app.example.entity.Book;
 import org.ssh.app.example.service.BookService;
 import org.ssh.app.util.JsonViewUtil;
@@ -31,7 +35,7 @@ public class BookController {
     public @ResponseBody Map<String,? extends Object> showBooks2(){
         logger.info("list...");
 
-        List<Book> books = bookService.getBooks();
+        List<Book> books = bookService.getBooksOnMethodCache();
 
         Map<String, Object> modelMap = new HashMap<String, Object>();
         modelMap.put("books", books);
@@ -40,12 +44,44 @@ public class BookController {
         return modelMap;
     }
 
+    //方法缓存
     @RequestMapping(value="/getBooks", method = RequestMethod.GET)
     public ModelAndView showBooks(HttpServletRequest request,
             HttpServletResponse response) throws Exception {
-        logger.info("list...");
+        logger.info("method cache list...");
+        long start = System.currentTimeMillis();
 
-        List<Book> books = bookService.getBooks();
+        List<Book> books = bookService.getBooksOnMethodCache();
+        logger.info(" method cache 执行共计:" + (System.currentTimeMillis() - start) + " ms");
         return JsonViewUtil.getModelMap(books);
     }
+
+    //表查询缓存
+    @RequestMapping(value="/getBooks3", method = RequestMethod.GET)
+    public ModelAndView showBooks3(HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+        logger.info("table cache list...");
+        long start = System.currentTimeMillis();
+
+        List<Book> books = bookService.getBooks2();
+        logger.info(" table cache 执行共计:" + (System.currentTimeMillis() - start) + " ms");
+        return JsonViewUtil.getModelMap(books);
+    }
+
+    //手工缓存
+    @RequestMapping(value="/getBooks4", method = RequestMethod.GET)
+    public ModelAndView showBooks4(HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+        logger.info("man hand cache list...");
+        long start = System.currentTimeMillis();
+
+        List<Book> books = (ArrayList<Book>)CacheUtil.getCache("bookController", "books");
+        if (books == null) {
+            books = bookService.getBooks3();
+            CacheUtil.setCache("bookController", "books", books);
+        }
+        logger.info(" man hand 执行共计:" + (System.currentTimeMillis() - start) + " ms");
+        return JsonViewUtil.getModelMap(books);
+    }
+
 }

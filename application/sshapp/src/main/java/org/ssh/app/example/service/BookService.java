@@ -25,9 +25,21 @@ public class BookService {
     @Autowired
     private BookDao bookDao;
 
+    //采用了方法缓存
     @Transactional(readOnly = true)
-    public List<Book> getBooks(){
+    public List<Book> getBooksOnMethodCache(){
+        return bookDao.getAll();
+    }
+
+    //采用表缓存
+    @Transactional(readOnly = true)
+    public List<Book> getBooks2(){
         return bookDao.getAll2();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Book> getBooks3(){
+        return bookDao.getAll();
     }
 
     @Transactional(readOnly = true)
