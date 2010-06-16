@@ -1,8 +1,6 @@
 Ext.onReady(function() {
 
-      // Ext.BLANK_IMAGE_URL =
-      // '/extjs-crud-grid/ext-3.1.1/resources/images/default/s.gif';
-      Ext.BLANK_IMAGE_URL = "../../img/s.gif";
+      Ext.BLANK_IMAGE_URL = "../img/s.gif";
 
       var Contact = Ext.data.Record.create([{
             name : 'id'
@@ -18,15 +16,15 @@ Ext.onReady(function() {
           }, {
             name : 'birthday',
             type : 'date',
-            dateFormat : 'm/d/Y'
+            dateFormat : 'Y.m.d'
           }]);
 
       var proxy = new Ext.data.HttpProxy({
             api : {
-              read : '/contact/getContacts',
-              create : '/contact/create',
-              update : '/contact/update',
-              destroy : '/contact/delete'
+              read : '../contact/getContacts',
+              create : '../contact/create',
+              update : '../contact/update',
+              destroy : '../contact/delete'
             }
           });
 
@@ -61,22 +59,22 @@ Ext.onReady(function() {
 
       Ext.data.DataProxy.addListener('exception', function(proxy, type, action, options, res) {
             Ext.Msg.show({
-                  title : 'ERROR',
-                  msg : res.message,
+                  title : '出错了!',
+                  msg : '信息: '+res.message,
                   icon : Ext.MessageBox.ERROR,
                   buttons : Ext.Msg.OK
                 });
           });
 
       var editor = new Ext.ux.grid.RowEditor({
-            saveText : 'Update'
+            saveText : '保存'
           });
 
       // create grid
       var grid = new Ext.grid.GridPanel({
             store : store,
             columns : [{
-                  header : "NAME",
+                  header : "姓名",
                   width : 170,
                   sortable : true,
                   dataIndex : 'name',
@@ -85,7 +83,7 @@ Ext.onReady(function() {
                     allowBlank : false
                   }
                 }, {
-                  header : "PHONE #",
+                  header : "电话号码",
                   width : 150,
                   sortable : true,
                   dataIndex : 'phone',
@@ -94,7 +92,7 @@ Ext.onReady(function() {
                     allowBlank : false
                   }
                 }, {
-                  header : "EMAIL",
+                  header : "邮箱",
                   width : 150,
                   sortable : true,
                   dataIndex : 'email',
@@ -103,14 +101,14 @@ Ext.onReady(function() {
                     allowBlank : false
                   }
                 }, {
-                  header : "BIRTHDAY",
+                  header : "出生日期",
                   width : 100,
                   sortable : true,
                   dataIndex : 'birthday',
-                  renderer : Ext.util.Format.dateRenderer('m/d/Y'),
+                  renderer : Ext.util.Format.dateRenderer('Y.m.d'),
                   editor : new Ext.form.DateField({
                         allowBlank : false,
-                        format : 'm/d/Y',
+                        format : 'Y.m.d',
                         maxValue : (new Date())
                       })
                 }],
@@ -127,7 +125,7 @@ Ext.onReady(function() {
                           name : 'New Guy',
                           phone : '(000) 000-0000',
                           email : 'new@loianetest.com',
-                          birthday : '01/01/2000'
+                          birthday : '2000.01.01'
                         });
                     editor.stopEditing();
                     store.insert(0, e);

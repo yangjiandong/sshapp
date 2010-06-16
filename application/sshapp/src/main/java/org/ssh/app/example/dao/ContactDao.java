@@ -1,7 +1,10 @@
 package org.ssh.app.example.dao;
 
+import java.util.List;
+
 import javax.sql.DataSource;
 
+import org.hibernate.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
@@ -31,4 +34,9 @@ public class ContactDao extends HibernateDao<Contact, String> {
         return findUnique(COUNT_CONTACTS);
     }
 
+    public List<Contact> getAll2() {
+        Criteria criteria = getSession().createCriteria(entityClass);
+        criteria.setCacheable(true);
+        return criteria.list();
+    }
 }

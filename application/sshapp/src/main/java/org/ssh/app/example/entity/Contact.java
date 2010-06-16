@@ -4,10 +4,13 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.ssh.app.common.entity.IdEntity;
 
 @Entity
 @Table(name = "t_contact")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Contact extends IdEntity {
 
     private String name;

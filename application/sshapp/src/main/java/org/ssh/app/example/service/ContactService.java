@@ -27,7 +27,7 @@ public class ContactService {
 
     @Transactional(readOnly = true)
     public List<Contact> getContacts() {
-        return contactDao.getAll();
+        return contactDao.getAll2();
     }
 
     public void initData() {
@@ -68,7 +68,7 @@ public class ContactService {
 
     @Transactional(readOnly = true)
     public List<Contact> getAlls() {
-        return contactDao.getAll();
+        return contactDao.getAll2();
     }
 
     /**
