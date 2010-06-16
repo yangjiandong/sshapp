@@ -14,6 +14,9 @@ ssh
 
    crud例子:http://localhost:8089/sshapp/book/index.jsp
 
+2、测试 java 最大可用内存
+   在命令行下用 java -XmxXXXXM -version 命令来进行测试
+
 2010.06.15
 ----------
 
