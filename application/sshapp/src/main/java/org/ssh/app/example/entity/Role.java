@@ -8,11 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-@Entity
-// 暂时只能用这个表名
+//避免相同Entity
+@Entity(name="org.ssh.app.example.entity.Role")
 @Table(name = "t_roles")
 // @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Role {

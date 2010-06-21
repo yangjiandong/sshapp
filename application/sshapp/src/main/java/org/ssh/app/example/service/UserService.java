@@ -28,13 +28,15 @@ public class UserService {
         User b = new User();
         b.setUsername("admin");
         b.setPassword("admin");
-        b.setEnabled(true);
+        b.setStatus(1L);
+        b.setDescn("管理员");
         userDao.save(b);
 
         b = new User();
         b.setUsername("user");
         b.setPassword("user");
-        b.setEnabled(true);
+        b.setStatus(1L);
+        b.setDescn("用户");
         userDao.save(b);
     }
 }

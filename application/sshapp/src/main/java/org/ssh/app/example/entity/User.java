@@ -8,14 +8,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 //避免相同Entity
 @Entity(name="org.ssh.app.example.entity.User")
-//暂时只能用这个表名
 @Table(name = "t_users")
-//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class User {
 
     private Long oid;
@@ -24,7 +19,9 @@ public class User {
 
     private String password;
 
-    private Boolean enabled;
+    private Long status;
+
+    private String descn;
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "Id_Generator")
@@ -55,11 +52,20 @@ public class User {
         this.password = password;
     }
 
-    public Boolean getEnabled() {
-        return enabled;
+    public Long getStatus() {
+        return status;
     }
 
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
+    public void setStatus(Long status) {
+        this.status = status;
+    }
+
+    @Column(length=200)
+    public String getDescn() {
+        return descn;
+    }
+
+    public void setDescn(String descn) {
+        this.descn = descn;
     }
 }
