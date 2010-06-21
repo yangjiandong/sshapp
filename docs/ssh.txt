@@ -1,6 +1,16 @@
 ssh
 ======
 
+2010.06.21
+----------
+
+1、http://www.family168.com/oa/springsecurity/html/ch003-custom-db.html
+
+   14：00 - 15：36  
+
+2、增加本地文档
+   save/springsecurity.zip
+
 2010.06.20
 ----------
 

@@ -14,10 +14,13 @@
 
   <authentication-manager>
     <authentication-provider>
+      <jdbc-user-service data-source-ref="dataSource"/>
+      <!--
       <user-service>
         <user name="admin" password="admin" authorities="ROLE_USER, ROLE_ADMIN" />
         <user name="user" password="user" authorities="ROLE_USER" />
       </user-service>
+      -->
     </authentication-provider>
   </authentication-manager>
 </beans:beans>
