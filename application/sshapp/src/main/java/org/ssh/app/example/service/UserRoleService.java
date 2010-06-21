@@ -6,36 +6,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.ssh.app.example.dao.UserDao;
-import org.ssh.app.example.entity.User;
+import org.ssh.app.example.dao.UserRoleDao;
+import org.ssh.app.example.entity.UserRole;
 
 @Component
 @Transactional
-public class UserService {
+public class UserRoleService {
 
-    private static Logger logger = LoggerFactory.getLogger(UserService.class);
+    private static Logger logger = LoggerFactory
+            .getLogger(UserRoleService.class);
 
     @Autowired
-    @Qualifier("sp_userDao")
-    private UserDao userDao;
+    @Qualifier("sp_userRoleDao")
+    private UserRoleDao userDao;
 
     public void initData() {
         if (this.userDao.getBookCount().longValue() != 0) {
             return;
         }
 
-        User b = new User();
-        b.setUsername("admin");
-        b.setPassword("admin");
-        b.setStatus(1L);
-        b.setDescn("管理员");
+        UserRole b = new UserRole();
+        b.setUserid(1L);
+        b.setRoleid(1L);
         userDao.save(b);
 
-        b = new User();
-        b.setUsername("user");
-        b.setPassword("user");
-        b.setStatus(1L);
-        b.setDescn("用户");
+        b = new UserRole();
+        b.setUserid(1L);
+        b.setRoleid(2L);
         userDao.save(b);
+
+        b = new UserRole();
+        b.setUserid(2L);
+        b.setRoleid(2L);
+        userDao.save(b);
+
     }
 }

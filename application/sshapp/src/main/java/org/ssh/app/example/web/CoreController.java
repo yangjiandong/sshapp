@@ -14,6 +14,8 @@ import org.ssh.app.common.service.AccountManager;
 import org.ssh.app.example.service.AuthorityService;
 import org.ssh.app.example.service.BookService;
 import org.ssh.app.example.service.ContactService;
+import org.ssh.app.example.service.RoleService;
+import org.ssh.app.example.service.UserRoleService;
 import org.ssh.app.example.service.UserService;
 
 //http://stsmedia.net/spring-finance-part-2-spring-mvc-spring-30-rest-integration/
@@ -36,6 +38,12 @@ public class CoreController {
     @Autowired
     private AuthorityService authorityService;
 
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private UserRoleService userRoleService;
+
     @RequestMapping("/initData.do")
     public ModelAndView initData(ModelMap modelMap, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
@@ -46,7 +54,9 @@ public class CoreController {
         this.contactService.initData();
 
         this.userService.initData();
-        this.authorityService.initData();
+        //this.authorityService.initData();
+        this.roleService.initData();
+        this.userRoleService.initData();
 
         return new ModelAndView("redirect:/index2.jsp");
 

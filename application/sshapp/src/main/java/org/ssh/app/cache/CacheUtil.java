@@ -6,20 +6,22 @@ import net.sf.ehcache.Element;
 
 import org.springside.modules.utils.SpringContextHolder;
 
-public class CacheUtil {
 
+public class CacheUtil {
     /**
      * 设置缓存
      */
     public static void setCache(String cacheName, String key, Object value) {
+        CacheManager manager = (CacheManager) SpringContextHolder.getBean(
+                "ehcacheManager");
 
-        CacheManager manager = (CacheManager) SpringContextHolder.getBean("ehcacheManager");
         if (manager.getCache(cacheName) == null) {
             manager.addCache(cacheName);
         }
 
         Cache cache = manager.getCache(cacheName);
         cache.put(new Element(key, value));
+
         // manager.shutdown();
     }
 
@@ -27,29 +29,34 @@ public class CacheUtil {
      * 获取缓存的值
      */
     public static Object getCache(String cacheName, String key) {
-
-        CacheManager manager = (CacheManager) SpringContextHolder.getBean("ehcacheManager");
+        CacheManager manager = (CacheManager) SpringContextHolder.getBean(
+                "ehcacheManager");
 
         Cache cache = manager.getCache(cacheName);
-        if (cache == null)
+
+        if (cache == null) {
             return null;
+        }
 
         Element element = cache.get(key);
-        // manager.shutdown();
 
-        if (element == null)
+        // manager.shutdown();
+        if (element == null) {
             return null;
-        else
+        } else {
             return element.getObjectValue();
+        }
     }
 
     /**
      * 清除缓存
      */
     public static void removeCache(String cacheName, String key) {
-        CacheManager manager = (CacheManager) SpringContextHolder.getBean("ehcacheManager");
+        CacheManager manager = (CacheManager) SpringContextHolder.getBean(
+                "ehcacheManager");
 
         Cache cache = manager.getCache(cacheName);
+
         if (cache != null) {
             cache.remove(key);
         }

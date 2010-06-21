@@ -6,36 +6,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.ssh.app.example.dao.RoleDao;
 import org.ssh.app.example.dao.UserDao;
+import org.ssh.app.example.entity.Role;
 import org.ssh.app.example.entity.User;
 
 @Component
 @Transactional
-public class UserService {
+public class RoleService {
 
-    private static Logger logger = LoggerFactory.getLogger(UserService.class);
+    private static Logger logger = LoggerFactory.getLogger(RoleService.class);
 
     @Autowired
-    @Qualifier("sp_userDao")
-    private UserDao userDao;
+    @Qualifier("sp_roleDao")
+    private RoleDao userDao;
 
     public void initData() {
         if (this.userDao.getBookCount().longValue() != 0) {
             return;
         }
 
-        User b = new User();
-        b.setUsername("admin");
-        b.setPassword("admin");
-        b.setStatus(1L);
-        b.setDescn("管理员");
+        Role b = new Role();
+        b.setName("ROLE_ADMIN");
+        b.setDescn("管理员角色");
         userDao.save(b);
 
-        b = new User();
-        b.setUsername("user");
-        b.setPassword("user");
-        b.setStatus(1L);
-        b.setDescn("用户");
+        b = new Role();
+        b.setName("ROLE_USER");
+        b.setDescn("用户角色");
         userDao.save(b);
     }
 }

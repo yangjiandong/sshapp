@@ -6,10 +6,20 @@ ssh
 
 1、http://www.family168.com/oa/springsecurity/html/ch003-custom-db.html
 
-   14：00 - 15：36  
+   14：00 - 15：36
 
-2、增加本地文档
-   save/springsecurity.zip
+2、增加本地文档、例子
+   save/springsecurity.zip，springsecurity-sample.rar
+
+3、21:45 - 22:28
+
+   http://www.family168.com/opensource.html
+
+   oa = spring + extjs + hibernate
+   http://family168.googlecode.com/svn/trunk/
+
+   代码美化工具jalopy
+   save/jalopy-eclipse-0.2-1.5rc3.zip
 
 2010.06.20
 ----------
