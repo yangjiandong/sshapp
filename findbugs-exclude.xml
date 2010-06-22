@@ -1,0 +1,14 @@
+<FindBugsFilter>
+  <Match>
+    <Package name="~com\.filsoft\.object.*" />
+  </Match>
+  <Match>
+    <Package name="~com\.filsoft\.permission\.bean.*" />
+  </Match>
+  <Match>
+    <Package name="~com\.filsoft\.dun\.*.*" />
+  </Match>
+  <Match>
+    <Package name="~com\.zoomlion\.*.*" />
+  </Match>
+</FindBugsFilter>

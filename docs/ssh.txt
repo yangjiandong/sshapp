@@ -10,6 +10,17 @@ ssh
 
    use: mvn jalopy:format
 
+2、参考oa-trunk中
+  org.mortbay.jetty.maven-jetty-plugin服务器jetty
+  scanIntervalSeconds热部署时间间隔10s
+  webDefaultXml使用自定义的webdefault.xml，解决静态资源被锁定的问题
+
+3、增加mvn report
+
+   user: mvn site
+
+   --运行还有问题
+
 2010.06.21
 ----------
 

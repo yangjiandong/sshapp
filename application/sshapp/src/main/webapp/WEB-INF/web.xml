@@ -97,6 +97,7 @@
   </filter-mapping>
 
   <!-- Files are locked on Windows and can't be replaced -->
+  <!-- 采用webdefault.xml 方式，不再需要以下设置
   <servlet>
     <servlet-name>default</servlet-name>
     <servlet-class>org.mortbay.jetty.servlet.DefaultServlet</servlet-class>
@@ -106,6 +107,7 @@
     </init-param>
     <load-on-startup>0</load-on-startup>
   </servlet>
+   -->
 
   <!-- Spring MVC's Servlet -->
   <servlet>
