@@ -21,6 +21,8 @@ ssh
 
    --运行还有问题
 
+4、spring securty 登录认证，增加method="post"
+
 2010.06.21
 ----------
 
@@ -40,6 +42,7 @@ ssh
 
    代码美化工具jalopy
    save/jalopy-eclipse-0.2-1.5rc3.zip
+
 
 2010.06.20
 ----------

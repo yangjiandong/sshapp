@@ -81,8 +81,6 @@
   <filter-mapping>
     <filter-name>springSecurityFilterChain</filter-name>
     <url-pattern>/*</url-pattern>
-    <dispatcher>REQUEST</dispatcher>
-    <dispatcher>FORWARD</dispatcher>
   </filter-mapping>
 
   <!-- Enables clean URLs with JSP views e.g. /welcome instead of /app/welcome -->
