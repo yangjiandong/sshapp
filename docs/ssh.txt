@@ -1,6 +1,15 @@
 ssh
 ======
 
+2010.06.22
+----------
+
+1、增加jalopy(格式化java文件)
+   parent/pom.xml
+   jalopy.xml
+
+   use: mvn jalopy:format
+
 2010.06.21
 ----------
 
