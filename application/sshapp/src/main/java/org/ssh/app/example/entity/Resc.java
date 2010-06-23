@@ -8,19 +8,20 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
-
-//避免相同Entity
-@Entity(name = "org.ssh.app.example.entity.Role")
-@Table(name = "t_roles")
-// @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Role {
+//资源
+@Entity
+@Table(name = "t_rescs")
+public class Resc {
     private Long oid;
     private String name;
+    private String resType;
+    private String resString;
+    private Integer priority;
     private String descn;
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "Id_Generator")
-    @TableGenerator(name = "Id_Generator", table = "ID_GENERATOR", pkColumnName = "GEN_NAME", valueColumnName = "GEN_VAL", pkColumnValue = "t_roles", initialValue = 1, allocationSize = 1)
+    @TableGenerator(name = "Id_Generator", table = "ID_GENERATOR", pkColumnName = "GEN_NAME", valueColumnName = "GEN_VAL", pkColumnValue = "t_rescs", initialValue = 1, allocationSize = 1)
     public Long getOid() {
         return oid;
     }
@@ -45,5 +46,29 @@ public class Role {
 
     public void setDescn(String descn) {
         this.descn = descn;
+    }
+
+    public String getResType() {
+        return resType;
+    }
+
+    public void setResType(String resType) {
+        this.resType = resType;
+    }
+
+    public String getResString() {
+        return resString;
+    }
+
+    public void setResString(String resString) {
+        this.resString = resString;
+    }
+
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
 }

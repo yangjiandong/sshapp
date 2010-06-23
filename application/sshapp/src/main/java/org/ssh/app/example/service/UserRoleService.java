@@ -12,7 +12,6 @@ import org.ssh.app.example.entity.UserRole;
 @Component
 @Transactional
 public class UserRoleService {
-
     private static Logger logger = LoggerFactory
             .getLogger(UserRoleService.class);
 
@@ -39,6 +38,5 @@ public class UserRoleService {
         b.setUserid(2L);
         b.setRoleid(2L);
         userDao.save(b);
-
     }
 }
