@@ -42,17 +42,11 @@
     <findbugs-maven-plugin.version>2.0.1</findbugs-maven-plugin.version>
     <cobertura-maven-plugin.version>2.2</cobertura-maven-plugin.version>
     <taglist-maven-plugin.version>2.3</taglist-maven-plugin.version>
-    <!--
-      <javancss-maven-plugin.version>20081124</javancss-maven-plugin.version>
--->
     <javancss-maven-plugin.version>2.0-beta-2</javancss-maven-plugin.version>
     <dashboard-maven-plugin.version>1.0.0-beta-1</dashboard-maven-plugin.version>
 
     <jdepend-maven-plugin.version>2.0-beta-2</jdepend-maven-plugin.version>
     <maven-javadoc-plugin.version>2.5</maven-javadoc-plugin.version>
-    <!--
-      <maven-changelog-plugin.version>20080922</maven-changelog-plugin.version>
--->
     <maven-changelog-plugin.version>2.1</maven-changelog-plugin.version>
 
     <maven-surefire-report-plugin.version>2.4.3</maven-surefire-report-plugin.version>
