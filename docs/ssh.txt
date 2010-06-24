@@ -1,6 +1,18 @@
 ssh
 ======
 
+2010.06.24
+----------
+
+1、关注eclipse下编写wiki
+   http://eclipse.dzone.com/articles/getting-started-wikitext
+   可查看eclipse下相关帮助
+
+2010.06.23
+----------
+
+1、网上教材版本与本项目不一致。
+
 2010.06.22
 ----------
 

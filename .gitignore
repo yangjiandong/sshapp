@@ -56,3 +56,6 @@ lift_proto.db.*
 
 # h2 database
 application/sshapp/sshappdatas.*
+
+# wiki
+docs/wiki/*.html

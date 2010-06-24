@@ -1,0 +1,21 @@
+<project name="wikitext" default="wikitext2pdf" basedir=".">
+  <property name="wikitext.standalone" value="lib" />
+  <property name="wiki.dir" value="docs/wiki" />
+  <!-- path to wikitext standalone package -->
+  <path id="wikitext.classpath">
+    <fileset dir="${wikitext.standalone}">
+      <include name="org.eclipse.mylyn.wikitext.*core*.jar" />
+      <include name="net.java.dev.textilej.wikitext.*core*.jar" />
+      <include name="net.java.dev.textilej.wikitext.*lib*.jar" />
+    </fileset>
+  </path>
+  <taskdef classpathref="wikitext.classpath" resource="org/eclipse/mylyn/wikitext/core/util/anttask/tasks.properties" />
+  <taskdef classpathref="wikitext.classpath" resource="net/java/dev/textilej/wikitext/pdf/core/util/anttask/tasks.properties" />
+  <target name="wikitext2pdf" description="Generate PDF from textile">
+    <wikitext-to-pdf markupLanguage="Textile">
+      <fileset dir="${wiki.dir}">
+        <include name="HelloWorld.textile" />
+      </fileset>
+    </wikitext-to-pdf>
+  </target>
+</project>
