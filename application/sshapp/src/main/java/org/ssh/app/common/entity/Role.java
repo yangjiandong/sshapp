@@ -9,21 +9,30 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 /**
  * 角色.
  *
- * @author calvin
  */
 @Entity
-@Table(name = "SS_ROLE")
+@Table(name = "T_ROLES")
 public class Role extends IdEntity {
 
     private String name;
+    private String desc;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length=20)
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Column(length=100)
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
     @Override

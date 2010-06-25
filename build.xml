@@ -1,4 +1,4 @@
-<project name="wikitext" default="wikitext2pdf" basedir=".">
+<project name="wikitext" default="wikitext.files" basedir=".">
   <property name="wikitext.standalone" value="lib" />
   <property name="wiki.dir" value="docs/wiki" />
   <!-- path to wikitext standalone package -->
@@ -10,12 +10,15 @@
     </fileset>
   </path>
   <taskdef classpathref="wikitext.classpath" resource="org/eclipse/mylyn/wikitext/core/util/anttask/tasks.properties" />
+  <!--
   <taskdef classpathref="wikitext.classpath" resource="net/java/dev/textilej/wikitext/pdf/core/util/anttask/tasks.properties" />
-  <target name="wikitext2pdf" description="Generate PDF from textile">
-    <wikitext-to-pdf markupLanguage="Textile">
+  wikitext-to-dita
+  -->
+  <target name="wikitext.files" description="Generate wiki from textile">
+    <wikitext-to-html markupLanguage="Textile">
       <fileset dir="${wiki.dir}">
-        <include name="HelloWorld.textile" />
+        <include name="**/*.textile" />
       </fileset>
-    </wikitext-to-pdf>
+    </wikitext-to-html>
   </target>
 </project>

@@ -1,6 +1,14 @@
 ssh
 ======
 
+2010.06.25
+----------
+
+1、初始基础数据
+   http://localhost:8089/sshapp/init/index
+   
+   完成后，通过app-servlet.xml中配置自动指到index.jsp
+   
 2010.06.24
 ----------
 

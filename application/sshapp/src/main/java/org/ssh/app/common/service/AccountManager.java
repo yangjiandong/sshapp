@@ -1,5 +1,6 @@
 package org.ssh.app.common.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -8,14 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springside.modules.security.springsecurity.SpringSecurityUtils;
+import org.ssh.app.common.dao.RoleDao;
 import org.ssh.app.common.dao.UserDao;
+import org.ssh.app.common.entity.Role;
 import org.ssh.app.common.entity.User;
 import org.ssh.app.jms.simple.NotifyMessageProducer;
 import org.ssh.app.jmx.server.ServerConfig;
-import org.springside.modules.security.springsecurity.SpringSecurityUtils;
 
 /**
  * 用户管理类.
@@ -35,6 +37,9 @@ public class AccountManager {
     private ServerConfig serverConfig; //系统配置
     @Autowired(required = false)
     private NotifyMessageProducer notifyProducer; //JMS消息发送
+
+    @Autowired
+    private RoleDao roleDao;
 
     /**
      * 在保存用户时,发送用户修改通知消息, 由消息接收者异步进行较为耗时的通知邮件发送.
@@ -149,13 +154,23 @@ public class AccountManager {
             return;
         }
 
+        Role r = new Role();
+        r.setName("admin");
+        r.setDesc("系统管理员角色");
+        this.roleDao.save(r);
+
+        List<Role>rs = new ArrayList<Role>();
+        rs.add(r);
+
         User u = new User();
         u.setName("管理员");
         u.setLoginName("Admin");
         u.setPlainPassword("123");
-        u.setEmail("young.jiandong@gmail.com");
-        u.setCreateBy("测试用");
+        u.setEmail("admin@gmail.com");
+        u.setCreateBy("初始化");
         u.setStatus("enabled");
+        //add role
+        u.setRoleList(rs);
         saveUser(u);
 
     }

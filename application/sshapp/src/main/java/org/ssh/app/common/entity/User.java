@@ -27,10 +27,9 @@ import javax.persistence.Version;
 /**
  * 用户.
  *
- * @author calvin
  */
 @Entity
-@Table(name = "SS_USER")
+@Table(name = "T_USERS")
 public class User extends AuditableEntity {
     private String loginName;
     private String plainPassword;
@@ -111,7 +110,7 @@ public class User extends AuditableEntity {
     //多对多定义
     @ManyToMany
     //中间表定义,表名采用默认命名规则
-    @JoinTable(name = "SS_USER_ROLE", joinColumns =  {
+    @JoinTable(name = "T_USER_ROLE", joinColumns =  {
         @JoinColumn(name = "USER_ID")
     }
     , inverseJoinColumns =  {
