@@ -32,7 +32,9 @@ public class AuditListener implements SaveOrUpdateEventListener {
             if (entity.getId() == null) {
                 //创建新对象
                 entity.setCreateTime(org.ssh.app.util.UtilDateTime.nowDateString());
-                entity.setCreateBy(loginName);
+                if (entity.getCreateBy() == null){
+                    entity.setCreateBy(loginName);
+                }
             } else {
                 //修改旧对象
                 entity.setLastModifyTime(org.ssh.app.util.UtilDateTime.nowDateString());

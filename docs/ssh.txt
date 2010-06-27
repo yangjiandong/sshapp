@@ -1,14 +1,21 @@
 ssh
 ======
 
+2010.06.27
+----------
+
+1、spring security + extjs
+  http://loianegroner.com/2010/02/integrating-spring-security-with-extjs-login-page/
+  19:00 - 20:34
+
 2010.06.25
 ----------
 
 1、初始基础数据
    http://localhost:8089/sshapp/init/index
-   
+
    完成后，通过app-servlet.xml中配置自动指到index.jsp
-   
+
 2010.06.24
 ----------
 
