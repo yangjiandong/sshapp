@@ -30,7 +30,7 @@
       // Product version. Do not change!
       CFG_PRODUCT_VERSION = L("/Application/Version");
       CFG_DEFAULT_LANGUAGE = 'en';
-      CFG_AUTHSERVER_URL = 'auth.htm';
+      CFG_AUTHSERVER_URL = 'j_spring_security_check';
       CFG_CLIENT_URL =  'js/app';
       CFG_EXT_3RD = 'js/3rdparty';
 
