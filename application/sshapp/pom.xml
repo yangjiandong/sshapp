@@ -15,6 +15,59 @@
     <relativePath>../../modules/parent/pom.xml</relativePath>
   </parent>
 
+  <!-- More Project Information -->
+  <licenses>
+    <license>
+      <name>ssh app</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>A business-friendly OSS license</comments>
+    </license>
+  </licenses>
+
+  <organization>
+    <name>java development team</name>
+    <url>http://org.ssh.app</url>
+  </organization>
+
+  <developers>
+    <developer>
+      <id>guoxp</id>
+      <name>yangjiandong</name>
+      <email>young.jiandong@gmail.com</email>
+      <url>http://freecode.javaeye.com/</url>
+      <organization>UFO</organization>
+      <organizationUrl>http://www.UFO.org</organizationUrl>
+      <roles>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+      <timezone>+8</timezone>
+      <properties>
+        <picUrl>http://www.mxjava.com/logo.gif</picUrl>
+      </properties>
+    </developer>
+  </developers>
+
+  <contributors>
+    <contributor>
+      <name>UFO</name>
+      <email>UFO@bingosoft.net</email>
+      <url>http://freecode.javaeye.com/</url>
+      <organization>Infrastucture</organization>
+      <organizationUrl>
+    http://AlienOrganization.com
+      </organizationUrl>
+      <roles>
+        <role>tester</role>
+      </roles>
+      <timezone>-5</timezone>
+      <properties>
+        <gtalk>some.name@gmail.com</gtalk>
+      </properties>
+    </contributor>
+  </contributors>
+
   <!-- 项目属性 -->
   <properties>
     <jdbc.driver.groupId>com.h2database</jdbc.driver.groupId>
@@ -94,14 +147,14 @@
     </dependency>
 
     <!--
-      <dependency> <groupId>net.sf.json-lib</groupId>
-      <artifactId>json-lib-ext-spring</artifactId> <version>1.0.2</version>
-      </dependency> <dependency> <groupId>net.sf.spring-json</groupId>
-      <artifactId>spring-json</artifactId> <version>1.3.0</version>
-      </dependency> <dependency> <groupId>net.sf.ezmorph</groupId>
-      <artifactId>ezmorph</artifactId> <version>1.0.6</version>
-      </dependency>
-    -->
+        <dependency> <groupId>net.sf.json-lib</groupId>
+        <artifactId>json-lib-ext-spring</artifactId> <version>1.0.2</version>
+        </dependency> <dependency> <groupId>net.sf.spring-json</groupId>
+        <artifactId>spring-json</artifactId> <version>1.3.0</version>
+        </dependency> <dependency> <groupId>net.sf.ezmorph</groupId>
+        <artifactId>ezmorph</artifactId> <version>1.0.6</version>
+        </dependency>
+      -->
 
     <dependency>
       <groupId>com.thoughtworks.xstream</groupId>
@@ -133,9 +186,9 @@
     </dependency>
 
     <!--
-      dbcp <dependency> <groupId>commons-dbcp</groupId>
-      <artifactId>commons-dbcp</artifactId> </dependency>
-    -->
+        dbcp <dependency> <groupId>commons-dbcp</groupId>
+        <artifactId>commons-dbcp</artifactId> </dependency>
+      -->
     <dependency>
       <groupId>c3p0</groupId>
       <artifactId>c3p0</artifactId>
@@ -168,13 +221,13 @@
 
     <!-- web begin -->
     <!--
-      no struts <dependency> <groupId>org.apache.struts</groupId>
-      <artifactId>struts2-core</artifactId> </dependency> <dependency>
-      <groupId>org.apache.struts</groupId>
-      <artifactId>struts2-convention-plugin </artifactId> </dependency>
-      <dependency> <groupId>org.apache.struts</groupId>
-      <artifactId>struts2-spring-plugin</artifactId> </dependency>
-    -->
+        no struts <dependency> <groupId>org.apache.struts</groupId>
+        <artifactId>struts2-core</artifactId> </dependency> <dependency>
+        <groupId>org.apache.struts</groupId>
+        <artifactId>struts2-convention-plugin </artifactId> </dependency>
+        <dependency> <groupId>org.apache.struts</groupId>
+        <artifactId>struts2-spring-plugin</artifactId> </dependency>
+      -->
 
     <dependency>
       <groupId>org.freemarker</groupId>
@@ -317,11 +370,11 @@
       <artifactId>ehcache</artifactId>
     </dependency>
     <!--
-    <dependency>
-      <groupId>com.googlecode.ehcache-spring-annotations</groupId>
-      <artifactId>ehcache-spring-annotations</artifactId>
-    </dependency>
-     -->
+      <dependency>
+        <groupId>com.googlecode.ehcache-spring-annotations</groupId>
+        <artifactId>ehcache-spring-annotations</artifactId>
+      </dependency>
+       -->
     <dependency>
       <groupId>joda-time</groupId>
       <artifactId>joda-time</artifactId>
@@ -433,18 +486,18 @@
 
     <!-- javamelody -->
     <!--
-      <dependency> <groupId>org.jrobin</groupId>
-      <artifactId>jrobin</artifactId> </dependency> <dependency>
-      <groupId>com.lowagie</groupId> <artifactId>itext</artifactId>
-      <version>2.1.4</version> <exclusions> <exclusion>
-      <artifactId>bcmail-jdk14</artifactId> <groupId>bouncycastle</groupId>
-      </exclusion> <exclusion> <artifactId>bcprov-jdk14</artifactId>
-      <groupId>bouncycastle</groupId> </exclusion> </exclusions>
-      </dependency> <dependency>
-      <groupId>com.thoughtworks.xstream</groupId>
-      <artifactId>xstream</artifactId> <version>1.3.1</version>
-      </dependency>
-    -->
+        <dependency> <groupId>org.jrobin</groupId>
+        <artifactId>jrobin</artifactId> </dependency> <dependency>
+        <groupId>com.lowagie</groupId> <artifactId>itext</artifactId>
+        <version>2.1.4</version> <exclusions> <exclusion>
+        <artifactId>bcmail-jdk14</artifactId> <groupId>bouncycastle</groupId>
+        </exclusion> <exclusion> <artifactId>bcprov-jdk14</artifactId>
+        <groupId>bouncycastle</groupId> </exclusion> </exclusions>
+        </dependency> <dependency>
+        <groupId>com.thoughtworks.xstream</groupId>
+        <artifactId>xstream</artifactId> <version>1.3.1</version>
+        </dependency>
+      -->
     <!-- javamelody -->
 
   </dependencies>
@@ -454,11 +507,11 @@
 
       <!-- compiler插件, 设定JDK版本 -->
       <!--
-        <plugin> <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3</version> <configuration> <source>1.6</source>
-        <target>1.6</target> </configuration> </plugin>
-      -->
+          <plugin> <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>2.3</version> <configuration> <source>1.6</source>
+          <target>1.6</target> </configuration> </plugin>
+        -->
       <!-- eclipse插件 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -481,19 +534,19 @@
       <!-- Hibernate lazy load bytecode enhancement -->
       <!-- 注释掉，对json生成有影响 -->
       <!--
-        <plugin> <artifactId>maven-antrun-plugin</artifactId> <executions>
-        <execution> <id>instrument-hibernate-entity</id>
-        <phase>process-classes</phase> <goals> <goal>run</goal> </goals>
-        </execution> </executions> <configuration> <tasks> <taskdef
-        name="instrument"
-        classname="org.hibernate.tool.instrument.javassist.InstrumentTask">
-        <classpath> <path refid="maven.runtime.classpath" /> <path
-        refid="maven.plugin.classpath" /> </classpath> </taskdef>
-        <instrument verbose="false"> <fileset
-        dir="${project.build.outputDirectory}"> <include
-        name="**/entity/**/*.class" /> </fileset> </instrument> </tasks>
-        </configuration> </plugin>
-      -->
+          <plugin> <artifactId>maven-antrun-plugin</artifactId> <executions>
+          <execution> <id>instrument-hibernate-entity</id>
+          <phase>process-classes</phase> <goals> <goal>run</goal> </goals>
+          </execution> </executions> <configuration> <tasks> <taskdef
+          name="instrument"
+          classname="org.hibernate.tool.instrument.javassist.InstrumentTask">
+          <classpath> <path refid="maven.runtime.classpath" /> <path
+          refid="maven.plugin.classpath" /> </classpath> </taskdef>
+          <instrument verbose="false"> <fileset
+          dir="${project.build.outputDirectory}"> <include
+          name="**/entity/**/*.class" /> </fileset> </instrument> </tasks>
+          </configuration> </plugin>
+        -->
       <!-- test插件,加大内存 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
