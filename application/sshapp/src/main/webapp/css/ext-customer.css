@@ -1,0 +1,100 @@
+
+/** */
+.add, .x-btn .add {
+    background: url('fam/add.gif');
+}
+.go, .x-btn .go {
+    background: url('fam/application_go.png');
+}
+.delete, .x-btn .delete {
+    background: url('fam/delete.gif');
+}
+.edit, .x-btn .edit {
+    background: url('fam/cog_edit.png');
+}
+.refresh, .x-btn .refresh {
+    background: url('fam/table_refresh.png');
+}
+.expand, .x-btn .expand {
+    background: url('fam/folder_go.png');
+}
+.collapse, .x-btn .collapse {
+    background: url('fam/folder_wrench.png');
+}
+.config, .x-btn .config {
+    background: url('fam/plugin.gif');
+}
+.save, .x-btn .save {
+    background: url('login/save.gif');
+}
+.cog, .x-btn .cog {
+    background: url('fam/cog.png');
+}
+.student, .x-btn .student {
+    background: url('fam/user.gif');
+}
+.wrench, .x-btn .wrench {
+    background: url('fam/folder_wrench.png');
+}
+.user_delete, .x-btn .user_delete {
+    background: url('fam/user_delete.png');
+}
+
+/** */
+.user{
+    background:url("fam/user.gif") no-repeat 1px 2px;
+}
+.key{
+    background:url("login/key.gif") no-repeat 1px 2px;
+}
+.key, .user{
+    background-color: #FFFFFF;
+    padding-left: 20px;
+    font-weight: bold;
+    color: #000033;
+}
+.key.x-form-invalid, .user.x-form-invalid{
+    border:2px solid #dd7870;
+}
+
+/** */
+
+.loading-indicator {
+    font-size:11px;
+    background-image:url('login/loading.gif');
+    background-repeat: no-repeat;
+    background-position:top left;
+    padding-left:20px;
+    height:18px;
+    text-align:left;
+}
+#loading-mask{
+    position:absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    z-index:20000;
+    background-color:white;
+}
+#loading{
+    position:absolute;
+    left:45%;
+    top:40%;
+    padding:2px;
+    z-index:20001;
+    height:auto;
+}
+#loading img {
+    margin-bottom:5px;
+}
+#loading .loading-indicator{
+    background:white;
+    color:#555;
+    font:bold 13px tahoma,arial,helvetica;
+    padding:10px;
+    margin:0;
+    text-align:center;
+    height:auto;
+}
+

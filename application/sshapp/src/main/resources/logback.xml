@@ -1,36 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <substitutionProperty name="log.base" value="./logs" />
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%d [%-5p] \(%-20c{3}:%L\) - %m%n</pattern>
-        </layout>
-    </appender>
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <Encoding>UTF-8</Encoding>
-        <File>${log.base}/app.log</File>
-        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <FileNamePattern>${log.base}/web.%i.log.zip</FileNamePattern>
-            <MinIndex>1</MinIndex>
-            <MaxIndex>9</MaxIndex>
-        </rollingPolicy>
+  <substitutionProperty name="log.base" value="./logs" />
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <Pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</Pattern>
+      <!--
+          <pattern>%d [%-5p] \(%-20c{3}:%L\) - %m%n</pattern>
+        -->
+    </layout>
+  </appender>
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <Encoding>UTF-8</Encoding>
+    <File>${log.base}/app.log</File>
+    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+      <FileNamePattern>${log.base}/web.%i.log.zip</FileNamePattern>
+      <MinIndex>1</MinIndex>
+      <MaxIndex>9</MaxIndex>
+    </rollingPolicy>
 
-        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <MaxFileSize>5MB</MaxFileSize>
-        </triggeringPolicy>
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%d [%-5p] \(%-20c{3}:%L\) - %m%n</pattern>
-        </layout>
-    </appender>
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <MaxFileSize>5MB</MaxFileSize>
+    </triggeringPolicy>
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <Pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</Pattern>
+      <!--
+        <pattern>%d [%-5p] \(%-20c{3}:%L\) - %m%n</pattern>
+        -->
+    </layout>
+  </appender>
 
-    <root>
-        <level value="INFO"/>
-        <appender-ref ref="CONSOLE"/>
-    </root>
+  <root>
+    <level value="INFO"/>
+    <appender-ref ref="CONSOLE"/>
+  </root>
 
-
-<!--
+  <!--
     <root>
         <level value="INFO"/>
         <appender-ref ref="CONSOLE"/>
