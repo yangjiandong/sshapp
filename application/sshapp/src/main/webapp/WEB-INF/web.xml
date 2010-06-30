@@ -9,7 +9,7 @@
       此参数用于后面的Spring Context Loader -->
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>classpath*:/applicationContext.xml,classpath*:/applicationContext-sshapp.xml</param-value>
+    <param-value>classpath*:/applicationContext.pro.xml,classpath*:/applicationContext-sshapp.xml</param-value>
   </context-param>
 
   <listener>

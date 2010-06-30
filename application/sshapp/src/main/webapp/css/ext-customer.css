@@ -106,7 +106,7 @@ span.uiName { color:red;padding-right:4px; font-size:10px; }
 }
 
 /* load.. */
-#n21-loading {
+#app-loading {
   position: absolute;
   left: 40%;
   top: 40%;
@@ -115,25 +115,25 @@ span.uiName { color:red;padding-right:4px; font-size:10px; }
   height: auto;
 }
 
-#n21-loading-msg {
+#app-loading-msg {
   font: normal 10px arial, tahoma, sans-serif;
 }
 
-#n21-loading-logo {
+#app-loading-logo {
   background: white;
   color: #444;
   font: bold 13px tahoma, arial, helvetica;
   padding: 5px;
 }
 
-#n21-loading-logo-text {
+#app-loading-logo-text {
   background: white;
   color: #444;
   font: bold 13px tahoma, arial, helvetica;
   padding: 5px;
 }
 
-#n21-loading .n21-loading-indicator {
+#app-loading .app-loading-indicator {
   text-align: center;
   background: white;
   height: auto;

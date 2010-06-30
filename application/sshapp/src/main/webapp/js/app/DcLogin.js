@@ -67,6 +67,7 @@ N21.Other.DcLogin = Ext.extend(Ext.Window, {
       initComponent : function() {
         this.fields.add("username", new Ext.form.TextField({
                   id : 'userName',
+                  cls: 'user',
                   allow_blank : false,
                   blankText : '请输入用户名',
                   value : '',
@@ -81,6 +82,7 @@ N21.Other.DcLogin = Ext.extend(Ext.Window, {
 
         this.fields.add("password", new Ext.form.TextField({
                   id : 'password',
+                  cls: 'key',
                   allow_blank : false,
                   value : '',
                   inputType : 'password',

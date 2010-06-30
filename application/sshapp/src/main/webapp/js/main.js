@@ -27,8 +27,8 @@ Ext.onReady(function() {
         onLogonSuccess();
       });
 
-  if (!Ext.isEmpty(Ext.get('n21-loading'))) {
-    Ext.get('n21-loading').remove();
+  if (!Ext.isEmpty(Ext.get('app-loading'))) {
+    Ext.get('app-loading').remove();
   }
 
   if (!loggedIn) {
