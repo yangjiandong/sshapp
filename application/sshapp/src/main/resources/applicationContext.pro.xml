@@ -37,18 +37,22 @@
       <property name="username" value="${jdbc.username}" /> <property
       name="password" value="${jdbc.password}" />
     -->
-
-  <!--springframwork自带的测试用dataSource，别用在生产环境下-->
-  <bean id="dataSourceImpl" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-    <property name="driverClassName" value="${jdbc.driver}"/>
-    <property name="url" value="${jdbc.url}"/>
-    <property name="username" value="${jdbc.username}"/>
-    <property name="password" value="${jdbc.password}"/>
-  </bean>
-
-  <!-- 用p6spy 在console显示变量绑定后的真实sql 与ResultSet,方便开发 -->
-  <bean id="dataSource" class="com.p6spy.engine.spy.P6DataSource">
-    <constructor-arg index="0" ref="dataSourceImpl"/>
+  <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+    destroy-method="close">
+    <property name="driverClass" value="${jdbc.driver}" />
+    <property name="jdbcUrl" value="${jdbc.url}" />
+    <property name="user" value="${jdbc.username}" />
+    <property name="password" value="${jdbc.password}" />
+    <property name="minPoolSize" value="10" />
+    <property name="maxPoolSize" value="100" />
+    <property name="maxIdleTime" value="1800" />
+    <property name="acquireIncrement" value="5" />
+    <property name="maxStatements" value="0" />
+    <property name="initialPoolSize" value="5" />
+    <property name="idleConnectionTestPeriod" value="1800" />
+    <property name="acquireRetryAttempts" value="30" />
+    <property name="breakAfterAcquireFailure" value="true" />
+    <property name="testConnectionOnCheckout" value="false" />
   </bean>
 
   <bean id="quartzDataSource"

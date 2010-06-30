@@ -31,6 +31,7 @@
     <org.jrobin.version>1.5.9</org.jrobin.version>
     <ehcache.version>1.6.2</ehcache.version>
     <ehcache.annotations.version>1.0.5</ehcache.annotations.version>
+    <p6spy.version>1.3</p6spy.version>
 
     <jalopy-maven-plugin.version>1.0-alpha-1</jalopy-maven-plugin.version>
 
@@ -284,6 +285,13 @@
         <groupId>commons-dbcp</groupId>
         <artifactId>commons-dbcp</artifactId>
         <version>1.3</version>
+      </dependency>
+
+      <!--监听数据库操作-->
+      <dependency>
+        <groupId>p6spy</groupId>
+        <artifactId>p6spy</artifactId>
+        <version>${p6spy.version}</version>
       </dependency>
       <!-- database access end -->
 

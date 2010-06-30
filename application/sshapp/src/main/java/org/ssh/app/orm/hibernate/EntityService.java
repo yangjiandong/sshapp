@@ -73,10 +73,10 @@ public abstract class EntityService<T, PK extends Serializable> {
         return getEntityDao().find(hql, values);
     }
 
-    @Transactional(readOnly = true)
-    public T findUnique(final String hql, final Object... values) {
-        return getEntityDao().findUnique(hql, values);
-    }
+//    @Transactional(readOnly = true)
+//    public T findUnique(final String hql, final Object... values) {
+//        return getEntityDao().findUnique(hql, values);
+//    }
 
     public int batchExecute(final String hql, final Object... values) {
         return getEntityDao().batchExecute(hql, values);
