@@ -24,8 +24,6 @@
 </script>
 
 <script type="text/javascript"  src="./js/labels_srv.js" ></script>
-<link rel="stylesheet" href="<c:url value='css/n21ebs.css'/>" type="text/css"  />
-
 <script type="text/javascript">
       // Product version. Do not change!
       CFG_PRODUCT_VERSION = L("/Application/Version");
@@ -38,7 +36,7 @@
 <script type="text/javascript" src="./js/app/UiLoadingHelper.js"></script>
 <script type="text/javascript" src="./js/DcIncludesMap.js"></script>
 
-<link rel="stylesheet" type="text/css" href="css/loading.css" />
+<link rel="stylesheet" type="text/css" href="./css/ext-customer.css" />
 <script>
       document.write('<title>' + L("/Application/Name")+'-'+ CFG_PRODUCT_VERSION + '</title>');
 </script>
@@ -50,10 +48,12 @@
 <span id="n21-loading-logo">
 <script>
       s=L("/Application/Name")+'-'+ CFG_PRODUCT_VERSION;
+
+      document.write(s);
 </script>
 </span><br>
 <span id="n21-loading-logo-text"></span> <br>
-<img src="img/icon/extanim32.gif" /> <br>
+<img src="img/extanim32.gif" /> <br>
 <span id="n21-loading-msg">装载中...</span></div>
 </div>
 
@@ -70,16 +70,11 @@
 <script type="text/javascript" src="<c:url value='js/app/DcLogin.js'/>"></script>
 <script type="text/javascript" src="<c:url value='js/app/DcMenuTree.js'/>"></script>
 <script>
-    ///document.writeln('<link rel="stylesheet" type="text/css" href="'+CFG_PATH_EXTJS+'/resources/css/ext-all.css"/>');
-    //document.writeln('<link rel="stylesheet" type="text/css" href="css/n21ebs.css"/>');
     document.writeln('<link rel="stylesheet" type="text/css" href="'+'css/xtheme-nbs.css"/>');
 </script>
 <script type="text/javascript">document.getElementById('n21-loading-msg').innerHTML = '初始化...';</script>
 
 <script type="text/javascript" src="./js/main.js"></script>
-
-<script>
-</script>
 
 </body>
 </html>
