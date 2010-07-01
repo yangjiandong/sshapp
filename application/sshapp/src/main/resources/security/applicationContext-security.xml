@@ -16,6 +16,7 @@
     <s:intercept-url pattern="/index2.jsp" filters="none" />
     <s:intercept-url pattern="/init/*" filters="none" />
     <s:intercept-url pattern="/help/*" filters="none" />
+    <s:intercept-url pattern="/remote/**" filters="none" />
 
     <s:intercept-url pattern="/common/user/*" access="isAuthenticated()" />
 

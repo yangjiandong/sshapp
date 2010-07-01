@@ -2,6 +2,7 @@
 <%@ include file="../common/taglibs.jsp"%>
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8" %>
 <%pageContext.setAttribute("ext", "ext");%>
+<%pageContext.setAttribute("deployment_type", "DEV");%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -18,7 +19,7 @@
 
 <script type="text/javascript">
       // Deployment type: Production(PROD) or development(DEV). In development mod does not cache
-      CFG_DEPLOYMENT_TYPE = 'DEV';
+      CFG_DEPLOYMENT_TYPE = '${deployment_type}';
       //javascript
       CFG_PATH_EXTJS = '${ext}';
       CFG_PATH_JSLIB = 'js/lib';
@@ -39,6 +40,7 @@
 <script type="text/javascript" src="./js/DcIncludesMap.js"></script>
 
 <link rel="stylesheet" type="text/css" href="./css/ext-customer.css" />
+<link rel="stylesheet" type="text/css" href="./css/ext-patch.css" />
 <script>
       document.write('<title>' + L("/Application/Name")+'-'+ CFG_PRODUCT_VERSION + '</title>');
 </script>

@@ -32,8 +32,6 @@
   <filter-mapping>
     <filter-name>encodingFilter</filter-name>
     <url-pattern>/*</url-pattern>
-    <dispatcher>REQUEST</dispatcher>
-    <dispatcher>FORWARD</dispatcher>
   </filter-mapping>
 
   <!-- multiple configure Hibernate Open Session In View filter-->
@@ -59,8 +57,6 @@
   <filter-mapping>
     <filter-name>hibernateOpenSessionInViewFilter</filter-name>
     <url-pattern>/rest/*</url-pattern>
-    <dispatcher>REQUEST</dispatcher>
-    <dispatcher>FORWARD</dispatcher>
   </filter-mapping>
   <filter-mapping>
     <filter-name>hibernateOpenSessionInViewFilter</filter-name>
@@ -69,8 +65,6 @@
     <filter-mapping>
     <filter-name>hibernateOpenSessionInViewFilter</filter-name>
     <url-pattern>/remote/*</url-pattern>
-    <dispatcher>REQUEST</dispatcher>
-    <dispatcher>FORWARD</dispatcher>
   </filter-mapping>
 
   <!-- SpringSecurity filter-->

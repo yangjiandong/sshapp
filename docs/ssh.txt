@@ -1,6 +1,16 @@
 ssh
 ======
 
+2010.07.01
+----------
+
+1、加入spring httpInvoke
+   http://snowolf.javaeye.com/blog/703732
+
+   remote-servlet.xml,org.ssh.app.httpinvoke
+   测试:  client.UserServiceTest
+   暂时不考虑用户权限
+
 2010.06.30
 ----------
 
