@@ -20,7 +20,7 @@ Ext.onReady(function() {
   // session.add("language", CFG_DEFAULT_LANGUAGE);
 
   loggedIn = (readCookie(AUTH_COOKIE_NAME) == null) ? false : true;
-  logInWindow = new N21.Other.DcLogin({
+  logInWindow = new App.dc.DcLogin({
         authServerUrl : CFG_AUTHSERVER_URL
       });
   logInWindow.addListener('logonSuccess', function() {
@@ -52,7 +52,7 @@ Ext.onReady(function() {
       initAppViewport();
       getCurUserInfos();
     }
-    document.getElementById("content_iframe").src = "showAbout.html";
+    document.getElementById("content_iframe").src = "help/showAbout.html";
   }
 
   function initAppViewport() {
@@ -168,10 +168,12 @@ Ext.onReady(function() {
    */
   function loadMenuLink(ifrID, guiID, params) {
     if (guiID.substr(0, 3) == "REP") {
-      document.getElementById(ifrID).src = CFG_BACKENDSERVER_URL + "?_p_report_id=" + guiID;
+      document.getElementById(ifrID).src = CFG_BACKENDSERVER_URL
+          + "?_p_report_id=" + guiID;
     } else {
-      var htmlString = buildHtml(session.get("language"), guiID, uiDcInc.get(guiID));
-      //alert(htmlString);
+      var htmlString = buildHtml(session.get("language"), guiID, uiDcInc
+              .get(guiID));
+      // alert(htmlString);
       window.frames[ifrID].document.open("text/html", "replace");
       window.frames[ifrID].document.write(htmlString);
       window.frames[ifrID].document.close();
@@ -205,9 +207,11 @@ Ext.onReady(function() {
    * Implements the UI loading mechanism.
    */
   function _openMenuLinkImpl(tabID, ifrID, guiID, guiText, params) {
-     //alert(ifrID+' => window.frames='+window.frames[ifrID]);
-     //alert(ifrID+' => document.getElementById'+document.getElementById(ifrID));
-    if (Ext.isEmpty(document.getElementById(ifrID)) && !Ext.isEmpty(window.frames[ifrID])) {
+    // alert(ifrID+' => window.frames='+window.frames[ifrID]);
+    // alert(ifrID+' =>
+    // document.getElementById'+document.getElementById(ifrID));
+    if (Ext.isEmpty(document.getElementById(ifrID))
+        && !Ext.isEmpty(window.frames[ifrID])) {
       // alert('am frames no docgetElemById');
       delete window.frames[ifrID];
     }
@@ -235,7 +239,7 @@ Ext.onReady(function() {
       }));
       contentPane.activate(tabID);
       loadMenuLink(ifrID, guiID, params);
-      //alert("olkk");
+      // alert("olkk");
     }
   }
 
@@ -267,7 +271,8 @@ Ext.onReady(function() {
               if (!Ext.isEmpty(respText.message)) {
                 Ext.Msg.alert('Error', urldecode(respText.message));
               } else {
-                Ext.Msg.alert('Error', 'Cannot lock session. Connection to server lost.');
+                Ext.Msg.alert('Error',
+                    'Cannot lock session. Connection to server lost.');
               }
             }
           }
@@ -287,7 +292,8 @@ Ext.onReady(function() {
               if (!Ext.isEmpty(respText.message)) {
                 Ext.Msg.alert('Error', urldecode(respText.message));
               } else {
-                Ext.Msg.alert('Error', 'Cannot logout. Connection to server lost');
+                Ext.Msg.alert('Error',
+                    'Cannot logout. Connection to server lost');
               }
             }
           }
@@ -332,13 +338,13 @@ Ext.onReady(function() {
           items : [{
                 text : '关于',
                 handler : function() {
-                  document.getElementById("content_iframe").src = "showAbout.html"
+                  document.getElementById("content_iframe").src = "help/showAbout.html"
                 },
                 scope : this
               }, {
                 text : '在线帮助',
                 handler : function() {
-                  document.getElementById("content_iframe").src = "howto.html"
+                  document.getElementById("content_iframe").src = "help/howto.html"
                 },
                 scope : this
                 // disabled : true
@@ -387,13 +393,12 @@ Ext.onReady(function() {
     });
   }
 
-    // 获取当前用户的信息
+  // 获取当前用户的信息
   function getCurUserInfos() {
     var curUser = getCurUser();
     if (curUser) {
-      Ext.get('cur-user-name').dom.innerHTML = "当前用户:&nbsp;&nbsp;"
-          + curUser;
-    }else{
+      Ext.get('cur-user-name').dom.innerHTML = "当前用户:&nbsp;&nbsp;" + curUser;
+    } else {
       Ext.get('cur-user-name').dom.innerHTML = "当前用户:&nbsp;&nbsp;";
     }
   }

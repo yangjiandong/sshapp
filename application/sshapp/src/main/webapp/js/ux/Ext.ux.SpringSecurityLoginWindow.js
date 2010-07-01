@@ -1,5 +1,5 @@
 
-Ext.namespace("Ext.lingo");
+Ext.namespace("Ext.co");
 
 SpringSecurityLoginWindow = Ext.extend(Ext.Window, {
     title: '登陆',

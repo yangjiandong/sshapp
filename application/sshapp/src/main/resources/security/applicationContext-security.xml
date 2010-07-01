@@ -15,12 +15,13 @@
     <s:intercept-url pattern="/book/*" filters="none" />
     <s:intercept-url pattern="/index2.jsp" filters="none" />
     <s:intercept-url pattern="/init/*" filters="none" />
+    <s:intercept-url pattern="/help/*" filters="none" />
 
     <s:intercept-url pattern="/common/user/*" access="isAuthenticated()" />
 
-    <s:form-login login-page="/security/login.action" default-target-url="/" authentication-failure-url="/security/login.action?error=1" />
+    <s:form-login login-page="/" default-target-url="/user/loginsuccess" authentication-failure-url="/user/loginerror1" />
     <s:logout logout-success-url="/" />
-    <s:session-management invalid-session-url="/security/login.action?error=3">
+    <s:session-management invalid-session-url="/">
       <s:concurrency-control max-sessions="1" error-if-maximum-exceeded="false" />
     </s:session-management>
 

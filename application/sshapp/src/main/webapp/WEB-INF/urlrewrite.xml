@@ -29,12 +29,6 @@ PUBLIC "-//tuckey.org//DTD UrlRewrite 3.0//EN"
     <to>/book/$1</to>
   </rule>
 
-  <!--remote-->
-  <rule>
-    <from>/remote/**</from>
-    <to>/remote/$1</to>
-  </rule>
-
   <rule>
     <from>/index2.jsp</from>
     <to>/index2.jsp</to>
@@ -46,6 +40,16 @@ PUBLIC "-//tuckey.org//DTD UrlRewrite 3.0//EN"
   <rule>
     <from>/common/**</from>
     <to>/common/$1</to>
+  </rule>
+  <rule>
+    <from>/help/**</from>
+    <to>/help/$1</to>
+  </rule>
+
+  <!--remote-->
+  <rule>
+    <from>/remote/**</from>
+    <to>/remote/$1</to>
   </rule>
 
   <rule>

@@ -1,28 +1,4 @@
-Ext.QuickTips.init();
-Ext.ns("N21.Other");
-
-// Ext.ns.ImageField = Ext.extend(Ext.form.Field, {
-// autoCreate : {
-// tag : 'img'
-// },
-// setValue : function(new_value) {
-// if (new_value == undefined || new_value == null) {
-// this.el.dom.src = CFG_PATH_ICONS + '/extlogo64.gif';
-// } else {
-// this.el.dom.src = CFG_PATH_ICONS + '/' + new_value;
-// }
-// },
-// initValue : function() {
-// this.setValue(this.value);
-// },
-// initComponent : function() {
-// Ext.apply(this, {
-// });
-// Ext.ns.ImageField.superclass.initComponent.apply(this);
-// }
-// });
-//
-// Ext.reg('image_field', Ext.ns.ImageField);
+Ext.ns("App.dc");
 
 // http://www.extjs.com/forum/showthread.php?t=59623
 Ext.ux.Image = Ext.extend(Ext.BoxComponent, {
@@ -56,7 +32,7 @@ Ext.ux.Image = Ext.extend(Ext.BoxComponent, {
 
 Ext.reg('image', Ext.ux.Image);
 
-N21.Other.DcLogin = Ext.extend(Ext.Window, {
+App.dc.DcLogin = Ext.extend(Ext.Window, {
       fields : new Ext.util.MixedCollection(),
       authServerUrl : null,
       authObj : null, // on successfull authentication, this is
@@ -65,6 +41,14 @@ N21.Other.DcLogin = Ext.extend(Ext.Window, {
       // name, authentication hash-code, etc)
 
       initComponent : function() {
+        this.fields.add("logoimg", new Ext.ux.Image({
+                  id : 'logoimg'
+                  // ,width : 64
+                  ,
+                  autoHeight : true,
+                  src : "extlogo64.gif"
+                }));
+
         this.fields.add("username", new Ext.form.TextField({
                   id : 'userName',
                   cls: 'user',
@@ -89,13 +73,6 @@ N21.Other.DcLogin = Ext.extend(Ext.Window, {
                   fieldLabel : L('/Login/Password'),
                   width : 150
                 }));
-        this.fields.add("logoimg", new Ext.ux.Image({
-                  id : 'logoimg'
-                  // ,width : 64
-                  ,
-                  autoHeight : true,
-                  src : "extlogo64.gif"
-                }))
 
         Ext.apply(this, {
               title : '用户登录?',
@@ -109,8 +86,8 @@ N21.Other.DcLogin = Ext.extend(Ext.Window, {
               modal : true,
               resizable : false,
               constrain : true,
-              items : [this.fields.get("username"),
-                  this.fields.get("password"), this.fields.get("logoimg")],
+              items : [this.fields.get("logoimg"), this.fields.get("username"),
+                  this.fields.get("password") ],
               buttons : [{
                     id : 'signin',
                     // xtype : "button",
@@ -125,7 +102,7 @@ N21.Other.DcLogin = Ext.extend(Ext.Window, {
                   }]
 
             });
-        N21.Other.DcLogin.superclass.initComponent.apply(this, arguments);
+        App.dc.DcLogin.superclass.initComponent.apply(this, arguments);
         this.addEvents('logonSuccess');
       },
 
@@ -139,16 +116,7 @@ N21.Other.DcLogin = Ext.extend(Ext.Window, {
       onLogin : function() {
         this.fields.get("logoimg").setSrc("extlogo64-anim.gif");
         Ext.Ajax.request({
-              //url : this.authServerUrl + "?_p_action=login&_p_usr="
-              //    + this.fields.get("username").getValue() + "&_p_psw="
-              //    + this.fields.get("password").getValue(),
               url: this.authServerUrl ,
-              //'j_spring_security_check'
-              //
-              //    + "?j_username="
-              //    + this.fields.get("username").getValue() + "&j_password="
-              //    + this.fields.get("password").getValue(),
-
               method : 'POST',
               params:{j_username:this.fields.get("username").getValue(),j_password:this.fields.get("password").getValue()},
               callback : this.afterOnlogin,

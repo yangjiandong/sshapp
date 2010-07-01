@@ -1,5 +1,8 @@
 package org.ssh.app.common.web;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,10 +15,9 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.ssh.app.common.entity.User;
 import org.ssh.app.common.service.AccountManager;
+import org.ssh.app.util.JsonViewUtil;
 
-//http://stsmedia.net/spring-finance-part-2-spring-mvc-spring-30-rest-integration/
 @Controller
 @RequestMapping("/user")
 public class UserController {
@@ -31,19 +33,26 @@ public class UserController {
         return "person/show";
     }
 
-    @RequestMapping(value = "/login")
-    //?? (value = "/login.do")
-    public String login(HttpServletRequest request, HttpServletResponse response, User userinfo) {
-        logger.info("user login..");
-        logger.info(userinfo.toString());
+    //error=1
+    //用户或密码不正确
+    @RequestMapping(value="/loginerror1")
+    public void login_error1(HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("success", false);
+        map.put("message", "用户名或密码不正确");
 
-        if (userinfo.getLoginName().equals("admin") && userinfo.getPlainPassword().equals("123")) {
-            request.setAttribute("user", userinfo);
-            return "users/list";//不能用/users/list,否则页面文件指到webapp/user/views/users/list.jsp
-        } else {
-            return "users/loginerr";
-        }
-
+        JsonViewUtil.buildCustomJSONDataResponse(response, map);
     }
 
+    //登录成功
+    @RequestMapping(value="/loginsuccess")
+    public void login_success(HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("success", true);
+        map.put("message", "");
+
+        JsonViewUtil.buildCustomJSONDataResponse(response, map);
+    }
 }
