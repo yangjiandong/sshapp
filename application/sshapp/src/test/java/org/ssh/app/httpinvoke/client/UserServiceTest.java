@@ -1,7 +1,10 @@
 package org.ssh.app.httpinvoke.client;
 
-import java.util.logging.Logger;
-
+import org.apache.log4j.Logger;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.ssh.app.httpinvoke.domain.User;
 import org.ssh.app.httpinvoke.service.UserService;
 
