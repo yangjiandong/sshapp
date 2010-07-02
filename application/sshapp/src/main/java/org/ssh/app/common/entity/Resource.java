@@ -22,7 +22,7 @@ public class Resource  {
     private Long parentId;
     private Long orderNo; // 资源排序字段
     private String note;
-    private boolean leaf;
+    private Boolean leaf;
     private Long resourceTypeId;
     private String active;
 
@@ -60,6 +60,7 @@ public class Resource  {
         this.parentId = parentId;
     }
 
+    @Column(length = 200)
     public String getUrl() {
         return url;
     }

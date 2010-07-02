@@ -206,16 +206,21 @@
     <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
-      <version>5.1.6</version>
       <scope>runtime</scope>
     </dependency>
 
     <dependency>
       <groupId>net.sourceforge.jtds</groupId>
       <artifactId>jtds</artifactId>
-      <version>1.2.2</version>
       <scope>runtime</scope>
     </dependency>
+
+    <dependency>
+      <groupId>com.oracle</groupId>
+      <artifactId>oracle</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
     <!--监听数据库操作-->
     <dependency>
       <groupId>p6spy</groupId>
@@ -369,6 +374,12 @@
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
     </dependency>
+
+<dependency>
+  <groupId>net.sf.opencsv</groupId>
+  <artifactId>opencsv</artifactId>
+
+</dependency>
 
     <dependency>
       <groupId>net.sf.ehcache</groupId>

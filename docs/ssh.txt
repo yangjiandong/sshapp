@@ -1,6 +1,17 @@
 ssh
 ======
 
+2010.07.02
+----------
+
+1、建立本地oracle.jar
+-在含有ojdbc14.jar的目录下运行
+mvn install:install-file -Dfile=ojdbc14.jar -DgroupId=com.oracle -DartifactId=oracle -Dversion=10.2.0.2.0 -Dpackaging=jar -DgeneratePom=true
+
+2、linux下eclipse 需手工设置 M2_REPO
+
+3、add opencsv
+
 2010.07.01
 ----------
 
