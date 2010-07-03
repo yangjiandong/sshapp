@@ -1,12 +1,12 @@
 package org.ssh.app.common.service;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileReader;
-import java.util.HashMap;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.util.Map;
 
-import org.hibernate.CacheMode;
-import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ssh.app.common.dao.HzDao;
 import org.ssh.app.common.entity.Hz;
-import org.ssh.app.orm.hibernate.EntityService;
-
-import au.com.bytecode.opencsv.CSVReader;
 
 //Spring Service Bean的标识.
 @Service("hzService")
@@ -42,22 +39,50 @@ public class HzService {
     }
 
     public void initData() {
-//        if (this.hzDao.getHzCount() != 0)
-//            return;
+        if (this.hzDao.getHzCount() != 0)
+            return;
 
         logger.debug("开始装载汉字库数据");
 
         File resourcetxt = new File(this.getClass().getResource("/data/hzk.txt").getFile());
 
         try {
+            FileInputStream fis = new FileInputStream(resourcetxt);
+            String thisLine;
 
-            CSVReader reader = new CSVReader(new FileReader(resourcetxt));
+            DataInputStream myInput = new DataInputStream(fis);
+            BufferedReader br = new BufferedReader(new InputStreamReader(myInput,"UTF-8"));
 
-            String[] nextLine;
-            while ((nextLine = reader.readNext()) != null) {
-                System.out.println("Name: [" + nextLine[0] + "]\nAddress: [" + nextLine[1]
-                        + "]\nEmail: [" + nextLine[2] + "]");
+            Hz re = new Hz();
+            this.hzDao.batchExecute("delete from " + Hz.class.getName());
+            int line=1;
+            while ((thisLine=br.readLine())!=null){
+                if (line==1) {
+                    line++;
+                    continue;
+                }
+                String star[]=thisLine.split(",");
+                //for(int j=0;j<star.length;j++){
+                //    System.out.println(star[j]);
+                //}
+
+                if (star[1].equals("")) continue;
+
+                re = new Hz();
+                re.setOid(new Long(star[0]));
+                re.setHz(star[1]);
+                re.setPy(star[2]);
+                re.setWb(star[3]);
+                this.hzDao.save(re);
             }
+//
+//            CSVReader reader = new CSVReader(new InputStreamReader(resourcetxt,"UTF-8"),',');
+//
+//            String[] nextLine;
+//            while ((nextLine = reader.readNext()) != null) {
+//                System.out.println("Name: [" + nextLine[1] + "]\npy: [" + nextLine[2]
+//                        + "]\nwb: [" + nextLine[3] + "]");
+//            }
 
         } catch (Exception e) {
             logger.error("装载汉字数据出错:" + e);
@@ -66,5 +91,4 @@ public class HzService {
 
         }
     }
-
 }

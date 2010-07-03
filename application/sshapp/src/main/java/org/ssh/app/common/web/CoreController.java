@@ -47,7 +47,7 @@ public class CoreController {
 //            return "redirect:/";
 //        }
 
-        request.setAttribute("message", "使用");
+        request.setAttribute("message", "初始化系统基础数据");
         return "init";
 
     }

@@ -13,11 +13,12 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "T_HZK")
 @Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Hz {
+    private Long oid;
+
     private String hz;
     private String wb;
     private String py;
 
-    @Id
     @Column(length = 10)
     public String getHz() {
         return hz;
@@ -48,5 +49,14 @@ public class Hz {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
+    }
+
+    @Id
+    public Long getOid() {
+        return oid;
+    }
+
+    public void setOid(Long oid) {
+        this.oid = oid;
     }
 }

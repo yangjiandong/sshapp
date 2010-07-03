@@ -11,7 +11,7 @@
 
 <body>
 <p>欢迎你!<br> ${message}</p>
-<a href="<c:url value="/init/commonData"/>">初始基础数据</a>
+<a href="<c:url value="/init/commonData"/>">开始!</a>
 <br><br>
 </body>
 </html>
