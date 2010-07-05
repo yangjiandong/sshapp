@@ -1,0 +1,35 @@
+Manage Licenses using License3j and GPG
+=========================================
+
+download:
+   http://www.gnupg.org/download/index.en.html
+   http://projects.verhas.com/com.verhas.licensor/license3j/license3j/index.html
+
+1、gpg 产生密匙
+
+   gpg --gen-key
+   --选择RSA(sign only)
+   --长度4096
+
+   产生文件位置：C:\Users\Administrator\AppData\Roaming\gnupg
+
+2、生成文本license-plain.txt
+
+edition=community
+valid-until=2009.12.31
+
+3、encode license
+
+  license3j.bat encode --license-file=license-plain.txt
+  --keyring-file="c:\Documents and Settings\verhas\Application Data\gnupg\secring.gpg"
+  --key=GrooWikiDemoKey --password=******** --output=license.out
+
+  --注意key的内容要采用全部信息如"yangjiandong (000973) <young.jiandong@gmail.com>"
+  --注意文件位置，最好指出全部路径
+
+4、
+license3j.bat decode --license-file=license.out --keyring-file="C:\Users\Administrator\AppData\Roaming\gnupg\pubring.gpg"
+
+
+  --END
+
