@@ -1,60 +1,60 @@
 
 
 Add Labels
-	
-Wait Image 
+
+Wait Image
 Enter labels to add to this page:
 Tip: Looking for a label? Just start typing.
-	
-		
-1. ¿ª³¡Ç°Ê®·ÖÖÓ
 
-    * °²×° JDK6.0ÒÔÉÏ°æ±¾£¬ÉèÖÃ»·¾³±äÁ¿JAVA_HOMEÓëpath.
-    * ÔÄ¶ÁSpringSide3µÄÏîÄ¿×ÜÊöºÍÄ¿Â¼ËµÃ÷ £¬ÁË½âSpringSide¸ÅÃ².
 
-2. Ò»Õ¾Ê½¿ìËÙ°²×°
+1. å¼€åœºå‰ååˆ†é’Ÿ
 
-     ÓÖ¼ûspringsdide2.0Ê½µÄÉµ¹ÏÊ½¿ìËÙ°²×°£¬Ë«»÷ springside3-all-in-one ½âÑ¹Ä¿Â¼/quick-start.bat£¬½«step by stepµÄ×Ô¶¯Ö´ĞĞ£º
+    * å®‰è£… JDK6.0ä»¥ä¸Šç‰ˆæœ¬ï¼Œè®¾ç½®ç¯å¢ƒå˜é‡JAVA_HOMEä¸path.
+    * é˜…è¯»SpringSide3çš„é¡¹ç›®æ€»è¿°å’Œç›®å½•è¯´æ˜ ï¼Œäº†è§£SpringSideæ¦‚è²Œ.
 
-   1. Æô¶¯×Ô´øµÄH2Ê¾ÀıÊı¾İ¿â¡£(µÈÍ¬Ö´ĞĞtools/h2/start-db.bat)
-   2. ½«tools/maven/central-repositoryÖĞµÄjarÎÄ¼ş¿½±´µ½±¾µØ²Ö¿â, ÈçC:/Document and Setting/ÓÃ»§Ãû/.m2/repository
-   3. ÎªËùÓĞ×ÓÏîÄ¿Éú³ÉEclipseÏîÄ¿ÎÄ¼ş¡£(µÈÍ¬Ö´ĞĞÃ¿¸öÏîÄ¿ÖĞµÄbin/eclipse.bat)
-   4. ±àÒë°²×°ËùÓĞ×ÓÏîÄ¿¡£(µÈÍ¬Ö´ĞĞÏîÄ¿ÖĞµÄbin/install.bat)
-   5. ÎªÈı¸öExamplesÏîÄ¿·Ö±ğÖ´ĞĞ³õÊ¼»¯Êı¾İ¿â£¬²¢Ê¹ÓÃJettyÔËĞĞ¡£(µÈÍ¬Ö´ĞĞÃ¿¸öÏîÄ¿ÖĞµÄbin/db-init.bat Óë jetty.bat)
+2. ä¸€ç«™å¼å¿«é€Ÿå®‰è£…
 
-3. »·±£Ô´Âë°æ
+     åˆè§springsdide2.0å¼çš„å‚»ç“œå¼å¿«é€Ÿå®‰è£…ï¼ŒåŒå‡» springside3-all-in-one è§£å‹ç›®å½•/quick-start.batï¼Œå°†step by stepçš„è‡ªåŠ¨æ‰§è¡Œï¼š
 
-   Èç¹ûÒÑ¾­ÊÇSpringSideµÄÀÏÓÃ»§£¬ÄÇ¾Í²»±ØÃ¿¸ö°æ±¾¶¼ÏÂÔØÒ»°Ù¶àMµÄall in one°æ£¬ÏÂ¸ö¼¸°ÙKµÄÔ´Âë°æ¾Í×ã¹»ÁË¡£
+   1. å¯åŠ¨è‡ªå¸¦çš„H2ç¤ºä¾‹æ•°æ®åº“ã€‚(ç­‰åŒæ‰§è¡Œtools/h2/start-db.bat)
+   2. å°†tools/maven/central-repositoryä¸­çš„jaræ–‡ä»¶æ‹·è´åˆ°æœ¬åœ°ä»“åº“, å¦‚C:/Document and Setting/ç”¨æˆ·å/.m2/repository
+   3. ä¸ºæ‰€æœ‰å­é¡¹ç›®ç”ŸæˆEclipseé¡¹ç›®æ–‡ä»¶ã€‚(ç­‰åŒæ‰§è¡Œæ¯ä¸ªé¡¹ç›®ä¸­çš„bin/eclipse.bat)
+   4. ç¼–è¯‘å®‰è£…æ‰€æœ‰å­é¡¹ç›®ã€‚(ç­‰åŒæ‰§è¡Œé¡¹ç›®ä¸­çš„bin/install.bat)
+   5. ä¸ºä¸‰ä¸ªExamplesé¡¹ç›®åˆ†åˆ«æ‰§è¡Œåˆå§‹åŒ–æ•°æ®åº“ï¼Œå¹¶ä½¿ç”¨Jettyè¿è¡Œã€‚(ç­‰åŒæ‰§è¡Œæ¯ä¸ªé¡¹ç›®ä¸­çš„bin/db-init.bat ä¸ jetty.bat)
 
-   ÅäºÃantºÍmavenµÄpathºó(±£Ö¤ÔÚantµÄlibÄ¿Â¼ÖĞ·ÅÁËmaven-ant-task.jar), ÊÖ¹¤Ö´ĞĞÉÏÊö¹ı³ÌÖĞµÈÍ¬²¿·ÖµÄÃüÁî¾ÍĞĞ.
-4. ÔÚEclipseÖĞ....
+3. ç¯ä¿æºç ç‰ˆ
 
-     Èç¹ûÄãÊÇ¼á¶¨µÄ°æÈ¨ÒâÊ¶Õß£¬ÕâÊ±ºòÊ¹ÓÃµÄÓ¦¸ÃÊÇEclipse 3.5.x for Java EE Developers£¬SpringSide µÄÏîÄ¿ÎÄ¼şÒ²ÊÇ»ùÓÚËüÖ®ÉÏ¡£Èç¹ûÄãÊ¹ÓÃµÄÊÇÆäËûIDEÈçMyEclipse¡¢Netbeans£¬¿ÉÌøµ½ÏÂÒ»½Ú¡£
+   å¦‚æœå·²ç»æ˜¯SpringSideçš„è€ç”¨æˆ·ï¼Œé‚£å°±ä¸å¿…æ¯ä¸ªç‰ˆæœ¬éƒ½ä¸‹è½½ä¸€ç™¾å¤šMçš„all in oneç‰ˆï¼Œä¸‹ä¸ªå‡ ç™¾Kçš„æºç ç‰ˆå°±è¶³å¤Ÿäº†ã€‚
 
-     ÊµÔÚ·³ÁËm2eclipse²å¼şÀÏ³öÕâÑùÄÇÑùµÄÎÊÌâ£¬½¨ÒéÓÃeclipse:eclipseÉú³ÉÏîÄ¿ÎÄ¼ş¡£
-4.1 ä¯ÀÀÔ´Âë
+   é…å¥½antå’Œmavençš„pathå(ä¿è¯åœ¨antçš„libç›®å½•ä¸­æ”¾äº†maven-ant-task.jar), æ‰‹å·¥æ‰§è¡Œä¸Šè¿°è¿‡ç¨‹ä¸­ç­‰åŒéƒ¨åˆ†çš„å‘½ä»¤å°±è¡Œ.
+4. åœ¨Eclipseä¸­....
 
-     ´ò¿ªEclipse£¬Ñ¡Ôñfile->import£¬Ñ¡ÔñGeneral->Existing Projects into Workspace£¬Ñ¡ÔñÏÂÔØµÄSpringsideSide3¸ùÄ¿Â¼£¬¹³Ñ¡ËùÓĞÏîÄ¿¡£
+     å¦‚æœä½ æ˜¯åšå®šçš„ç‰ˆæƒæ„è¯†è€…ï¼Œè¿™æ—¶å€™ä½¿ç”¨çš„åº”è¯¥æ˜¯Eclipse 3.5.x for Java EE Developersï¼ŒSpringSide çš„é¡¹ç›®æ–‡ä»¶ä¹Ÿæ˜¯åŸºäºå®ƒä¹‹ä¸Šã€‚å¦‚æœä½ ä½¿ç”¨çš„æ˜¯å…¶ä»–IDEå¦‚MyEclipseã€Netbeansï¼Œå¯è·³åˆ°ä¸‹ä¸€èŠ‚ã€‚
 
-     Ë¢ĞÂÏîÄ¿£¬´ó¼Ò¿ÉÒÔ³©¿ìµÄä¯ÀÀÔ´ÂëÁË......
-4.2 ÔËĞĞÏîÄ¿
+     å®åœ¨çƒ¦äº†m2eclipseæ’ä»¶è€å‡ºè¿™æ ·é‚£æ ·çš„é—®é¢˜ï¼Œå»ºè®®ç”¨eclipse:eclipseç”Ÿæˆé¡¹ç›®æ–‡ä»¶ã€‚
+4.1 æµè§ˆæºç 
 
-    * option1: µã»÷bin/jetty.bat
-    * option2: Ö´ĞĞsrc/test/java/.../tools/Start.java
-    * option3: Ê¹ÓÃrun-jetty-run²å¼ş.
+     æ‰“å¼€Eclipseï¼Œé€‰æ‹©file->importï¼Œé€‰æ‹©General->Existing Projects into Workspaceï¼Œé€‰æ‹©ä¸‹è½½çš„SpringsideSide3æ ¹ç›®å½•ï¼Œé’©é€‰æ‰€æœ‰é¡¹ç›®ã€‚
 
-5. ²»ÔÚEclipseÖĞ...
+     åˆ·æ–°é¡¹ç›®ï¼Œå¤§å®¶å¯ä»¥ç•…å¿«çš„æµè§ˆæºç äº†......
+4.2 è¿è¡Œé¡¹ç›®
 
-      Èç¹ûÄãÊ¹ÓÃÊÇMyEclipse£¬NetbeansÖ®ÀàµÄÆäËûIDE£¬¾ÍĞèÒª×ÔĞĞÎªÃ¿¸öÏîÄ¿ĞÂ½¨ÏîÄ¿ÎÄ¼ş£¬ÅäÖÃÈçÏÂ£º
+    * option1: ç‚¹å‡»bin/jetty.bat
+    * option2: æ‰§è¡Œsrc/test/java/.../tools/Start.java
+    * option3: ä½¿ç”¨run-jetty-runæ’ä»¶.
 
-    * Ô´ÂëÄ¿Â¼Îªsrc/main/javaºÍsrc/main/resources£¬²âÊÔ´úÂëÄ¿Â¼Îªsrc/test/java ºÍ src/test/resources¡£
-    * WebÓ¦ÓÃÄ¿Â¼Îªsrc/main/webapp¡£
-    * ÓÃmvn dependency:copy-dependencies³õÊ¼»¯ÒÀÀµjarµ½target/dependencyÄ¿Â¼£¬Éè¶¨ÒÀÀµ¡£
-    * ÏîÄ¿±àÂëÎªUTF-8£¬JDKÎª1.5ÒÔÉÏ°æ±¾(ĞèÒª°´1.5Óï·¨±àÒë)£¬ServletÎª2.4°æ±¾¡£
+5. ä¸åœ¨Eclipseä¸­...
 
-6. ½ÓÏÂÀ´...
+      å¦‚æœä½ ä½¿ç”¨æ˜¯MyEclipseï¼ŒNetbeansä¹‹ç±»çš„å…¶ä»–IDEï¼Œå°±éœ€è¦è‡ªè¡Œä¸ºæ¯ä¸ªé¡¹ç›®æ–°å»ºé¡¹ç›®æ–‡ä»¶ï¼Œé…ç½®å¦‚ä¸‹ï¼š
 
-    * ÔÄ¶ÁÊ¾ÀıÏîÄ¿µÄ¼Ü¹¹·ç¸ñËµÃ÷
-    * ÔÄ¶ÁÏêÏ¸¼¼Êõ²Î¿¼ÊÖ²á
-    * ÔÄ¶Á¿ª·¢¹ı³Ì¡¢¿ª·¢Êµ¼ù½¨Òé
+    * æºç ç›®å½•ä¸ºsrc/main/javaå’Œsrc/main/resourcesï¼Œæµ‹è¯•ä»£ç ç›®å½•ä¸ºsrc/test/java å’Œ src/test/resourcesã€‚
+    * Webåº”ç”¨ç›®å½•ä¸ºsrc/main/webappã€‚
+    * ç”¨mvn dependency:copy-dependenciesåˆå§‹åŒ–ä¾èµ–jaråˆ°target/dependencyç›®å½•ï¼Œè®¾å®šä¾èµ–ã€‚
+    * é¡¹ç›®ç¼–ç ä¸ºUTF-8ï¼ŒJDKä¸º1.5ä»¥ä¸Šç‰ˆæœ¬(éœ€è¦æŒ‰1.5è¯­æ³•ç¼–è¯‘)ï¼ŒServletä¸º2.4ç‰ˆæœ¬ã€‚
+
+6. æ¥ä¸‹æ¥...
+
+    * é˜…è¯»ç¤ºä¾‹é¡¹ç›®çš„æ¶æ„é£æ ¼è¯´æ˜
+    * é˜…è¯»è¯¦ç»†æŠ€æœ¯å‚è€ƒæ‰‹å†Œ
+    * é˜…è¯»å¼€å‘è¿‡ç¨‹ã€å¼€å‘å®è·µå»ºè®®
 

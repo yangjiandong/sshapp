@@ -23,6 +23,7 @@
     <s:form-login login-page="/" default-target-url="/user/loginsuccess" authentication-failure-url="/user/loginerror1" />
     <s:logout logout-success-url="/" />
     <s:session-management invalid-session-url="/">
+      <!--采用当前用户登录踢除上次登录-->
       <s:concurrency-control max-sessions="1" error-if-maximum-exceeded="false" />
     </s:session-management>
 

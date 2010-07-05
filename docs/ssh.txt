@@ -1,6 +1,17 @@
 ssh
 ======
 
+2010.07.05
+----------
+
+1、License3j 简单使用
+   save/license3j+gpg.txt
+
+2、spring安全策略修改，同一ip，用户可进行多次登录，不同ip只能等上次用户退出或会话过期才能登录
+   ch214-smart-concurrent.html
+   但spring security 3中对部分类不支持，编译没通过
+   org.ssh.app.security.SmartConcurrentSessionController
+
 2010.07.02
 ----------
 
