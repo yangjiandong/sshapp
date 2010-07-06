@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ include file="../common/taglibs.jsp"%>
-<%@ page language="java" import="java.util.*" pageEncoding="utf-8" %>
+
 <%pageContext.setAttribute("ext", "ext");%>
 <%pageContext.setAttribute("deployment_type", "DEV");%>
 
