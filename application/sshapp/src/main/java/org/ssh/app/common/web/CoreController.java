@@ -10,8 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.ssh.app.common.dao.ResourceTypeDao;
 import org.ssh.app.common.service.AccountManager;
 import org.ssh.app.common.service.HzService;
+import org.ssh.app.common.service.ResourceService;
+import org.ssh.app.common.service.ResourceTypeService;
 
 @Controller
 @RequestMapping("/init")
@@ -24,6 +27,12 @@ public class CoreController {
     @Autowired
     private HzService hzService;
 
+    @Autowired
+    private ResourceTypeService resourceTypeService;
+    
+    @Autowired
+    private ResourceService resourceService;
+    
     @RequestMapping("/commonData")
     public ModelAndView initData(ModelMap modelMap, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
@@ -31,6 +40,8 @@ public class CoreController {
 
         this.accountManager.initData();
         this.hzService.initData();
+        this.resourceTypeService.initData();
+        this.resourceService.initData();
 
         return new ModelAndView("redirect:/");
 

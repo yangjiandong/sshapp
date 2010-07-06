@@ -108,7 +108,7 @@ Ext.onReady(function() {
           listeners : {
             render : function() {
               Ext.Ajax.request({
-                    url : 'loadSubSystem.htm',
+                    url : '/resource/query',
                     success : successFn
                   })
             }

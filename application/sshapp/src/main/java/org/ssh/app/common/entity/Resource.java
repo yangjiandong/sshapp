@@ -1,9 +1,13 @@
 package org.ssh.app.common.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.Cache;
@@ -15,7 +19,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "t_resources")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class Resource  {
+public class Resource {
     private Long id;
     private String resourceName;
     private String url;
@@ -23,8 +27,7 @@ public class Resource  {
     private Long orderNo; // 资源排序字段
     private String note;
     private Boolean leaf;
-    private Long resourceTypeId;
-    private String active;
+    private ResourceType resourceType;
 
     @Id
     public Long getId() {
@@ -77,12 +80,19 @@ public class Resource  {
         this.leaf = leaf;
     }
 
-    public Long getResourceTypeId() {
-        return resourceTypeId;
+    @OneToOne(cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "RESOURCE_TYPE_ID")
+    public ResourceType getResourceType() {
+        return resourceType;
     }
 
-    public void setResourceTypeId(Long resourceTypeId) {
-        this.resourceTypeId = resourceTypeId;
+    public void setResourceType(ResourceType resourceType) {
+        this.resourceType = resourceType;
+    }
+
+    @Transient
+    public boolean isTransient() {
+        return this.id == null;
     }
 
     @Column(length = 200)
@@ -92,15 +102,6 @@ public class Resource  {
 
     public void setResourceName(String resourceName) {
         this.resourceName = resourceName;
-    }
-
-    @Column(length = 1)
-    public String getActive() {
-        return active;
-    }
-
-    public void setActive(String active) {
-        this.active = active;
     }
 
     @Override

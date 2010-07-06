@@ -53,7 +53,7 @@ public class HzDao extends HibernateDao<Hz, Long> {
         Hz hz = null;
         for (int i = 0; i < hzStr.length(); i++) {
             oneS = hzStr.substring(i, i + 1);
-            hz = this.findUnique("from " + Hz.class.getName()
+            hz = this.findOne("from " + Hz.class.getName()
                     + " where hz=?", oneS);
             if (hz != null) {
                 bfWb.append(hz.getWb().substring(0, 1));

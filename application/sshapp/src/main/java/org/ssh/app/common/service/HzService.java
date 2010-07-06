@@ -15,12 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.ssh.app.common.dao.HzDao;
 import org.ssh.app.common.entity.Hz;
 
-//Spring Service Bean的标识.
 @Service("hzService")
-// 默认将类中的所有函数纳入事务管理.
 @Transactional
 public class HzService {
-    // public class HzService {
     protected Logger logger = LoggerFactory.getLogger(getClass());
     private HzDao hzDao;
 
@@ -54,7 +51,7 @@ public class HzService {
             BufferedReader br = new BufferedReader(new InputStreamReader(myInput,"UTF-8"));
 
             Hz re = new Hz();
-            this.hzDao.batchExecute("delete from " + Hz.class.getName());
+            //this.hzDao.batchExecute("delete from " + Hz.class.getName());
             int line=1;
             while ((thisLine=br.readLine())!=null){
                 if (line==1) {
@@ -66,7 +63,7 @@ public class HzService {
                 //    System.out.println(star[j]);
                 //}
 
-                if (star[1].equals("")) continue;
+                if (star[1].trim().equals("")) continue;
 
                 re = new Hz();
                 re.setOid(new Long(star[0]));
