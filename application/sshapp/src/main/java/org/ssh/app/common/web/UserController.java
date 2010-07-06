@@ -51,7 +51,7 @@ public class UserController {
             HttpServletResponse response) throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("success", true);
-        map.put("message", "");
+        map.put("message", "o");
 
         JsonViewUtil.buildCustomJSONDataResponse(response, map);
     }

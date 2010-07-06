@@ -135,6 +135,7 @@ public class JsonViewUtil {
         JSONObject jsonObject = JSONObject.fromObject(data);
         response.setContentType("text/json; charset=UTF-8");
         PrintWriter out = response.getWriter();
+        logger.info(jsonObject.toString());
         out.write(jsonObject.toString());
     }
 

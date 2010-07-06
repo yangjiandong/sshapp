@@ -108,7 +108,7 @@ Ext.onReady(function() {
           listeners : {
             render : function() {
               Ext.Ajax.request({
-                    url : '/resource/query',
+                    url : '/resource/querys',
                     success : successFn
                   })
             }
@@ -282,20 +282,13 @@ Ext.onReady(function() {
   function doLogout() {
     eraseCookie(AUTH_COOKIE_NAME);
     Ext.Ajax.request({
-          url : "logOut.htm",
-          scope : this,
-          callback : function(o, s, r) {
-            var respText = Ext.decode(r.responseText);
-            if (respText.success && respText.message == "OK") {
-              document.location.href = 'index.jsp';
-            } else {
-              if (!Ext.isEmpty(respText.message)) {
-                Ext.Msg.alert('Error', urldecode(respText.message));
-              } else {
-                Ext.Msg.alert('Error',
-                    'Cannot logout. Connection to server lost');
-              }
-            }
+          url : "./j_spring_security_logout",
+          //scope : this,
+          success : function(response) {
+            document.location.href = './';
+          },
+          failure : function(response) {
+            Ext.Msg.alert('错误', '无法访问服务器。');
           }
         });
   }
@@ -331,39 +324,39 @@ Ext.onReady(function() {
         });
 
     var aboutMenu = new Ext.menu.Menu({
-          id : 'about-menu',
-          style : {
-            overflow : 'visible'
-          },
-          items : [{
-                text : '关于',
-                handler : function() {
-                  document.getElementById("content_iframe").src = "help/showAbout.html"
-                },
-                scope : this
-              }, {
-                text : '在线帮助',
-                handler : function() {
-                  document.getElementById("content_iframe").src = "help/howto.html"
-                },
-                scope : this
-                // disabled : true
-            }]
-        });
+      id : 'about-menu',
+      style : {
+        overflow : 'visible'
+      },
+      items : [{
+            text : '关于',
+            handler : function() {
+              document.getElementById("content_iframe").src = "help/showAbout.html"
+            },
+            scope : this
+          }, {
+            text : '在线帮助',
+            handler : function() {
+              document.getElementById("content_iframe").src = "help/howto.html"
+            },
+            scope : this
+            // disabled : true
+        }]
+    });
 
     menuBar = new Ext.Toolbar({
           id : 'menu-toolbar',
           items : [new Ext.Toolbar.Separator(), {
                 text : '子系统',
-                icon : 'img/icons/subsys.gif',
+                icon : 'img/subsys.gif',
                 menu : subSysMenu
               }, {
                 text : '会话',
-                icon : 'img/icons/user.gif',
+                icon : 'img/user.gif',
                 menu : sessionMenu
               }, {
                 text : '帮助',
-                icon : 'img/icons/help.gif',
+                icon : 'img/help.gif',
                 menu : aboutMenu
               }, '->', '<span id="cur-user-name"></span>']
         });

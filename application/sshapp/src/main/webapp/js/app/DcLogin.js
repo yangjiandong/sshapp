@@ -116,7 +116,7 @@ App.dc.DcLogin = Ext.extend(Ext.Window, {
       onLogin : function() {
         this.fields.get("logoimg").setSrc("extlogo64-anim.gif");
         Ext.Ajax.request({
-              url: this.authServerUrl ,
+              url: "/j_spring_security_check" ,
               method : 'POST',
               params:{j_username:this.fields.get("username").getValue(),j_password:this.fields.get("password").getValue()},
               callback : this.afterOnlogin,
