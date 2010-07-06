@@ -1,6 +1,11 @@
 ssh
 ======
 
+2010.07.06
+----------
+
+1、Share Nothing Architecture spring？
+
 2010.07.05
 ----------
 
