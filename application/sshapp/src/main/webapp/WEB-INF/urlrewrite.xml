@@ -41,10 +41,6 @@ PUBLIC "-//tuckey.org//DTD UrlRewrite 3.0//EN"
     <from>/common/**</from>
     <to>/common/$1</to>
   </rule>
-  <rule>
-    <from>/help/**</from>
-    <to>/help/$1</to>
-  </rule>
 
   <!--remote-->
   <rule>

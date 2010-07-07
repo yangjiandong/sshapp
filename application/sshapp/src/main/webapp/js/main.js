@@ -52,7 +52,7 @@ Ext.onReady(function() {
       initAppViewport();
       getCurUserInfos();
     }
-    document.getElementById("content_iframe").src = "help/showAbout.html";
+    document.getElementById("content_iframe").src = "help/showAbout";
   }
 
   function initAppViewport() {
@@ -331,13 +331,13 @@ Ext.onReady(function() {
       items : [{
             text : '关于',
             handler : function() {
-              document.getElementById("content_iframe").src = "help/showAbout.html"
+              document.getElementById("content_iframe").src = "help/showAbout"
             },
             scope : this
           }, {
             text : '在线帮助',
             handler : function() {
-              document.getElementById("content_iframe").src = "help/howto.html"
+              document.getElementById("content_iframe").src = "help/howto"
             },
             scope : this
             // disabled : true
