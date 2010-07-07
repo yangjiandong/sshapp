@@ -11,15 +11,15 @@ Object.prototype.hasOwnProperty = function(prop) {
 
 function getCurUser() {
   var name;
-        AppSysAction.doEcho('', function(result, e){
-          var t = e.getTransaction();
-          if(e.status){
-              name=result;
-              //alert('test:' + name);
-          }else{
-          }
-
-      });
+//        AppSysAction.doEcho('', function(result, e){
+//          var t = e.getTransaction();
+//          if(e.status){
+//              name=result;
+//              //alert('test:' + name);
+//          }else{
+//          }
+//
+//      });
   return name;
 }
 
