@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.ssh.app.common.ResourceTypeEnum;
-import org.ssh.app.common.dao.ResourceTypeDao;
 import org.ssh.app.common.dao.ResourceDao;
+import org.ssh.app.common.dao.ResourceTypeDao;
 import org.ssh.app.common.entity.Resource;
 import org.ssh.app.common.entity.ResourceType;
 import org.ssh.app.orm.hibernate.EntityService;
@@ -43,20 +43,39 @@ public class ResourceService extends EntityService<Resource, Long> {
     }
 
     /**
-     * 获取当前用户授权的子系统资源
+     * 获取当前用户授权角色对应的子系统资源
      */
     @Transactional(readOnly = true)
-    public List<Resource> loadGrantedSubSystems(Long userId, String userName) {
+    public List<Resource> loadGrantedSubSystemsByRole(List<String> roleId) {
         String hql = "";
         Map<String, Object> values = new HashMap<String, Object>();
 
-        if (userName.equals("admin")) {
-            hql = "from Resources where resourceType.typeName = :typeName and parentId is null order by orderNo";
+        hql =
+                "select a from Resources a,RoleResource b where a.parentId =0 and b.roleId in (:roleId) and b.resourceId = a.oid and a.resourceType.typeName = :typeName order by a.orderNo";
+        values.put("typeName", ResourceTypeEnum.SUBSYSTEM.getValue());
+        values.put("roleId", roleId);
+
+        return resourcesDao.find(hql, values);
+    }
+
+    /**
+     * 获取当前用户授权的子系统资源
+     */
+    @Transactional(readOnly = true)
+    public List<Resource> loadGrantedSubSystems(List<String> roleIds, String loginName) {
+        String hql = "";
+        Map<String, Object> values = new HashMap<String, Object>();
+
+        if (loginName.equals("admin")) {
+            //系统管理员
+            hql = "from Resource where resourceType.typeName = :typeName and parentId =0 order by orderNo";
             values.put("typeName", ResourceTypeEnum.SUBSYSTEM.getValue());
         } else {
-            hql = "select a from Resources a,RoleResource b,UserRoles c where a.parentId is null and c.userId = :userId and c.roleId = b.roleId and b.resourceId = a.oid and a.resourceType.typeName = :typeName order by a.orderNo";
+
+
+            hql = "select a from Resource a,RoleResource b where a.parentId =0 and  b.roleId in (:roleIds) and b.resourceId = a.oid and a.resourceType.typeName = :typeName order by a.orderNo";
             values.put("typeName", ResourceTypeEnum.SUBSYSTEM.getValue());
-            values.put("userId", userId);
+            values.put("roleIds", roleIds);
         }
 
         return resourcesDao.find(hql, values);
@@ -66,16 +85,16 @@ public class ResourceService extends EntityService<Resource, Long> {
      * 获取当前用户授权的菜单系统资源
      */
     @Transactional(readOnly = true)
-    public List<Resource> loadGrantedMenus(Long parentId, Long userId,
-            String userName) {
+    public List<Resource> loadGrantedMenus(Long parentId, String userId, String loginName) {
         String hql = "";
         Map<String, Object> values = new HashMap<String, Object>();
 
-        if (userName.equals("")) {
+        if (loginName.equals("admin")) {
             hql = "from Resource where parentId = :parentId order by orderNo";
             values.put("parentId", parentId);
         } else {
-            hql = "select a from Resource a,RoleResource b,UserRole c where c.userId = :userId and c.roleId = b.roleId and b.resourceId = a.oid and a.parentId = :parentId order by a.orderNo";
+            hql =
+                    "select a from Resource a,RoleResource b,UserRole c where c.userId = :userId and c.roleId = b.roleId and b.resourceId = a.oid and a.parentId = :parentId order by a.orderNo";
             values.put("parentId", parentId);
             values.put("userId", userId);
         }
@@ -88,9 +107,9 @@ public class ResourceService extends EntityService<Resource, Long> {
      */
     @Transactional(readOnly = true)
     public List<Resource> loadSubSystems() {
-        return resourcesDao
-                .find("from Resource where parentId is null and resourceType.typeName = ? order by orderNo",
-                        ResourceTypeEnum.SUBSYSTEM.getValue());
+        return resourcesDao.find(
+                "from Resource where parentId =0 and resourceType.typeName = ? order by orderNo",
+                ResourceTypeEnum.SUBSYSTEM.getValue());
 
     }
 
@@ -99,23 +118,20 @@ public class ResourceService extends EntityService<Resource, Long> {
      */
     @Transactional(readOnly = true)
     public List<Resource> getChildrenResource(Long parentId) {
-        return resourcesDao.find(
-                "from Resource where parentId = ? order by orderNo", parentId);
+        return resourcesDao.find("from Resource where parentId = ? order by orderNo", parentId);
     }
 
     public void initData() {
         logger.debug("开始装载资源初始数据");
 
-        File resourcetxt = new File(this.getClass()
-                .getResource("/data/resource.txt").getFile());
+        File resourcetxt = new File(this.getClass().getResource("/data/resource.txt").getFile());
 
         try {
             FileInputStream fis = new FileInputStream(resourcetxt);
             String thisLine;
 
             DataInputStream myInput = new DataInputStream(fis);
-            BufferedReader br = new BufferedReader(new InputStreamReader(
-                    myInput, "UTF-8"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(myInput, "UTF-8"));
 
             String s0;
             Resource u;
@@ -127,8 +143,9 @@ public class ResourceService extends EntityService<Resource, Long> {
                     line++;
                     continue;
                 }
-                //空行
-                if (thisLine.trim().equals("")) continue;
+                // 空行
+                if (thisLine.trim().equals(""))
+                    continue;
 
                 String star[] = thisLine.split(",");
                 s0 = star[1].trim();
@@ -138,10 +155,10 @@ public class ResourceService extends EntityService<Resource, Long> {
 
                 parentId = star[4].trim();// "parentId"
 
-                u = this.resourcesDao.findUnique(
-                        "from " + Resource.class.getName()
+                u =
+                        this.resourcesDao.findUnique("from " + Resource.class.getName()
                                 + " where resourceName=? and parentId =? ", s0,
-                        Long.valueOf(parentId));
+                                Long.valueOf(parentId));
 
                 if (u == null) {
                     u = new Resource();
@@ -153,8 +170,7 @@ public class ResourceService extends EntityService<Resource, Long> {
                     u.setOrderNo(new Long(star[6].trim()));
                     u.setLeaf(!star[3].trim().equals("0"));
 
-                    ResourceType type = resourceTypeDao.get(new Long(star[5]
-                            .trim()));
+                    ResourceType type = resourceTypeDao.get(new Long(star[5].trim()));
                     u.setResourceType(type);
                     u.setParentId(new Long(parentId));
 

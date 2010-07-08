@@ -29,8 +29,8 @@
     <property name="basename" value="messages" />
   </bean>
 
-  <!-- Forwards requests to the "/" resource to the "welcome" view -->
   <mvc:annotation-driven />
+  <!-- Forwards requests to the "/" resource to the "welcome" view -->
   <mvc:view-controller path="/" view-name="index"/>
 
   <!--define Spring MVC's view resource(*.jsp or other file) -->

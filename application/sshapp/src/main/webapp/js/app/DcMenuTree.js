@@ -9,7 +9,7 @@ N21.Other.MenuTree = Ext.extend(Ext.tree.TreePanel, {
               autoScroll : true,
               collapseFirst : false,
               loader : new Ext.tree.TreeLoader({
-                    dataUrl : '/resource/query'
+                    dataUrl : 'resource/loadMenu'
                   }),
               root : new Ext.tree.AsyncTreeNode({
                     id : '0',

@@ -1,0 +1,17 @@
+从头开始初始数据库
+===================
+
+1、选择相应数据库
+
+2、手工建立后台quartz表
+
+   src/main/resources/sql.h2/quartz.sql
+
+3、运行程序
+
+   http://localhost:8089/sshapp/init/index
+
+4、
+
+
+   --END

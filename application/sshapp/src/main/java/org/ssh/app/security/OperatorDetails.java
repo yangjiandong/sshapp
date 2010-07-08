@@ -20,6 +20,10 @@ public class OperatorDetails extends User {
 
     private List<Role> roleList;
 
+    private String userId;
+
+    private String loginName;
+
     public OperatorDetails(String username, String password, boolean enabled, boolean accountNonExpired,
             boolean credentialsNonExpired, boolean accountNonLocked, Collection<GrantedAuthority> authorities)
             throws IllegalArgumentException {
@@ -40,5 +44,21 @@ public class OperatorDetails extends User {
 
     public void setRoleList(List<Role> roleList) {
         this.roleList = roleList;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getLoginName() {
+        return loginName;
+    }
+
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
     }
 }

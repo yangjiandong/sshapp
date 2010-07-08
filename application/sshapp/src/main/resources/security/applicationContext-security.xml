@@ -17,6 +17,7 @@
     <s:intercept-url pattern="/init/*" filters="none" />
     <s:intercept-url pattern="/remote/**" filters="none" />
 
+    <s:intercept-url pattern="/rest/**" access="isAuthenticated()" />
     <s:intercept-url pattern="/common/user/*" access="isAuthenticated()" />
 
     <s:form-login login-page="/" default-target-url="/user/loginsuccess" authentication-failure-url="/user/loginerror1" />

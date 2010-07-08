@@ -72,7 +72,8 @@ public class AccountManager {
      * 判断是否超级管理员.
      */
     private boolean isSupervisor(User user) {
-        return (user.getId() != null && user.getId().equals("1"));
+        //return (user.getId() != null && user.getId().equals("1"));
+        return (user.getLoginName() != null && user.getLoginName().equals("admin"));
     }
 
     public User getUser(String id) {
@@ -163,15 +164,16 @@ public class AccountManager {
         rs.add(r);
 
         User u = new User();
+        //u.setId("1");
         u.setName("管理员");
-        u.setLoginName("Admin");
+        u.setLoginName("admin");
         u.setPlainPassword("123");
         u.setEmail("admin@gmail.com");
         u.setCreateBy("初始化");
         u.setStatus("enabled");
         //add role
         u.setRoleList(rs);
-        saveUser(u);
 
+        saveUser(u);
     }
 }

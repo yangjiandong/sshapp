@@ -1,3 +1,23 @@
+// +-------------------------------------------------------------------------+
+// | JavaScript                                                              |
+// +-------------------------------------------------------------------------+
+// | Copyright (c) 2010 -  yangjiandong CO., LTD.                            |
+// +-------------------------------------------------------------------------+
+// | LICENSE: This library is free software; you can redistribute it and/or  |
+// |          modify it under the terms of the GNU Lesser General Public     |
+// |          License as published by the Free Software Foundation; either   |
+// |          version 3 of the License, or (at your option) any later        |
+// |          version.                                                       |
+// |          See the GNU Lesser General Public License for more details.    |
+// |          Details have been described to the LICENSE file.               |
+// +-------------------------------------------------------------------------+
+// | Authors: yang jiandong <young.jiandong@gmail.com>                       |
+// +-------------------------------------------------------------------------+
+//
+// $Id: main.js 1441 2009-04-14 02:17:46Z yangjiandong $
+//上午09:43:29
+// @version       $Revision: 1.1 $  $Date: 2006/07/18 05:56:31 $
+
 var logInWindow, loggedIn;
 var appViewport;
 var mainViewportLoaded = false;
@@ -63,7 +83,7 @@ Ext.onReady(function() {
           plain : true,
           items : [{
                 contentEl : 'content',
-                title : 'Home',
+                title : '欢迎',
                 autoScroll : true,
                 layout : 'fit'
               }]
@@ -108,7 +128,7 @@ Ext.onReady(function() {
           listeners : {
             render : function() {
               Ext.Ajax.request({
-                    url : '/resource/querys',
+                    url : 'resource/loadSubSystem',
                     success : successFn
                   })
             }

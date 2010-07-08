@@ -54,6 +54,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         // 加入登录时间信息和用户角色
         userDetails.setLoginTime(new Date());
         userDetails.setRoleList(user.getRoleList());
+        userDetails.setUserId(user.getId());
+        userDetails.setLoginName(user.getLoginName());
         return userDetails;
     }
 

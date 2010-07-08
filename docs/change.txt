@@ -1,0 +1,15 @@
+变更历史
+========
+
+1、判断系统管理员条件改为loginName='admin'
+
+   原程序为
+        return (user.getId() != null && user.getId().equals("1"));
+
+   改为
+      return (user.getLoginName() != null && user.getLoginName().equals("admin"));
+
+   因为在初始表时，用户表id采用了自动产生id方法，现在没办法做到保证id为1
+
+
+   --END
