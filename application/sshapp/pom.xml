@@ -375,11 +375,16 @@
       <artifactId>commons-collections</artifactId>
     </dependency>
 
-<dependency>
-  <groupId>net.sf.opencsv</groupId>
-  <artifactId>opencsv</artifactId>
+    <dependency>
+      <groupId>net.sf.opencsv</groupId>
+      <artifactId>opencsv</artifactId>
 
-</dependency>
+    </dependency>
+
+    <dependency>
+      <groupId>com.googlecode.xmemcached</groupId>
+      <artifactId>xmemcached</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>net.sf.ehcache</groupId>
