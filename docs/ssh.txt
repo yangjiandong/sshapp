@@ -24,7 +24,29 @@ ssh
               joinColumns=@JoinColumn(name="book_id"),
               inverseJoinColumns=@JoinColumn(name="publisher_id"))
 
-   p129
+   d. p140
+
+   mapping a set
+   -- have no duplicate,
+
+   book -- has more chapter -- chapter
+   book 类中定义
+   private Set chapters;
+   @CollectionOfElements(targetElement=java.lang.String.class)
+   @JoinTable(
+      name="book_chapter",
+      joinColumns=@JoinColumn(name="book_id")
+   )
+   @Columne(name="chapter_name")
+   --后台生成的表book_chapter以book_id + chapter_name 为主键
+
+   mapping a bag
+   --have duplicates
+   private Collection chapters = new ArrayList();
+   ----后台生成的表book_chapter没有主键，当然也可以产生一个产生主键的策略p145
+
+   mapping a List
+   --p148
 
 2010.07.08
 ----------
