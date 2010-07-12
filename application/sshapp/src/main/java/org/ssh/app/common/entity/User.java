@@ -124,6 +124,9 @@ public class User extends AuditableEntity {
     public List<Role> getRoleList() {
         return roleList;
     }
+    //@Fetch(FetchMode.JOIN) 会使用left join查询  只产生一条sql语句
+    //@Fetch(FetchMode.SELECT)   会产生N+1条sql语句
+    //@Fetch(FetchMode.SUBSELECT)  产生两条sql语句 第二条语句使用id in (.....)查询出所有关联的数据
 
     public void setRoleList(List<Role> roleList) {
         this.roleList = roleList;
