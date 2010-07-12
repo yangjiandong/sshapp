@@ -47,7 +47,16 @@ ssh
 
    mapping a List
    --p148
+   --it's an ordered collection
 
+   mapping an array
+   --一般为解决遗留项目，大多会采用List
+
+   mapping a Map
+   -- p152
+
+   using Interceptors
+   -- p214 定义拦截
 
 2010.07.09
 ----------
