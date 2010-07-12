@@ -1,6 +1,31 @@
 ssh
 ======
 
+2010.07.12
+----------
+
+1、Hibernate Recipes A Problem-Solution Approach.pdf
+
+   a. org.ssh.app.common.entity.Contact
+
+   b. 继承表，采用同一张表
+      org.ssh.app.example.entity.Disc_1
+   c. 继承表，采用不同表(后台相应产生了3张表)
+      org.ssh.app.example.entity.Disc_2
+
+   也可参考 org.ssh.app.common.entity.Post，体会下。
+
+   p 125 many to one
+   book -- many to on -- publisher
+   book 类中定义
+   @ManyToOne
+   @Cascade(value=CascadeType.SAVE_UPDATE)
+   @JoinTable(name="book_publisher", -- 后台表名
+              joinColumns=@JoinColumn(name="book_id"),
+              inverseJoinColumns=@JoinColumn(name="publisher_id"))
+
+   p129
+
 2010.07.08
 ----------
 
