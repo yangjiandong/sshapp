@@ -48,6 +48,13 @@ ssh
    mapping a List
    --p148
 
+
+2010.07.09
+----------
+
+1、增加xmemcached pom.xml支持
+   save/xmemcached-User_Guide_zh.htm
+
 2010.07.08
 ----------
 
