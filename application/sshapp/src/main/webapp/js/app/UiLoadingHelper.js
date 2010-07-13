@@ -47,19 +47,13 @@
     function buildImportExtjs(pLang) {
      var out = '';
      out += '  <link rel="stylesheet" type="text/css" href="'+CFG_PATH_EXTJS+'/resources/css/ext-all.css"/>'+NEW_LINE;
-     out += '  <link rel="stylesheet" type="text/css" href="'+CFG_PATH_EXTJS+'css/ux-all.css"/>'+NEW_LINE;
-     out += '  <link rel="stylesheet" type="text/css" href="css/n21ebs.css"/>'+NEW_LINE;
-     out += '  <link rel="stylesheet" type="text/css" href="css/xtheme-nbs.css"/>'+NEW_LINE;
-     if (CFG_DEPLOYMENT_TYPE == 'DEV') {
-     out += '  <script  type="text/javascript" src="'+CFG_PATH_EXTJS+'/adapter/ext/ext-base-debug.js" ><\/script>'+NEW_LINE;
-     out += '  <script  type="text/javascript" src="'+CFG_PATH_EXTJS+'/ext-all-debug.js" ><\/script>'+NEW_LINE;
-     }else{
-     out += '  <script  type="text/javascript" src="'+CFG_PATH_EXTJS+'/adapter/ext/ext-base.js" ><\/script>'+NEW_LINE;
+     //out += '  <link rel="stylesheet" type="text/css" href="'+CFG_PATH_EXTJS+'css/ux-all.css"/>'+NEW_LINE;
+     out += '  <link rel="stylesheet" type="text/css" href="css/ext-customer.css"/>'+NEW_LINE;
+     out += '  <link rel="stylesheet" type="text/css" href="css/ext-patch.css"/>'+NEW_LINE;
+     out += '  <script  type="text/javascript" src="'+CFG_PATH_EXTJS+'/ext-base.js" ><\/script>'+NEW_LINE;
      out += '  <script  type="text/javascript" src="'+CFG_PATH_EXTJS+'/ext-all.js" ><\/script>'+NEW_LINE;
-     }
      out += '  <script  type="text/javascript" src="'+CFG_PATH_EXTJS+'/ext-lang-zh_CN.js" ><\/script>'+NEW_LINE;
-     out += '  <script  type="text/javascript" src="'+CFG_EXT_3RD+'/ux-all.js"><\/script>'+NEW_LINE;
-     out += '  <script  type="text/javascript" src="./app/Api.js"><\/script>'+NEW_LINE;
+     //out += '  <script  type="text/javascript" src="'+CFG_EXT_3RD+'/ux-all.js"><\/script>'+NEW_LINE;
      out += '  <script  type="text/javascript" src="./js/labels_srv.js"><\/script>'+NEW_LINE;
      out += '';
      return out;
@@ -71,7 +65,7 @@
      if (CFG_DEPLOYMENT_TYPE == 'DEV') {
        //ts = '?_t_='+(new Date()).getTime();
      }
-     out += '  <script  type="text/javascript" src="'+CFG_EXT_3RD+'/Ext.ux.form.XCheckbox.js"><\/script>'+NEW_LINE;
+     //out += '  <script  type="text/javascript" src="'+CFG_EXT_3RD+'/Ext.ux.form.XCheckbox.js"><\/script>'+NEW_LINE;
      out += '  <script  type="text/javascript" src="'+CFG_PATH_JSLIB+'/N21.Base.GridEdit.js'+ts+'"><\/script>'+NEW_LINE;
      out += '  <script  type="text/javascript" src="'+CFG_PATH_JSLIB+'/N21.Base.GridView.js'+ts+'"><\/script>'+NEW_LINE;
      out += '  <script  type="text/javascript" src="'+CFG_PATH_JSLIB+'/N21.Base.Combo.js'+ts+'"><\/script>'+NEW_LINE;
@@ -79,8 +73,6 @@
      out += '  <script  type="text/javascript" src="'+CFG_PATH_JSLIB+'/N21.Base.EditForm.js'+ts+'"><\/script>'+NEW_LINE;
      out += '  <script  type="text/javascript" src="'+CFG_PATH_JSLIB+'/N21.Base.GridEditForm.js'+ts+'"><\/script>'+NEW_LINE;
      out += '  <script  type="text/javascript" src="'+CFG_PATH_JSLIB+'/lib.js'+ts+'"><\/script>'+NEW_LINE;
-     //TODO 缺文件
-     //out += '  <script  type="text/javascript" src="'+CFG_EXT_3RD+'/Ext.ux.grid.GridSummary.js"><\/script>'+NEW_LINE;
      out += '';
      return out;
   }
@@ -93,10 +85,10 @@
        //ts = '?_t_='+(new Date()).getTime();
      }
      for (var j=0; j<pDcArray.length; j++) {
-       out += '<script  type="text/javascript" src="'+CFG_CLIENT_URL+'/dc/'+pDcArray[j]+'.js'+ts+'"><\/script>'+NEW_LINE;
+       out += '<script  type="text/javascript" src="'+CFG_CLIENT_URL+'/'+pDcArray[j]+'.js'+ts+'"><\/script>'+NEW_LINE;
        //out += '<script  type="text/javascript" src="'+CFG_CLIENT_URL+'/trl/'+pDcArray[j]+'_'+pLang+'.js'+ts+'"><\/script>'+NEW_LINE;
      }
-     out += '  <script  type="text/javascript" src="'+CFG_CLIENT_URL+'/ui/'+pUi+'.js'+ts+'"><\/script>'+NEW_LINE;
+     out += '  <script  type="text/javascript" src="'+CFG_CLIENT_URL+'/'+pUi+'.js'+ts+'"><\/script>'+NEW_LINE;
      return out;
   }
 

@@ -5,7 +5,7 @@
  */
 function initUiDcIncludes(m) {
   m.add("sys/UI0080",["sys/DC0031","sys/DC0068","sys/LOV0045"]);
-  m.add("sys/UI0081",["sys/DC0067"]);
+  m.add("sys/UIROLE",["sys/DCROLE"]);
   m.add("UI0020",["DC0003","LOV0004","DC0011","LOV0002"]);
   m.add("UI0006",["DC0013","LOV0006","LOV0007","LOV0010"]);
   m.add("UI0040",["DC0014","DC0015","LOV0006","LOV0007","DC0100","LOV0008","DC0057","DC0018","LOV0005","LOV0001","DC0058","LOV0038"]);
