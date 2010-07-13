@@ -14,7 +14,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @author calvin
  */
 @Entity
-//子类标识字段值
+//子类标识字段值，默认字段名为DTYPE,String
 @DiscriminatorValue("Reply")
 public class Reply extends Post {
 

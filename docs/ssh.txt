@@ -1,6 +1,12 @@
 ssh
 ======
 
+2010.07.13
+----------
+
+1. 线程学习
+   org.ssh.app.example.thread
+
 2010.07.12
 ----------
 
@@ -85,7 +91,7 @@ ssh
 2010.07.05
 ----------
 
-1、License3j 简单使用
+1、License3j 及 gpg 简单使用
    save/license3j+gpg.txt
 
 2、spring安全策略修改，同一ip，用户可进行多次登录，不同ip只能等上次用户退出或会话过期才能登录
