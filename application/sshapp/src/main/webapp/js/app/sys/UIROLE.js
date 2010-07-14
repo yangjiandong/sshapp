@@ -2,12 +2,12 @@ var DCROLE;
 Ext.onReady(function() {
       var ss='';
       if (CFG_DEPLOYMENT_TYPE == 'DEV'){
-        ss=" &nbsp;&nbsp;&nbsp;<font size=-2>&lt;UI0081&gt;</div>"
+        ss=" &nbsp;&nbsp;&nbsp;<font size=-2>&lt;UIROLE&gt;</div>"
         //ss="<span class='uiName'>UI0081</span>";
       }
 
-      if (!Ext.isEmpty(Ext.get("n21-loading"))) {
-        Ext.get("n21-loading").remove();
+      if (!Ext.isEmpty(Ext.get("app-loading"))) {
+        Ext.get("app-loading").remove();
       }
       Ext.BLANK_IMAGE_URL = CFG_PATH_ICONS + "/s.gif";
       Ext.QuickTips.init();

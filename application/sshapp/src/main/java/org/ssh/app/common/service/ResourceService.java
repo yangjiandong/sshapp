@@ -23,7 +23,6 @@ import org.ssh.app.common.entity.Resource;
 import org.ssh.app.common.entity.ResourceType;
 import org.ssh.app.orm.hibernate.EntityService;
 
-
 @Service("resourcesService")
 @Transactional
 public class ResourceService extends EntityService<Resource, Long> {

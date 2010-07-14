@@ -39,7 +39,7 @@ Sys.BaseData.DCROLE = Ext.extend(N21.Base.GridEdit, {
                     id : "storeDCROLE",
                     totalProperty : "totalCount",
                     root : "records",
-                    url : "role_list.htm",
+                    url : "role/list",
                     remoteSort : true,
                     fields : this.dataRecordMeta
                   }),

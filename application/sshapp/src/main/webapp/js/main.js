@@ -227,9 +227,8 @@ Ext.onReady(function() {
    * Implements the UI loading mechanism.
    */
   function _openMenuLinkImpl(tabID, ifrID, guiID, guiText, params) {
-    // alert(ifrID+' => window.frames='+window.frames[ifrID]);
-    // alert(ifrID+' =>
-    // document.getElementById'+document.getElementById(ifrID));
+    //alert(ifrID+' => window.frames='+window.frames[ifrID]);
+    //alert(ifrID+' => document.getElementById'+document.getElementById(ifrID));
     if (Ext.isEmpty(document.getElementById(ifrID))
         && !Ext.isEmpty(window.frames[ifrID])) {
       // alert('am frames no docgetElemById');
