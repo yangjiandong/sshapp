@@ -265,19 +265,19 @@ body {
 }
 
 #page {
-  background: url(welcome/images/header_ie6.png) no-repeat 50% 0;
+  background: url(../img/welcome/header_ie6.png) no-repeat 50% 0;
 }
 
 #learn h2 {
-  background: url(welcome/images/h_learn_ie6.png) no-repeat 0 0;
+  background: url(../img/welcome/h_learn_ie6.png) no-repeat 0 0;
 }
 
 #engage h2 {
-  background: url(welcome/images/h_engage_ie6.png) no-repeat 0 0;
+  background: url(../img/welcome/h_engage_ie6.png) no-repeat 0 0;
 }
 
 #license h2 {
-  background: url(welcome/images/h_license_ie6.png) no-repeat 0 0;
+  background: url(../img/welcome/h_license_ie6.png) no-repeat 0 0;
 }
 
 

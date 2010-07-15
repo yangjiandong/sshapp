@@ -1,10 +1,3 @@
-/*
- * extjs
- * Copyright: yangjiandong
- * @author yang.
- * Descript: DCROLE DataControl: Roles
- */
-
 Ext.ns("Sys.BaseData");
 var ss = '';
 if (CFG_DEPLOYMENT_TYPE == 'DEV') {
@@ -17,12 +10,12 @@ Sys.BaseData.DCROLE = Ext.extend(N21.Base.GridEdit, {
             type : "string"
           }, {
             name : "id",
-            type : "float"
+            type : "string"
           }, {
             name : "name",
             type : "string"
           }, {
-            name : "description",
+            name : "desc",
             type : "string"
           }]),
       queryFields : new Ext.util.MixedCollection(),
@@ -38,7 +31,7 @@ Sys.BaseData.DCROLE = Ext.extend(N21.Base.GridEdit, {
               store : new Ext.data.JsonStore({
                     id : "storeDCROLE",
                     totalProperty : "totalCount",
-                    root : "records",
+                    root : "rows",
                     url : "role/list",
                     remoteSort : true,
                     fields : this.dataRecordMeta
@@ -124,13 +117,13 @@ Sys.BaseData.DCROLE = Ext.extend(N21.Base.GridEdit, {
               editor : new Ext.form.TextField({
                     selectOnFocus : true,
                     allowBlank : false,
-                    caseRestriction : "Upper",
-                    style : "text-transform:uppercase;",
+                    //caseRestriction : "Upper",
+                    //style : "text-transform:uppercase;",
                     cls : "x-form-text-in-grid"
                   })
             });
         this.columnMap.add("description", {
-              id : 'description',
+              id : 'desc',
               header : "备注说明",
               width : 200,
               dataIndex : 'description',
@@ -156,8 +149,8 @@ Sys.BaseData.DCROLE = Ext.extend(N21.Base.GridEdit, {
                   id : "DCROLEF_QRY_name",
                   fieldLabel : "角色",
                   allowBlank : true,
-                  caseRestriction : "Upper",
-                  style : "text-transform:uppercase;",
+                  //caseRestriction : "Upper",
+                  //style : "text-transform:uppercase;",
                   width : 100
                 }));
 
