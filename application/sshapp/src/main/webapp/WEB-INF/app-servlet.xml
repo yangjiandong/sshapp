@@ -1,15 +1,40 @@
-<beans xmlns="http://www.springframework.org/schema/beans"
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:mvc="http://www.springframework.org/schema/mvc"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:p="http://www.springframework.org/schema/p"
+  xmlns="http://www.springframework.org/schema/beans"
   xmlns:context="http://www.springframework.org/schema/context"
   xmlns:tx="http://www.springframework.org/schema/tx"
   xmlns:aop="http://www.springframework.org/schema/aop"
-  xmlns:mvc="http://www.springframework.org/schema/mvc"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
-  http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
-  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
-  http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+  xmlns:petcare="http://www.springframework.org/schema/petcare"
+  xsi:schemaLocation="
+    http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+    http://www.springframework.org/schema/petcare http://www.springframework.org/schema/petcare/spring-petcare-3.0.xsd
+    http://www.springframework.org/schema/aop  http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+  <!-- Configures the Spring MVC @Controller programming model -->
+  <mvc:annotation-driven />
+
+  <!-- Maps view names to Tiles Definitions -->
+  <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+    <property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView" />
+  </bean>
+
+  <!-- Initializes the Apache Tiles CompositeView system -->
+  <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+    <property name="definitions">
+      <value>
+        /views/**/tiles.xml,/views/tiles.xml
+      </value>
+    </property>
+    <property name="checkRefresh" value="true" />
+  </bean>
+
+  <!--annotation-driven transaction manager -->
+  <tx:annotation-driven transaction-manager="transactionManager"  proxy-target-class="true" />
 
   <!--   The controllers are autodetected POJOs labeled with the @Controller annotation. -->
   <context:annotation-config/>
@@ -29,7 +54,6 @@
     <property name="basename" value="messages" />
   </bean>
 
-  <mvc:annotation-driven />
   <!-- Forwards requests to the "/" resource to the "welcome" view -->
   <mvc:view-controller path="/" view-name="index"/>
 
@@ -43,51 +67,5 @@
     -->
 
   <bean name="viewResolver" class="org.springframework.web.servlet.view.XmlViewResolver" p:order="1"/>
-  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/views/" p:suffix=".jsp" p:order="10"/>
-
-  <!--? 用处 http://www.rickherrick.com/?q=node/63
-    http://blog.anthonychaves.net/2010/02/01/spring-3-0-web-mvc-and-json/
-     -->
-  <!--
-    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver" p:order="1">
-      <property name="mediaTypes">
-        <map>
-          <entry key="json" value="application/json"/>
-          <entry key="xml" value="application/xml"/>
-        </map>
-      </property>
-
-      <property name="viewResolvers">
-        <list>
-          <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-            <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-            <property name="prefix" value="/views/" />
-            <property name="suffix" value=".jsp" />
-          </bean>
-        </list>
-      </property>
-      <property name="defaultViews">
-        <list>
-          <bean class="org.springframework.web.servlet.view.xml.MarshallingView">
-            <property name="marshaller">
-              <bean class="org.springframework.oxm.xstream.XStreamMarshaller"
-                p:autodetectAnnotations="true" />
-            </property>
-          </bean>
-        </list>
-      </property>
-    </bean>
-    -->
-
-  <!-- json
-    <bean id="xmlFileViewResolver" class="org.springframework.web.servlet.view.XmlViewResolver">
-      <property name="location">
-        <value>/WEB-INF/views.xml</value>
-      </property>
-      <property name="order">
-        <value>1</value>
-      </property>
-    </bean>
-    -->
 
 </beans>

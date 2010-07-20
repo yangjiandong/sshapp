@@ -15,7 +15,8 @@
   <properties>
     <!-- 主要依赖库的版本定义 -->
     <springside.version>3.3.2</springside.version>
-    <spring.version>3.0.2.RELEASE</spring.version>
+    <spring.version>3.0.3.RELEASE</spring.version>
+    <org.springframework.integration-version>2.0.0.M4</org.springframework.integration-version>
     <hibernate.version>3.3.2.GA</hibernate.version>
     <struts2.version>2.1.8.1</struts2.version>
     <cxf.version>2.2.8</cxf.version>
@@ -36,6 +37,7 @@
     <ehcache.annotations.version>1.0.5</ehcache.annotations.version>
     <p6spy.version>1.3</p6spy.version>
     <xmemcached.version>1.2.5</xmemcached.version>
+    <tiles.version>2.1.3</tiles.version>
 
     <jalopy-maven-plugin.version>1.0-alpha-1</jalopy-maven-plugin.version>
 
@@ -130,6 +132,28 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
+
+    <!-- For testing against latest Spring snapshots -->
+    <repository>
+      <id>org.springframework.maven.snapshot</id>
+      <name>Spring Maven Snapshot Repository</name>
+      <url>http://maven.springframework.org/snapshot</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+    <!-- For developing against latest Spring milestones -->
+    <repository>
+      <id>org.springframework.maven.milestone</id>
+      <name>Spring Maven Milestone Repository</name>
+      <url>http://maven.springframework.org/milestone</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
   </repositories>
 
   <pluginRepositories>
@@ -153,6 +177,7 @@
         <enabled>true</enabled>
       </releases>
     </pluginRepository>
+
   </pluginRepositories>
 
   <!--
@@ -947,12 +972,15 @@
         <!-- jetty插件 -->
         <plugin>
           <groupId>org.mortbay.jetty</groupId>
-          <artifactId>maven-jetty-plugin</artifactId>
-          <version>${jetty.version}</version>
-
+          <artifactId>jetty-maven-plugin</artifactId>
+          <version>7.1.4.v20100610</version>
           <configuration>
+            <webAppConfig>
+              <contextPath>/sshapp</contextPath>
+            </webAppConfig>
+
             <connectors>
-              <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+              <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
                 <port>8089</port>
                 <maxIdleTime>3600000</maxIdleTime>
               </connector>

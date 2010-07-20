@@ -1,6 +1,26 @@
 ssh
 ======
 
+2010.07.20
+----------
+
+1、尝试spring3.03, jetty 7.1.4.v20100610
+
+2、restful风格，
+   petcare-trunk,eggsy-spring3-restful-example web.xml中直接采用过滤，不用urlwriter
+
+   这样做法，就需要在程序中写全url,如/app/student(采用了/app/*过滤)，如果采用了/*，还要考虑静态文件的url，
+   petcare-trunk好象是通过 servlet-context.xml中定义
+   <!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+   <petcare:resources />
+
+3、增加tiles支持
+
+   app-servlet.xml 中取消
+   <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/views/" p:suffix=".jsp" p:order="10"/>
+
+   以前所有viewname都对应一个/views/下一个jsp文件，现改为对应titles.xml中一个 definition name=?
+
 2010.07.13
 ----------
 
