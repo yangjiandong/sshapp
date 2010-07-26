@@ -1,0 +1,15 @@
+2010.07.20
+-----------
+
+1. git tag -a spring3.02
+
+   --推送到remote
+
+   git push origin spring3.02
+
+   --或全部tag
+
+   git push origin --tags
+
+
+   --END
