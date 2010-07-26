@@ -1,6 +1,23 @@
 ssh
 ======
 
+2010.07.26
+----------
+
+1、增加spring mvc-showcase 例子，只支持3.0.4.BUILD-SNAPSHOT
+   http://www.dzone.com/links/r/spring_mvc_3_showcase.html
+
+   改为 3.0.3.RELEASE
+   参考 spring-samples\petcare-trunk，servlet-context.xml 中增加对 <petcare:resources />的支持
+
+   添加以下文件(3.0.4已不需这样操作，默认支持)
+   main/resources/org.springframework/util/config/spring-petcare-3.0.xsd
+   META-INF/spring.handlers, pring.schemas
+   main/java/org/springframework/util/config/.., resource
+
+   还有个问题，采用mvn eclipse:eclipse 产生项目导入eclipse，报以下错误
+   Java compiler level does not match the version of the installed Java project facets
+
 2010.07.20
 ----------
 
