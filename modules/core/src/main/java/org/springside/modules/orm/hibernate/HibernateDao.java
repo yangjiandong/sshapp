@@ -251,7 +251,10 @@ public class HibernateDao<T, PK extends Serializable> extends SimpleHibernateDao
         }
 
         // 执行Count查询
-        int totalCount = (Integer) c.setProjection(Projections.rowCount()).uniqueResult();
+        // hibernate3.3.2
+        //int totalCount = (Integer) c.setProjection(Projections.rowCount()).uniqueResult();
+        // hibernate3.5.4
+        Long totalCount = (Long)c.setProjection(Projections.rowCount()).uniqueResult();
 
         // 将之前的Projection,ResultTransformer和OrderBy条件重新设回去
         c.setProjection(projection);
@@ -268,7 +271,7 @@ public class HibernateDao<T, PK extends Serializable> extends SimpleHibernateDao
             logger.error("不可能抛出的异常:{}", e.getMessage());
         }
 
-        return totalCount;
+        return totalCount.intValue();
     }
 
     //-- 属性过滤条件(PropertyFilter)查询函数 --//

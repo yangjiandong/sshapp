@@ -17,7 +17,7 @@
     <springside.version>3.3.2</springside.version>
     <spring.version>3.0.3.RELEASE</spring.version>
     <org.springframework.integration-version>2.0.0.M4</org.springframework.integration-version>
-    <hibernate.version>3.3.2.GA</hibernate.version>
+    <hibernate.version>3.5.4-Final</hibernate.version>
     <struts2.version>2.1.8.1</struts2.version>
     <cxf.version>2.2.8</cxf.version>
     <jersey.version>1.2</jersey.version>
@@ -29,7 +29,7 @@
     <mssql.jtds.version>1.2.2</mssql.jtds.version>
     <oracle.version>10.2.0.2.0</oracle.version>
     <quartz.version>1.8.0</quartz.version>
-    <jackson.version>1.5.2</jackson.version>
+    <jackson.version>1.5.3</jackson.version>
     <slf4j.version>1.6.0</slf4j.version>
     <selenium.version>2.0a2</selenium.version>
     <org.jrobin.version>1.5.9</org.jrobin.version>
@@ -277,7 +277,7 @@
       <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-annotations</artifactId>
-        <version>3.4.0.GA</version>
+        <version>${hibernate.version}</version>
       </dependency>
       <dependency>
         <groupId>org.hibernate</groupId>
@@ -413,7 +413,7 @@
       <dependency>
         <groupId>javax.servlet</groupId>
         <artifactId>jstl</artifactId>
-        <version>1.1.2</version>
+        <version>1.2</version>
       </dependency>
       <dependency>
         <groupId>taglibs</groupId>

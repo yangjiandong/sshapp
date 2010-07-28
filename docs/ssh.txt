@@ -1,6 +1,35 @@
 ssh
 ======
 
+2010.07.28
+----------
+
+1、采用最新hibernate3.5.4
+
+   org.springside.modules.orm.hibernate.HibernateDoa
+   修改 countCriteriaResult 方法
+
+2、cd modules/pare
+   mvn clean
+   mvn install
+   cd modules/core
+   mvn clean
+   mvn eclipse:clean
+   mvn eclipse:eclipse
+   mvn install
+   cd modules/extension
+   mvn clean
+   mvn eclipse:clean
+   mvn eclipse:eclipse
+   mvn install
+
+   mvn application/sshapp
+   mvn clean
+   mvn eclipse:clean
+   mvn eclipse:eclipse
+
+3、springside - core 增加 resources 支持(spring3.04版本直接支持)
+
 2010.07.26
 ----------
 

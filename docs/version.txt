@@ -1,3 +1,16 @@
+2010.07.28
+-----------
+
+1. git tag -a hibernate3.3.2
+
+   --推送到remote
+
+   git push origin hibernate3.3.2
+
+   --或全部tag
+
+   git push origin --tags
+
 2010.07.20
 -----------
 
