@@ -17,7 +17,7 @@
     <springside.version>3.3.2</springside.version>
     <spring.version>3.0.3.RELEASE</spring.version>
     <org.springframework.integration-version>2.0.0.M4</org.springframework.integration-version>
-    <hibernate.version>3.5.4-Final</hibernate.version>
+    <hibernate.version>3.5.0-Final</hibernate.version>
     <struts2.version>2.1.8.1</struts2.version>
     <cxf.version>2.2.8</cxf.version>
     <jersey.version>1.2</jersey.version>

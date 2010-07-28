@@ -10,21 +10,21 @@
   <title>
     <tiles:insertAttribute name="title" />
   </title>
-  <link rel="stylesheet" href="<c:url value="/css/blueprint/screen.css" />" type="text/css" media="screen, projection" />
-  <link rel="stylesheet" href="<c:url value="/css/blueprint/print.css" />" type="text/css" media="print" />
+  <link rel="stylesheet" href="<c:url value="/resources/css/blueprint/screen.css" />" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="<c:url value="/resources/css/blueprint/print.css" />" type="text/css" media="print" />
   <!--[if lt IE 8]>
-    <link rel="stylesheet" href="<c:url value="/css/blueprint/ie.css" />" type="text/css" media="screen, projection" />
+    <link rel="stylesheet" href="<c:url value="/resources/css/blueprint/ie.css" />" type="text/css" media="screen, projection" />
   <![endif]-->
   <tiles:useAttribute id="styles" name="styles" classname="java.util.List" ignore="true" />
   <c:forEach var="style" items="${styles}">
-    <link rel="stylesheet" href="<c:url value="/css/${style}" />" type="text/css" media="all" />
+    <link rel="stylesheet" href="<c:url value="/resources/css/${style}" />" type="text/css" media="all" />
   </c:forEach>
-  <script type="text/javascript" src="<c:url value="/js/jquery/jquery.min.js" />"></script>
+  <script type="text/javascript" src="<c:url value="/resources/js/jquery/jquery.min.js" />"></script>
   <tiles:useAttribute id="scripts" name="scripts" classname="java.util.List" ignore="true" />
   <c:forEach var="script" items="${scripts}">
-    <script type="text/javascript" src="<c:url value="/js/${script}" />"></script>
+    <script type="text/javascript" src="<c:url value="/resources/js/${script}" />"></script>
   </c:forEach>
-  <link rel="shortcut icon" href="<c:url value="/img/icon/extjs.ico" />" />
+  <link rel="shortcut icon" href="<c:url value="/resources/img/icon/extjs.ico" />" />
 
   <style>
   #logo h1 {

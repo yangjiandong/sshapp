@@ -5,7 +5,7 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 
-<%pageContext.setAttribute("ext", "ext");%>
+<%pageContext.setAttribute("ext", "resources/ext");%>
 <%pageContext.setAttribute("deployment_type", "DEV");%>
 <%pageContext.setAttribute("apath", basePath);%>
 
@@ -15,37 +15,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE" />
-<link rel="shortcut icon" href="${apath}img/icon/extjs.ico" />
+<link rel="shortcut icon" href="${apath}/resources/img/icon/extjs.ico" />
 
-<link rel="stylesheet" type="text/css" href="${ext}/resources/css/ext-all.css" />
-<script type="text/javascript" src="${ext}/ext-base.js"></script>
-<script type="text/javascript" src="${ext}/ext-all.js"></script>
-<script type="text/javascript" src="${ext}/ext-lang-zh_CN.js"></script>
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/ext/resources/css/ext-all.css"/>" />
+<script type="text/javascript" src="<c:url value="/resources/ext/ext-base.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/ext/ext-all.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/ext/ext-lang-zh_CN.js"/>"></script>
 
 <script type="text/javascript">
       // Deployment type: Production(PROD) or development(DEV). In development mod does not cache
       CFG_DEPLOYMENT_TYPE = '${deployment_type}';
       //javascript
       CFG_PATH_EXTJS = '${ext}';
-      CFG_PATH_JSLIB = 'js/lib';
-      CFG_PATH_ICONS = 'img';
+      CFG_PATH_JSLIB = 'resources/js/lib';
+      CFG_PATH_ICONS = 'resources/img';
 </script>
 
-<script type="text/javascript"  src="./js/labels_srv.js" ></script>
+<script type="text/javascript"  src="<c:url value="/resources/js/labels_srv.js"/>" ></script>
 <script type="text/javascript">
       // Product version. Do not change!
       CFG_PRODUCT_VERSION = L("/Application/Version");
       CFG_DEFAULT_LANGUAGE = 'en';
       CFG_AUTHSERVER_URL = 'j_spring_security_check';
-      CFG_CLIENT_URL =  'js/app';
-      CFG_EXT_3RD = 'js/3rdparty';
+      CFG_CLIENT_URL =  'resources/js/app';
+      CFG_EXT_3RD = 'resources/js/3rdparty';
 
 </script>
-<script type="text/javascript" src="./js/app/UiLoadingHelper.js"></script>
-<script type="text/javascript" src="./js/DcIncludesMap.js"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/app/UiLoadingHelper.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/resources/js/DcIncludesMap.js"/>"></script>
 
-<link rel="stylesheet" type="text/css" href="./css/ext-customer.css" />
-<link rel="stylesheet" type="text/css" href="./css/ext-patch.css" />
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/ext-customer.css"/>" />
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/ext-patch.css"/>" />
 <script>
       document.write('<title>' + L("/Application/Name")+'-'+ CFG_PRODUCT_VERSION + '</title>');
 </script>
@@ -62,7 +62,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 </script>
 </span><br>
 <span id="app-loading-logo-text"></span> <br>
-<img src="img/extanim32.gif" /> <br>
+<img src="resources/img/extanim32.gif" /> <br>
 <span id="app-loading-msg">装载中...</span></div>
 </div>
 
@@ -75,15 +75,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   FRAMEBORDER="no"></iframe></div>
 
 <script type="text/javascript">document.getElementById('app-loading-msg').innerHTML = '装载资源...';</script>
-<script type="text/javascript" src="<c:url value='js/lib/lib.js'/>"></script>
-<script type="text/javascript" src="<c:url value='js/app/DcLogin.js'/>"></script>
-<script type="text/javascript" src="<c:url value='js/app/DcMenuTree.js'/>"></script>
-<script>
-    document.writeln('<link rel="stylesheet" type="text/css" href="'+'css/xtheme-nbs.css"/>');
-</script>
+<script type="text/javascript" src="<c:url value='/resources/js/lib/lib.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/app/DcLogin.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/app/DcMenuTree.js'/>"></script>
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/xtheme-nbs.css"/>" />
 <script type="text/javascript">document.getElementById('app-loading-msg').innerHTML = '初始化...';</script>
 
-<script type="text/javascript" src="./js/main.js"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/main.js' />"></script>
 
 </body>
 </html>

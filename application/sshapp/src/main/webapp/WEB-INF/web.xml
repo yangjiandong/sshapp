@@ -78,6 +78,7 @@
   </filter-mapping>
 
   <!-- Enables clean URLs with JSP views e.g. /welcome instead of /app/welcome -->
+  <!--
   <filter>
     <filter-name>UrlRewriteFilter</filter-name>
     <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
@@ -87,6 +88,7 @@
     <filter-name>UrlRewriteFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+   -->
 
   <!-- Files are locked on Windows and can't be replaced -->
   <!-- 采用webdefault.xml 方式，不再需要以下设置
@@ -115,7 +117,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>rest</servlet-name>
-    <url-pattern>/rest/*</url-pattern>
+    <url-pattern>/</url-pattern>
   </servlet-mapping>
 
   <servlet>
