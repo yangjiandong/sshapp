@@ -47,14 +47,14 @@
     function buildImportExtjs(pLang) {
      var out = '';
      out += '  <link rel="stylesheet" type="text/css" href="'+CFG_PATH_EXTJS+'/resources/css/ext-all.css"/>'+NEW_LINE;
-     out += '  <link rel="stylesheet" type="text/css" href="css/ux/ux-all.css"/>'+NEW_LINE;
-     out += '  <link rel="stylesheet" type="text/css" href="css/ext-customer.css"/>'+NEW_LINE;
-     out += '  <link rel="stylesheet" type="text/css" href="css/ext-patch.css"/>'+NEW_LINE;
+     out += '  <link rel="stylesheet" type="text/css" href="resources/css/ux/ux-all.css"/>'+NEW_LINE;
+     out += '  <link rel="stylesheet" type="text/css" href="resources/css/ext-customer.css"/>'+NEW_LINE;
+     out += '  <link rel="stylesheet" type="text/css" href="resources/css/ext-patch.css"/>'+NEW_LINE;
      out += '  <script  type="text/javascript" src="'+CFG_PATH_EXTJS+'/ext-base.js" ><\/script>'+NEW_LINE;
      out += '  <script  type="text/javascript" src="'+CFG_PATH_EXTJS+'/ext-all.js" ><\/script>'+NEW_LINE;
      out += '  <script  type="text/javascript" src="'+CFG_PATH_EXTJS+'/ext-lang-zh_CN.js" ><\/script>'+NEW_LINE;
-     out += '  <script  type="text/javascript" src="./js/ux/ux-all.js"><\/script>'+NEW_LINE;
-     out += '  <script  type="text/javascript" src="./js/labels_srv.js"><\/script>'+NEW_LINE;
+     out += '  <script  type="text/javascript" src="resources/js/ux/ux-all.js"><\/script>'+NEW_LINE;
+     out += '  <script  type="text/javascript" src="resources/js/labels_srv.js"><\/script>'+NEW_LINE;
      out += '';
      return out;
   }

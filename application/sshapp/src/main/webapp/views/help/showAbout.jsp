@@ -15,7 +15,7 @@
 }
 
 body {
-  background: #f7f7f7 url(../img/welcome/bg-x2.png) repeat-x 0 0;
+  background: #f7f7f7 url(../resources/img/welcome/bg-x2.png) repeat-x 0 0;
   color: #999;
   font: normal 11px/1.3 Verdana, sans-serif;
   margin: 0 auto 0;
@@ -51,7 +51,7 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 #page {
-  background: url(../img/welcome/header.png) no-repeat 50% 0;
+  background: url(../resources/img/welcome/header.png) no-repeat 50% 0;
 }
 
 #header {
@@ -92,15 +92,15 @@ div#container {
 }
 
 #learn h2 {
-  background: url(../img/welcome/h_learn.png) no-repeat 0 0;
+  background: url(../resources/img/welcome/h_learn.png) no-repeat 0 0;
 }
 
 #engage h2 {
-  background: url(../img/welcome/h_engage.png) no-repeat 0 0;
+  background: url(../resources/img/welcome/h_engage.png) no-repeat 0 0;
 }
 
 #license h2 {
-  background: url(../img/welcome/h_license.png) no-repeat 0 0;
+  background: url(../resources/img/welcome/h_license.png) no-repeat 0 0;
 }
 
 #engage ul li {
@@ -135,7 +135,7 @@ div#container {
 }
 
 #engage a#join_us {
-    background: url(../img/welcome/button_join_us.png) no-repeat 0 0;
+    background: url(../resources/img/welcome/button_join_us.png) no-repeat 0 0;
     display: block;
     height: 27px;
 
@@ -151,47 +151,47 @@ div#container {
 
 #engage a#join_us:hover,
 #engage a#join_us:active {
-    background: url(../img/welcome/button_join_us.png) no-repeat 0 -27px;
+    background: url(../resources/img/welcome/button_join_us.png) no-repeat 0 -27px;
 }
 
 #engage a#twitter {
-    background: url(../img/welcome/social_sprite.gif) no-repeat 0 0;
+    background: url(../resources/img/welcome/social_sprite.gif) no-repeat 0 0;
 }
 
 #engage a#twitter:hover {
-    background: url(../img/welcome/social_sprite.gif) no-repeat 0 -16px;
+    background: url(../resources/img/welcome/social_sprite.gif) no-repeat 0 -16px;
 }
 
 #engage a#tumblr {
-    background: url(../img/welcome/social_sprite.gif) no-repeat 0 -32px;
+    background: url(../resources/img/welcome/social_sprite.gif) no-repeat 0 -32px;
 }
 
 #engage a#tumblr:hover {
-    background: url(../img/welcome/social_sprite.gif) no-repeat 0 -48px;
+    background: url(../resources/img/welcome/social_sprite.gif) no-repeat 0 -48px;
 }
 
 #engage a#facebook {
-    background: url(../img/welcome/social_sprite.gif) no-repeat 0 -64px;
+    background: url(../resources/img/welcome/social_sprite.gif) no-repeat 0 -64px;
 }
 
 #engage a#facebook:hover {
-    background: url(../img/welcome/social_sprite.gif) no-repeat 0 -80px;
+    background: url(../resources/img/welcome/social_sprite.gif) no-repeat 0 -80px;
 }
 
 #engage a#linkedin {
-    background: url(../img/welcome/social_sprite.gif) no-repeat 0 -128px;
+    background: url(../resources/img/welcome/social_sprite.gif) no-repeat 0 -128px;
 }
 
 #engage a#linkedin:hover {
-    background: url(../img/welcome/social_sprite.gif) no-repeat 0 -144px;
+    background: url(../resources/img/welcome/social_sprite.gif) no-repeat 0 -144px;
 }
 
 #engage a#blog {
-    background: url(../img/welcome/social_sprite.gif) no-repeat 0 -96px;
+    background: url(../resources/img/welcome/social_sprite.gif) no-repeat 0 -96px;
 }
 
 #engage a#blog:hover {
-    background: url(../img/welcome/social_sprite.gif) no-repeat 0 -112px;
+    background: url(../resources/img/welcome/social_sprite.gif) no-repeat 0 -112px;
 }
 
 #license {
@@ -207,13 +207,13 @@ ul li {
 
 #learn ul li,
 #license ul li {
-  background: url(../img/welcome/li.png) no-repeat 1px 2px;
+  background: url(../resources/img/welcome/li.png) no-repeat 1px 2px;
   padding: 0 0 0.5em 10px;
   margin-left: 0px;
 }
 
 div#communication {
-  background: url(../img/welcome/comm.png) no-repeat 50% 0;
+  background: url(../resources/img/welcome/comm.png) no-repeat 50% 0;
   height: 40px;
   margin: 18px auto 0;
   padding: 18px 0 32px;
@@ -265,19 +265,19 @@ body {
 }
 
 #page {
-  background: url(../img/welcome/header_ie6.png) no-repeat 50% 0;
+  background: url(../resources/img/welcome/header_ie6.png) no-repeat 50% 0;
 }
 
 #learn h2 {
-  background: url(../img/welcome/h_learn_ie6.png) no-repeat 0 0;
+  background: url(../resources/img/welcome/h_learn_ie6.png) no-repeat 0 0;
 }
 
 #engage h2 {
-  background: url(../img/welcome/h_engage_ie6.png) no-repeat 0 0;
+  background: url(../resources/img/welcome/h_engage_ie6.png) no-repeat 0 0;
 }
 
 #license h2 {
-  background: url(../img/welcome/h_license_ie6.png) no-repeat 0 0;
+  background: url(../resources/img/welcome/h_license_ie6.png) no-repeat 0 0;
 }
 
 

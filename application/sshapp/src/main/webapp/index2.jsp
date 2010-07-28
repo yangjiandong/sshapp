@@ -7,7 +7,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta http-equiv="CACHE-CONTROL" content="NO-CACHE" />
-<link rel="shortcut icon" href="img/icon/extjs.ico" />
+<link rel="shortcut icon" href="resources/img/icon/extjs.ico" />
 </head>
 
 <body>

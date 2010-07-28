@@ -367,15 +367,15 @@ Ext.onReady(function() {
           id : 'menu-toolbar',
           items : [new Ext.Toolbar.Separator(), {
                 text : '子系统',
-                icon : 'img/subsys.gif',
+                icon : CFG_PATH_ICONS + '/subsys.gif',
                 menu : subSysMenu
               }, {
                 text : '会话',
-                icon : 'img/user.gif',
+                icon : CFG_PATH_ICONS + '/user.gif',
                 menu : sessionMenu
               }, {
                 text : '帮助',
-                icon : 'img/help.gif',
+                icon : CFG_PATH_ICONS + '/help.gif',
                 menu : aboutMenu
               }, '->', '<span id="cur-user-name"></span>']
         });
@@ -391,9 +391,9 @@ Ext.onReady(function() {
       layout : 'border',
       items : [{
         region : 'north',
-        html : "<table style='width:100%;background-color:#006EC7;border:0;' cellspacing='0'><tr><td align='left' width='120'><img src='img/eaton.gif'/></td><td class='product-name'>"
+        html : "<table style='width:100%;background-color:#006EC7;border:0;' cellspacing='0'><tr><td align='left' width='120'><img src='resources/img/eaton.gif'/></td><td class='product-name'>"
             + L('/Application/Name')
-            + "</td><td align='right'><img src='img/eaton-ipm.gif'/></td></tr></table>",
+            + "</td><td align='right'><img src='resources/img/eaton-ipm.gif'/></td></tr></table>",
         border : false,
         height : 48
       }, {
