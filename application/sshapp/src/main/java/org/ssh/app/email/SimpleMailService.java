@@ -24,8 +24,8 @@ public class SimpleMailService {
      */
     public void sendNotificationMail(String userName) {
         SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setFrom("springside3.demo@gmail.com");
-        msg.setTo("springside3.demo@gmail.com");
+        msg.setFrom("yangfreecodeo@gmail.com");
+        msg.setTo("yangfreecode@gmail.com");
         msg.setSubject("用户修改通知");
 
         //将用户名与当期日期格式化到邮件内容的字符串模板

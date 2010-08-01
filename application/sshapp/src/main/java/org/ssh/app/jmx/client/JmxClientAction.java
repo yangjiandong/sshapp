@@ -3,14 +3,14 @@ package org.ssh.app.jmx.client;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.struts2.convention.annotation.Namespace;
+//import org.apache.struts2.convention.annotation.Namespace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.ssh.app.jmx.client.JmxClientService.HibernateStatistics;
 import org.springside.modules.web.struts2.Struts2Utils;
 
-import com.opensymphony.xwork2.ActionSupport;
+//import com.opensymphony.xwork2.ActionSupport;
 
 /**
  * JMX客户端演示的Action.
@@ -18,9 +18,10 @@ import com.opensymphony.xwork2.ActionSupport;
  * @author ben
  * @author calvin
  */
-@Namespace("/jmx")
+//@Namespace("/jmx")
 @SuppressWarnings("serial")
-public class JmxClientAction extends ActionSupport {
+public class JmxClientAction{
+//extends ActionSupport {
 
     private static Logger logger = LoggerFactory.getLogger(JmxClientAction.class);
 
@@ -35,12 +36,13 @@ public class JmxClientAction extends ActionSupport {
     /**
      * 默认函数,显示服务器配置及运行情况.
      */
-    @Override
+    //@Override
     public String execute() {
         nodeName = jmxClientService.getNodeName();
         notificationMailEnabled = jmxClientService.isNotificationMailEnabled();
         hibernateStatistics = jmxClientService.getHibernateStatistics();
-        return SUCCESS;
+        //return SUCCESS;
+        return "";
     }
 
     //-- 系统配置 (基于MBean) --//

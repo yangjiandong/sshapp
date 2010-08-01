@@ -60,8 +60,8 @@ public class MimeMailService {
             MimeMessage msg = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(msg, true, DEFAULT_ENCODING);
 
-            helper.setTo("springside3.demo@gmail.com");
-            helper.setFrom("springside3.demo@gmail.com");
+            helper.setTo("yangfreecode@gmail.com");
+            helper.setFrom("yangfreecode@gmail.com");
             helper.setSubject("用户修改通知");
 
             String content = generateContent(userName);
@@ -71,7 +71,7 @@ public class MimeMailService {
             helper.addAttachment("mailAttachment.txt", attachment);
 
             mailSender.send(msg);
-            logger.info("HTML版邮件已发送至springside3.demo@gmail.com");
+            logger.info("HTML版邮件已发送至yangfreecode@gmail.com");
         } catch (MessagingException e) {
             logger.error("构造邮件失败", e);
         } catch (Exception e) {

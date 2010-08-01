@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+  xmlns:context="http://www.springframework.org/schema/context"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<description>JMX服务端配置</description>
+  <description>JMX服务端配置</description>
 
-	<!-- 配置RMI注册服务器 -->
-	<bean id="registry" class="org.springframework.remoting.rmi.RmiRegistryFactoryBean" lazy-init="false">
-		<property name="port" value="${jmx.rmi_port}" />
-	</bean>
+  <!-- 配置RMI注册服务器 -->
+  <bean id="registry" class="org.springframework.remoting.rmi.RmiRegistryFactoryBean" lazy-init="false">
+    <property name="port" value="${jmx.rmi_port}" />
+  </bean>
 
-	<!-- 配置JMX远程连接 -->
-	<bean id="serverConnector" class="org.springframework.jmx.support.ConnectorServerFactoryBean" lazy-init="false">
-		<property name="serviceUrl" value="service:jmx:rmi:///jndi/rmi://${server.addr}:${jmx.rmi_port}/showcase" />
-		<property name="environment">
-			<map>
-				<!-- 认证配置,文件路径需为绝对路径 -->
-				<!--
-					<entry key="jmx.remote.x.password.file" value="/mypath/jmxremote.password" />
-					<entry key="jmx.remote.x.access.file" value="/mypath/jmxremote.access" />
-				-->
-			</map>
-		</property>
-	</bean>
+  <!-- 配置JMX远程连接 -->
+  <bean id="serverConnector" class="org.springframework.jmx.support.ConnectorServerFactoryBean" lazy-init="false">
+    <property name="serviceUrl" value="service:jmx:rmi:///jndi/rmi://${server.addr}:${jmx.rmi_port}/case" />
+    <property name="environment">
+      <map>
+        <!-- 认证配置,文件路径需为绝对路径 -->
+        <!--
+          <entry key="jmx.remote.x.password.file" value="/mypath/jmxremote.password" />
+          <entry key="jmx.remote.x.access.file" value="/mypath/jmxremote.access" />
+        -->
+      </map>
+    </property>
+  </bean>
 
-	<!-- 配置MBean自动注册 -->
-	<context:mbean-export default-domain="Showcase" registration="replaceExisting" />
+  <!-- 配置MBean自动注册 -->
+  <context:mbean-export default-domain="Showcase" registration="replaceExisting" />
 
-	<!-- 系统属性配置MBean -->
-	<bean id="serverConfig" class="org.springside.examples.showcase.jmx.server.ServerConfig">
-		<property name="nodeName" value="${server.node_name}" />
-		<property name="notificationMailEnabled" value="true" />
-	</bean>
+  <!-- 系统属性配置MBean -->
+  <bean id="serverConfig" class="org.ssh.app.jmx.server.ServerConfig">
+    <property name="nodeName" value="${server.node_name}" />
+    <property name="notificationMailEnabled" value="true" />
+  </bean>
 
-	<!-- Hibernate Statistics MBean-->
-	<bean id="hibernateStatistics" class="org.hibernate.jmx.StatisticsService">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
+  <!-- Hibernate Statistics MBean-->
+  <bean id="hibernateStatistics" class="org.hibernate.jmx.StatisticsService">
+    <property name="sessionFactory" ref="sessionFactory" />
+  </bean>
 </beans>

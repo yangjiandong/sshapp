@@ -14,9 +14,16 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
+import org.springside.modules.web.ServletUtils;
 
 public class JsonViewUtil {
     private static Logger logger = LoggerFactory.getLogger(JsonViewUtil.class);
+
+    //-- header 常量定义 --//
+    public static final String HEADER_ENCODING = "encoding";
+    public static final String HEADER_NOCACHE = "no-cache";
+    public static final String DEFAULT_ENCODING = "UTF-8";
+    public static final boolean DEFAULT_NOCACHE = true;
 
     /**
      * Generates modelMap to return in the modelAndView
@@ -62,7 +69,10 @@ public class JsonViewUtil {
         sb.append(jsonString);
         sb.append("}");
 
-        response.setContentType("text/json; charset=UTF-8");
+        //response.setContentType("text/json; charset=UTF-8");
+        response.setContentType(ServletUtils.JSON_TYPE +";charset="+DEFAULT_ENCODING);
+        ServletUtils.setNoCacheHeader(response);
+
         PrintWriter out = response.getWriter();
         out.write(sb.toString());
     }
@@ -99,7 +109,14 @@ public class JsonViewUtil {
         sb.append(jsonArray.toString());
         sb.append("}");
 
-        response.setContentType("text/json; charset=UTF-8");
+        String encoding = DEFAULT_ENCODING;
+        boolean noCache = DEFAULT_NOCACHE;
+
+        //response.setContentType("text/json; charset=UTF-8");
+        response.setContentType(ServletUtils.JSON_TYPE +";charset="+encoding);
+        if (noCache) {
+            ServletUtils.setNoCacheHeader(response);
+        }
         PrintWriter out = response.getWriter();
         out.write(sb.toString());
     }
@@ -133,7 +150,10 @@ public class JsonViewUtil {
             HttpServletResponse response, Map<String, ? extends Object> data)
             throws Exception {
         JSONObject jsonObject = JSONObject.fromObject(data);
-        response.setContentType("text/json; charset=UTF-8");
+        //response.setContentType("text/json; charset=UTF-8");
+        response.setContentType(ServletUtils.JSON_TYPE +";charset="+DEFAULT_ENCODING);
+        ServletUtils.setNoCacheHeader(response);
+
         PrintWriter out = response.getWriter();
         //logger.info(jsonObject.toString());
         out.write(jsonObject.toString());
@@ -145,7 +165,10 @@ public class JsonViewUtil {
     public static void buildJSONResponse(HttpServletResponse response,
             List<? extends Object> data) throws Exception {
         JSONArray jsonArray = JSONArray.fromObject(data);
-        response.setContentType("text/json; charset=UTF-8");
+        //response.setContentType("text/json; charset=UTF-8");
+        response.setContentType(ServletUtils.JSON_TYPE +";charset="+DEFAULT_ENCODING);
+        ServletUtils.setNoCacheHeader(response);
+
         PrintWriter out = response.getWriter();
         out.write(jsonArray.toString());
     }
@@ -155,8 +178,12 @@ public class JsonViewUtil {
      */
     public static void buildJSONObjectResponse(HttpServletResponse response,
             JSONObject data) throws Exception {
-        response.setContentType("text/json; charset=UTF-8");
+        //response.setContentType("text/json; charset=UTF-8");
+        response.setContentType(ServletUtils.JSON_TYPE +";charset="+DEFAULT_ENCODING);
+        ServletUtils.setNoCacheHeader(response);
+
         PrintWriter out = response.getWriter();
         out.write(data.toString());
     }
+
 }

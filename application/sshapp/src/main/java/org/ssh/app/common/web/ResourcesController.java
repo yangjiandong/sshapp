@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springside.modules.security.springsecurity.SpringSecurityUtils;
+import org.springside.modules.web.ServletUtils;
 import org.ssh.app.common.entity.Resource;
 import org.ssh.app.common.entity.Role;
 import org.ssh.app.common.service.ResourceService;
@@ -111,9 +112,11 @@ public class ResourcesController {
             if (!sb.equals("")) sb.append("]");
         }
 
-        logger.info(sb.toString());
+        //logger.info(sb.toString());
 
-        response.setContentType("text/json; charset=UTF-8");
+        response.setContentType(ServletUtils.JSON_TYPE +";charset="+JsonViewUtil.DEFAULT_ENCODING);
+        ServletUtils.setNoCacheHeader(response);
+
         PrintWriter out = response.getWriter();
         out.write(sb.toString());
     }
