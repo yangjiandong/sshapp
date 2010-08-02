@@ -1,6 +1,36 @@
 springside3
 ------------
 
+2010.08.01
+----------
+
+1、hjpetstore 
+http://hi.baidu.com/quest2run/blog/item/2526f64672654a2bcefca3a4.html
+
+use cvs client command line
+On client replace username with your java.net account (registration free):
+cvs -d :pserver:username@cvs.dev.java.net:/cvs login
+Then:
+cvs -d :pserver:username@cvs.dev.java.net:/cvs checkout hjpetstore/hjpetstore2
+
+The following technologies are being used in the current implementation:
+
+    * JQuery fisheye
+    * kaptcha
+    * Spring MVC 3
+    * Spring Security
+    * Hibernate 3.5
+    * JBoss Cache 3 (alternative infinispan)
+    * JMS External Integration
+    * GlassFish 3 cluster
+    * Mysql fail-over and cluster
+    * Zabbix / Zapcat
+
+--可参考下它的安全方面设置
+
+hjpetstore-mysql-populate.sql脚本需更改证
+save/hjpetstore-mysql-populate.sql
+
 2010.06.07
 ----------
 
