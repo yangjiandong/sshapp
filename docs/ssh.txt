@@ -1,6 +1,16 @@
 ssh
 ======
 
+2010.08.03
+----------
+
+1、Asynchronous method invocation in Spring 3.0
+The @Async annotation
+The @Async annotation allows invocation of that method to occur asynchronously.
+In other words, the caller will return immediately upon invocation.
+
+http://www.skill-guru.com/blog/2010/01/13/asynchronous-method-invocation-in-spring-3-0/
+
 2010.08.01
 ----------
 
