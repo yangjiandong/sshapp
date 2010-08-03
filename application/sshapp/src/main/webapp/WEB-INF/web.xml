@@ -6,17 +6,17 @@
   <display-name>spring side app</display-name>
   <description>Spring sample application</description>
 
-	<!--
-		- Key of the system property that should specify the root directory of this
-		- web app. Applied by WebAppRootListener or Log4jConfigListener.
-	-->
-	<context-param>
-		<param-name>webAppRootKey</param-name>
-		<param-value>sshapp.root</param-value>
-	</context-param>
+  <!--
+      - Key of the system property that should specify the root directory of this
+      - web app. Applied by WebAppRootListener or Log4jConfigListener.
+    -->
+  <context-param>
+    <param-name>webAppRootKey</param-name>
+    <param-value>sshapp.root</param-value>
+  </context-param>
 
   <!-- Spring ApplicationContext配置文件的路径,可使用通配符,多个路径用,号分隔
-      此参数用于后面的Spring Context Loader -->
+    此参数用于后面的Spring Context Loader -->
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath*:/applicationContext.pro.xml,classpath*:/applicationContext-sshapp.xml</param-value>
@@ -50,20 +50,20 @@
     <filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
   </filter>
   <!--
-  <filter>
-    <filter-name>hibernateOpenSessionInViewFilter</filter-name>
-    <filter-class>
-      org.ssh.app.orm.hibernate.OpenSessionInViewFilter</filter-class>
-    <init-param>
-      <param-name>excludeSuffixs</param-name>
-      <param-value>js,css,jpg,gif</param-value>
-    </init-param>
-    <init-param>
-      <param-name>sessionFactoryBeanName</param-name>
-      <param-value>sessionFactory</param-value>
-    </init-param>
-  </filter>
-  -->
+    <filter>
+      <filter-name>hibernateOpenSessionInViewFilter</filter-name>
+      <filter-class>
+        org.ssh.app.orm.hibernate.OpenSessionInViewFilter</filter-class>
+      <init-param>
+        <param-name>excludeSuffixs</param-name>
+        <param-value>js,css,jpg,gif</param-value>
+      </init-param>
+      <init-param>
+        <param-name>sessionFactoryBeanName</param-name>
+        <param-value>sessionFactory</param-value>
+      </init-param>
+    </filter>
+    -->
   <filter-mapping>
     <filter-name>hibernateOpenSessionInViewFilter</filter-name>
     <url-pattern>/rest/*</url-pattern>
@@ -72,7 +72,7 @@
     <filter-name>hibernateOpenSessionInViewFilter</filter-name>
     <url-pattern>/</url-pattern>
   </filter-mapping>
-    <filter-mapping>
+  <filter-mapping>
     <filter-name>hibernateOpenSessionInViewFilter</filter-name>
     <url-pattern>/remote/*</url-pattern>
   </filter-mapping>
@@ -89,29 +89,42 @@
 
   <!-- Enables clean URLs with JSP views e.g. /welcome instead of /app/welcome -->
   <!--
-  <filter>
-    <filter-name>UrlRewriteFilter</filter-name>
-    <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
-  </filter>
+    <filter>
+      <filter-name>UrlRewriteFilter</filter-name>
+      <filter-class>org.tuckey.web.filters.urlrewrite.UrlRewriteFilter</filter-class>
+    </filter>
 
-  <filter-mapping>
-    <filter-name>UrlRewriteFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
-   -->
+    <filter-mapping>
+      <filter-name>UrlRewriteFilter</filter-name>
+      <url-pattern>/*</url-pattern>
+    </filter-mapping>
+     -->
 
   <!-- Files are locked on Windows and can't be replaced -->
   <!-- 采用webdefault.xml 方式，不再需要以下设置
+    <servlet>
+      <servlet-name>default</servlet-name>
+      <servlet-class>org.mortbay.jetty.servlet.DefaultServlet</servlet-class>
+      <init-param>
+        <param-name>useFileMappedBuffer</param-name>
+        <param-value>false</param-value>
+      </init-param>
+      <load-on-startup>0</load-on-startup>
+    </servlet>
+     -->
+
+  <!--
+        kaptcha: Make sure to start your JDK with -Djava.awt.headless=true
+    -->
   <servlet>
-    <servlet-name>default</servlet-name>
-    <servlet-class>org.mortbay.jetty.servlet.DefaultServlet</servlet-class>
-    <init-param>
-      <param-name>useFileMappedBuffer</param-name>
-      <param-value>false</param-value>
-    </init-param>
-    <load-on-startup>0</load-on-startup>
+    <servlet-name>Kaptcha</servlet-name>
+    <servlet-class>com.google.code.kaptcha.servlet.KaptchaServlet</servlet-class>
+    <load-on-startup>2</load-on-startup>
   </servlet>
-   -->
+  <servlet-mapping>
+    <servlet-name>Kaptcha</servlet-name>
+    <url-pattern>/kaptcha.jpg</url-pattern>
+  </servlet-mapping>
 
   <!-- Spring MVC's Servlet -->
   <servlet>
@@ -123,7 +136,7 @@
         /WEB-INF/app-servlet.xml
       </param-value>
     </init-param>
-    <load-on-startup>2</load-on-startup>
+    <load-on-startup>3</load-on-startup>
   </servlet>
   <servlet-mapping>
     <servlet-name>rest</servlet-name>
@@ -133,7 +146,7 @@
   <servlet>
     <servlet-name>remote</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    <load-on-startup>3</load-on-startup>
+    <load-on-startup>4</load-on-startup>
   </servlet>
   <servlet-mapping>
     <servlet-name>remote</servlet-name>
@@ -142,8 +155,8 @@
 
   <!--spring rest-->
   <!--
-      浏览器不支持put,delete等 method,由该filter将/blog?_method=delete转换为标准的http  delete 方法
-  -->
+        浏览器不支持put,delete等 method,由该filter将/blog?_method=delete转换为标准的http  delete 方法
+    -->
   <filter>
     <filter-name>httpMethodFilter</filter-name>
     <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>

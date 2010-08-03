@@ -384,7 +384,6 @@
     <dependency>
       <groupId>net.sf.opencsv</groupId>
       <artifactId>opencsv</artifactId>
-
     </dependency>
 
     <dependency>
@@ -433,6 +432,11 @@
     <dependency>
       <groupId>org.apache.velocity</groupId>
       <artifactId>velocity</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.code</groupId>
+      <artifactId>kaptcha</artifactId>
     </dependency>
     <!-- utils end -->
 

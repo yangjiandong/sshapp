@@ -4,7 +4,7 @@ springside3
 2010.08.01
 ----------
 
-1、hjpetstore 
+1、hjpetstore
 http://hi.baidu.com/quest2run/blog/item/2526f64672654a2bcefca3a4.html
 
 use cvs client command line
@@ -31,6 +31,31 @@ The following technologies are being used in the current implementation:
 hjpetstore-mysql-populate.sql脚本需更改证
 save/hjpetstore-mysql-populate.sql
 
+--很奇怪，家里的环境mvn下载不了所需包，必须设置proxy
+    <proxy>
+      <id>optional</id>
+      <active>true</active>
+      <protocol>http</protocol>
+      <username>proxyuser</username>
+      <password>proxypass</password>
+      <host>localhost</host>
+      <port>2010</port>
+      <nonProxyHosts>repository.jboss.org|repo1.maven.org|download.java.net</nonProxyHosts>
+    </proxy>
+
+2、glassfish v3
+
+   --启动默认domain1
+   as-install/bin/asadmin start-domain
+
+   as-install/bin/asadmin stop-domain
+
+   --java db
+   as-install/bin/asadmin start-database --dbhome directory-path
+
+   For example, to start the Java DB server from its default location:
+   as-install/bin/asadmin start-database --dbhome as-install-parent/javadb
+
 2010.06.07
 ----------
 
@@ -40,7 +65,7 @@ net.sf.json.JSONException: java.lang.reflect.InvocationTargetException
 2、Hibernate中缓存的统计策略 -generate_statistics
 
   http://blog.163.com/qqabc20082006@126/blog/static/2292852520091120112719561/
-  
+
   // 创建Statistics对象，并通过SessionFactory对象获得统计信息
   Statistics st =  sf.getStatistics();
   // 打印全部统计信息
@@ -61,7 +86,7 @@ net.sf.json.JSONException: java.lang.reflect.InvocationTargetException
    gedit /etc/fstab
    设置mvn/conf/setting.xml
    <localRepository>/media/54485D16CE623524/HOME/local/repo</localRepository>
-   
+
    c.eclipse
 gedit ~/.gtkrc-2.0
 style "gtkcompact" {
@@ -100,7 +125,7 @@ sudo gedit nm-system-settings.conf
 停止 NetworkManager
 sudo /etc/init.d/network-manager stop
 重新啟動 NetworkManager
-sudo /etc/init.d/network-manager start 
+sudo /etc/init.d/network-manager start
 
 3、没体会到spring3 rest 风格，简单的连接测试成功，
 
@@ -108,7 +133,7 @@ sudo /etc/init.d/network-manager start
   如 http://loianegroner.com/tag/json-lib-ext-spring/，方式与公司采用的拼字符输出类似
   --JsonController.java
   --test: curl -i -X GET http://localhost:8089/sshapp/jsons/getBooks
-   
+
   需要解决的是dwr如何用restful方式替代
 
 2010.06.03
@@ -120,7 +145,7 @@ http://stsmedia.net/spring-finance-part-7-adding-support-for-json-and-xml-views/
 2010.06.02
 ----------
 
-1、spring 3 mvc + rest 
+1、spring 3 mvc + rest
 
 配置 web.xml
 <servlet>
@@ -202,27 +227,27 @@ urlrewrite.xml
 或：
 http://www.javabloger.com/article/no-mapping-found-for-http-request-with-uri.html
 
-<servlet-mapping>  
-     <servlet-name>springmvc</servlet-name>  
-     <url-pattern>/</url-pattern>  
- </servlet-mapping>   
+<servlet-mapping>
+     <servlet-name>springmvc</servlet-name>
+     <url-pattern>/</url-pattern>
+ </servlet-mapping>
 
  将默认的过滤器选项激活，世界又恢复平静，css、js、gif、jpg 等一切显示正常。
      <servlet-mapping>
          <servlet-name>default</servlet-name>
          <url-pattern>*.css</url-pattern>
      </servlet-mapping>
- 
+
       <servlet-mapping>
          <servlet-name>default</servlet-name>
          <url-pattern>*.gif</url-pattern>
      </servlet-mapping>
-    
+
     <servlet-mapping>
          <servlet-name>default</servlet-name>
          <url-pattern>*.jpg</url-pattern>
     </servlet-mapping>
-    
+
     <servlet-mapping>
          <servlet-name>default</servlet-name>
          <url-pattern>*.js</url-pattern>
@@ -346,9 +371,9 @@ http://stsmedia.net/spring-finance-part-2-spring-mvc-spring-30-rest-integration/
    git push origin 3.3.2
 
 3、springside 安装运行步骤
-   
+
    a.设置ant,mvn系统变量，采用springside提供的，设置mvn本地仓库，拷贝springside提供的仓库文件
-   
+
    b.直接运行quick-start.bat
 
      能正常发布到本地仓库，运行好像有问题
@@ -356,7 +381,7 @@ http://stsmedia.net/spring-finance-part-2-spring-mvc-spring-30-rest-integration/
    c.如果正常，一般能生成eclipse项目
 
 4、手工建立eclipse项目
-   
+
    a、建立m2_home变量
      mvn -Declipse.workspace=<path-to-eclipse-workspace> eclipse:add-maven-repo
    b、生成eclipse项目

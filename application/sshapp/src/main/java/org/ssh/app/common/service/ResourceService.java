@@ -59,7 +59,7 @@ public class ResourceService extends EntityService<Resource, Long> {
         values.put("typeName", ResourceTypeEnum.SUBSYSTEM.getValue());
         values.put("roleId", roleId);
 
-        return resourcesDao.find(hql, values);
+        return resourcesDao.findByCache(hql, values);
     }
 
     /**
@@ -85,7 +85,7 @@ public class ResourceService extends EntityService<Resource, Long> {
             values.put("roleIds", roleIds);
         }
 
-        return resourcesDao.find(hql, values);
+        return resourcesDao.findByCache(hql, values);
     }
 
     /**
@@ -109,7 +109,7 @@ public class ResourceService extends EntityService<Resource, Long> {
             values.put("userId", userId);
         }
 
-        return resourcesDao.find(hql, values);
+        return resourcesDao.findByCache(hql, values);
     }
 
     /**
@@ -117,7 +117,7 @@ public class ResourceService extends EntityService<Resource, Long> {
      */
     @Transactional(readOnly = true)
     public List<Resource> loadSubSystems() {
-        return resourcesDao.find("from Resource where parentId =0 and resourceType.typeName = ? order by orderNo",
+        return resourcesDao.findByCache("from Resource where parentId =0 and resourceType.typeName = ? order by orderNo",
             ResourceTypeEnum.SUBSYSTEM.getValue());
     }
 
@@ -126,7 +126,7 @@ public class ResourceService extends EntityService<Resource, Long> {
      */
     @Transactional(readOnly = true)
     public List<Resource> getChildrenResource(Long parentId) {
-        return resourcesDao.find("from Resource where parentId = ? order by orderNo",
+        return resourcesDao.findByCache("from Resource where parentId = ? order by orderNo",
             parentId);
     }
 
