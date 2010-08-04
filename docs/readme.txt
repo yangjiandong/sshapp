@@ -56,6 +56,29 @@ save/hjpetstore-mysql-populate.sql
    For example, to start the Java DB server from its default location:
    as-install/bin/asadmin start-database --dbhome as-install-parent/javadb
 
+   --相关配置
+   -Dhttp.maxConnections=250
+
+   1、在 将:-Xmx512 和 -client 这2个参数  修改
+      为这几个参数 -server ,-XX:+AggressiveHeap, -Xmx2048m, -Xms2048m, -Xss128k, -XX:+DisableExplicitGC，
+      不要写在一行中要分开写成几行，
+      另外，如果在64位的JMV中你的内存使用范围需要设置到  -Xmx4096m -Xms4096m 才会起到效果，
+      也就是64位的运行环境说需要设置超过4个G的大小才会得到效果，
+      在windows 32位的环境下，一般 1.4G 到 1.6G是一个比较稳健的值，2G是一个极限。
+      而在Solaris的SPARC CPU环境下尽量控制在1400M范围以内。
+ 
+   2、如果在多个CPU上运行GlassFish V3，还需要添加这2个参数，增大并行运算的处理能力：
+      -XX:ParallelGCThreads=N   (其中N为CPU的数量，如果N>8 ，N=CPU数x2)
+      -XX:+UseParallelOldGC
+      -XX:LargePageSizeInBytes=256m
+ 
+   3、如果你使用的是JDK版本6u16或者更高的64位的JVM环境则需要加入：
+      -XX:+UseCompressedOops 参数 .
+      另外,需要注意设置Java堆的最大值跟你的操作系统系统有一定的关系，
+      linux/solairs/windows 、32位或者64位的环境需要设置的参数都不一样，
+      所以应该根据具体的操作系统环境设置不同的参数
+
+
 2010.06.07
 ----------
 
