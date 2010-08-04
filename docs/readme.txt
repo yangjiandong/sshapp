@@ -26,8 +26,6 @@ The following technologies are being used in the current implementation:
     * Mysql fail-over and cluster
     * Zabbix / Zapcat
 
---可参考下它的安全方面设置
-
 hjpetstore-mysql-populate.sql脚本需更改证
 save/hjpetstore-mysql-populate.sql
 
@@ -42,6 +40,9 @@ save/hjpetstore-mysql-populate.sql
       <port>2010</port>
       <nonProxyHosts>repository.jboss.org|repo1.maven.org|download.java.net</nonProxyHosts>
     </proxy>
+
+--关注它的RestTemplate
+SecurityServiceRestClientImpl
 
 2、glassfish v3
 
@@ -66,12 +67,12 @@ save/hjpetstore-mysql-populate.sql
       也就是64位的运行环境说需要设置超过4个G的大小才会得到效果，
       在windows 32位的环境下，一般 1.4G 到 1.6G是一个比较稳健的值，2G是一个极限。
       而在Solaris的SPARC CPU环境下尽量控制在1400M范围以内。
- 
+
    2、如果在多个CPU上运行GlassFish V3，还需要添加这2个参数，增大并行运算的处理能力：
       -XX:ParallelGCThreads=N   (其中N为CPU的数量，如果N>8 ，N=CPU数x2)
       -XX:+UseParallelOldGC
       -XX:LargePageSizeInBytes=256m
- 
+
    3、如果你使用的是JDK版本6u16或者更高的64位的JVM环境则需要加入：
       -XX:+UseCompressedOops 参数 .
       另外,需要注意设置Java堆的最大值跟你的操作系统系统有一定的关系，
