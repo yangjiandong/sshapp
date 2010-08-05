@@ -1,6 +1,44 @@
 ssh
 ======
 
+2010.08.05
+----------
+
+1、core 增加 ServiceException 异常类
+   cd module/core
+   mvn install
+
+2、sshapp 改变jdk支持版本为1.6,pom.xml
+
+      <!-- compiler插件, 设定JDK版本 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+          <showDeprecation>false</showDeprecation>
+          <encoding>${project.build.sourceEncoding}</encoding>
+        </configuration>
+      </plugin>
+
+3、新增hjpetstore中几个包
+   common/monitor
+   util/Base64Coder.java
+   util/CalendarUtil.java
+   util/CustomCalendarEditor.java
+   util/EmailSender.java
+   util/FileUtils.java
+   util/MessageDigestUtil.java
+   util/RSAUtil.java
+   util/RestCredentialsTemplate.java
+   util/SimpleTextEmailSender.java
+
+   所加的monitor.xml 与原有jmx 配置有冲突
+
+4、增加所需的mvn，kaptcha,zapcat
+   save/my-mvn
+
 2010.08.03
 ----------
 

@@ -17,7 +17,7 @@
   <import resource="jmx/applicationContext-jmx-client.xml" />
 
   <!--
-
+  <import resource="jmx/monitor.xml" />
   <import resource="log/applicationContext-log.xml" />
   <import resource="schedule/applicationContext-quartz-cron-local.xml" />
   <import resource="schedule/applicationContext-quartz-timer-cluster.xml" />

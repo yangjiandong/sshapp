@@ -464,6 +464,13 @@
     </dependency>
     <!-- poi end -->
 
+    <dependency>
+      <groupId>zapcat</groupId>
+      <artifactId>zapcat</artifactId>
+      <version>1.2</version>
+      <scope>runtime</scope>
+    </dependency>
+
     <!-- test begin -->
     <dependency>
       <groupId>junit</groupId>
@@ -551,12 +558,17 @@
     <plugins>
 
       <!-- compiler插件, 设定JDK版本 -->
-      <!--
-          <plugin> <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>2.3</version> <configuration> <source>1.6</source>
-          <target>1.6</target> </configuration> </plugin>
-        -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.6</source>
+          <target>1.6</target>
+          <showDeprecation>false</showDeprecation>
+          <encoding>${project.build.sourceEncoding}</encoding>
+        </configuration>
+      </plugin>
+
       <!-- eclipse插件 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
