@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-  <substitutionProperty name="log.base" value="./logs" />
+  <substitutionProperty name="log.base" value="${sshapp.root}/logs" />
   <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
     <layout class="ch.qos.logback.classic.PatternLayout">
       <Pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</Pattern>
@@ -32,7 +32,7 @@
 
   <root>
     <level value="INFO"/>
-    <appender-ref ref="CONSOLE"/>
+    <appender-ref ref="FILE"/>
   </root>
 
   <!--

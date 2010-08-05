@@ -17,8 +17,9 @@
       <map>
         <!-- 认证配置,文件路径需为绝对路径 -->
         <!--
-          <entry key="jmx.remote.x.password.file" value="/mypath/jmxremote.password" />
-          <entry key="jmx.remote.x.access.file" value="/mypath/jmxremote.access" />
+
+          <entry key="jmx.remote.x.password.file" value="${jmxremote.password}" />
+          <entry key="jmx.remote.x.access.file" value="${jmxremote.access}" />
         -->
       </map>
     </property>
