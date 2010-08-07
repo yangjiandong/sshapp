@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.Assert;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -54,5 +55,23 @@ public class UserController {
         map.put("message", "o");
 
         JsonViewUtil.buildCustomJSONDataResponse(response, map);
+    }
+
+    //TODO
+    //验证码
+    private void validateCaptcha(HttpServletRequest request, BindException errors) {
+        String kaptchaExpected = (String) request.getSession().getAttribute(com.google.code.kaptcha.Constants.KAPTCHA_SESSION_KEY);
+        //String kaptchaReceived = userForm.getKaptcha();
+        String kaptchaReceived = request.getParameter("kaptcha");
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("Received kaptcha: '" + kaptchaReceived + "' is comparing with Expected kaptcha: '" + kaptchaExpected + "'...");
+        }
+
+        if (kaptchaReceived == null || !kaptchaReceived.equalsIgnoreCase(kaptchaExpected)) {
+            logger.error("Received kaptcha: '" + kaptchaReceived + "' is comparing with Expected kaptcha: '" + kaptchaExpected + "'...");
+            errors.rejectValue(null, "error.invalidKaptcha", "invalidKaptcha");
+
+        }
     }
 }

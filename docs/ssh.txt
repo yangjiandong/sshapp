@@ -1,6 +1,95 @@
 ssh
 ======
 
+2010.08.07
+----------
+
+--参考年轻构架师
+1、hibernate 映射
+
+   a. 使用合成(synthetic identifiler) 或代理(surrogate) 主健
+      即采用没有业务含义的字段如 protected Long id;
+
+   b. 不要使用复合主键
+
+   c. 强烈建议引入 version or timestamp
+
+      解决并发控制 optimistic locking.
+
+      但各自也有问题，version在达到数据类型最大值后，hibernate 不会自动归0，而是报异常
+      timestamp 信赖于jvm 及 os的时间精度
+
+   d. 使用中间表映射多对多关系，如用户与角色
+
+   e. 尽是不要使用 class inheritance 映射
+
+   f. 永远不要使用List
+
+      ?? 要查下资料理解下
+
+   g. EntityIntereptor
+
+      对核算字段，如create_time, update_time ，实行自动插入值
+      参考hjpetstore2中 AuditInterceptor
+
+   h. 不要指定任何lazy=false
+
+      如果使用了lazy = true,可在代码中显示使用eagerly fetch
+
+       return  getSession().createCriteria(Order.class)
+                .setFetchMode("shipAddress", FetchMode.JOIN)         --
+                .setFetchMode("billAddress", FetchMode.JOIN)         --
+                .setFetchMode("orderLineItems", FetchMode.JOIN)      --
+                .setFetchMode("orderLineItems.item", FetchMode.JOIN) --
+                .add(Restrictions.between("createTime", from, to))
+                .addOrder(org.hibernate.criterion.Order.asc("orderStatus"))
+                .list();
+
+       String hql = "FROM Order AS o "
+                 + "INNER JOIN FETCH o.shipAddress a "               --
+                 + "INNER JOIN FETCH o.orderLineItems oli "          --
+                 + "INNER JOIN FETCH o.paymentPartner pp "           --
+                 + "LEFT JOIN FETCH oli.item i "                     --
+                 + "WHERE o.createTime BETWEEN :from AND :to "
+                 + "ORDER BY o.orderStatus ASC ";
+
+   i. 显示指定外键名
+
+   j. 二级缓存
+
+      设置read-only,read-write 实体使用二级缓存，
+
+      最好不使用查询缓存??
+
+2、kaptcha
+
+   参考 hjpetstore UserFormController.validateCaptcha
+
+3、https
+
+   HttpsUrlRewritingInterceptor
+
+   使用参考hjpetstore-servlet.xml
+
+4、soa public api key
+
+   每个注册用户有个 api key,每次访问服务时需带上个api key，这样保证了web service的安全性
+
+   HjpetstoreController
+
+   --有关安全方面，还是要再看下项目代码
+
+5、p86 spring jms
+
+6、win2003安装ip6
+
+运行：cd 、\
+      netsh
+      int ipv6
+      install     耐心等待确定
+这样就可以啦，如果想自己配置，就在ipv6模式下输入add address "本地地址" [ipv6地址]
+
+
 2010.08.05
 ----------
 
