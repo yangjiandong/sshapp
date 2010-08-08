@@ -67,6 +67,7 @@
     <!-- Plugin的属性定义  -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <project.build.directory>./</project.build.directory>
   </properties>
 
   <!-- 设定除中央仓库(repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查找. -->
@@ -999,14 +1000,52 @@
                 <port>8089</port>
                 <maxIdleTime>3600000</maxIdleTime>
               </connector>
+
+              <connector implementation="org.eclipse.jetty.server.ssl.SslSocketConnector">
+                <port>8443</port>
+                <maxIdleTime>60000</maxIdleTime>
+                <keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
+                <password>jetty6</password>
+                <keyPassword>jetty6</keyPassword>
+              </connector>
+
             </connectors>
 
             <stopPort>9966</stopPort>
             <stopKey>foo</stopKey>
             <scanIntervalSeconds>5</scanIntervalSeconds>
             <webDefaultXml>webdefault.xml</webDefaultXml>
-          </configuration>
 
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>keytool-maven-plugin</artifactId>
+          <executions>
+            <execution>
+              <phase>generate-resources</phase>
+              <id>clean</id>
+              <goals>
+                <goal>clean</goal>
+              </goals>
+            </execution>
+            <execution>
+              <phase>generate-resources</phase>
+              <id>genkey</id>
+              <goals>
+                <goal>genkey</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
+            <dname>cn=young.jiandong@gamil.com</dname>
+            <keypass>jetty6</keypass>
+            <storepass>jetty6</storepass>
+            <alias>jetty6</alias>
+            <keyalg>RSA</keyalg>
+          </configuration>
         </plugin>
 
         <!-- jar插件 -->

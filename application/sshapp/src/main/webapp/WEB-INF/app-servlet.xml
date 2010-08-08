@@ -84,22 +84,24 @@
     <property name="sslPort" value="${ssl.port}" />
   </bean>
 
-  <!-- editUser and newOrder need both above interceptor -->
   <!--
-    <bean id="secureHandlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-      <property name="interceptors">
-        <list>
-          <ref bean="httpsUrlRewritingInterceptor" />
-          <ref bean="signonInterceptor"/>
-        </list>
-      </property>
-      <property name="urlMap">
-        <map>
-          <entry key="/shop/editUser.html" value-ref="secure_editUser"/>
-          <entry key="/shop/newOrder.html" value-ref="secure_newOrder"/>
-        </map>
-      </property>
-    </bean>
-    -->
+  editUser and newOrder need both above interceptor
+  mvn jetty plugin ssl 方式运行没成功
+  -->
+  <!--
+  <bean id="secureHandlerMapping" class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+    <property name="interceptors">
+      <list>
+        <ref bean="httpsUrlRewritingInterceptor" />
+      </list>
+    </property>
+    <property name="mappings">
+      <props>
+        <prop key="/init/*">coreController</prop>
+      </props>
+    </property>
+  </bean>
+  -->
+
 
 </beans>
