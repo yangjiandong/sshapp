@@ -35,6 +35,8 @@ public class RoleController {
     @RequestMapping("/list")
     public void queryRoles(HttpServletRequest request, HttpServletResponse response)
             throws Exception {
+        logger.debug("tst..");
+
         Page<Role> page = new Page<Role>(request);
         List<PropertyFilter> filters = new ArrayList<PropertyFilter>();
 

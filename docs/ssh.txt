@@ -1,6 +1,26 @@
 ssh
 ======
 
+2010.08.08
+----------
+
+1、增加
+
+      <dependency>
+        <groupId>commons-httpclient</groupId>
+        <artifactId>commons-httpclient</artifactId>
+        <version>${httpclient.version}</version>
+      </dependency>
+
+   不知与
+      <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>4.0.1</version>
+      </dependency>
+   有什么关系
+
+
 2010.08.07
 ----------
 
@@ -88,7 +108,7 @@ ssh
       int ipv6
       install     耐心等待确定
 这样就可以啦，如果想自己配置，就在ipv6模式下输入add address "本地地址" [ipv6地址]
-
+--感觉现在没什么用处，翻墙现在也不是很方便
 
 2010.08.05
 ----------

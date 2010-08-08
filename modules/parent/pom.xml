@@ -30,7 +30,7 @@
     <oracle.version>10.2.0.2.0</oracle.version>
     <quartz.version>1.8.0</quartz.version>
     <jackson.version>1.5.3</jackson.version>
-    <slf4j.version>1.6.0</slf4j.version>
+    <slf4j.version>1.5.8</slf4j.version>
     <selenium.version>2.0a2</selenium.version>
     <org.jrobin.version>1.5.9</org.jrobin.version>
     <ehcache.version>1.6.2</ehcache.version>
@@ -39,6 +39,7 @@
     <xmemcached.version>1.2.5</xmemcached.version>
     <tiles.version>2.1.3</tiles.version>
     <kaptcha.version>2.3</kaptcha.version>
+    <httpclient.version>3.1</httpclient.version>
 
     <jalopy-maven-plugin.version>1.0-alpha-1</jalopy-maven-plugin.version>
 
@@ -705,6 +706,12 @@
         <artifactId>httpclient</artifactId>
         <version>4.0.1</version>
       </dependency>
+      <dependency>
+        <groupId>commons-httpclient</groupId>
+        <artifactId>commons-httpclient</artifactId>
+        <version>${httpclient.version}</version>
+      </dependency>
+
       <dependency>
         <groupId>net.jcip</groupId>
         <artifactId>jcip-annotations</artifactId>

@@ -4,8 +4,9 @@
   <substitutionProperty name="log.base" value="${sshapp.root}/logs" />
   <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
     <layout class="ch.qos.logback.classic.PatternLayout">
-      <Pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</Pattern>
+      <Pattern>%d [%-5p] \(%-20c{3}:%L\) - %m%n</Pattern>
       <!--
+          %d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n
           <pattern>%d [%-5p] \(%-20c{3}:%L\) - %m%n</pattern>
         -->
     </layout>
@@ -30,9 +31,9 @@
     </layout>
   </appender>
 
-  <root>
-    <level value="INFO"/>
+  <root level="INFO">
     <appender-ref ref="FILE"/>
+    <appender-ref ref="CONSOLE"/>
   </root>
 
   <!--
