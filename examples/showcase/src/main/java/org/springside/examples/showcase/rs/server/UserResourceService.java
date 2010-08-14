@@ -2,6 +2,7 @@ package org.springside.examples.showcase.rs.server;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -23,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.stereotype.Component;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.common.service.AccountManager;
 import org.springside.examples.showcase.rs.dto.UserDTO;
@@ -35,6 +37,7 @@ import com.google.common.collect.Lists;
  * 
  * @author calvin
  */
+@Component
 @Path("/users")
 public class UserResourceService {
 
@@ -47,7 +50,7 @@ public class UserResourceService {
 
 	/**
 	 * 获取所有用户.
-	 * 演示SpringSecurity结合.
+	 * 演示与SpringSecurity的结合.
 	 */
 	@GET
 	@Secured("ROLE_User")
@@ -118,19 +121,25 @@ public class UserResourceService {
 	}
 
 	/**
-	 * 演示获取灵活,不固定的参数.
+	 * 演示直接获取灵活,不固定的参数.
+	 * 可以从原版HttpServletRequest中获取,也可以用封装好的更方便的UriInfo和HttpHeaders.
 	 */
 	@GET
-	public void searchUserByFlexibleParameter(@Context UriInfo ui, @Context HttpHeaders hh) {
+	public String searchUserByFlexibleParameter(@Context HttpServletRequest request, @Context UriInfo ui,
+			@Context HttpHeaders hh) {
 		MultivaluedMap<String, String> queryParams = ui.getQueryParameters();
 
-		//先尝试从Http Header获取参数,如没有再尝试从URL中获取.
+		//先尝试从Http Header获取参数,如没有再尝试从URL参数中获取.
 		String userName = null;
-		if (hh.getRequestHeader("agent") != null) {
+		if (hh.getRequestHeader("userName") != null) {
 			userName = hh.getRequestHeader("userName").get(0);
 		} else {
 			userName = queryParams.getFirst("userName");
 		}
+
+		if (userName == null)
+			buildException(450, "用戶名既不在Http Header也不在URL参数中");
+		return userName;
 	}
 
 	/**

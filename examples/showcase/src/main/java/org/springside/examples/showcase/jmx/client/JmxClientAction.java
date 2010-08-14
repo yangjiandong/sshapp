@@ -7,7 +7,6 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springside.examples.showcase.jmx.client.JmxClientService.HibernateStatistics;
 import org.springside.modules.web.struts2.Struts2Utils;
 
 import com.opensymphony.xwork2.ActionSupport;
@@ -30,7 +29,7 @@ public class JmxClientAction extends ActionSupport {
 	//-- 页面属性 --//
 	private String nodeName;
 	private boolean notificationMailEnabled;
-	private HibernateStatistics hibernateStatistics;
+	private boolean traceStarted;
 
 	/**
 	 * 默认函数,显示服务器配置及运行情况.
@@ -39,7 +38,7 @@ public class JmxClientAction extends ActionSupport {
 	public String execute() {
 		nodeName = jmxClientService.getNodeName();
 		notificationMailEnabled = jmxClientService.isNotificationMailEnabled();
-		hibernateStatistics = jmxClientService.getHibernateStatistics();
+		traceStarted = jmxClientService.getTraceStatus();
 		return SUCCESS;
 	}
 
@@ -71,9 +70,9 @@ public class JmxClientAction extends ActionSupport {
 
 			map.put("nodeName", nodeName);
 			map.put("notificationMailEnabled", String.valueOf(notificationMailEnabled));
-			map.put("message", "获取配置成功.");
+			map.put("message", "刷新配置成功.");
 		} catch (Exception e) {
-			map.put("message", "获取配置失败.");
+			map.put("message", "刷新配置失败.");
 			logger.error(e.getMessage(), e);
 		}
 
@@ -81,12 +80,19 @@ public class JmxClientAction extends ActionSupport {
 		return null;
 	}
 
-	//-- Hibernate运行统计(直接读取属性/调用方法) --//
+	//-- Trace控制(直接读取属性/调用方法) --//
 	/**
-	 * 打印Hibernate统计信息日志.
+	 * 开始Trace.
 	 */
-	public void logSummary() {
-		jmxClientService.logSummary();
+	public void startTrace() {
+		jmxClientService.startTrace();
+	}
+
+	/**
+	 * 停止Trace.
+	 */
+	public void stopTrace() {
+		jmxClientService.stopTrace();
 	}
 
 	//-- 页面属性访问函数 --//
@@ -106,7 +112,7 @@ public class JmxClientAction extends ActionSupport {
 		this.notificationMailEnabled = notificationMailEnabled;
 	}
 
-	public HibernateStatistics getHibernateStatistics() {
-		return hibernateStatistics;
+	public boolean isTraceStarted() {
+		return traceStarted;
 	}
 }

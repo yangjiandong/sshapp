@@ -20,7 +20,6 @@ import org.springside.examples.showcase.common.service.AccountManager;
  */
 public class PlainPasswordCallback implements CallbackHandler {
 
-	@Autowired
 	private AccountManager accountManager;
 
 	/**
@@ -40,5 +39,10 @@ public class PlainPasswordCallback implements CallbackHandler {
 		if (!encoder.isPasswordValid(user.getShaPassword(), pc.getPassword(), null)) {
 			throw new IOException("wrong password " + pc.getPassword() + " for " + pc.getIdentifier());
 		}
+	}
+
+	@Autowired
+	public void setAccountManager(AccountManager accountManager) {
+		this.accountManager = accountManager;
 	}
 }

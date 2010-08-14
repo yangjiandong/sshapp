@@ -6,6 +6,8 @@ import javax.jws.WebService;
 
 import org.dozer.DozerBeanMapper;
 import org.hibernate.ObjectNotFoundException;
+import org.perf4j.StopWatch;
+import org.perf4j.slf4j.Slf4JStopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,9 @@ import org.springside.examples.showcase.ws.server.result.WSResult;
 import com.google.common.collect.Lists;
 
 /**
- * WebService实现类.
+ * UserWebService服务端实现类.
+ * 
+ * 客户端实现见功能测试用例.
  * 
  * @author sky
  * @author calvin
@@ -67,6 +71,7 @@ public class UserWebServiceImpl implements UserWebService {
 	//SpringSecurity 控制的方法
 	@Secured( { "ROLE_Admin" })
 	public GetUserResult getUser(String id) {
+		StopWatch totalStopWatch = new Slf4JStopWatch();
 		//校验请求参数
 		try {
 			Assert.notNull(id, "id参数为空");
@@ -77,18 +82,27 @@ public class UserWebServiceImpl implements UserWebService {
 
 		//获取用户
 		try {
+
+			StopWatch dbStopWatch = new Slf4JStopWatch("GetUser.fetchDB");
 			User entity = accountManager.getLoadedUser(id);
+			dbStopWatch.stop();
+
 			UserDTO dto = dozer.map(entity, UserDTO.class);
 
 			GetUserResult result = new GetUserResult();
 			result.setUser(dto);
+
+			totalStopWatch.stop("GerUser.total.success");
+
 			return result;
 		} catch (ObjectNotFoundException e) {
 			String message = "用户不存在(id:" + id + ")";
 			logger.error(message, e);
+			totalStopWatch.stop("GerUser.total.failure");
 			return WSResult.buildResult(GetUserResult.class, WSResult.PARAMETER_ERROR, message);
 		} catch (RuntimeException e) {
 			logger.error(e.getMessage(), e);
+			totalStopWatch.stop("GerUser.total.failure");
 			return WSResult.buildDefaultErrorResult(GetUserResult.class);
 		}
 	}

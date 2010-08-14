@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * 
- * $Id: SpringContextTestCase.java 966 2010-02-24 16:56:28Z calvinxiu $
+ * $Id: SpringContextTestCase.java 1141 2010-07-31 17:54:22Z calvinxiu $
  */
 package org.springside.modules.test.spring;
 
@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -32,9 +33,10 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
  * 
  * @author calvin
  */
+@DirtiesContext
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestExecutionListeners( { DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class })
-public class SpringContextTestCase extends Assert implements ApplicationContextAware {
+public abstract class SpringContextTestCase extends Assert implements ApplicationContextAware {
 
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 

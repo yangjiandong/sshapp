@@ -7,11 +7,9 @@
  */
 package org.springside.modules.test.groups;
 
-import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 import org.apache.commons.lang.StringUtils;
 import org.junit.Ignore;
@@ -22,17 +20,14 @@ import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 /**
  * 实现TestNG Groups分组执行用例功能的TestRunner.
  * 
  * 比如可以在白天持续执行速度较快的测试方法, 到了晚上再执行较慢的测试方法.
  * 
- * Runner会只执行测试类的@Groups定义, 与在-Dtest.groups=xxx 或 application.test.properties的test.groups=xxx相吻合的测试类及测试方法.
- * 如两处均无设置则执行全部.
+ * Runner会只执行测试类的@Groups定义, 与在-Dtest.groups=xxx,xxx相吻合的测试类及测试方法.
+ * 如无设置则执行全部.
  * 另提供独立判断的工具方法供其他的Runner调用.
  * 
  * 注意, 本类只适用于JUnit 4.4以上版本.
@@ -44,10 +39,6 @@ public class GroupsTestRunner extends BlockJUnit4ClassRunner {
 
 	/** 在Properties文件或JVM参数-D中定义执行分组的变量名称. */
 	public static final String PROPERTY_NAME = "test.groups";
-	/** 定义了分组变量的Properties文件名. */
-	public static final String PROPERTY_FILE = "application.test.properties";
-
-	private static Logger logger = LoggerFactory.getLogger(GroupsTestRunner.class);
 
 	private static List<String> groups;
 
@@ -111,7 +102,7 @@ public class GroupsTestRunner extends BlockJUnit4ClassRunner {
 	public static boolean shouldRun(Method testMethod) {
 		//初始化Groups定义
 		if (groups == null) {
-			initGroups(PROPERTY_FILE);
+			initGroups();
 		}
 		//如果groups定义为全部执行则返回true
 		if (groups.contains(Groups.ALL)) {
@@ -128,44 +119,19 @@ public class GroupsTestRunner extends BlockJUnit4ClassRunner {
 	}
 
 	/**
-	 * 从系统变量或Properties文件初始化运行的groups.
+	 * 从环境变量读取test.groups定义, 多个group用逗号分隔.
+	 * eg. java -Dtest.groups=Mini,Major
 	 * 如果均无定义则返回ALL.
 	 */
-	protected static void initGroups(String propertyFile) {
+	protected static void initGroups() {
 
-		String groupsDefine = getGroupsFromSystemProperty();
+		String groupsDefine = System.getProperty(PROPERTY_NAME);
 
 		//如果环境变量未定义test.groups,尝试从property文件读取.
 		if (StringUtils.isBlank(groupsDefine)) {
-			groupsDefine = getGroupsFromPropertyFile(propertyFile);
-			//如果仍未定义,设为全部运行
-			if (StringUtils.isBlank(groupsDefine)) {
-				groupsDefine = Groups.ALL;
-			}
+			groupsDefine = Groups.ALL;
 		}
 
 		groups = Arrays.asList(groupsDefine.split(","));
-	}
-
-	/**
-	 * 从环境变量读取test.groups定义, 多个group用逗号分隔.
-	 * eg. java -Dtest.groups=Mini,Majo
-	 */
-	protected static String getGroupsFromSystemProperty() {
-		return System.getProperty(PROPERTY_NAME);
-	}
-
-	/**
-	 * 从Classpath中的application.test.properties文件读取test.groups定义, 多个group用逗号分隔.
-	 * eg. test.groups=Mini,Major
-	 */
-	protected static String getGroupsFromPropertyFile(String propertyFile) {
-		try {
-			Properties p = PropertiesLoaderUtils.loadAllProperties(propertyFile);
-			return p.getProperty(PROPERTY_NAME);
-		} catch (IOException e) {
-			logger.warn(e.getMessage(), e);
-		}
-		return null;
 	}
 }

@@ -17,7 +17,9 @@ import org.springside.examples.showcase.ws.server.result.SmallImageResult;
 import org.springside.examples.showcase.ws.server.result.WSResult;
 
 /**
- * SmallImageWebService实现类.
+ * SmallImageWebService服务端实现类.
+ * 
+ * 客户端实现见功能测试用例.
  * 
  * @see SmallImageWebService
  * 

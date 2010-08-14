@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * 
- * $Id: QueuesHolder.java 1050 2010-04-17 15:10:56Z calvinxiu $
+ * $Id: QueuesHolder.java 1144 2010-08-03 17:22:21Z calvinxiu $
  */
 package org.springside.modules.queue;
 
@@ -32,14 +32,8 @@ public class QueuesHolder {
 	public static final String QUEUEHOLDER_MBEAN_NAME = "SpringSide:type=QueueManagement,name=queueHolder";
 
 	private static ConcurrentMap<String, BlockingQueue> queueMap = new MapMaker().concurrencyLevel(32).makeMap();//消息队列
-	private static int queueSize = Integer.MAX_VALUE;
 
-	/**
-	 * 设置每个队列的最大长度, 默认为Integer最大值, 设置时不改变已创建队列的最大长度.
-	 */
-	public void setQueueSize(int queueSize) {
-		QueuesHolder.queueSize = queueSize; //NOSONAR
-	}
+	private static int queueSize = Integer.MAX_VALUE;
 
 	/**
 	 * 根据queueName获得消息队列的静态函数.
@@ -49,10 +43,14 @@ public class QueuesHolder {
 		BlockingQueue queue = queueMap.get(queueName);
 
 		if (queue == null) {
-			queue = new LinkedBlockingQueue(queueSize);
-			queueMap.put(queueName, queue);
-		}
+			BlockingQueue newQueue = new LinkedBlockingQueue(queueSize);
 
+			//如果之前消息队列还不存在,放入新队列并返回Null.否则返回之前的值.
+			queue = queueMap.putIfAbsent(queueName, newQueue);
+			if (queue == null) {
+				queue = newQueue;
+			}
+		}
 		return queue;
 	}
 
@@ -65,4 +63,10 @@ public class QueuesHolder {
 		return getQueue(queueName).size();
 	}
 
+	/**
+	 * 设置每个队列的最大长度, 默认为Integer最大值, 设置时不改变已创建队列的最大长度.
+	 */
+	public void setQueueSize(int queueSize) {
+		QueuesHolder.queueSize = queueSize; //NOSONAR
+	}
 }

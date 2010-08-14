@@ -1,20 +1,22 @@
 package org.ssh.app.common.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springside.modules.binder.JsonBinder;
+import org.springside.modules.memcached.SpyMemcachedClient;
+import org.springside.modules.memcached.SpyMemcachedClientFactory;
 import org.springside.modules.security.springsecurity.SpringSecurityUtils;
-import org.ssh.app.common.dao.RoleDao;
+import org.ssh.app.cache.MemcachedObjectType;
 import org.ssh.app.common.dao.UserDao;
-import org.ssh.app.common.entity.Role;
+import org.ssh.app.common.dao.UserJdbcDao;
 import org.ssh.app.common.entity.User;
 import org.ssh.app.jms.simple.NotifyMessageProducer;
 import org.ssh.app.jmx.server.ServerConfig;
@@ -26,26 +28,31 @@ import org.ssh.app.jmx.server.ServerConfig;
  */
 //Spring Service Bean的标识.
 @Component
-//@Service("accountManager")
-//默认将类中的所有函数纳入事务管理.
-@Transactional
 public class AccountManager {
     private static Logger logger = LoggerFactory.getLogger(AccountManager.class);
 
     private UserDao userDao;
-    @Autowired(required = false)
+
+    private UserJdbcDao userJdbcDao;
+
+    private SpyMemcachedClientFactory spyClientFactory;
+
+    private JsonBinder jsonBinder = new JsonBinder(Inclusion.NON_DEFAULT);
+
     private ServerConfig serverConfig; //系统配置
-    @Autowired(required = false)
+
     private NotifyMessageProducer notifyProducer; //JMS消息发送
 
-    @Autowired
-    private RoleDao roleDao;
+    private PasswordEncoder encoder = new ShaPasswordEncoder();
 
     /**
      * 在保存用户时,发送用户修改通知消息, 由消息接收者异步进行较为耗时的通知邮件发送.
      *
      * 如果企图修改超级用户,取出当前操作员用户,打印其信息然后抛出异常.
+     *
      */
+    //演示指定非默认名称的TransactionManager.
+    @Transactional("transactionManager")
     public void saveUser(User user) {
 
         if (isSupervisor(user)) {
@@ -53,29 +60,22 @@ public class AccountManager {
             throw new ServiceException("不能修改超级管理员用户");
         }
 
-        PasswordEncoder encoder = new ShaPasswordEncoder();
         String shaPassword = encoder.encodePassword(user.getPlainPassword(), null);
         user.setShaPassword(shaPassword);
 
-        saveUserToDB(user);
+        userDao.save(user);
 
         sendNotifyMessage(user);
-    }
-
-    //设置Propagation, 保证在发送通知消息前数据已保存
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void saveUserToDB(User user) {
-        userDao.save(user);
     }
 
     /**
      * 判断是否超级管理员.
      */
     private boolean isSupervisor(User user) {
-        //return (user.getId() != null && user.getId().equals("1"));
-        return (user.getLoginName() != null && user.getLoginName().equals("admin"));
+        return (user.getId() != null && user.getId().equals("1"));
     }
 
+    @Transactional(readOnly = true)
     public User getUser(String id) {
         return userDao.get(id);
     }
@@ -83,15 +83,44 @@ public class AccountManager {
     /**
      * 取得用户, 并对用户的延迟加载关联进行初始化.
      */
+    @Transactional(readOnly = true)
     public User getLoadedUser(String id) {
-        User user = userDao.get(id);
-        userDao.initUser(user);
+        if (spyClientFactory != null) {
+            return getUserFromMemcached(id);
+        } else {
+            return userJdbcDao.queryObject(id);
+        }
+    }
+
+    /**
+     * 访问Memcached, 使用JSON字符串存放对象以节约空间.
+     */
+    private User getUserFromMemcached(String id) {
+        SpyMemcachedClient spyClient = spyClientFactory.getClient();
+
+        String key = MemcachedObjectType.USER.getPrefix() + id;
+
+        User user = null;
+        String jsonString = spyClient.get(key);
+
+        if (jsonString == null) {
+            //用户不在 memcached中,从数据库中取出并放入memcached.
+            //因为hibernate的proxy问题多多,此处使用jdbc
+            user = userJdbcDao.queryObject(id);
+            if (user != null) {
+                jsonString = jsonBinder.toJson(user);
+                spyClient.set(key, MemcachedObjectType.USER.getExpiredTime(), jsonString);
+            }
+        } else {
+            user = jsonBinder.fromJson(jsonString, User.class);
+        }
         return user;
     }
 
     /**
      * 按名称查询用户, 并对用户的延迟加载关联进行初始化.
      */
+    @Transactional(readOnly = true)
     public User searchLoadedUserByName(String name) {
         User user = userDao.findUniqueBy("name", name);
         userDao.initUser(user);
@@ -149,31 +178,24 @@ public class AccountManager {
         this.userDao = userDao;
     }
 
-    //初始
-    public void initData() {
-        if (this.userDao.getUserCount().longValue() != 0) {
-            return;
-        }
-
-        Role r = new Role();
-        r.setName("admin");
-        r.setDesc("系统管理员角色");
-        this.roleDao.save(r);
-
-        List<Role>rs = new ArrayList<Role>();
-        rs.add(r);
-
-        User u = new User();
-        //u.setId("1");
-        u.setName("管理员");
-        u.setLoginName("admin");
-        u.setPlainPassword("123");
-        u.setEmail("admin@gmail.com");
-        u.setCreateBy("初始化");
-        u.setStatus("enabled");
-        //add role
-        u.setRoleList(rs);
-
-        saveUser(u);
+    @Autowired
+    public void setUserJdbcDao(UserJdbcDao userJdbcDao) {
+        this.userJdbcDao = userJdbcDao;
     }
+
+    @Autowired(required = false)
+    public void setServerConfig(ServerConfig serverConfig) {
+        this.serverConfig = serverConfig;
+    }
+
+    @Autowired(required = false)
+    public void setNotifyProducer(NotifyMessageProducer notifyProducer) {
+        this.notifyProducer = notifyProducer;
+    }
+
+    @Autowired(required = false)
+    public void setSpyClientFactory(SpyMemcachedClientFactory spyClientFactory) {
+        this.spyClientFactory = spyClientFactory;
+    }
+
 }

@@ -16,11 +16,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.ResourceLoader;
-import org.springside.modules.utils.PropertyUtils;
+import org.springside.modules.utils.PropertiesUtils;
 
 public class DbUnitUtils {
 
-	private static Logger logger = LoggerFactory.getLogger(PropertyUtils.class);
+	private static Logger logger = LoggerFactory.getLogger(PropertiesUtils.class);
 	private static ResourceLoader resourceLoader = new DefaultResourceLoader();
 
 	/**

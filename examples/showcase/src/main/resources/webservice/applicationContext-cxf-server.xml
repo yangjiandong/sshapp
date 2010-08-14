@@ -43,7 +43,7 @@
 		</jaxws:inInterceptors>
 	</jaxws:endpoint>
 
-	<!-- 使用WS-Security中的明文密码认证机制并结合SpringSecurity的Endpoint -->
+	<!-- 使用WS-Security中的明文密码认证机制并结合SpringSecurity控制权限的Endpoint -->
 	<jaxws:endpoint id="userServiceWithSpringSecurityEP" address="/UserServiceWithSpringSecurity">
 		<jaxws:implementor ref="userWebService" />
 		<jaxws:inInterceptors>

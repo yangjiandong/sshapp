@@ -1,6 +1,7 @@
 package org.springside.examples.showcase.unit.common;
 
 import org.easymock.EasyMock;
+import org.easymock.IMocksControl;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -12,19 +13,21 @@ import org.springside.examples.showcase.common.service.ServiceException;
 
 public class AccountManagerTest extends Assert {
 
+	private IMocksControl control = EasyMock.createControl();
+
 	private AccountManager accountManager;
 	private UserDao mockUserDao;
 
 	@Before
 	public void setUp() {
 		accountManager = new AccountManager();
-		mockUserDao = EasyMock.createMock(UserDao.class);
+		mockUserDao = control.createMock(UserDao.class);
 		accountManager.setUserDao(mockUserDao);
 	}
 
 	@After
 	public void tearDown() {
-		EasyMock.verify(mockUserDao);
+		control.verify();
 	}
 
 	@Test
@@ -35,7 +38,7 @@ public class AccountManagerTest extends Assert {
 		user.setId("2");
 
 		mockUserDao.save(user);
-		EasyMock.replay(mockUserDao);
+		control.replay();
 
 		//正常保存用户.
 		accountManager.saveUser(user);

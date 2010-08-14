@@ -21,7 +21,7 @@
 		<config>src/main/resources/jms/applicationContext-advanced.xml</config>
 		<config>src/main/resources/jms/applicationContext-simple.xml</config>
 		<config>src/main/resources/cache/applicationContext-ehcache.xml</config>
-		<config>src/main/resources/webservice/applicationContext-jersey-server.xml</config>
+		<config>src/main/resources/common/applicationContext-jdbc.xml</config>
 	</configs>
 	<configSets>
 	</configSets>

@@ -10,7 +10,7 @@ public class UIDGeneratorTest extends Assert {
 	public void generateId() {
 		UIDGenerator generator = new UIDGenerator();
 		String id = (String) generator.generate(null, null);
-		System.out.println(id);
 		assertTrue(id.length() == 16);
+		System.out.println(id);
 	}
 }

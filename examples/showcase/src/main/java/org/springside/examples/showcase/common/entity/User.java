@@ -13,6 +13,7 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springside.examples.showcase.orm.hibernate.AuditableEntity;
@@ -120,6 +121,7 @@ public class User extends AuditableEntity {
 	}
 
 	@Transient
+	@JsonIgnore
 	public String getRoleNames() {
 		return ReflectionUtils.convertElementPropertyToString(roleList, "name", ", ");
 	}

@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
@@ -29,11 +28,15 @@ import javax.annotation.PreDestroy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springside.modules.utils.ThreadUtils;
+import org.springside.modules.utils.ThreadUtils.CustomizableThreadFactory;
 
 /**
- * 消费Queue中消息的任务基类.
+ * 单线程消费Queue中消息的任务基类.
  * 
- * 定义了任务的初始化流程及停止流程.
+ * 定义了QueueConsumer的启动关闭流程.
+ * 
+ * TODO:支持多线程执行.
  * 
  * @see QueuesHolder
  * 
@@ -45,11 +48,11 @@ public abstract class QueueConsumer implements Runnable {
 	protected Logger logger = LoggerFactory.getLogger(getClass());
 
 	protected String queueName;
-	protected int shutdownWait = 10000;
+	protected int shutdownTimeout = Integer.MAX_VALUE;
 
 	protected boolean persistence = true;
 	protected String persistencePath = System.getProperty("java.io.tmpdir") + File.separator + "queue";
-	protected Object persistenceLock = new Object();
+	protected Object persistenceLock = new Object(); //用于在backup与restore间等待的锁.
 
 	protected BlockingQueue queue;
 	protected ExecutorService executor;
@@ -62,10 +65,10 @@ public abstract class QueueConsumer implements Runnable {
 	}
 
 	/**
-	 * 停止任务时最多等待的时间, 单位为毫秒, 默认为10秒.
+	 * 停止任务时最多等待的时间, 单位为毫秒.
 	 */
-	public void setShutdownWait(int shutdownWait) {
-		this.shutdownWait = shutdownWait;
+	public void setShutdownTimeout(int shutdownTimeout) {
+		this.shutdownTimeout = shutdownTimeout;
 	}
 
 	/**
@@ -86,20 +89,17 @@ public abstract class QueueConsumer implements Runnable {
 	 * 任务初始化函数.
 	 */
 	@PostConstruct
-	public void start() throws IOException, ClassNotFoundException {
+	public void start() throws IOException, ClassNotFoundException, InterruptedException {
+
 		queue = QueuesHolder.getQueue(queueName);
 
 		if (persistence) {
 			synchronized (persistenceLock) {
-				restore();
+				restoreQueue();
 			}
 		}
 
-		executor = Executors.newSingleThreadExecutor(new ThreadFactory() {
-			public Thread newThread(Runnable runable) {
-				return new Thread(runable, "Queue Consumer-" + queueName);
-			}
-		});
+		executor = Executors.newSingleThreadExecutor(new CustomizableThreadFactory("Queue Consumer-" + queueName));
 		executor.execute(this);
 	}
 
@@ -109,23 +109,21 @@ public abstract class QueueConsumer implements Runnable {
 	@PreDestroy
 	public void stop() throws IOException {
 		try {
-			executor.shutdownNow();
-			executor.awaitTermination(shutdownWait, TimeUnit.MILLISECONDS);
-		} catch (InterruptedException e) {
-			logger.debug("awaitTermination被中断", e);
-		}
-
-		if (persistence) {
-			synchronized (persistenceLock) {
-				backup();
+			ThreadUtils.normalShutdown(executor, shutdownTimeout, TimeUnit.MILLISECONDS);
+		} finally {
+			if (persistence) {
+				synchronized (persistenceLock) {
+					backupQueue();
+				}
 			}
 		}
+
 	}
 
 	/**
 	 * 保存队列中的消息到文件.
 	 */
-	public void backup() throws IOException {
+	protected void backupQueue() throws IOException {
 		List list = new ArrayList();
 		queue.drainTo(list);
 
@@ -151,7 +149,7 @@ public abstract class QueueConsumer implements Runnable {
 	/**
 	 * 载入持久化文件中的消息到队列.
 	 */
-	public void restore() throws ClassNotFoundException, IOException {
+	protected void restoreQueue() throws ClassNotFoundException, IOException, InterruptedException {
 		ObjectInputStream ois = null;
 		File file = new File(getPersistenceDir(), getPersistenceFileName());
 
@@ -162,7 +160,7 @@ public abstract class QueueConsumer implements Runnable {
 				while (true) {
 					try {
 						Object message = ois.readObject();
-						queue.offer(message);
+						queue.put(message);
 						count++;
 					} catch (EOFException e) {
 						break;

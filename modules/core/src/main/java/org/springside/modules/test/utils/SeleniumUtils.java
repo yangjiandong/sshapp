@@ -1,6 +1,6 @@
 /*
  * $HeadURL: https://springside.googlecode.com/svn/springside3/trunk/modules/core/src/main/java/org/springside/modules/test/utils/SeleniumUtils.java $
- * $Id: SeleniumUtils.java 1079 2010-05-14 15:23:06Z calvinxiu $
+ * $Id: SeleniumUtils.java 1141 2010-07-31 17:54:22Z calvinxiu $
  * Copyright (c) 2010 by Ericsson, all rights reserved.
  */
 
@@ -37,7 +37,7 @@ public class SeleniumUtils {
 
 	public static final String REMOTE = "remote";
 
-	public static Logger logger = LoggerFactory.getLogger(SeleniumUtils.class);
+	private static Logger logger = LoggerFactory.getLogger(SeleniumUtils.class);
 
 	public static WebDriver buildDriver(String driverName) throws Exception {
 		WebDriver driver = null;

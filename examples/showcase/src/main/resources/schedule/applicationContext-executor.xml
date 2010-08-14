@@ -4,28 +4,22 @@
 	default-lazy-init="true">
 
 	<description>使用JDK ScheduledExecutorService的定时任务配置</description>
-
-	<!-- ScheduledThreadPoolExecutor集成工厂 -->
-	<bean class="org.springframework.scheduling.concurrent.ScheduledExecutorFactoryBean" lazy-init="false">
-		<property name="continueScheduledExecutionAfterException" value="true" />
-		<property name="scheduledExecutorTasks">
-			<list>
-				<ref bean="scheduledExecutorTask" />
-			</list>
-		</property>
-	</bean>
-
-	<!-- Task的封装 -->
-	<bean id="scheduledExecutorTask" class="org.springframework.scheduling.concurrent.ScheduledExecutorTask">
-		<property name="runnable" ref="executorJob" />
-		<!-- 首次执行延期2秒 -->
-		<property name="delay" value="2000" />
-		<!-- 每次执行间隔1小时 -->
-		<property name="period" value="3600000" />
-		<!-- 固定间隔,否则默认fixDelay会等到前一个任务完成后才开始计时. -->
-		<property name="fixedRate" value="true" />
-	</bean>
-
+	
 	<!-- 定期执行的业务类 -->
-	<bean id="executorJob" class="org.springside.examples.showcase.schedule.ExecutorJob"/>
+	<bean id="jdkExecutorJob" class="org.springside.examples.showcase.schedule.JdkExecutorJob" lazy-init="false">
+		<!-- 每次执行间隔60秒 -->
+		<property name="period" value="60" />
+		<!-- 首次执行延期2秒 -->
+		<property name="initialDelay" value="2" />
+		<!-- shutdown时等待任务完成, 最多等待20秒 -->
+		<property name="shutdownTimeout" value="20" />
+	</bean>
+	
+	<!-- 根据Cron表达式执行的业务类  -->
+	<bean id="springCronJob" class="org.springside.examples.showcase.schedule.SpringCronJob" lazy-init="false">
+		<!-- cron表达式 -->
+		<property name="cronExpression" value="* 15 9-17 * * MON-FRI"/>
+		<!-- shutdown时等待任务完成, 最多等待20秒 -->
+		<property name="shutdownTimeout" value="20" />
+	</bean>
 </beans>

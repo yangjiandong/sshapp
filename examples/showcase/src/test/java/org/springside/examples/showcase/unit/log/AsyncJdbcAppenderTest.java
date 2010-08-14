@@ -5,12 +5,13 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.modules.test.spring.SpringTxTestCase;
-import org.springside.modules.test.utils.TimeUtils;
+import org.springside.modules.utils.ThreadUtils;
 
-@ContextConfiguration(locations = { "/applicationContext-test.xml", "/jmx/applicationContext-jmx-server.xml",
-		"/jmx/applicationContext-jmx-client.xml", "/log/applicationContext-log.xml" })
+@DirtiesContext
+@ContextConfiguration(locations = { "/applicationContext-test.xml", "/log/applicationContext-log.xml" })
 public class AsyncJdbcAppenderTest extends SpringTxTestCase {
 
 	private static final String LOG_TABLE_NAME = "SS_LOG";
@@ -27,14 +28,14 @@ public class AsyncJdbcAppenderTest extends SpringTxTestCase {
 		for (; i <= 5; i++) {
 			dbLogger.info("helloworld" + i);
 		}
-		TimeUtils.sleep(1000);
+		ThreadUtils.sleep(1000);
 		assertEquals(oldLogsCount, this.countRowsInTable(LOG_TABLE_NAME));
 
 		//再插入5条记录,达到batchSize(10),插入数据库.
 		for (; i <= 10; i++) {
 			dbLogger.info("helloworld" + i);
 		}
-		TimeUtils.sleep(1000);
+		ThreadUtils.sleep(1000);
 		assertEquals(oldLogsCount + 10, this.countRowsInTable(LOG_TABLE_NAME));
 	}
 

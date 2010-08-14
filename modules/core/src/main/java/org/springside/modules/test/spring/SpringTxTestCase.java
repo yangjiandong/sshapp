@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * 
- * $Id: SpringTxTestCase.java 997 2010-03-23 13:34:47Z calvinxiu $
+ * $Id: SpringTxTestCase.java 1141 2010-07-31 17:54:22Z calvinxiu $
  */
 package org.springside.modules.test.spring;
 
@@ -38,7 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 @TestExecutionListeners(TransactionalTestExecutionListener.class)
-public class SpringTxTestCase extends SpringContextTestCase {
+public abstract class SpringTxTestCase extends SpringContextTestCase {
 
 	protected DataSource dataSource;
 

@@ -3,6 +3,7 @@ package org.ssh.app.common.entity;
 import com.google.common.collect.Lists;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -133,6 +134,7 @@ public class User extends AuditableEntity {
     }
 
     @Transient
+    //@JsonIgnore
     public String getRoleNames() {
         return ReflectionUtils.convertElementPropertyToString(roleList, "name",
             ", ");

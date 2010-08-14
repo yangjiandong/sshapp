@@ -5,18 +5,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URL;
 
 import javax.activation.DataHandler;
-import javax.xml.namespace.QName;
-import javax.xml.ws.Service;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.junit.Test;
 import org.springside.examples.showcase.functional.BaseFunctionalTestCase;
 import org.springside.examples.showcase.ws.server.LargeImageWebService;
 import org.springside.examples.showcase.ws.server.SmallImageWebService;
-import org.springside.examples.showcase.ws.server.WsConstants;
 import org.springside.examples.showcase.ws.server.result.LargeImageResult;
 import org.springside.examples.showcase.ws.server.result.SmallImageResult;
 
@@ -31,10 +28,11 @@ public class BinaryWebServiceTest extends BaseFunctionalTestCase {
 	public void getSmallImage() throws IOException {
 
 		//创建SmallImageService
-		URL wsdlURL = new URL("http://localhost:8080/showcase/services/SmallImageService?wsdl");
-		QName serviceName = new QName(WsConstants.NS, "SmallImageService");
-		Service service = Service.create(wsdlURL, serviceName);
-		SmallImageWebService imageService = service.getPort(SmallImageWebService.class);
+		String address = BASE_URL + "/services/SmallImageService";
+		JaxWsProxyFactoryBean proxyFactory = new JaxWsProxyFactoryBean();
+		proxyFactory.setAddress(address);
+		proxyFactory.setServiceClass(SmallImageWebService.class);
+		SmallImageWebService imageService = (SmallImageWebService) proxyFactory.create();
 
 		//调用SmallImageService
 		SmallImageResult result = imageService.getImage();
@@ -52,10 +50,11 @@ public class BinaryWebServiceTest extends BaseFunctionalTestCase {
 	public void getLargeImage() throws IOException {
 
 		//创建LargeImageService
-		URL wsdlURL = new URL("http://localhost:8080/showcase/services/LargeImageService?wsdl");
-		QName serviceName = new QName(WsConstants.NS, "LargeImageService");
-		Service service = Service.create(wsdlURL, serviceName);
-		LargeImageWebService imageService = service.getPort(LargeImageWebService.class);
+		String address = BASE_URL + "/services/LargeImageService";
+		JaxWsProxyFactoryBean proxyFactory = new JaxWsProxyFactoryBean();
+		proxyFactory.setAddress(address);
+		proxyFactory.setServiceClass(LargeImageWebService.class);
+		LargeImageWebService imageService = (LargeImageWebService) proxyFactory.create();
 
 		//调用LargeImageService
 		LargeImageResult result = imageService.getImage();
@@ -75,5 +74,4 @@ public class BinaryWebServiceTest extends BaseFunctionalTestCase {
 		File tempFile = new File(tempFilePath);
 		assertTrue(tempFile.length() > 0);
 	}
-
 }

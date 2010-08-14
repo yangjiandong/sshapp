@@ -32,5 +32,5 @@ public abstract class IgnorePrefixReverseEngineeringStrategy extends DelegatingR
 	/**
 	 * 在子类重载的忽略的长度.
 	 */
-	abstract protected int getPrefixLength();
+	protected abstract int getPrefixLength();
 }

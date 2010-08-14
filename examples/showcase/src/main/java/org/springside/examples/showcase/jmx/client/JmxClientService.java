@@ -21,9 +21,7 @@ import org.springside.modules.jmx.JmxClientTemplate;
  */
 public class JmxClientService {
 
-	//ObjectName定义
-	public static final String SERVER_CONFIG_MBEAN_NAME = "Showcase:name=serverConfig,type=ServerConfig";
-	public static final String HIBERNATE_MBEAN_NAME = "Showcase:name=hibernateStatistics,type=StatisticsService";
+	public static final String TRACE_MBEAN_NAME = "Showcase:name=trace,type=Trace";
 
 	private static Logger logger = LoggerFactory.getLogger(JmxClientService.class);
 
@@ -64,9 +62,10 @@ public class JmxClientService {
 		Assert.hasText(port, "port参数不能为空");
 
 		try {
-			String serviceUrl = "service:jmx:rmi:///jndi/rmi://" + host + ":" + port + "/showcase";
+			String serviceUrl = "service:jmx:rmi:///jndi/rmi://" + host + ":" + port + "/jmxrmi";
 			jmxClientTemplate = new JmxClientTemplate(serviceUrl, userName, passwd);
-			serverConfigMBean = jmxClientTemplate.createMBeanProxy(SERVER_CONFIG_MBEAN_NAME, ServerConfigMBean.class);
+			serverConfigMBean = jmxClientTemplate.createMBeanProxy(ServerConfigMBean.SERVER_CONFIG_MBEAN_NAME,
+					ServerConfigMBean.class);
 		} catch (Exception e) {
 			logger.error("连接Jmx Server 或 创建Mbean Proxy时失败", e);
 		}
@@ -111,48 +110,24 @@ public class JmxClientService {
 
 	//-- 无MBean的Class文件时直接访问属性调用方法的演示 --//
 	/**
-	 * 获取Hibernate统计数据.
+	 * 获取TraceMBean的是否已打开Trace属性.
 	 */
-	public HibernateStatistics getHibernateStatistics() {
-		long sessionOpenCount = (Long) jmxClientTemplate.getAttribute(HIBERNATE_MBEAN_NAME, "SessionOpenCount");
-		long sessionCloseCount = (Long) jmxClientTemplate.getAttribute(HIBERNATE_MBEAN_NAME, "SessionCloseCount");
-
-		return new HibernateStatistics(sessionOpenCount, sessionCloseCount);
+	public Boolean getTraceStatus() {
+		return (Boolean) jmxClientTemplate.getAttribute(TRACE_MBEAN_NAME, "TraceStatus");
 	}
 
 	/**
-	 * 调用Hibernate MBean的logSummary函数.
+	 * 调用TraceMBean的startTrace函数.
 	 */
-	public void logSummary() {
-		jmxClientTemplate.inoke(HIBERNATE_MBEAN_NAME, "logSummary");
+	public void startTrace() {
+		jmxClientTemplate.inoke(TRACE_MBEAN_NAME, "startTrace");
 	}
 
 	/**
-	 * 保存Hibernate统计数据的本地DTO.
+	 * 调用TraceMBean的stopTrace函数.
 	 */
-	public static class HibernateStatistics {
-		private long sessionOpenCount;
-		private long sessionCloseCount;
-
-		public HibernateStatistics(long sessionOpenCount, long sessionCloseCount) {
-			this.sessionOpenCount = sessionOpenCount;
-			this.sessionCloseCount = sessionCloseCount;
-		}
-
-		public long getSessionOpenCount() {
-			return sessionOpenCount;
-		}
-
-		public void setSessionOpenCount(long sessionOpenCount) {
-			this.sessionOpenCount = sessionOpenCount;
-		}
-
-		public long getSessionCloseCount() {
-			return sessionCloseCount;
-		}
-
-		public void setSessionCloseCount(long sessionCloseCount) {
-			this.sessionCloseCount = sessionCloseCount;
-		}
+	public void stopTrace() {
+		jmxClientTemplate.inoke(TRACE_MBEAN_NAME, "stopTrace");
 	}
+
 }

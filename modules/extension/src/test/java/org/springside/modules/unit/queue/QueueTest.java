@@ -19,7 +19,7 @@ import org.springside.modules.queue.QueuesHolder;
 public class QueueTest extends Assert {
 
 	@Test
-	public void backup() throws IOException, ClassNotFoundException {
+	public void backup() throws IOException, ClassNotFoundException, InterruptedException {
 		String queueName = "testBackup";
 		String filePath = System.getProperty("java.io.tmpdir") + File.separator + "queue" + File.separator + queueName;
 
@@ -55,7 +55,7 @@ public class QueueTest extends Assert {
 	}
 
 	@Test
-	public void restore() throws IOException, ClassNotFoundException {
+	public void restore() throws IOException, ClassNotFoundException, InterruptedException {
 		String queueName = "testRestore";
 		String filePath = System.getProperty("java.io.tmpdir") + File.separator + "queue" + File.separator + queueName;
 
@@ -89,6 +89,7 @@ public class QueueTest extends Assert {
 	}
 
 	static class MockConsumerTask extends QueueConsumer {
+		@Override
 		public void run() {
 		}
 	}

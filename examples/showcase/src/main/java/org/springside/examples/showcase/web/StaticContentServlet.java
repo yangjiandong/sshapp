@@ -17,15 +17,14 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import org.springside.examples.showcase.cache.EhcacheImpl;
 import org.springside.modules.web.ServletUtils;
 
 /**
  * 本地静态内容展示与下载的Servlet.
  * 
  * 演示文件高效读取,客户端缓存控制及Gzip压缩传输.
- * 使用EhCache缓存静态内容基本信息(可切换到其他缓存方案)
- * 
+ * 可使用org.springside.examples.showcase.cache包下的Ehcache或本地Map缓存静态内容基本信息(未演示).
+ *  
  * 演示访问地址为：
  * static-content?contentPath=img/logo.jpg
  * static-content?contentPath=img/logo.jpg&download=true
@@ -43,16 +42,15 @@ public class StaticContentServlet extends HttpServlet {
 	/** 需要被Gzip压缩的最小文件大小. */
 	private static final int GZIP_MINI_LENGTH = 512;
 
-	/** Content基本信息缓存. */
-	private EhcacheImpl contentInfoCache;
-
 	private MimetypesFileTypeMap mimetypesFileTypeMap = new MimetypesFileTypeMap();
+
+	private ApplicationContext appcationContext;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//获取请求内容的基本信息.
 		String contentPath = request.getParameter("contentPath");
-		ContentInfo contentInfo = getContentInfoFromCache(contentPath);
+		ContentInfo contentInfo = getContentInfo(contentPath);
 
 		//根据Etag或ModifiedSince Header判断客户端的缓存文件是否有效, 如仍有效则设置返回码为304,直接返回.
 		if (!ServletUtils.checkIfModifiedSince(request, response, contentInfo.lastModified)
@@ -104,11 +102,7 @@ public class StaticContentServlet extends HttpServlet {
 		//Http1.1 header
 		String acceptEncoding = request.getHeader("Accept-Encoding");
 
-		if (StringUtils.contains(acceptEncoding, "gzip")) {
-			return true;
-		} else {
-			return false;
-		}
+		return StringUtils.contains(acceptEncoding, "gzip");
 	}
 
 	/**
@@ -121,30 +115,17 @@ public class StaticContentServlet extends HttpServlet {
 	}
 
 	/**
-	 * 在初始化函数中创建内容信息缓存.
+	 * 保存appcationContext以备后用.
 	 */
 	@Override
 	public void init() throws ServletException {
-		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
-		contentInfoCache.init(context);
-	}
-
-	/**
-	* 从缓存中获取Content基本信息, 如不存在则进行创建.
-	*/
-	private ContentInfo getContentInfoFromCache(String path) {
-		Object info = contentInfoCache.get(path);
-		if (info == null) {
-			ContentInfo content = createContentInfo(path);
-			contentInfoCache.put(content.contentPath, content);
-		}
-		return (ContentInfo) info;
+		appcationContext = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 	}
 
 	/**
 	 * 创建Content基本信息.
 	 */
-	private ContentInfo createContentInfo(String contentPath) {
+	private ContentInfo getContentInfo(String contentPath) {
 		ContentInfo contentInfo = new ContentInfo();
 
 		String realFilePath = getServletContext().getRealPath(contentPath);
@@ -177,13 +158,13 @@ public class StaticContentServlet extends HttpServlet {
 	 * 定义Content的基本信息.
 	 */
 	static class ContentInfo {
-		String contentPath;
-		File file;
-		String fileName;
-		int length;
-		String mimeType;
-		long lastModified;
-		String etag;
-		boolean needGzip;
+		protected String contentPath;
+		protected File file;
+		protected String fileName;
+		protected int length;
+		protected String mimeType;
+		protected long lastModified;
+		protected String etag;
+		protected boolean needGzip;
 	}
 }

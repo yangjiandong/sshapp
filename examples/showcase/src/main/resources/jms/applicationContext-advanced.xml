@@ -61,6 +61,8 @@
 		<!-- 初始5个Consumer, 可动态扩展到10 -->
 		<property name="concurrentConsumers" value="5" />
 		<property name="maxConcurrentConsumers" value="10" />
+		<!-- 设置消息确认模式为Client -->
+		<property name="sessionAcknowledgeModeName" value="CLIENT_ACKNOWLEDGE" />
 	</bean>
 
 	<!-- 异步接收Topic消息Container -->

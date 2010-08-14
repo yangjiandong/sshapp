@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * 
- * $Id: Groups.java 873 2010-01-18 16:38:24Z calvinxiu $
+ * $Id: Groups.java 1141 2010-07-31 17:54:22Z calvinxiu $
  */
 package org.springside.modules.test.groups;
 
@@ -26,10 +26,10 @@ public @interface Groups {
 	/**
 	 * 执行所有组别的测试.
 	 */
-	public static final String ALL = "all";
+	final String ALL = "all";
 
 	/**
 	 * 组别定义,默认为ALL.
 	 */
-	public String value() default ALL;
+	String value() default ALL;
 }

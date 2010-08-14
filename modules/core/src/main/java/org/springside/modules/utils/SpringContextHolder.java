@@ -3,10 +3,13 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * 
- * $Id: SpringContextHolder.java 1000 2010-03-23 17:50:12Z calvinxiu $
+ * $Id: SpringContextHolder.java 1112 2010-07-01 15:51:12Z calvinxiu $
  */
 package org.springside.modules.utils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
@@ -15,15 +18,33 @@ import org.springframework.context.ApplicationContextAware;
  * 
  * @author calvin
  */
-public class SpringContextHolder implements ApplicationContextAware {
+public class SpringContextHolder implements ApplicationContextAware, DisposableBean {
 
-	private static ApplicationContext applicationContext;
+	private static ApplicationContext applicationContext = null;
+
+	private static Logger logger = LoggerFactory.getLogger(SpringContextHolder.class);
 
 	/**
-	 * 实现ApplicationContextAware接口的context注入函数, 将其存入静态变量.
+	 * 实现ApplicationContextAware接口, 注入Context到静态变量中.
 	 */
 	public void setApplicationContext(ApplicationContext applicationContext) {
+		logger.debug("注入ApplicationContext到SpringContextHolder:" + applicationContext);
+
+		if (SpringContextHolder.applicationContext != null) {
+			logger.warn("SpringContextHolder中的ApplicationContext被覆盖,原有Context为:"
+					+ SpringContextHolder.applicationContext);
+		}
+
 		SpringContextHolder.applicationContext = applicationContext; //NOSONAR
+	}
+
+	/**
+	 * 实现DisposableBean接口,在Context关闭时清理静态变量.
+	 */
+	@Override
+	public void destroy() throws Exception {
+		SpringContextHolder.cleanApplicationContext();
+
 	}
 
 	/**
@@ -56,9 +77,13 @@ public class SpringContextHolder implements ApplicationContextAware {
 	 * 清除applicationContext静态变量.
 	 */
 	public static void cleanApplicationContext() {
+		logger.debug("清除SpringContextHolder中的ApplicationContext:" + applicationContext);
 		applicationContext = null;
 	}
 
+	/**
+	 * 检查ApplicationContext不为空.
+	 */
 	private static void checkApplicationContext() {
 		if (applicationContext == null) {
 			throw new IllegalStateException("applicaitonContext未注入,请在applicationContext.xml中定义SpringContextHolder");

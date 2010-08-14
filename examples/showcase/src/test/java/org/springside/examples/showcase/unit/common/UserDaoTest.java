@@ -2,14 +2,20 @@ package org.springside.examples.showcase.unit.common;
 
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.hibernate.Hibernate;
+import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springside.examples.showcase.common.dao.UserDao;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.data.UserData;
-import org.springside.examples.showcase.unit.BaseTxTestCase;
+import org.springside.modules.test.spring.SpringTxTestCase;
+import org.springside.modules.test.utils.DbUnitUtils;
 
 import com.google.common.collect.Lists;
 
@@ -19,9 +25,27 @@ import com.google.common.collect.Lists;
  * @author calvin
  */
 @ContextConfiguration(locations = { "/applicationContext-test.xml" })
-public class UserDaoTest extends BaseTxTestCase {
+//演示指定非默认名称的TransactionManager.
+@TransactionConfiguration(transactionManager = "transactionManager")
+public class UserDaoTest extends SpringTxTestCase {
+
+	private static DataSource dataSourceHolder = null;
+
 	@Autowired
 	private UserDao userDao;
+
+	@Before
+	public void loadDefaultData() throws Exception {
+		if (dataSourceHolder == null) {
+			DbUnitUtils.loadData(dataSource, "/data/default-data.xml");
+			dataSourceHolder = dataSource;
+		}
+	}
+
+	@AfterClass
+	public static void cleanDefaultData() throws Exception {
+		DbUnitUtils.removeData(dataSourceHolder, "/data/default-data.xml");
+	}
 
 	@Test
 	public void eagerFetchCollection() {

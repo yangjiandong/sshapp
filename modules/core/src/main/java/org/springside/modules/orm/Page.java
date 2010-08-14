@@ -89,7 +89,6 @@ public class Page<T> {
         this.pageSize = pageSize;
     }
 
-
     public Page(HttpServletRequest request) {
         this.req = request;
 

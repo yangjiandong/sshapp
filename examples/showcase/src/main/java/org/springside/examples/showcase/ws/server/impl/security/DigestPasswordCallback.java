@@ -18,7 +18,6 @@ import org.springside.examples.showcase.common.service.AccountManager;
  */
 public class DigestPasswordCallback implements CallbackHandler {
 
-	@Autowired
 	private AccountManager accountManager;
 
 	/**
@@ -33,5 +32,10 @@ public class DigestPasswordCallback implements CallbackHandler {
 		}
 
 		pc.setPassword(user.getPlainPassword());
+	}
+
+	@Autowired
+	public void setAccountManager(AccountManager accountManager) {
+		this.accountManager = accountManager;
 	}
 }

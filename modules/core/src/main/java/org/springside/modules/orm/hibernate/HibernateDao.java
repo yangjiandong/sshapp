@@ -87,7 +87,6 @@ public class HibernateDao<T, PK extends Serializable> extends SimpleHibernateDao
         Assert.notNull(page, "page不能为空");
 
         Query q = createQuery(hql, values);
-        q.setCacheable(true);
 
         if (page.isAutoCount()) {
             long totalCount = countHqlResult(hql, values);
@@ -114,7 +113,6 @@ public class HibernateDao<T, PK extends Serializable> extends SimpleHibernateDao
         Assert.notNull(page, "page不能为空");
 
         Query q = createQuery(hql, values);
-        q.setCacheable(true);
 
         if (page.isAutoCount()) {
             long totalCount = countHqlResult(hql, values);
@@ -141,7 +139,6 @@ public class HibernateDao<T, PK extends Serializable> extends SimpleHibernateDao
         Assert.notNull(page, "page不能为空");
 
         Criteria c = createCriteria(criterions);
-        c.setCacheable(true);
 
         if (page.isAutoCount()) {
             int totalCount = countCriteriaResult(c);

@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *
- * $Id: SimpleHibernateDao.java 1005 2010-03-25 15:50:00Z calvinxiu $
+ * $Id: SimpleHibernateDao.java 1139 2010-07-31 15:25:32Z calvinxiu $
  */
 package org.springside.modules.orm.hibernate;
 
@@ -209,7 +209,6 @@ public class SimpleHibernateDao<T, PK extends Serializable> {
         return (X) createQuery(hql, values).uniqueResult();
     }
 
-
     /**
      * 按HQL查询对象列表，只返回第一个
      *
@@ -315,6 +314,10 @@ public class SimpleHibernateDao<T, PK extends Serializable> {
      * Hibernate.initialize(user.getRoles())，初始化User的直接属性和关联集合.
      * Hibernate.initialize(user.getDescription())，初始化User的直接属性和延迟加载的Description属性.
      */
+    public void initProxyProperty(Object proxyProperty) {
+        Hibernate.initialize(proxyProperty);
+    }
+
     public void initEntity(T entity) {
         Hibernate.initialize(entity);
     }

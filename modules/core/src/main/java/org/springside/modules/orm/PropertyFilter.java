@@ -49,7 +49,6 @@ public class PropertyFilter {
     private Class<?> propertyType = null;
     private Object propertyValue = null;
     //private MatchType matchType = null;
-
     private String propertyName;
     private Object value;
     private MatchType matchType = MatchType.EQ;

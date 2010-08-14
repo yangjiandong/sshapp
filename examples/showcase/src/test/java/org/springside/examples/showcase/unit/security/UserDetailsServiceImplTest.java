@@ -1,6 +1,7 @@
 package org.springside.examples.showcase.unit.security;
 
 import org.easymock.EasyMock;
+import org.easymock.IMocksControl;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -16,19 +17,21 @@ import org.springside.examples.showcase.security.UserDetailsServiceImpl;
 
 public class UserDetailsServiceImplTest extends Assert {
 
+	private IMocksControl control = EasyMock.createControl();
+
 	private UserDetailsServiceImpl userDetailsService;
 	private AccountManager mockAccountManager;
 
 	@Before
 	public void setUp() {
 		userDetailsService = new UserDetailsServiceImpl();
-		mockAccountManager = EasyMock.createMock(AccountManager.class);
+		mockAccountManager = control.createMock(AccountManager.class);
 		userDetailsService.setAccountManager(mockAccountManager);
 	}
 
 	@After
 	public void tearDown() {
-		EasyMock.verify(mockAccountManager);
+		control.verify();
 	}
 
 	@Test
@@ -47,7 +50,7 @@ public class UserDetailsServiceImplTest extends Assert {
 
 		//录制脚本
 		EasyMock.expect(mockAccountManager.findUserByLoginName("admin")).andReturn(user);
-		EasyMock.replay(mockAccountManager);
+		control.replay();
 
 		//执行测试
 		OperatorDetails operator = (OperatorDetails) userDetailsService.loadUserByUsername(user.getLoginName());
@@ -64,7 +67,7 @@ public class UserDetailsServiceImplTest extends Assert {
 	public void loadUserByWrongUserName() {
 		//录制脚本
 		EasyMock.expect(mockAccountManager.findUserByLoginName("foo")).andReturn(null);
-		EasyMock.replay(mockAccountManager);
+		control.replay();
 
 		assertNull(userDetailsService.loadUserByUsername("foo"));
 	}

@@ -29,7 +29,7 @@
 
 	<!-- 使用WS-Security中的Digest密码认证机制的客户端, 不使用本XML直接在代码中直接定义. -->
 
-	<!-- 使用WS-Security中的明文密码认证机制访问与SpringSecurity结合EndPoint的客户端 -->
+	<!-- 使用WS-Security中的明文密码认证机制访问与SpringSecurity权限管理结合EndPoint的客户端 -->
 	<jaxws:client id="userServiceWithSpringSecurity" serviceClass="org.springside.examples.showcase.ws.server.UserWebService"
 		address="http://localhost:8080/showcase/services/UserServiceWithSpringSecurity">
 		<jaxws:outInterceptors>

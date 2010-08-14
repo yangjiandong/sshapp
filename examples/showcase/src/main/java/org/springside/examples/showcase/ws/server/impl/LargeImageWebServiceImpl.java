@@ -19,7 +19,9 @@ import org.springside.examples.showcase.ws.server.result.LargeImageResult;
 import org.springside.examples.showcase.ws.server.result.WSResult;
 
 /**
- * LargeImageWebService实现类.
+ * LargeImageWebService服务端实现类.
+ * 
+ * 客户端实现见功能测试用例.
  * 
  * @see LargeImageWebService
  * 

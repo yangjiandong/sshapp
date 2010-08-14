@@ -6,21 +6,22 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
-import org.ssh.app.common.entity.User;
 import org.springside.modules.orm.jdbc.SqlBuilder;
+import org.ssh.app.common.entity.User;
 
 import com.google.common.collect.Maps;
 
@@ -29,6 +30,7 @@ import com.google.common.collect.Maps;
  *
  * @author calvin
  */
+@Component
 public class UserJdbcDao {
 
     private static final String QUERY_USER_BY_ID = "select id, name, login_name from SS_USER where id=?";
@@ -57,13 +59,13 @@ public class UserJdbcDao {
         }
     }
 
-    @Autowired
+    @Resource
     public void setDataSource(DataSource dataSource) {
         jdbcTemplate = new SimpleJdbcTemplate(dataSource);
     }
 
-    @Autowired
-    public void setTransactionManager(PlatformTransactionManager transactionManager) {
+    @Resource
+    public void setDefaultTransactionManager(PlatformTransactionManager transactionManager) {
         transactionTemplate = new TransactionTemplate(transactionManager);
     }
 

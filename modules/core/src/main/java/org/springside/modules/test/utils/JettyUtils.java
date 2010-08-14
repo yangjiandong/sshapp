@@ -23,8 +23,9 @@ public class JettyUtils {
 	}
 
 	/**
-	 * 创建用于Functional TestJetty Server, 以src/main/webapp为Web应用目录.
-	 * 以test/resources/web.xml指向applicationContext-test.xml创建测试环境.
+	 * 创建用于Functional Test的Jetty Server:
+	 * 1.以src/main/webapp为Web应用目录.
+	 * 2.以test/resources/web.xml指向applicationContext-test.xml创建测试环境.
 	 */
 	public static Server buildTestServer(int port, String contextPath) {
 		Server server = new Server(port);

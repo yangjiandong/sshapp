@@ -2,6 +2,7 @@ package org.springside.modules.unit.utils;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springside.modules.utils.ReflectionUtils;
 import org.springside.modules.utils.SpringContextHolder;
@@ -11,8 +12,7 @@ public class SpringContextHolderTest extends Assert {
 	@Test
 	public void testGetBean() {
 
-		ReflectionUtils.setFieldValue(new SpringContextHolder(), "applicationContext", null);
-
+		SpringContextHolder.cleanApplicationContext();
 		try {
 			SpringContextHolder.getBean("foo");
 			fail("No exception throw for applicationContxt hadn't been init.");
@@ -20,10 +20,18 @@ public class SpringContextHolderTest extends Assert {
 
 		}
 
-		new ClassPathXmlApplicationContext("classpath:/applicationContext-core-test.xml");
+		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(
+				"classpath:/applicationContext-core-test.xml");
 		assertNotNull(SpringContextHolder.getApplicationContext());
-		assertNotNull(SpringContextHolder.getBean("springContextHolder"));
-		assertEquals(SpringContextHolder.class, SpringContextHolder.getBean(SpringContextHolder.class).getClass());
-	}
 
+		SpringContextHolder holderByName = SpringContextHolder.getBean("springContextHolder");
+		assertEquals(SpringContextHolder.class, holderByName.getClass());
+
+		SpringContextHolder holderByClass = SpringContextHolder.getBean(SpringContextHolder.class);
+		assertEquals(SpringContextHolder.class, holderByClass.getClass());
+
+		context.close();
+		assertNull(ReflectionUtils.getFieldValue(holderByName, "applicationContext"));
+
+	}
 }

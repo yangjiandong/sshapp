@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * 
- * $Id: HibernateUtils.java 1066 2010-04-30 16:25:19Z calvinxiu $
+ * $Id: HibernateUtils.java 1141 2010-07-31 17:54:22Z calvinxiu $
  */
 package org.springside.modules.orm.hibernate;
 
@@ -28,9 +28,6 @@ import org.springside.modules.web.ServletUtils;
  * @author calvin
  */
 public class HibernateUtils {
-
-	private HibernateUtils() {
-	}
 
 	/**
 	 * 根据对象ID集合,整理合并集合.

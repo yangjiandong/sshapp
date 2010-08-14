@@ -11,7 +11,7 @@
   <parent>
     <groupId>org.springside</groupId>
     <artifactId>springside3-parent</artifactId>
-    <version>3.3.2</version>
+    <version>3.3.3</version>
     <relativePath>../../modules/parent/pom.xml</relativePath>
   </parent>
 
@@ -389,10 +389,12 @@
       <artifactId>opencsv</artifactId>
     </dependency>
 
+    <!--
     <dependency>
       <groupId>com.googlecode.xmemcached</groupId>
       <artifactId>xmemcached</artifactId>
     </dependency>
+    -->
 
     <!-- Apache Tiles -->
     <dependency>

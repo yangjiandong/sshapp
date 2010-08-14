@@ -7,7 +7,6 @@
 
 	<description>Spring公共配置文件</description>
 
-
 	<!-- 数据源配置,在测试环境使用单连接 -->
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="org.h2.Driver" />

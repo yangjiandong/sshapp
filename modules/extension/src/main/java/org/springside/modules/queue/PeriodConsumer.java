@@ -10,26 +10,36 @@ package org.springside.modules.queue;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
+import org.springframework.util.Assert;
+
 /**
  * 采用定时批量读取Queue中消息策略的Consumer.
  */
 public abstract class PeriodConsumer extends QueueConsumer {
 
-	protected int batchSize = 10;
-	protected int period = 1000;
+	protected int batchSize = 0;
+	protected int period = 0;
 
 	/**
-	* 批量定时读取消息的队列大小, 默认为10.
+	* 批量定时读取消息的队列大小.
 	*/
 	public void setBatchSize(int batchSize) {
 		this.batchSize = batchSize;
 	}
 
 	/**
-	 * 批量定时读取的时间间隔,单位为毫秒,默认为1秒.
+	 * 批量定时读取的时间间隔,单位为毫秒.
 	 */
 	public void setPeriod(int period) {
 		this.period = period;
+	}
+
+	@PostConstruct
+	public void checkSetting() {
+		Assert.isTrue(batchSize > 0);
+		Assert.isTrue(period > 0);
 	}
 
 	/**
@@ -47,7 +57,7 @@ public abstract class PeriodConsumer extends QueueConsumer {
 				}
 			}
 		} catch (InterruptedException e) {
-			logger.debug("消费线程阻塞被中断");
+			// Ignore.
 		} finally {
 			//退出线程前调用清理函数.
 			clean();
@@ -63,5 +73,4 @@ public abstract class PeriodConsumer extends QueueConsumer {
 	 * 退出清理函数.
 	 */
 	protected abstract void clean();
-
 }

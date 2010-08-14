@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * 
- * $Id: JmxClientTemplate.java 763 2009-12-27 18:36:21Z calvinxiu $
+ * $Id: JmxClientTemplate.java 1085 2010-05-20 15:25:32Z calvinxiu $
  */
 package org.springside.modules.jmx;
 
@@ -87,7 +87,6 @@ public class JmxClientTemplate {
 	/**
 	 * 创建标准MBean代理.
 	 */
-	@SuppressWarnings("unchecked")
 	public <T> T createMBeanProxy(final String mbeanName, final Class<T> mBeanInterface) {
 		Assert.hasText(mbeanName, "mbeanName不能为空");
 		assertConnected();

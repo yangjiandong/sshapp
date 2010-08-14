@@ -23,7 +23,7 @@ public abstract class BlockingConsumer extends QueueConsumer {
 				processMessage(message);
 			}
 		} catch (InterruptedException e) {
-			logger.debug("消费线程阻塞被中断");
+			// Ignore.
 		} finally {
 			//退出线程前调用清理函数.
 			clean();

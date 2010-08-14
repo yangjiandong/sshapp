@@ -5,14 +5,14 @@
 
 	<description>JMX服务端配置</description>
 
-	<!-- 配置RMI注册服务器 -->
+	<!-- (可选)配置RMI注册服务器,可在命令行用-D定义实现 -->
 	<bean id="registry" class="org.springframework.remoting.rmi.RmiRegistryFactoryBean" lazy-init="false">
 		<property name="port" value="${jmx.rmi_port}" />
 	</bean>
 
-	<!-- 配置JMX远程连接 -->
+	<!-- (可选)配置JMX远程连接,可在命令行用-D定义实现 -->
 	<bean id="serverConnector" class="org.springframework.jmx.support.ConnectorServerFactoryBean" lazy-init="false">
-		<property name="serviceUrl" value="service:jmx:rmi:///jndi/rmi://${server.addr}:${jmx.rmi_port}/showcase" />
+		<property name="serviceUrl" value="service:jmx:rmi:///jndi/rmi://${server.addr}:${jmx.rmi_port}/jmxrmi" />
 		<property name="environment">
 			<map>
 				<!-- 认证配置,文件路径需为绝对路径 -->
@@ -33,8 +33,6 @@
 		<property name="notificationMailEnabled" value="true" />
 	</bean>
 
-	<!-- Hibernate Statistics MBean-->
-	<bean id="hibernateStatistics" class="org.hibernate.jmx.StatisticsService">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
+	<!-- Trace控制 MBean-->
+	<bean id="traceMBean" class="org.springside.examples.showcase.log.trace.TraceMBean"/>
 </beans>

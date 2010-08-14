@@ -11,7 +11,7 @@
 	<script src="${ctx}/js/jquery.js" type="text/javascript"></script>
 	<script type="text/javascript">
 
-		//系统配置(MBean代理)
+		//系统配置(MBean代理)//
 		//动态提交表单保存服务器配置.
 		function saveConfig() {
 			$.get("jmx-client!saveConfig.action?" + $("form").serialize(), function(data) {
@@ -24,21 +24,20 @@
 			$.getJSON("jmx-client!refreshConfig.action", function(data) {
 				$('#nodeName').val(data.nodeName);
 				$('input:radio[name=notificationMailEnabled]').val([data.notificationMailEnabled]);
-				$('#updateMessage').text(data.message).show().fadeOut(2000);
+				$('#refreshMessage').text(data.message).show().fadeOut(2000);
 			});
 		}
 
-		//Hibernate运行统计(直接读取属性/调用方法)
-		//动态获取服务器最新状态,返回JSON对象.
-		function resetStatistics() {
-			$.get("jmx-client!resetStatistics.action?statisticsName=" + $('#statisticsName').val(), function(data) {
-				updateStatistics();
-			});
+		//Trace控制(直接读取属性/调用方法)//
+		//动态调用JMX函数start/stopTrace().
+		function startTrace() {
+			$.get("jmx-client!startTrace.action");
+			$('#traceStatus').text("true");
 		}
 
-		//动态调用JMX函数logsummary().
-		function logSummary() {
-			$.get("jmx-client!logSummary.action");
+		function stopTrace() {
+			$.get("jmx-client!stopTrace.action");
+			$('#traceStatus').text("false");
 		}
 	</script>
 </head>
@@ -61,7 +60,7 @@
 		<h2>用户故事：</h2>
 		<div>
 			使用JMX动态配置服务节点的系统变量与Log4J日志等级,并实时监控Hibernate运行统计。<br/>
-			客户端可使用JConsole, 远程进程URL为 service:jmx:rmi:///jndi/rmi://localhost:1099/showcase
+			客户端可使用JConsole, 远程进程URL为 localhost:1099 或完整版的service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi
 		</div>
 		
 		<div class="yui-g">
@@ -82,8 +81,8 @@
 				<tr>
 					<td colspan="2">
 						<input type="button" value="保存配置" onclick="saveConfig();"/>&nbsp;&nbsp;
-						<input type="button" value="刷新配置" onclick="updateConfig();"/>
-						<span id="saveMessage"></span><span id="updateMessage"></span>
+						<input type="button" value="刷新配置" onclick="refreshConfig();"/>
+						<span id="saveMessage"></span><span id="refreshMessage"></span>
 					</td>
 				</tr>
 			</table>
@@ -91,11 +90,11 @@
 		</div>
 
 		<div class="yui-u">
-			<h2>Hibernate运行统计(反射读取属性/调用方法)</h2>
+			<h2>Trace控制(反射读取属性/调用方法)</h2>
 			<div>
-				打开数据库连接:${hibernateStatistics.sessionOpenCount}<br/>
-				关闭数据库连接:${hibernateStatistics.sessionCloseCount}<br/>
-				<input type="button" value="在日志打印Hibernate统计信息" onclick="logSummary();"/>
+				是否已开始Trace:<span id="traceStatus">${traceStarted}</span><br/>
+				<input type="button" value="开始Trace" onclick="startTrace();"/> &nbsp;&nbsp;
+				<input type="button" value="停止Trace" onclick="stopTrace();"/>
 			</div>
 		</div>
 		</div>
