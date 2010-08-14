@@ -47,7 +47,7 @@
   </bean>
 
   <!-- 使用Spring JmsTemplate的消息生产者 -->
-  <bean id="advancedNotifyMessageProducer" class="org.springside.examples.showcase.jms.advanced.AdvancedNotifyMessageProducer">
+  <bean id="advancedNotifyMessageProducer" class="org.ssh.app.jms.advanced.AdvancedNotifyMessageProducer">
     <property name="jmsTemplate" ref="advancedJmsTemplate" />
     <property name="notifyQueue" ref="advancedNotifyQueue" />
     <property name="notifyTopic" ref="advancedNotifyTopic" />

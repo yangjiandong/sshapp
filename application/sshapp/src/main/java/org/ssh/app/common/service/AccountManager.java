@@ -1,5 +1,6 @@
 package org.ssh.app.common.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
@@ -15,8 +16,10 @@ import org.springside.modules.memcached.SpyMemcachedClient;
 import org.springside.modules.memcached.SpyMemcachedClientFactory;
 import org.springside.modules.security.springsecurity.SpringSecurityUtils;
 import org.ssh.app.cache.MemcachedObjectType;
+import org.ssh.app.common.dao.RoleDao;
 import org.ssh.app.common.dao.UserDao;
 import org.ssh.app.common.dao.UserJdbcDao;
+import org.ssh.app.common.entity.Role;
 import org.ssh.app.common.entity.User;
 import org.ssh.app.jms.simple.NotifyMessageProducer;
 import org.ssh.app.jmx.server.ServerConfig;
@@ -45,6 +48,9 @@ public class AccountManager {
 
     private PasswordEncoder encoder = new ShaPasswordEncoder();
 
+    @Autowired
+    private RoleDao roleDao;
+
     /**
      * 在保存用户时,发送用户修改通知消息, 由消息接收者异步进行较为耗时的通知邮件发送.
      *
@@ -72,7 +78,8 @@ public class AccountManager {
      * 判断是否超级管理员.
      */
     private boolean isSupervisor(User user) {
-        return (user.getId() != null && user.getId().equals("1"));
+        //return (user.getId() != null && user.getId().equals("1"));
+        return (user.getLoginName() != null && user.getLoginName().equals("admin"));
     }
 
     @Transactional(readOnly = true)
@@ -196,6 +203,34 @@ public class AccountManager {
     @Autowired(required = false)
     public void setSpyClientFactory(SpyMemcachedClientFactory spyClientFactory) {
         this.spyClientFactory = spyClientFactory;
+    }
+
+  //初始
+    public void initData() {
+        if (this.userDao.getUserCount().longValue() != 0) {
+            return;
+        }
+
+        Role r = new Role();
+        r.setName("admin");
+        r.setDesc("系统管理员角色");
+        this.roleDao.save(r);
+
+        List<Role>rs = new ArrayList<Role>();
+        rs.add(r);
+
+        User u = new User();
+        //u.setId("1");
+        u.setName("管理员");
+        u.setLoginName("admin");
+        u.setPlainPassword("123");
+        u.setEmail("admin@gmail.com");
+        u.setCreateBy("初始化");
+        u.setStatus("enabled");
+        //add role
+        u.setRoleList(rs);
+
+        saveUser(u);
     }
 
 }

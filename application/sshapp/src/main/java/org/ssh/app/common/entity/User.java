@@ -134,7 +134,7 @@ public class User extends AuditableEntity {
     }
 
     @Transient
-    //@JsonIgnore
+    @JsonIgnore
     public String getRoleNames() {
         return ReflectionUtils.convertElementPropertyToString(roleList, "name",
             ", ");

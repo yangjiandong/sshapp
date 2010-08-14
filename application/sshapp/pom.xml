@@ -322,6 +322,20 @@
       <artifactId>quartz</artifactId>
     </dependency>
 
+    <!-- memcached begin-->
+    <dependency>
+      <groupId>spy</groupId>
+      <artifactId>memcached</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.thimbleware.jmemcached</groupId>
+      <artifactId>jmemcached-core</artifactId>
+      <!-- 为演示而改为runtime -->
+      <scope>runtime</scope>
+    </dependency>
+    <!-- memcached end -->
+
     <!-- logging begin -->
     <dependency>
       <groupId>org.slf4j</groupId>
