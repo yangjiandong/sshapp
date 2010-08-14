@@ -1,3 +1,24 @@
+2010.08.14
+-----------
+
+1. branch
+   --好像也有
+   --建立分支，推到服务器上
+   git branch 3.3.2
+   git push origin 3.3.2
+
+   --其他用户checkout分支
+   git fetch (origin)
+   git checkout -b 3.3.2 origin/3.3.2
+
+2. 升级3.3.3前
+
+  git tag -a 20100814
+
+   --推送到remote
+
+   git push origin 20100814
+
 2010.07.28
 -----------
 

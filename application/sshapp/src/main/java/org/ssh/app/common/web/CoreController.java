@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.ssh.app.common.service.AccountManager;
 import org.ssh.app.common.service.HzService;
@@ -46,7 +47,7 @@ public class CoreController {
     }
 
     // 提示初始基础数据
-    @RequestMapping(value = "/init/index")
+    @RequestMapping(value = "/init/index", method = RequestMethod.GET)
     public String index(HttpServletRequest request, HttpServletResponse response) {
 
         // //判断是否还要做初始化

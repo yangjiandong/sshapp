@@ -21,6 +21,7 @@ ssh
    有什么关系
 
 2、使用spring中的Log4jConfigListener有如如下好处：
+
    1. 动态的改变记录级别和策略，不需要重启Web应用，如《Effective Enterprise Java》所说。
    2. 把log文件定在 /WEB-INF/logs/ 而不需要写绝对路径。
 因为 系统把web目录的路径压入一个叫webapp.root的系统变量。这样写log文件路径时不用写绝对路径了.
@@ -51,8 +52,15 @@ log4j.appender.logfile.File=${webapp.root}/WEB-INF/logs/myfuse.log
    mvn  keytool:genkey
          keytool:clean
 
-   org.ssh.app.common.web.HttpsUrlRewritingInterceptor 例子运行没成功
+   org.ssh.app.common.web.HttpsUrlRewritingInterceptor 例子运行没成功。
+   采用/init/index，没找到匹配，
+   采用/init/*，index动作不会匹配到，随意采用一个不存在的动作，虽然报错，但会跳转到https
 
+5、/ /* 的区别
+   / 匹配路径
+   /* 匹配所有，采用该方式后，jsp后缀的页面也会被DispatcherServlet匹配，报找不到对应控制器,所以还是采用/
+
+   http://www.coderanch.com/t/364782/Servlets/java/there-key-difference-between-url
 
 2010.08.07
 ----------
