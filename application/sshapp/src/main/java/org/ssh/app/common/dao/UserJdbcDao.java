@@ -33,11 +33,11 @@ import com.google.common.collect.Maps;
 @Component
 public class UserJdbcDao {
 
-    private static final String QUERY_USER_BY_ID = "select id, name, login_name from SS_USER where id=?";
-    private static final String QUERY_USER_BY_IDS = "select id, name, login_name from SS_USER where id in(:ids)";
+    private static final String QUERY_USER_BY_ID = "select id, name, login_name from T_USERS where id=?";
+    private static final String QUERY_USER_BY_IDS = "select id, name, login_name from T_USERS where id in(:ids)";
     private static final String QUERY_USER = "select id, name, login_name from SS_USER order by id";
-    private static final String QUERY_USER_BY_LOGINNAME = "select id,name,login_name from SS_USER where login_name=:login_name";
-    private static final String INSERT_USER = "insert into SS_USER(id, login_name, name) values(:id, :loginName, :name)";
+    private static final String QUERY_USER_BY_LOGINNAME = "select id,name,login_name from T_USERS where login_name=:login_name";
+    private static final String INSERT_USER = "insert into T_USERS(id, login_name, name) values(:id, :loginName, :name)";
 
     private static Logger logger = LoggerFactory.getLogger(UserJdbcDao.class);
 

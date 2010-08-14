@@ -93,6 +93,7 @@ public class AccountManager {
     @Transactional(readOnly = true)
     public User getLoadedUser(String id) {
         if (spyClientFactory != null) {
+            logger.debug("use memecache!!!");
             return getUserFromMemcached(id);
         } else {
             return userJdbcDao.queryObject(id);
@@ -205,7 +206,8 @@ public class AccountManager {
         this.spyClientFactory = spyClientFactory;
     }
 
-  //初始
+    //初始
+    @Transactional
     public void initData() {
         if (this.userDao.getUserCount().longValue() != 0) {
             return;
@@ -230,7 +232,12 @@ public class AccountManager {
         //add role
         u.setRoleList(rs);
 
-        saveUser(u);
+        String shaPassword = encoder.encodePassword(u.getPlainPassword(), null);
+        u.setShaPassword(shaPassword);
+
+        userDao.save(u);
+
+        //saveUser(u);
     }
 
 }

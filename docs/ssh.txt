@@ -6,6 +6,9 @@ ssh
 
 1、升级到3.3.3
 
+2、memcache 測試環境
+   org.springside.modules.memcached.JmemcachedServer
+
 2010.08.08
 ----------
 
