@@ -6,7 +6,7 @@
   <!-- SpyMemcached客户端 -->
   <bean id="spyClientFactory" class="org.springside.modules.memcached.SpyMemcachedClientFactory">
     <!-- 设置Memcached集群 -->
-    <property name="memcachedNodes" value="localhost:11211" />
+    <property name="memcachedNodes" value="${memcache_server}" />
     <!-- 缩短Timeout时间到200毫秒 -->
     <property name="operationTimeout" value="200" />
   </bean>
