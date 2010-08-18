@@ -1,0 +1,28 @@
+pentaho
+==========
+
+2010.08.18
+-----------
+
+   1. pdf book
+
+   Pentaho Solutions - Business Intelligence and Data Warehousing with Pentaho and MySQL[Roland Bouman][Wiley][Sep 2009].pdf
+
+   report,
+   OLAP,
+   dashboard,--仪器盘
+
+   p52
+
+   2. download
+
+   http://ncu.dl.sourceforge.net/project/pentaho/Business%20Intelligence%20Server/3.6.0-stable/biserver-manual-ce-3.6.0-stable.zip
+   http://ncu.dl.sourceforge.net/project/pentaho/Business%20Intelligence%20Server/3.6.0-stable/biserver-ce-3.6.0-stable.tar.gz
+
+   3. 构建社区版
+
+   http://wiki.pentaho.com/display/COM/CBF+-+Community+Build+Framework
+
+   svn://source.pentaho.org/svnroot/bi-platform-v2/branches/3.0
+
+   --END
