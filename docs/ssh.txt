@@ -1,9 +1,14 @@
 ssh
 ======
 
-2010.08.15
+2010.08.21
 ----------
 
+1、修改showcase test 取消部分测试内容
+
+   备份h2数据库,save/back.sql,back2.sql
+
+   装载数据 bin/db-init.bat，环境ant1.7需maven-ant-tasks-2.1.0.jar
 
 2010.08.14
 ----------
