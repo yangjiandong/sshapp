@@ -6,6 +6,8 @@ ssh
 
 1、ssh 增加db-init.bat,db-export.bat功能，公司环境能正常运行。
 
+2、tools\h2\start-db.bat 增加oracle访问
+
 2010.08.21
 ----------
 
