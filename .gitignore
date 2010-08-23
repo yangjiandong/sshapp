@@ -61,3 +61,7 @@ application/sshapp/sshappdatas.*
 
 # wiki
 docs/wiki/*.html
+
+#export data
+application/sshapp/src/test/resources/data/export-data.xml
+examples/showcase/src/test/resources/data/export-data.xml
