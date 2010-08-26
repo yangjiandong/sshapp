@@ -1,6 +1,39 @@
 ssh
 ======
 
+2010.08.26
+----------
+
+1、有空关注下 Hibernate Search，与Lucene查询有不同
+
+   1. <dependency>
+   2.     <groupid>org.hibernate</groupid>
+   3.     <artifactid>hibernate-search</artifactid>
+   4.     <version>3.3.0.Beta1</version>
+   5. </dependency>
+
+QueryBuilder mythQB = searchFactory.buildQueryBuilder().forEntity( Myth.class ).get();
+
+//look for popular modern myths that are not urban
+Date twentiethCentury = ...;
+Query luceneQuery = mythQB
+    .bool()
+      .must( mythQB.keyword().onField("description_stem").matching("urban").createQuery() )
+        .not()
+      .must( mythQB
+        .range()
+        .onField("starred")
+        .from(3).excludeLimit()
+        .to(5)
+        .createQuery() )
+      .must( mythQB
+        .range()
+        .onField("creationDate")
+        .above(twentiethCentury)
+        .createQuery() )
+    .createQuery();
+
+
 2010.08.23
 ----------
 
