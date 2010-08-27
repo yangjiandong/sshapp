@@ -1,0 +1,25 @@
+hibernate reference
+====================
+
+1. 2010.08.27
+
+   a. 有关实体类构造函数的说明
+
+P16
+所有的持久化类（persistent classes）都要求有无参的构造器，因为 Hibernate 必须使用 Java
+反射机制来为你创建对象。构造器（constructor）的访问级别可以是 private，然而当生成运行
+时代理（runtime proxy）的时候则要求使用至少是 package 级别的访问控制，这样在没有字节
+码指令（bytecode instrumentation）的情况下，从持久化类里获取数据会更有效率。
+
+   b. mvn 运行单个程序
+
+   要运行它，我们将使用 Maven exec 插件以及必要的 classpath 设置来进行调用：
+   mvn exec:java -Dexec.mainClass="org.hibernate.tutorial.EventManager" -Dexec.args="store"
+
+   c. 表关系 需要处理的设计问题是
+   关联方向（directionality），阶数（multiplicity）和集合（collection）的行为
+
+   p28
+
+
+  --END
