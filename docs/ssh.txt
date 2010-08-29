@@ -1,6 +1,18 @@
 ssh
 ======
 
+2010.08.28
+----------
+
+1、青岛老劈柴院海鲜
+
+2010.08.27
+----------
+
+1、有空关注下pos项目floreantpos，一直想搞个pos
+
+svn co https://floreantpos.svn.sourceforge.net/svnroot/floreantpos floreantpos
+
 2010.08.26
 ----------
 

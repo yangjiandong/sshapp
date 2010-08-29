@@ -1,7 +1,126 @@
 hibernate reference
 ====================
 
-1. 2010.08.27
+2010.08.29
+-----------
+
+1. 批量处理 Batch processing
+
+设置合理参数
+hibernate.jdbc.batch_size 20
+
+--insert
+Session session = sessionFactory.openSession();
+Transaction tx = session.beginTransaction();
+
+for ( int i=0; i<100000; i++ ) {
+    Customer customer = new Customer(.....);
+    session.save(customer);
+    if ( i % 20 == 0 ) { //20, same as the JDBC batch size
+     //flush a batch of inserts and release memory:
+        session.flush();
+        session.clear();
+    }
+}
+
+tx.commit();
+session.close();
+
+--批量更新（Batch updates）
+--此方法同样适用于检索和更新数据。此外，在进行会返回很多行数据的查询时，你需要使用
+--scroll() 方法以便充分利用服务器端游标所带来的好处。
+Session session = sessionFactory.openSession();
+Transaction tx = session.beginTransaction();
+
+ScrollableResults customers = session.getNamedQuery("GetCustomers")
+    .setCacheMode(CacheMode.IGNORE)
+    .scroll(ScrollMode.FORWARD_ONLY);
+int count=0;
+while ( customers.next() ) {
+    Customer customer = (Customer) customers.get(0);
+    customer.updateStuff(...);
+    if ( ++count % 20 == 0 ) {
+        //flush a batch of updates and release memory:
+        session.flush();
+        session.clear();
+    }
+}
+
+tx.commit();
+session.close();
+
+2. HQL: hibernate 查询
+   p221
+
+   通过将接口 Query 与一个过滤器（filter）一起使用，集合（Collections）是可以分页的：
+Query q = s.createFilter( collection, "" ); // the trivial filter
+q.setMaxResults(PAGE_SIZE);
+q.setFirstResult(PAGE_SIZE * pageNumber);
+List page = q.list();
+
+3. 条件查询（Criteria Queries）
+List cats = sess.createCriteria(Cat.class)
+    .add( Restrictions.in( "name", new String[] { "Fritz", "Izi", "Pk" } ) )
+    .add( Restrictions.disjunction()
+        .add( Restrictions.isNull("age") )
+        .add( Restrictions.eq("age", new Integer(0) ) )
+        .add( Restrictions.eq("age", new Integer(1) ) )
+        .add( Restrictions.eq("age", new Integer(2) ) )
+    ) )
+    .list();
+
+   -- 有关查询，以后可以看看
+   -- p228
+
+2010.08.28
+-----------
+
+1. 生产环境下连接池
+   c3p0, proxool
+
+2. hibernate.connection.charSet
+
+3. 外连接抓取 outer join fetch
+
+4. 查询语言中的替换
+你可以使用 hibernate.query.substitutions 在 Hibernate 中定义新的查询符号。例如：
+hibernate.query.substitutions true=1, false=0
+将导致符号 true 和 false 在生成的 SQL 中被翻译成整数常量。
+hibernate.query.substitutions toLowercase=LOWER
+将允许你重命名 SQL 中的 LOWER 函数。
+
+p63
+
+5. 再次解释构造函数
+
+所有的持久化类都必须有一个默认的构造方法（可以不是 public
+的），这样的话 Hibernate 就可以使用 Constructor.newInstance(）来实例化它们。 我们强烈建
+议，在 Hibernate 中，为了运行期代理的生成，构造方法至少是包（package）内可见的
+
+6. 多次映射同一个类
+对特定的持久化类，映射多次是允许的。这种情形下，你必须指定 entity name 来区别不同映射
+实体的对象实例。（默认情况下，实体名字和类名是相同的。）
+--在以往项目中，查询中一般就用持久化类名，以后到要考虑用实体名字
+
+7. 使用原生 SQL 的查询
+你可以使用 createSQLQuery() 方法，用 SQL 来描述查询，并由 Hibernate 将结果集转换成对象。
+请注意，你可以在任何时候调用 session.connection() 来获得并使用 JDBC Connection 对象。 如
+果你选择使用 Hibernate 的 API，你必须把 SQL 别名用大括号包围起来：
+List cats = session.createSQLQuery("SELECT {cat.*} FROM CAT {cat} WHERE ROWNUM<10")
+    .addEntity("cat", Cat.class)
+.list();
+List cats = session.createSQLQuery(
+    "SELECT {cat}.ID AS {cat.id}, {cat}.SEX AS {cat.sex}, " +
+           "{cat}.MATE AS {cat.mate}, {cat}.SUBCLASS AS {cat.class}, ... " +
+    "FROM CAT {cat} WHERE ROWNUM<10")
+    .addEntity("cat", Cat.class)
+.list()
+
+8. 事务和并发
+p183
+
+2010.08.27
+-----------
 
    a. 有关实体类构造函数的说明
 
