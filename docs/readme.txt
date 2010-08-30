@@ -412,4 +412,9 @@ http://stsmedia.net/spring-finance-part-2-spring-mvc-spring-30-rest-integration/
      mvn eclipse:eclipse
      bin/eclipse.bat
 
+5、clone
+
+   git clone git://github.com/yangjiandong/sshapp.git sshapp
+
+
    --END
