@@ -80,6 +80,7 @@
         <prop key="hibernate.cache.provider_class">${hibernate.cache_provider_class}</prop>
         <prop key="hibernate.cache.use_query_cache">${hibernate.cache_use_query_cache}</prop>
         <prop key="hibernate.cache.provider_configuration_file_resource_path">${hibernate.ehcache_config_file}</prop>
+        <prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
       </props>
     </property>
     <property name="packagesToScan" value="org.ssh.app.*.entity" />
@@ -96,7 +97,7 @@
   </bean>
 
   <!-- 事务管理器配置, Hibernate单数据源事务 -->
-  <bean id="defaultTransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+  <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
     <property name="sessionFactory" ref="sessionFactory" />
   </bean>
 
@@ -106,7 +107,7 @@
   </bean>
 
   <!-- 使用annotation定义事务 -->
-  <tx:annotation-driven transaction-manager="defaultTransactionManager" proxy-target-class="true" />
+  <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 
   <bean
     class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />

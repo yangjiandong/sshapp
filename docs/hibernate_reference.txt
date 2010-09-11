@@ -1,6 +1,16 @@
 hibernate reference
 ====================
 
+2010.09.11
+-----------
+
+1. p 228
+   Criteria
+   
+   结合项目，测试hibernate criteria 功能
+   http://localhost:8090/sshapp/index2.jsp
+   book/getBookByTitle
+
 2010.08.29
 -----------
 

@@ -88,4 +88,12 @@ public class BookService {
         b.setPublished("AM");
         bookDao.save(b);
     }
+
+    public List<Book> getBooksByTile(String name){
+        return this.bookDao.getBooksByTitle(name);
+    }
+
+    public List<Book> getBooksBySql(String name){
+        return this.bookDao.getBooksBySql(name);
+    }
 }

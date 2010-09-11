@@ -24,10 +24,10 @@ public class CoreController {
     @Autowired
     private ContactService contactService;
 
-    @RequestMapping("/initData.do")
+    @RequestMapping("/init/exampleData")
     public ModelAndView initData(ModelMap modelMap, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
-        logger.info("开始初始化数据...");
+        logger.info("开始初始化Example数据...");
 
         this.bookService.initData();
         this.contactService.initData();

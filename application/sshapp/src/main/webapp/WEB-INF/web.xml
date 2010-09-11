@@ -24,7 +24,7 @@
     此参数用于后面的Spring Context Loader -->
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>classpath*:/applicationContext.pro.xml,classpath*:/applicationContext-sshapp.xml</param-value>
+    <param-value>classpath*:/applicationContext.xml,classpath*:/applicationContext-sshapp.xml</param-value>
   </context-param>
 
   <!-- 60 ms -->
@@ -217,4 +217,17 @@
     <welcome-file>index.jsp</welcome-file>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
+
+  <!-- ==================================================================== -->
+  <!-- Default MIME mappings                                                -->
+  <!-- The default MIME mappings are provided by the mime.properties        -->
+  <!-- resource in the org.mortbay.jetty.jar file.  Additional or modified  -->
+  <!-- mappings may be specified here                                       -->
+  <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
+  <!-- UNCOMMENT TO ACTIVATE
+  <mime-mapping>
+    <extension>mysuffix</extension>
+    <mime-type>image/x-png</mime-type>
+  </mime-mapping>
+  -->
 </web-app>

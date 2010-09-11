@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-
+//example 全部采用book 前缀
 @Controller
-@RequestMapping("/topic")
+@RequestMapping("/book")
 public class TopicController {
     private static Logger logger = LoggerFactory.getLogger(TopicController.class);
 
@@ -23,7 +23,7 @@ public class TopicController {
             HttpServletResponse response) {
             request.setAttribute("message", "You Input Topci Id is: <b>"+id+"</b>");
         logger.info("topic....");
-
+        //现采用tiles 定义页面
         return  "topic" ;
     }
 

@@ -20,7 +20,7 @@ import org.ssh.app.example.service.ContactService;
 import org.ssh.app.util.JsonViewUtil;
 
 @Controller
-@RequestMapping("/contact")
+@RequestMapping("/book")
 public class ContactController extends MultiActionController {
     private static Logger logger = LoggerFactory
             .getLogger(ContactController.class);

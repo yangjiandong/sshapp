@@ -19,9 +19,26 @@
     <INPUT TYPE="text" NAME="plainPassword" value="密码"><br><br>
     <INPUT TYPE="submit">
  <br>
- <A HREF="topic/add" target="_blank" >add</A>
+ <A HREF="book/add" target="_blank" >add</A>
       <br>
-    <A HREF="topic/1234567" target="_blank">id:1234567</A>
+    <A HREF="book/1234567" target="_blank">id:1234567</A>
  </FORM>
+
+<br><br>
+
+<FORM METHOD=POST ACTION="book/getBookByTitle">
+    <INPUT TYPE="text" NAME="title" value="book-title"><br><br>
+
+    <INPUT TYPE="submit"  value=" test book ">
+ <br>
+</FORM>
+
+<FORM METHOD=POST ACTION="book/getBooksBySql">
+    <INPUT TYPE="text" NAME="title" value="title for getBooksBySql"><br><br>
+
+    <INPUT TYPE="submit"  value=" getBooksBySql ">
+ <br>
+</FORM>
+
 </body>
 </html>

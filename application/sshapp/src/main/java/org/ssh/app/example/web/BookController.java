@@ -9,11 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.ehcache.Cache;
+import net.sf.json.JSONArray;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,7 +26,7 @@ import org.ssh.app.example.service.BookService;
 import org.ssh.app.util.JsonViewUtil;
 
 @Controller
-@RequestMapping("/books")
+@RequestMapping("/book")
 public class BookController {
     private static Logger logger = LoggerFactory.getLogger(BookController.class);
 
@@ -82,6 +84,24 @@ public class BookController {
         }
         logger.info(" man hand 执行共计:" + (System.currentTimeMillis() - start) + " ms");
         return JsonViewUtil.getModelMap(books);
+    }
+
+    @RequestMapping(value = "/getBookByTitle")
+    public String getBookByTitle(HttpServletRequest request, HttpServletResponse response, Book book) {
+
+        List<Book> allBooks = this.bookService.getBooksByTile(book.getTitle());
+        JSONArray jsonArray = JSONArray.fromObject(allBooks);
+        request.setAttribute("message", "You Input Book title is: <b>"+jsonArray.toString()+"</b>");
+        return  "showBook" ;
+    }
+
+    @RequestMapping(value = "/getBooksBySql")
+    public String getBooksBySql(HttpServletRequest request, HttpServletResponse response, Book book) {
+
+        List<Book> allBooks = this.bookService.getBooksBySql(book.getTitle());
+        JSONArray jsonArray = JSONArray.fromObject(allBooks);
+        request.setAttribute("message", "You Input Book title is: <b>"+jsonArray.toString()+"</b>");
+        return  "showBook" ;
     }
 
 }

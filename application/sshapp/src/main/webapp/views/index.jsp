@@ -46,6 +46,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/ext-customer.css"/>" />
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/ext-patch.css"/>" />
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/xtheme-nbs.css"/>" />
 <script>
       document.write('<title>' + L("/Application/Name")+'-'+ CFG_PRODUCT_VERSION + '</title>');
 </script>
@@ -78,9 +79,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="<c:url value='/resources/js/lib/lib.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/js/app/DcLogin.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/js/app/DcMenuTree.js'/>"></script>
-<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/xtheme-nbs.css"/>" />
 <script type="text/javascript">document.getElementById('app-loading-msg').innerHTML = '初始化...';</script>
-
 <script type="text/javascript" src="<c:url value='/resources/js/main.js' />"></script>
 
 </body>
