@@ -5,7 +5,8 @@ TODO
 
 2、spring security 3 应用
 
-3、采用urlrewrite，连接能通过地址栏直接应用，
+ok 采用spring3.03 + 自定义 resource 不采用urlrewrite ，可直接用restfully 样式 url
+   3、采用urlrewrite，连接能通过地址栏直接应用，
    --spring3.0.3 + 自定义resource方案或spring3.04，可不采用urlrewrite
 
    如/role/list，在程序里应用时，会处理成/rest/role/list，而在地址栏直接输入后，能直接产生json输出，并且也没通过spring security过滤
