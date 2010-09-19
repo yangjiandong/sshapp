@@ -1,5 +1,6 @@
 package org.ssh.app.example.service;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +43,7 @@ public class ContactService {
         c.setBirthday("2001.01.01");
         c.setEmail("yang@gmail.com");
         c.setPhone("0519-1");
+        c.setNums(new BigDecimal("100.02"));
         contactDao.save(c);
 
         c = new Contact();
@@ -49,6 +51,7 @@ public class ContactService {
         c.setBirthday("2001.11.01");
         c.setEmail("yangs@gmail.com");
         c.setPhone("0519-21");
+        c.setNums(new BigDecimal("101.02"));
         contactDao.save(c);
 
         c = new Contact();
@@ -56,6 +59,7 @@ public class ContactService {
         c.setBirthday("2001.01.01");
         c.setEmail("yang@gmail.com");
         c.setPhone("0519-1");
+        c.setNums(new BigDecimal("110.02"));
         contactDao.save(c);
 
         c = new Contact();
@@ -63,6 +67,15 @@ public class ContactService {
         c.setBirthday("2001.01.01");
         c.setEmail("yang@gmail.com");
         c.setPhone("0519-1");
+        c.setNums(new BigDecimal("120.02"));
+        contactDao.save(c);
+
+        c = new Contact();
+        c.setName("yang222");
+        c.setBirthday("2001.01.01");
+        c.setEmail("yang@gmail.com");
+        c.setPhone("0519-1");
+        c.setNums(new BigDecimal("123.99"));
         contactDao.save(c);
     }
 
@@ -195,5 +208,25 @@ public class ContactService {
         List<String> idContacts = (List<String>) JSONArray.toCollection(
                 jsonArray, String.class);
         return idContacts;
+    }
+
+    public List<Contact> getContactByProjections(String p_name) {
+        return this.contactDao.getContactByProjections(p_name);
+    }
+
+    public List<Contact> getContactByDetachedCriteria(String p_name) {
+        return this.contactDao.getContactByDetachedCriteria(p_name);
+    }
+
+    public List<Contact> getContactByDetachedCriteria2(String p_name) {
+        return this.contactDao.getContactByDetachedCriteria2(p_name);
+    }
+
+    public List<Contact> getContactByNaturalId(String p_name) {
+        return this.contactDao.getContactByNaturalId(p_name);
+    }
+
+    public List getContactBySql(String p_name) {
+        return this.contactDao.getContactBySql(p_name);
     }
 }

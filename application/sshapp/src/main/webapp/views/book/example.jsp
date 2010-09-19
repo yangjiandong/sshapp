@@ -5,6 +5,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <body>
-    <p>This is book:<br> ${message}</p>
+    <p>This is result(json):<br> ${message}</p>
+<br><br>
+    <a href="<c:url value="/index2.jsp"/>">返回</a>
+<br><br>
 </body>
 </html>

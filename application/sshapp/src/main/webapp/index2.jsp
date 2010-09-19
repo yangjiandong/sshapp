@@ -11,7 +11,7 @@
 </head>
 
 <body>
-<a href="<c:url value="/init/commonData"/>">初始数据dd</a>
+<a href="<c:url value="/init/exampleData"/>">初始数据dd</a>
 <br><br>
 
   <FORM METHOD=POST ACTION="user/login">
@@ -27,16 +27,48 @@
 <br><br>
 
 <FORM METHOD=POST ACTION="book/getBookByTitle">
-    <INPUT TYPE="text" NAME="title" value="book-title"><br><br>
+    <INPUT TYPE="text" NAME="title" value="请输入book 's Title"><br><br>
 
     <INPUT TYPE="submit"  value=" test book ">
  <br>
 </FORM>
 
 <FORM METHOD=POST ACTION="book/getBooksBySql">
-    <INPUT TYPE="text" NAME="title" value="title for getBooksBySql"><br><br>
+    <INPUT TYPE="text" NAME="title" value="请输入book 's Title"><br><br>
 
     <INPUT TYPE="submit"  value=" getBooksBySql ">
+ <br>
+</FORM>
+
+<FORM METHOD=POST ACTION="book/getContactByProjections">
+    <INPUT TYPE="text" NAME="name" value="请输入Contact 's Name"><br><br>
+
+    <INPUT TYPE="submit"  value=" getContactByProjections ">
+ <br>
+</FORM>
+<FORM METHOD=POST ACTION="book/getContactByDetachedCriteria">
+    <INPUT TYPE="text" NAME="name" value="请输入Contact 's Name"><br><br>
+
+    <INPUT TYPE="submit"  value=" 列出大于平均值的记录 ">
+ <br>
+</FORM>
+
+<FORM METHOD=POST ACTION="book/getContactByDetachedCriteria2">
+    <INPUT TYPE="text" NAME="name" value="请输入Contact 's Name"><br><br>
+
+    <INPUT TYPE="submit"  value=" getContactByDetachedCriteria2. ">
+ <br>
+</FORM>
+<FORM METHOD=POST ACTION="book/getContactByNaturalId">
+    <INPUT TYPE="text" NAME="name" value="请输入Contact 's Name"><br><br>
+
+    <INPUT TYPE="submit"  value=" 采用naturalid提高缓存效果 ">
+ <br>
+</FORM>
+<FORM METHOD=POST ACTION="book/getContactBySql">
+    <INPUT TYPE="text" NAME="name" value="请输入Contact 's Name"><br><br>
+
+    <INPUT TYPE="submit"  value=" 采用原生的sql ">
  <br>
 </FORM>
 

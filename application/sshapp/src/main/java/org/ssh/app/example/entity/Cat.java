@@ -22,8 +22,8 @@ public class Cat {
     private char sex;
     private float weight;
     private int litterId;
-    private Cat mother;
-    private Set kittens = new HashSet();
+    //private Cat mother;
+    //private Set kittens = new HashSet();
 
     private void setId(Long id) {
         this.id = id;
@@ -76,26 +76,26 @@ public class Cat {
         return litterId;
     }
 
-    public void setMother(Cat mother) {
-        this.mother = mother;
-    }
+//    public void setMother(Cat mother) {
+//        this.mother = mother;
+//    }
+//
+//    public Cat getMother() {
+//        return mother;
+//    }
 
-    public Cat getMother() {
-        return mother;
-    }
-
-    void setKittens(Set kittens) {
-        this.kittens = kittens;
-    }
-
-    public Set getKittens() {
-        return kittens;
-    }
-
-    // addKitten not needed by Hibernate
-    public void addKitten(Cat kitten) {
-        kitten.setMother(this);
-        kitten.setLitterId(kittens.size());
-        kittens.add(kitten);
-    }
+//    void setKittens(Set kittens) {
+//        this.kittens = kittens;
+//    }
+//
+//    public Set getKittens() {
+//        return kittens;
+//    }
+//
+//    // addKitten not needed by Hibernate
+//    public void addKitten(Cat kitten) {
+//        kitten.setMother(this);
+//        kitten.setLitterId(kittens.size());
+//        kittens.add(kitten);
+//    }
 }

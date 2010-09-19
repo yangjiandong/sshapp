@@ -1,11 +1,74 @@
 hibernate reference
 ====================
 
+2010.09.19
+----------
+
+1. 关联
+
+--多对多，采用中间表，参看User
+    //多对多定义
+    @ManyToMany
+    //中间表定义,表名采用默认命名规则
+    @JoinTable(name = "T_USER_ROLE", joinColumns =  {
+        @JoinColumn(name = "USER_ID")
+    }
+    , inverseJoinColumns =  {
+        @JoinColumn(name = "ROLE_ID")
+    }
+    )
+    //Fecth策略定义
+    @Fetch(FetchMode.SUBSELECT)
+    //集合按id排序
+    @OrderBy("id ASC")
+    public List<Role> getRoleList() {
+        return roleList;
+    }
+
+--一对多，一般是业务表引用字典表 或 住明细表
+
+2010.09.18
+----------
+
+1. 双向的一对多关系 Bidirectional one-to-many
+   p283
+   --还不是很明白
+   childen 中定义
+   <many-to-one name="parent" column="parent_id" not-null="true"/>
+
+你还需要为类 Child 添加 parent 属性。
+现在实体 Child 在管理连接的状态，为了使 collection 不更新连接，我们使用 inverse 属性：
+<set name="children" inverse="true">
+    <key column="parent_id"/>
+    <one-to-many class="Child"/>
+
+2. p289
+inverse:
+   默认inverse=false 
+   mapedBy="xxxx" 
+   相当于inverse=true
+
+2010.09.16
+----------
+
+1. 抓取策略 fetching strategy
+   p257
+
+2010.09.15
+----------
+
+1. 参看 ContactDao
+   有空了解下 Subqueries， Property 带的 gt,geAll....
+
+2. // 16.9. 根据自然标识查询（Queries by natural identifier）
+
+3. p236
+
 2010.09.12
 -----------
 
 1. p230
-   参看CatDao
+   参看ContactDao
 
 2. p233
 

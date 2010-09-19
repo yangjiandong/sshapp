@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tiles-definitions PUBLIC
-       "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
-       "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+   "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+   "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
 
 <tiles-definitions>
 
@@ -23,5 +23,9 @@
     <put-attribute name="title" value="book..." type="string" />
     <put-attribute name="content" value="/views/book/example.jsp" type="template" />
   </definition>
-  
+
+  <definition name="showContact" extends="page">
+    <put-attribute name="title" value="contact..." type="string" />
+    <put-attribute name="content" value="/views/book/example.jsp" type="template" />
+  </definition>
 </tiles-definitions>

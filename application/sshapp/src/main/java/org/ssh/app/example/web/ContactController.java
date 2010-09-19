@@ -7,6 +7,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
+import org.ssh.app.example.entity.Book;
 import org.ssh.app.example.entity.Contact;
 import org.ssh.app.example.service.ContactService;
 import org.ssh.app.util.JsonViewUtil;
@@ -91,4 +94,51 @@ public class ContactController extends MultiActionController {
                     .getModelMapError("Error trying to delete contact.");
         }
     }
+
+    @RequestMapping(value = "/getContactByProjections")
+    public String getContactByProjections(HttpServletRequest request, HttpServletResponse response, Contact book) {
+
+        List<Contact> allBooks = this.contactService.getContactByProjections(book.getName());
+        JSONArray jsonArray = JSONArray.fromObject(allBooks);
+        request.setAttribute("message", "You Input Contact title is: <b>"+jsonArray.toString()+"</b>");
+        return  "showContact" ;
+    }
+
+    @RequestMapping(value = "/getContactByDetachedCriteria")
+    public String getContactByDetachedCriteria(HttpServletRequest request, HttpServletResponse response, Contact book) {
+
+        List<Contact> allBooks = this.contactService.getContactByDetachedCriteria(book.getName());
+        JSONArray jsonArray = JSONArray.fromObject(allBooks);
+        request.setAttribute("message", "You Input Contact title is: <b>"+jsonArray.toString()+"</b>");
+        return  "showContact" ;
+    }
+
+    @RequestMapping(value = "/getContactByDetachedCriteria2")
+    public String getContactByDetachedCriteria2(HttpServletRequest request, HttpServletResponse response, Contact book) {
+
+        List<Contact> allBooks = this.contactService.getContactByDetachedCriteria2(book.getName());
+        JSONArray jsonArray = JSONArray.fromObject(allBooks);
+        request.setAttribute("message", "You Input Contact title is: <b>"+jsonArray.toString()+"</b>");
+        return  "showContact" ;
+    }
+
+    @RequestMapping(value = "/getContactByNaturalId")
+    public String getContactByNaturalId(HttpServletRequest request, HttpServletResponse response, Contact book) {
+
+        List<Contact> allBooks = this.contactService.getContactByNaturalId(book.getName());
+        JSONArray jsonArray = JSONArray.fromObject(allBooks);
+        request.setAttribute("message", "You Input Contact title is: <b>"+jsonArray.toString()+"</b>");
+        return  "showContact" ;
+    }
+
+    @RequestMapping(value = "/getContactBySql")
+    public String getContactBySql(HttpServletRequest request, HttpServletResponse response, Contact book) {
+
+        List<Contact> allBooks = this.contactService.getContactBySql(book.getName());
+        JSONArray jsonArray = JSONArray.fromObject(allBooks);
+        request.setAttribute("message", "You Input Contact title is: <b>"+jsonArray.toString()+"</b>");
+        return  "showContact" ;
+    }
+
+
 }
