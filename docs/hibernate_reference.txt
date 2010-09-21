@@ -83,6 +83,49 @@ inverse:
    http://localhost:8090/sshapp/index2.jsp
    book/getBookByTitle
 
+2010.09.05
+----------
+
+1. Criteria
+
+List cats = sess.createCriteria(Cat.class)
+        .add(  Restrictions.sqlRestriction("lower({alias}.name)  like  lower(?)",  "Fritz
+%", Hibernate.STRING) )
+    .list();
+{alias} 占位符应当被替换为被查询实体的列别名。
+
+Property age = Property.forName("age");
+List cats = sess.createCriteria(Cat.class)
+    .add( Restrictions.disjunction()
+        .add( age.isNull() )
+        .add( age.eq( new Integer(0) ) )
+        .add( age.eq( new Integer(1) ) )
+        .add( age.eq( new Integer(2) ) )
+    ) )
+    .add( Property.forName("name").in( new String[] { "Fritz", "Izi", "Pk" } ) )
+    .list();
+
+List cats = sess.createCriteria(Cat.class)
+    .add( Restrictions.like("name", "F%")
+    .addOrder( Order.asc("name") )
+    .addOrder( Order.desc("age") )
+    .setMaxResults(50)
+    .list();
+List cats = sess.createCriteria(Cat.class)
+    .add( Property.forName("name").like("F%") )
+    .addOrder( Property.forName("name").asc() )
+    .addOrder( Property.forName("age").desc() )
+    .setMaxResults(50)
+    .list();
+
+通过使用 createCriteria() 对关联进行导航，你可以指定相关实体的约束。
+List cats = sess.createCriteria(Cat.class)
+ .add( Restrictions.like("name", "F%") )
+    .createCriteria("kittens")
+        .add( Restrictions.like("name", "F%") )
+    .list();
+注意第二个 createCriteria() 返回一个新的 Criteria 实例，该实例引用 kittens 集合中的元素。
+
 2010.08.29
 -----------
 
