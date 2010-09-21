@@ -25,7 +25,8 @@ hibernate reference
         return roleList;
     }
 
---一对多，一般是业务表引用字典表 或 住明细表
+--一对多，一般是业务表引用字典表 或 住明细表，参看Subject,Reply
+
 
 2010.09.18
 ----------
