@@ -1,3 +1,22 @@
+2010.09.22
+-----------
+
+1. branch
+   git branch 3.3.3
+   git push origin 3.3.3
+
+   --其他用户checkout分支
+   git fetch (origin)
+   git checkout -b 3.3.3 origin/3.3.3
+
+2. 升级3.3.4前
+
+  git tag -a 20100922
+
+   --推送到remote
+
+   git push origin 20100922
+   
 2010.08.14
 -----------
 

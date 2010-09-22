@@ -26,17 +26,17 @@ http://www.xhsky.net/book/0/18/1228690.html
 运行 ssh-host-config 的配置脚本对 SSHD 服务进行配置，在配置过程中注意下面的配置选项：
 
 Should privilege separation be used 提示是否要为服务创建新的权限，
-   OpenSSH3.3 之后的 SSHD 服务器版本，默认是需要为其创建独立的权限，此处填 yes 之后输入回车键进入下一个选项。 
+   OpenSSH3.3 之后的 SSHD 服务器版本，默认是需要为其创建独立的权限，此处填 yes 之后输入回车键进入下一个选项。
 Do you want to install sshd as service 提示是否需要创建 SSHD 服务并注册为 Windows 服务，
-   此处填 yes 之后输入回车进入下一个选项。（实际操作时，输入yes后，需设置daemon ，以下操作不再需要） 
+   此处填 yes 之后输入回车进入下一个选项。（实际操作时，输入yes后，需设置daemon ，以下操作不再需要）
 Do you want to use a different 提示是否需要使用其他的账户管理 SSHD 服务，
    如果选择” no ”的话，会指定一个默认的用户作为管理 SSHD 服务的账号。
-   当然，用户也可以为 SSHD 服务建立一个新的账号，然后输入需要建立的用户名，在本例中选择新建一个账号，输入 sshadm 作为用户名。 
+   当然，用户也可以为 SSHD 服务建立一个新的账号，然后输入需要建立的用户名，在本例中选择新建一个账号，输入 sshadm 作为用户名。
 Create a new privileged user account: sshadmin 提示是否为用户指定新的权限，
    推荐使用“ yes ”选项。这时要注意，如果选择“ yes ”的话，在配置 SSHD 服务的时候会使用独立的账号权限，
    所以要注意在配置 SSHD 服务的过程中，一定不要使用需要在进行无密码访问过程中，用来登陆系统的用户来实现 SSHD 服务的控制。
-   否则，进行 SSH 访问的时候，只会读取该用户作为系统用户的权限，而不会读取它作为 SSHD 服务的权限，这样会导致访问 SSHD 服务失败。 
-随后提示输入该用户名的密码。 
+   否则，进行 SSH 访问的时候，只会读取该用户作为系统用户的权限，而不会读取它作为 SSHD 服务的权限，这样会导致访问 SSHD 服务失败。
+随后提示输入该用户名的密码。
 创建一个新的用户以后，需要在 cydwin 的命令环境中通过 su 命令检验用户的密码是否指定成功，如果密码设置不正确，SSHD 服务启动过程会失败，这就需要在特权账号下使用 passwd 命令修改其密码。
 
 完成配置过程后，就将 SSHD 服务添加到了 cygwin 的服务中，可以通过运行 cygrunsrv 命令查看，启动或停止该服务。
@@ -52,16 +52,16 @@ Create a new privileged user account: sshadmin 提示是否为用户指定新的
 1. 生成密钥
 -- cd ~
 -- mkdir .ssh
-ssh-keygen -N "" -t rsa -f ~/.ssh/id_rsa 
+ssh-keygen -N "" -t rsa -f ~/.ssh/id_rsa
 
-将密钥文件上传到被访问机上 
+将密钥文件上传到被访问机上
 2. 复制密钥文件到目标机
-scp -q ~/.ssh/id_rsa.pub root@$target_host:/tmp/ausaod01_rpub_key 
+scp -q ~/.ssh/id_rsa.pub root@$target_host:/tmp/ausaod01_rpub_key
 
-将密钥内容添加到被访问机器的系统用户的 /.ssh/authorized_keys 文件中 
+将密钥内容添加到被访问机器的系统用户的 /.ssh/authorized_keys 文件中
 3. 写入密钥内容
 ssh root@$target_host  \n
- "mkdir -p ~/.ssh; cat /tmp/ausaod01_rpub_key >> ~/.ssh/authorized_keys" 
+ "mkdir -p ~/.ssh; cat /tmp/ausaod01_rpub_key >> ~/.ssh/authorized_keys"
 
 至此，用户就可以在访问机上通过 ssh 命令直接访问被访问机，无需提示用户输入密码口令。
 利用 Cygwin 实现平台互通的例子
@@ -73,43 +73,54 @@ ssh root@$target_host  \n
 首先，按照本文所述在 Windows 服务器上安装并配置 SSHD 服务，同时设置与性能数据采集服务器之间的无密码访问。
 
 清单 4. 平台互通脚本实例
-function startdetector { 
- SSH_OPTIONS="-o StrictHostKeyChecking=no -o PasswordAuthentication=no -o loglevel=QUIET" 
- ACCOUNTNAME='LogonAcc' 
- HOSTNAME='TestMachine' 
- PD_INSTALL_DIR='TestDIR' 
- PD_SRC_DIR='ScriptDIR' 
- SCRIPTNAME='TestScript' 
- MACHINE_resultdir='ResultCollectionDIR' 
- RESULTFILE='ResultFile' 
-    
+function startdetector {
+ SSH_OPTIONS="-o StrictHostKeyChecking=no -o PasswordAuthentication=no -o loglevel=QUIET"
+ ACCOUNTNAME='LogonAcc'
+ HOSTNAME='TestMachine'
+ PD_INSTALL_DIR='TestDIR'
+ PD_SRC_DIR='ScriptDIR'
+ SCRIPTNAME='TestScript'
+ MACHINE_resultdir='ResultCollectionDIR'
+ RESULTFILE='ResultFile'
+
  # 拷贝脚本文件到远端机器
- ssh ${SSH_OPTIONS} "${HOSTNAME}" "rm -rf ${PD_INSTALL_DIR}; 
- mkdir -p ${PD_INSTALL_DIR}" &>/dev/null 
- scp ${SSH_OPTIONS} -r ${PD_SRC_DIR}/${SCRIPTNAME} 
+ ssh ${SSH_OPTIONS} "${HOSTNAME}" "rm -rf ${PD_INSTALL_DIR};
+ mkdir -p ${PD_INSTALL_DIR}" &>/dev/null
+ scp ${SSH_OPTIONS} -r ${PD_SRC_DIR}/${SCRIPTNAME}
  ${ACCOUNTNAME}@${HOSTNAME}:${PD_INSTALL_DIR}/${SCRIPTNAME}  \n
-        &>/dev/null 
-  
+        &>/dev/null
+
     # 在本地创建结果目录
-    
-    mkdir -p ${MACHINE_resultdir} &>/dev/null 
-    
+
+    mkdir -p ${MACHINE_resultdir} &>/dev/null
+
     # 执行远端脚本监控数据
-    ( 
-        ssh $SSH_OPTIONS $ACCOUNTNAME@$HOSTNAME "${PD_INSTALL_DIR}/${SCRIPTNAME}" 
-    ) 
-    
+    (
+        ssh $SSH_OPTIONS $ACCOUNTNAME@$HOSTNAME "${PD_INSTALL_DIR}/${SCRIPTNAME}"
+    )
+
     # 取回脚本执行结果
-    scp $SSH_OPTIONS ${ACCOUNTNAME}@${HOSTNAME}:${RESULTFILE} 
-    ${MACHINE_resultdir}/ &>/dev/null 
-    
- } 
+    scp $SSH_OPTIONS ${ACCOUNTNAME}@${HOSTNAME}:${RESULTFILE}
+    ${MACHINE_resultdir}/ &>/dev/null
+
+ }
 
 该示例中定义了 SSH 命令参数，远端机器的用户名和机器名，本地脚本存放路径，脚本名，结果目录名，远端机器的脚本存放路径，结果保存目录等变量。实际的操作当中，完全可以将下面的操作该成循环的实现方式从而实现对多个远端服务器的监控。
 例子中提到的脚本 TestScript 可以由读者任意编写，它可以是运行在 Linux 环境下的任何命令组成的脚本文件，包括文件的处理，性能的监控等操作。下面的脚本实现只实现了本文所介绍的环境互通方面的功能。读者还可以扩充脚本实例的功能来提高平台互通之间的交互性。
 
 2010.09.07
 ----------
+   09.22
+   中秋节天气气温下降，今天只有24度。
+   中午徐柯在三品苑请客，5桌。晨晨的表现还是不行，在家倒叽叽喳喳的全是话，到了外面，没声音了，天天开心倒很活跃。
+
+   09.21
+   中秋放假23-25，三天。
+   取3000，每月1100，借贷卡上冲了1000，还丁奕玲300，晨晨看病200。
+
+   09.20
+   坐早上9点的汽车从四方出发，晚上8点过后才到常州，到大娘水饺吃了碗牛杂汤，二两水饺没吃完打包
+
    09.19
    早上没爬起来，昨天1点才睡，看豪斯医生，8点半才到15楼，买了一袋牛奶。
    今天才叫郁闷，下班前他们请客吃饭，我们说晚上要走没去，出门打的，错到了四方，重新到火车站，买票时说今天晚上没车，只能买了明天9点，
@@ -119,7 +130,7 @@ function startdetector {
    86
    95.4
    50
-      
+
    09.18
    早上9点起床，在房间里看看hibernate 文档，下午安排出去一趟，到市里转转。
    吃完午饭到市政府坐车，到新华书店转转，比常州大，买了两本尤劲东的连环画人到中年，50元。
@@ -131,7 +142,7 @@ function startdetector {
    09.16
    核对医保数据。
    今天佛山照明复牌，涨停，手上还有2手，当时是想出掉佛山照明换佛塑，没想到照明还这么厉害。
-   
+
    09.15
    早上起来，嗓子疼，想想昨天也没吃什么。
    下午给河南武警来的一个财务领导汇报6个系统。
@@ -177,7 +188,7 @@ function startdetector {
    今天信息科，任姐、冯姐、边、冷工倒没怎么喝，小王倒喝了不少。刘主任牛X，喝多少都没问题，周主任也和我一样喝了不少。
    回到房间，看豪斯医生，一直到12点过后才躺下睡觉，当中还吐了一回。
 
-   09.08 
+   09.08
    从昨天晚上开始青岛下小雨，今天早上没去食堂，吃了昨天买的方便面。
    昨天晚上只看了一集豪斯医生，感觉累，洗完衣服后，洗澡睡觉。
 
@@ -196,7 +207,7 @@ function startdetector {
    09.06
    坐了10个钟点的汽车，感觉头晕，前两回没这事。
    晚上到住的地方，洗澡洗衣服，吃了碗方便面。
-=======
+
 2010.09.04
 ----------
 
