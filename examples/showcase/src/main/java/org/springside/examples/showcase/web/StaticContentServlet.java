@@ -17,7 +17,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import org.springside.modules.web.ServletUtils;
+import org.springside.modules.utils.web.ServletUtils;
 
 /**
  * 本地静态内容展示与下载的Servlet.
@@ -33,23 +33,29 @@ import org.springside.modules.web.ServletUtils;
  */
 public class StaticContentServlet extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1855617048198368534L;
 
 	/** 需要被Gzip压缩的Mime类型. */
-	private static final String[] GZIP_MIME_TYPES = { "text/html", "application/xhtml+xml", "text/plain", "text/css",
-			"text/javascript", "application/x-javascript" };
+	private static final String[] GZIP_MIME_TYPES = { "text/html", "text/xml", "text/plain", "text/css",
+			"text/javascript", "application/xml", "application/xhtml+xml", "application/x-javascript" };
 
 	/** 需要被Gzip压缩的最小文件大小. */
 	private static final int GZIP_MINI_LENGTH = 512;
 
-	private MimetypesFileTypeMap mimetypesFileTypeMap = new MimetypesFileTypeMap();
+	private MimetypesFileTypeMap mimetypesFileTypeMap;
 
-	private ApplicationContext appcationContext;
+	private ApplicationContext applicationContext;
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//获取请求内容的基本信息.
+		//取得参数
 		String contentPath = request.getParameter("contentPath");
+		if (StringUtils.isBlank(contentPath)) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "contentPath parameter is required.");
+			return;
+		}
+
+		//获取请求内容的基本信息.
 		ContentInfo contentInfo = getContentInfo(contentPath);
 
 		//根据Etag或ModifiedSince Header判断客户端的缓存文件是否有效, 如仍有效则设置返回码为304,直接返回.
@@ -115,11 +121,16 @@ public class StaticContentServlet extends HttpServlet {
 	}
 
 	/**
-	 * 保存appcationContext以备后用.
+	 * 初始化.
 	 */
 	@Override
 	public void init() throws ServletException {
-		appcationContext = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+		//保存applicationContext以备后用.
+		applicationContext = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
+
+		//初始化mimeTypes, 默认缺少css的定义,添加之.
+		mimetypesFileTypeMap = new MimetypesFileTypeMap();
+		mimetypesFileTypeMap.addMimeTypes("text/css css");
 	}
 
 	/**
@@ -139,11 +150,7 @@ public class StaticContentServlet extends HttpServlet {
 		contentInfo.lastModified = file.lastModified();
 		contentInfo.etag = "W/\"" + contentInfo.lastModified + "\"";
 
-		String mimeType = mimetypesFileTypeMap.getContentType(contentInfo.fileName);
-		if (mimeType == null) {
-			mimeType = "application/octet-stream";
-		}
-		contentInfo.mimeType = mimeType;
+		contentInfo.mimeType = mimetypesFileTypeMap.getContentType(contentInfo.fileName);
 
 		if (contentInfo.length >= GZIP_MINI_LENGTH && ArrayUtils.contains(GZIP_MIME_TYPES, contentInfo.mimeType)) {
 			contentInfo.needGzip = true;

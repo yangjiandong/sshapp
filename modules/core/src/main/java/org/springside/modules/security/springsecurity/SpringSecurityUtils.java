@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * 
- * $Id: SpringSecurityUtils.java 1062 2010-04-27 16:51:10Z calvinxiu $
+ * $Id: SpringSecurityUtils.java 1185 2010-08-29 15:56:19Z calvinxiu $
  */
 package org.springside.modules.security.springsecurity;
 
@@ -34,13 +34,17 @@ public class SpringSecurityUtils {
 	@SuppressWarnings("unchecked")
 	public static <T extends User> T getCurrentUser() {
 		Authentication authentication = getAuthentication();
-		if (authentication != null) {
-			Object principal = authentication.getPrincipal();
-			if (principal instanceof User) {
-				return (T) principal;
-			}
+
+		if (authentication == null) {
+			return null;
 		}
-		return null;
+
+		Object principal = authentication.getPrincipal();
+		if (!(principal instanceof User)) {
+			return null;
+		}
+
+		return (T) principal;
 	}
 
 	/**
@@ -48,10 +52,12 @@ public class SpringSecurityUtils {
 	 */
 	public static String getCurrentUserName() {
 		Authentication authentication = getAuthentication();
-		if (authentication != null && authentication.getPrincipal() != null) {
-			return authentication.getName();
+
+		if (authentication == null || authentication.getPrincipal() == null) {
+			return "";
 		}
-		return "";
+
+		return authentication.getName();
 	}
 
 	/**
@@ -59,30 +65,39 @@ public class SpringSecurityUtils {
 	 */
 	public static String getCurrentUserIp() {
 		Authentication authentication = getAuthentication();
-		if (authentication != null) {
-			Object details = authentication.getDetails();
-			if (details instanceof WebAuthenticationDetails) {
-				WebAuthenticationDetails webDetails = (WebAuthenticationDetails) details;
-				return webDetails.getRemoteAddress();
-			}
+
+		if (authentication == null) {
+			return "";
 		}
 
-		return "";
+		Object details = authentication.getDetails();
+		if (!(details instanceof WebAuthenticationDetails)) {
+			return "";
+		}
+
+		WebAuthenticationDetails webDetails = (WebAuthenticationDetails) details;
+		return webDetails.getRemoteAddress();
 	}
 
 	/**
 	 * 判断用户是否拥有角色, 如果用户拥有参数中的任意一个角色则返回true.
 	 */
-	public static boolean hasAnyRole(String[] roles) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Collection<GrantedAuthority> granteds = authentication.getAuthorities();
+	public static boolean hasAnyRole(String... roles) {
+		Authentication authentication = getAuthentication();
+
+		if (authentication == null) {
+			return false;
+		}
+
+		Collection<GrantedAuthority> grantedAuthorityList = authentication.getAuthorities();
 		for (String role : roles) {
-			for (GrantedAuthority authority : granteds) {
+			for (GrantedAuthority authority : grantedAuthorityList) {
 				if (role.equals(authority.getAuthority())) {
 					return true;
 				}
 			}
 		}
+
 		return false;
 	}
 
@@ -90,13 +105,15 @@ public class SpringSecurityUtils {
 	 * 将UserDetails保存到Security Context.
 	 * 
 	 * @param userDetails 已初始化好的用户信息.
-	 * @param request 用于获取用户IP地址信息.
+	 * @param request 用于获取用户IP地址信息,可为Null.
 	 */
 	public static void saveUserDetailsToContext(UserDetails userDetails, HttpServletRequest request) {
 		PreAuthenticatedAuthenticationToken authentication = new PreAuthenticatedAuthenticationToken(userDetails,
 				userDetails.getPassword(), userDetails.getAuthorities());
 
-		authentication.setDetails(new WebAuthenticationDetails(request));
+		if (request != null) {
+			authentication.setDetails(new WebAuthenticationDetails(request));
+		}
 
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
@@ -106,9 +123,11 @@ public class SpringSecurityUtils {
 	 */
 	private static Authentication getAuthentication() {
 		SecurityContext context = SecurityContextHolder.getContext();
-		if (context != null) {
-			return context.getAuthentication();
+
+		if (context == null) {
+			return null;
 		}
-		return null;
+
+		return context.getAuthentication();
 	}
 }

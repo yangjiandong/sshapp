@@ -1,11 +1,12 @@
 package org.springside.modules.unit.orm;
 
-import org.junit.Assert;
+import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springside.modules.orm.Page;
 
-public class PageTest extends Assert {
+public class PageTest {
     private Page<Object> page;
 
     @Before
@@ -27,9 +28,6 @@ public class PageTest extends Assert {
         page.setPageNo(-1);
         assertEquals(1, page.getPageNo());
 
-        page.setPageSize(-1);
-        assertEquals(1, page.getPageSize());
-
         assertNull(page.getOrder());
         assertNull(page.getOrderBy());
 
@@ -40,7 +38,7 @@ public class PageTest extends Assert {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void checkInValidOrderParameter() {
+    public void checkInvalidOrderParameter() {
         page.setOrder("asc,abcd");
     }
 
@@ -102,5 +100,16 @@ public class PageTest extends Assert {
 
         page.setPageNo(2);
         assertEquals(2, page.getNextPage());
+    }
+
+    @Test
+    public void setAllParameterInOneLine() {
+        page.pageNo(2).pageSize(10).orderBy("abc").order(Page.ASC).autoCount(true);
+
+        assertEquals(2, page.getPageNo());
+        assertEquals(10, page.getPageSize());
+        assertEquals("abc", page.getOrderBy());
+        assertEquals(Page.ASC, page.getOrder());
+        assertEquals(true, page.isAutoCount());
     }
 }

@@ -5,7 +5,6 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
@@ -17,7 +16,7 @@ import org.springside.modules.test.utils.DbUnitUtils;
 import org.springside.modules.test.utils.JettyUtils;
 import org.springside.modules.test.utils.SeleniumUtils;
 import org.springside.modules.utils.PropertiesUtils;
-import org.springside.modules.utils.SpringContextHolder;
+import org.springside.modules.utils.spring.SpringContextHolder;
 
 /**
  * 功能测试基类.
@@ -28,7 +27,7 @@ import org.springside.modules.utils.SpringContextHolder;
  */
 @Ignore
 @RunWith(GroupsTestRunner.class)
-public class BaseFunctionalTestCase extends Assert {
+public class BaseFunctionalTestCase {
 
 	protected static final String BASE_URL = Start.BASE_URL;
 

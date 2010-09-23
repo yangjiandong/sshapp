@@ -20,7 +20,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
-import org.springside.modules.orm.jdbc.SqlBuilder;
+import org.springside.modules.utils.VelocityUtils;
 import org.ssh.app.common.entity.User;
 
 import com.google.common.collect.Maps;
@@ -64,10 +64,10 @@ public class UserJdbcDao {
         jdbcTemplate = new SimpleJdbcTemplate(dataSource);
     }
 
-    @Resource
-    public void setDefaultTransactionManager(PlatformTransactionManager transactionManager) {
-        transactionTemplate = new TransactionTemplate(transactionManager);
-    }
+	@Resource
+	public void setDefaultTransactionManager(PlatformTransactionManager defaultTransactionManager) {
+		transactionTemplate = new TransactionTemplate(defaultTransactionManager);
+	}
 
     public void setSearchUserSql(String searchUserSql) {
         this.searchUserSql = searchUserSql;
@@ -144,14 +144,14 @@ public class UserJdbcDao {
         jdbcTemplate.batchUpdate(INSERT_USER, sourceArray);
     }
 
-    /**
-     * 使用freemarker创建动态SQL.
-     */
-    public List<User> searchUserByFreemarkerSqlTemplate(Map<String, ?> conditions) {
-        String sql = SqlBuilder.getSql(searchUserSql, conditions);
-        logger.info(sql);
-        return jdbcTemplate.query(sql, userMapper, conditions);
-    }
+	/**
+	 * 使用freemarker创建动态SQL.
+	 */
+	public List<User> searchUserByFreemarkerSqlTemplate(Map<String, ?> conditions) {
+		String sql = VelocityUtils.render(searchUserSql, conditions);
+		logger.info(sql);
+		return jdbcTemplate.query(sql, userMapper, conditions);
+	}
 
     /**
      * 使用TransactionTemplate编程控制事务,一般在Manager/Service层

@@ -1,6 +1,5 @@
 package org.springside.examples.showcase.jms.simple;
 
-import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -38,8 +37,8 @@ public class NotifyMessageListener implements MessageListener {
 			if (simpleMailService != null) {
 				simpleMailService.sendNotificationMail(mapMessage.getString("userName"));
 			}
-		} catch (JMSException e) {
-			logger.error(e.getMessage(), e);
+		} catch (Exception e) {
+			logger.error("处理消息时发生异常.", e);
 		}
 	}
 }

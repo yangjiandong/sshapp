@@ -1,20 +1,21 @@
 package org.springside.examples.showcase.unit.report;
 
+import static org.junit.Assert.*;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellReference;
-import org.junit.Assert;
 import org.junit.Test;
 import org.springside.examples.showcase.report.ExcelExportAction;
-import org.springside.modules.utils.ReflectionUtils;
+import org.springside.modules.utils.reflection.ReflectionUtils;
 
 /**
  * 测试ExcelExportAction测试,演示Excel的读取.
  * 
  * @author calvin
  */
-public class ExcelExportActionTest extends Assert {
+public class ExcelExportActionTest {
 
 	@Test
 	public void test() throws Exception {

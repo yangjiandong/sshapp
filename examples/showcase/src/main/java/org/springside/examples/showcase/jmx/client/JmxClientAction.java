@@ -7,7 +7,7 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springside.modules.web.struts2.Struts2Utils;
+import org.springside.modules.utils.web.struts2.Struts2Utils;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -18,8 +18,9 @@ import com.opensymphony.xwork2.ActionSupport;
  * @author calvin
  */
 @Namespace("/jmx")
-@SuppressWarnings("serial")
 public class JmxClientAction extends ActionSupport {
+
+	private static final long serialVersionUID = -12923147736849709L;
 
 	private static Logger logger = LoggerFactory.getLogger(JmxClientAction.class);
 

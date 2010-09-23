@@ -5,9 +5,9 @@
 <setting id="cleanup.always_use_parentheses_in_expressions" value="false"/>
 <setting id="cleanup.never_use_blocks" value="false"/>
 <setting id="cleanup.remove_unused_private_methods" value="true"/>
-<setting id="cleanup.add_missing_deprecated_annotations" value="true"/>
+<setting id="cleanup.add_missing_deprecated_annotations" value="false"/>
 <setting id="cleanup.convert_to_enhanced_for_loop" value="true"/>
-<setting id="cleanup.remove_unnecessary_nls_tags" value="true"/>
+<setting id="cleanup.remove_unnecessary_nls_tags" value="false"/>
 <setting id="cleanup.sort_members" value="false"/>
 <setting id="cleanup.remove_unused_local_variables" value="false"/>
 <setting id="cleanup.never_use_parentheses_in_expressions" value="true"/>
@@ -49,7 +49,7 @@
 <setting id="cleanup.qualify_static_member_accesses_through_instances_with_declaring_class" value="true"/>
 <setting id="cleanup.add_serial_version_id" value="false"/>
 <setting id="cleanup.format_source_code_changes_only" value="false"/>
-<setting id="cleanup.qualify_static_member_accesses_with_declaring_class" value="false"/>
+<setting id="cleanup.qualify_static_member_accesses_with_declaring_class" value="true"/>
 <setting id="cleanup.always_use_blocks" value="true"/>
 </profile>
 </profiles>

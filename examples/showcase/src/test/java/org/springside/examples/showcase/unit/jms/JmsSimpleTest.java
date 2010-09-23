@@ -1,5 +1,7 @@
 package org.springside.examples.showcase.unit.jms;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
@@ -12,7 +14,7 @@ import org.springside.modules.test.spring.SpringContextTestCase;
 import org.springside.modules.utils.ThreadUtils;
 
 @DirtiesContext
-@ContextConfiguration(locations = { "/applicationContext-test.xml", "/jms/applicationContext-simple.xml" })
+@ContextConfiguration(locations = { "/applicationContext-test.xml", "/jms/applicationContext-jms-simple.xml" })
 public class JmsSimpleTest extends SpringContextTestCase {
 
 	@Autowired

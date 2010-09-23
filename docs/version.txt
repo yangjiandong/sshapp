@@ -16,7 +16,26 @@
    --推送到remote
 
    git push origin 20100922
-   
+
+3. 升级到 3.3.4
+
+   这个3.3.4版，就是对3.3.3版的一堆修正。
+SpringSide Core项目大规模修订，注释，测试。
+JSW + Jetty的轻量级运行环境演示 - 最潮的运行环境。
+Tokyo Tyrant Key-Value数据库演示。
+JMockit演示 - 解决EasyMock解决不了的问题。
+    其他修改：
+
+Sonar 加入更多CheckStyle规则
+升级DBCP使用
+升级Jackson演示
+Joda演示TimeZone与Locale
+升级SpyMemcached客户端
+整理Eclipse插件
+升级依赖包版本：Spring3.0.4, Hibernate 3.5, Struts 2.2.1, ActiveMQ 5.4
+
+   --具体参考save/3.3.4
+
 2010.08.14
 -----------
 

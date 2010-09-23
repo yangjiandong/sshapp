@@ -1,0 +1,47 @@
+Eclipse 3.50 for JavaEE 环境配置
+1.基本设置
+导入SpringSide3的代码格式与Cleanup规则，详见后面的附录 (Preferences->Java->Code Style下的Cleanup和Formatter，两者的Profile文件在springside3/tools/eclipse/中)
+设置import static默认使用.* (Preferences-> Java -> Code Style -> Organize Imports, 设置Number of static imports need for .* 为 1)
+手工修改warning设置，详见后面的附录 (Preferences-> Java ->Compiler->Errors/Warining, 抱怨一下Eclipse，这里居然没有输出模板的功能 )
+设置保存代码时的自动操作 ,包括：format source code->all lines，与Organize  Imports。(Preference->Java->Editor->SaveAction)
+调整与输入法切换冲突的内容助手热键.(Preference->General->Keys, 找到Content Assist, 改为诸如Shift+Space)
+取消XML缺少DTD的warning 并设置XML每行长度为120字符, (Preference->XML->XML Files下的Editor和Validation)
+2.插件安装
+SubEclipse插件，Subversion插件
+Spring IDE插件，Spring辅助插件(Updatesite : http://dist.springsource.com/release/TOOLS/update/e3.5, 只下载其中的Spring IDE就足够.)
+Checkstyle插件，代码质量自动检查插件.
+MoreUnit插件，   单元测试辅助插件.
+ECobertura插件   Cobertura测试覆盖率插件.
+EasyShell，       可从Eclipse快速切换到文件所在Windows目录或dos窗口。
+3. 附录
+3.1 Formatter模板
+     对默认Formatter修改如下。
+
+每行增至120字符 (Line wrapping)
+取消三个 Comment Format (Comments) --因为Eclipse的Formatter不能自由换行，老把注释搞成一行的缘故
+3.2 Cleanup模板
+3.2.1默认的规则
+Change non static accesses to static members using declaring type
+Change indirect accesses to static members to direct accesses (accesses through subtypes)
+Remove unused imports
+Add missing '@Override' annotations
+Add missing '@Deprecated' annotations
+Remove unnecessary casts
+Remove unnecessary '$NON-NLS$' tags
+ 3.2.2 springside增加的规则
+Convert control statement bodies to block(Code Style)
+Convert for loops to enhanced for loops (Code Style)
+Organize imports (Code Organizing)
+Format source code (Code Organizing)
+Remove trailing whitespaces on non empty lines(Code Organizing)
+ 3.3 手工进行Java Compile Warning的修改
+Code Style:
+增加全部，除Unqualified access to instance field , Undocumented empty block 和 Non-externalized strings
+Potential programming problem
+增加全部，除Boxing and UnBoxing
+Name shadowing and confict
+增加全部
+Unecessary Code
+增加全部, 除Unnecessary 'else' statement
+Annoatation
+增加全部

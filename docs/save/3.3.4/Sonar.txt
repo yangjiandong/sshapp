@@ -1,0 +1,70 @@
+
+
+
+    Sonar 是一个集成了CheckStyle,PMD,Findbugs的代码校验规则 ,重复代码发现，代码测试覆盖率， 代码注释率，及所有的检测率变化追踪的完美代码质量检查工具。
+
+1. 团队工作
+配置持续集成服务器持续运行项目(每天至少一次)
+设定专门的Code Quality Driver每天检查Sonar的报表。
+在每个迭代增量的定义Sonar的度量目标，并以之作为release的关键条件。
+2.    Sonar设置
+     所有配置(除两个插件外)已导出到项目的tool\sonar目录中，用户可直接导入到自己的Sonar服务器.
+
+在带findbug规则的Sonar默认规则基础上，进行项目的剪裁 ，详见后。
+配置Alert规则，如Code Rule Compliance低于95%，Code Coverage低于80%，Duplicate Code大于5%,Critical/Major violations大于1/3个等。
+安装Taglist插件，监控//TODO或其他CodeView专用的tag.
+安装SCM Activity插件，快速发现谁修改的代码违反了规则.
+加大了违反规则的扣分，使得warning更加明显, 在setting处设置规则权重 INFO=0;MINOR=3;MAJOR=5;CRITICAL=10;BLOCKER=20
+配置DashBoard,删除Version与Link，增加Coverage, Duplicated lines (%),Critical violations, Major violations , Skipped unit tests  与 Tags.
+Sonar2.2后的版本, 可注册不同的帐号，通过filter只关心自己Favourites 的项目。
+合理在代码中使用//NOSONAR 与 pom.xml中设置cobertura plugin的excludes避免不必要的检查.
+Sonar使用Oracle/Mysql的数据库时，要在Hundson Sonar插件里配置连接参数，在maven的lib里增加jdbc driver. 当然也可以把连接参数直接写在pom.xml里，但不推荐.
+3.Sonar Rules修改
+将所有Blocker级别的bug调为Critical，便于集中显示。
+
+3.1 CheckStyle
+ Ignored rules:
+
+Design For Extension
+Hide Utility Class Constructor
+Magic Number
+ Modified rules:
+
+Redundant Throws :allowUnchecked = true
+Visibility Modifier :protectedAllowed = true
+ Added ruels:(from springside 3.4):
+
+Method Length(max=50, countEmpty=false)
+File Length(max=500)
+Nested If(max=2)
+Nested Try Depth(max=1)
+Parameter Number (max=5)
+Declaration Order
+Avoid Nested Blocks
+Equals Avoid Null
+Illegal Instantiation
+Modify Control Variable
+3.2 PMD
+  Ignored rules:
+
+Avoid Throwing Raw Exception Types
+Constructor Calls Overridable Method
+Signature Declare Throws Exception
+Security - Array is stored directly
+Unnecessary Local Before Return
+  Modified rules:
+
+Avoid Duplicate Literals  : skipAnnotations=true
+3.3 FindBugs
+  Ignored rules:
+
+Bad practice - Method invoked that should be only be invoked inside a doPrivileged block
+Correctness - Field not initialized in constructor
+Malicious code vulnerability - May expose internal representation by returning reference to mutable object
+Performance - Could be refactored into a named static inner class
+3.4 Squid
+  Added rules:
+
+Avoid use of deprecated method
+Unused private method
+Unused protected method

@@ -1,0 +1,53 @@
+1. Overview
+   JavaEE炒过一轮又一轮的概念后，实际呈现出两个趋势：
+
+   一是应用服务器越来越没有用途. EJB3已没落，Web Service与JMS的实现又不需要应用服务器来提供, 应用服务器提供的Http Session集群方案更少人真正使用。
+
+   二是一个大的应用总会被拆散成越来越多的独立提供服务的子系统集群，也就是炒了一百遍的分布式与面向服务了。
+
+   所以，目前最爱的是的Jetty，可以独立部署与启停，对子系统的可扩展部署与应用版本升级都有莫大好处。
+
+   但斋使用Jetty的话，起码还有两个问题需要解决：
+
+   一是跨平台的启动/关闭/重启脚本，用pid文件控制的那种。
+
+   二是为应用健壮性提供一些保护机制,比如发现程序不明不白挂掉了会重启, 发现OutOfMemory又会重启等等。
+
+   JSW(Java Service Wrapper)能很好解决这点，另外还有些小优点见后面的说明。
+
+   其实，如果留意最近的开源项目，会发现很多都是JSW+Jetty的组合了。
+
+2.In SpringSide3
+2.1 Overview
+     SpringSide3在showcase项目中演示了使用Maven的Assemble插件打包一个应用+JSW+Jetty的可运行压缩包。
+
+     首先SpringSide在自己的Maven仓库里提供了一个定制的JSW压缩包，去除了一些无用的平台支持与文件。
+
+     然后在assembly目录的assembly.xml中定义了一系列的打包动作：
+
+     1.解压JSW压缩包,  释出JSW标准的bin, conf, lib,logs目录.
+
+     2.将依赖的Jetty jar包全部解压到lib目录中.
+
+     3.将target目录中showcase webapp目录拷贝到webapp目录中，这里选择了webapp目录而不是war文件作为应用的最终形态，是方便大家有时候直接修改应用中的xml与properties文件.
+
+     4.将assembly目录中的wrapper.conf与jetty.xml, jetty-jmx.xml 解压到conf目录中，并替换其中的一些变量。
+     注意示例里提供了production与test两个子目录，需要在mvn package -packageId=xx来指定，目的是区分两者的不同，比如production环境中分配的内存需较多等。
+
+2.2 Assembly插件
+    执行bin/package-production.bat即可在target目录生成一个zip文件，选用Assembly插件而不是写shell或ant脚本来打包，一是它能比较方便的处理一些依赖包的打包，
+    二是它能与整个Deploy/Install过程联系起来，将打出来的zip包也部署到团队的Nexus仓库里面去。
+
+    代价就是要学习一次Assembly的语法。
+
+2.3 JSW
+    JSW需要学习的地方都在wrapper.conf，在showcase中提供的示例，相对默认文件，修改如下：
+
+wrapper.working.dir=.. ，将working dir指向根目录而不是bin目录。
+wrapper.java.mainclass=org.tanukisoftware.wrapper.WrapperSimpleApp 使用最简单的集成模式，使用Kill-9来停止服务进程。
+wrapper.java.classpath.1=lib/*.jar, 这本来是JSW的小features，不过JDK6终于支持classpath=.jar这样的定义。
+wrapper.java.additional1=xxx，个人喜欢的标准的java参数定义模式，一般要设定GC参数，可能还要打开JMX管理。
+wrapper.java.initmemory与wrapper.java.maxmemory，按实际情况设定。
+wrapper.app.parameter1=xxx，指定Jetty Start的启动Class，启动Jetty.xml，然后在jetty.xml里指定webapp目录为应用路径。
+wrapper.logfile.maxsize=10m 与 wrapper.logfile.maxfiles=50，设定java console输出的日志滚动存放
+wrapper.jvm_exit.timeout=60, 如果JVM开始退出但60秒后还没有彻底退出则强行退出，默认只有15秒。

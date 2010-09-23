@@ -6,8 +6,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * Web Service传输Role信息的DTO.
- * 
- * 注释见{@link UserDTO}.
  *
  * @author calvin
  */

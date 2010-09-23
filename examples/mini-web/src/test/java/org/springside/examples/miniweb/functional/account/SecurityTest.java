@@ -1,5 +1,7 @@
 package org.springside.examples.miniweb.functional.account;
 
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;

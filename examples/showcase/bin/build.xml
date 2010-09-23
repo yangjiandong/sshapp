@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="mini-service" default="init-db" xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
-  <artifact:remoteRepository id="remote.repository" url="file://D:/HOME/local/repo" />
   <artifact:dependencies pathId="project.lib">
+    <artifact:remoteRepository id="remote.repository" url="file://D:/HOME/local/repo" />
     <pom file="../pom.xml" />
-
   </artifact:dependencies>
 
   <property file="../src/main/resources/application.properties" />
@@ -22,7 +21,7 @@
       <classpath refid="project.lib" />
     </sql>
 
-    <sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}" src="${sql.dir}/quartz.sql" onerror="continue">
+    <sql driver="${quartz.jdbc.driver}" url="${quartz.jdbc.url}" userid="${quartz.jdbc.username}" password="${quartz.jdbc.password}" src="${sql.dir}/quartz.sql" onerror="continue">
       <classpath refid="project.lib" />
     </sql>
 

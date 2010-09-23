@@ -25,7 +25,9 @@ import org.springside.examples.miniservice.ws.result.WSResult;
 import com.google.common.collect.Lists;
 
 /**
- * WebService实现类.
+ * WebService服务端实现类.
+ * 
+ * 客户端实现见功能测试用例.
  * 
  * @author sky
  * @author calvin
@@ -36,7 +38,6 @@ public class UserWebServiceImpl implements UserWebService {
 
 	private static Logger logger = LoggerFactory.getLogger(UserWebServiceImpl.class);
 
-	@Autowired
 	private AccountManager accountManager;
 
 	private DozerBeanMapper dozer;
@@ -50,7 +51,7 @@ public class UserWebServiceImpl implements UserWebService {
 
 		//获取User列表并转换为UserDTO列表.
 		try {
-			List<User> userEntityList = accountManager.getAllLoadedUser();
+			List<User> userEntityList = accountManager.getAllInitedUser();
 			List<UserDTO> userDTOList = Lists.newArrayList();
 
 			for (User userEntity : userEntityList) {
@@ -80,7 +81,7 @@ public class UserWebServiceImpl implements UserWebService {
 
 		//获取用户
 		try {
-			User entity = accountManager.getLoadedUser(id);
+			User entity = accountManager.getInitedUser(id);
 			UserDTO dto = dozer.map(entity, UserDTO.class);
 
 			result.setUser(dto);

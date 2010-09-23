@@ -1,0 +1,72 @@
+1 单元测试概况
+    JUnit4中@BeforeClass是只执行一次的静态函数，@Before是每个测试方法都执行一次的函数(小心测试父类与子类的准备函数名不要都叫before,setup,一不小心就互相覆盖了)
+
+    @Ignore("xxx")可以暂时 不执行类/方法并说明原因(Sonar会对@Ignore的用例进行监控，所以暂时Skip用例时尽量使用@Ignore，以便日后恢复)。
+
+    可以继承Assert，免得那堆静态导入那堆校验函数。
+
+    对待测对象的私有变量，私有函数可以用ReflectionUtils的反射函数直接调用，如 ReflectionUtils.setFieldValue(userManager, "userDao", mockUserDao);
+
+    另外，Spring还为Web相关的测试提供了MockHttpRequest等一大堆stub类， SpringSide也提供了一个可能会用到的WebTestUtils，Spring WebApplicationContext初始化到ServletContext, 将MockRequest/Response放入Struts2的ServletActionContext.
+
+2 Mock
+2.1 EasyMock  vs JMockit vs JMock vs Others
+       比较过EasyMock和JMock觉得还是EasyMock要好用一些.
+
+       但是EasyMock对静态方法没办法，对不能注入的依赖也没办法，这时候需要JMockit出场，它用直接改变原类的字节码的狠方法帮你解决了这个麻烦.
+
+       另外没有interface又想写Stub类时，也是JMockit好用，可以只挑自己感兴趣的方法重新实现，其他方法继续使用原类。
+
+       Mock对单元测试是如此重要，EasyMock们也不再要求基于接口编程了.
+
+2.2  EasyMock
+   另外，虽然EasyMock提供了createNiceMock()这样的简便方法，但尽量还是不要用，太不可控了.
+
+   在必要情况下可以在设定函数参数时用上isA()这样的功能，如果函数有多个参数，需要都使用匹配。比如userDao.save(Long id,User user);如果想灵活第2个参数，可以写成：
+
+    mockUserDao.save(EasyMock.eq(1L), EasyMock.isA(User.class));
+  如果方法没有返回值，而你又设置方法抛出异常，可以先执行方法，然后调用EasyMock.expectLastCall();
+
+2.3 JMockit
+   关于如何用Jmockit很爽的Mock掉静态的，无法注入的对象，详见core中的SpringSecurityUtilsTest等示例.
+
+   JMockit在JDK6上可以不需要太多设置的顺畅运行。
+
+先定义一个Stub类，定义@MockClass(realClass = XXX.class)
+然后重载Stub方法，在方法上定义@Mock
+Mockit.setUpMocks(Stub类.class)
+Mockit.tearDownMocks()，将所有当前的Stub类取消，或者Mockit.tearDownMocks(原始XXX.class)
+3. 使用ApplicationContext的测试
+       严格说使用ApplicationContext的测试不是完全的单元测试，按Spring的说法是集成测试。
+
+       像DAO层测试这种需要连接实际数据库及其他需要建立ApplicationContext的情况，Spring提供了较方便的初始化并缓存ApplicationContext，注入以及测试事务自动回滚的功能。
+
+       Spring 2.5的依赖测试用例支持ApplicationContext依赖注入，事务自动回滚等功能(也可设置不回滚)，详见Spring 2.5 集成测试资料。
+
+       因为Spring的类名一贯清晰但超长，因此搞了两个名称较短的基类
+
+      注意测试时要使用dao的flush()函数，因为Hibernate只有事务提交 时才会执行 SQL，为了验证你的ORM正确性，必须常常执行flush强制hibernate执行SQL。不过只要不执行提交,sql执行的结果不会影响测试数据库 的实际数据。
+
+      可在applicationContext-test.properties定义与 applicationContext.properties不一样的测试环境参数。
+
+      注意Spring对于相同applicationContext-*xml数组配置的applicationContext，默认是会被cache起来，在所有 TestCase中使用的。这造成了太多的混乱，可在TestCase上使用@DirtiesContext强迫放弃Cache功能。
+
+4 .Assert方法
+    Junit 4下不再有继承TestCase基类后，对于原来的那些assert方法， 可以继承一下Assert类算，如果继承关系上有问题，可以用static import，记得修改Eclipse配置，import assert.*
+
+5 DBUnit , 数据准备类 与 测试用例间数据解耦
+    当测试用例多起来以后, 如果防止用例间执行结果的互相影响(这个用例跑完之后会影响另一个用例的结果值)，降低用例对基础数据的依赖非常重要(增加或修改基础数据不会造成一大堆用例跑不过)。
+
+    因为使用H2嵌入式数据库，表结构的初始化sql在applicationContext-test.xml中定义，这是Spring3.0新提供的功能。
+
+    测试数据尽量在用例中创建，使用相应的数据准备类如UserData.java，使用了SpringSide提供了DataUtils工具方法尽量随机的产生数据，比如随机生成数字，随机从备选List出取出若干个元素等。
+
+    有些基本数据也可以用DBUnit来载入，预先定义在src/test /resources/*-data.xml. 可以定义多套数据.
+
+    另外平时开发调试时， 也可以用Ant来调用DBUnit(Maven的DBUnit插件不支持调用多个xml文件)来记录和载入基础数据，详见用bin的db-init.bat与db-export.bat。
+
+    JUnit执行用例的顺序不可控，因此规定，
+
+纯单元测试不访问数据库
+访问数据库的集成测试用Spring的事务测试基类强制Rollback
+使用DBUnit的时候，在整个测试类技术前调用dbunit的remove方法清理数据，免得影响其他没有对该xml执行CLEAN_INSERT的集成/功能测试用例。(见DbUnitUtils)

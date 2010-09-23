@@ -8,26 +8,25 @@
 
   <description>Spring公共配置</description>
 
-  <context:annotation-config />
-  <context:component-scan base-package="org.ssh.app" />
-  <aop:aspectj-autoproxy />
-
-  <!--annotation-driven transaction manager -->
-  <tx:annotation-driven transaction-manager="transactionManager"
-    proxy-target-class="true" />
-
-  <!-- variables  -->
-  <bean
-    class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+  <!-- 定义受环境影响易变的变量 -->
+  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
     <property name="ignoreResourceNotFound" value="true" />
     <property name="locations">
       <list>
-        <!-- standard config -->
+        <!-- 标准配置 -->
         <value>classpath*:/application.properties</value>
+        <!-- 本地开发环境配置 -->
+        <value>classpath*:/application.local.properties</value>
+        <!-- 服务器生产环境配置 -->
+        <value>file:/var/showcase/application.server.properties</value>
       </list>
     </property>
   </bean>
+
+  <context:annotation-config />
+  <context:component-scan base-package="org.ssh.app" />
+  <aop:aspectj-autoproxy />
 
   <!--
       数据源配置,使用应用内的DBCP数据库连接池 <bean id="dataSource"
@@ -97,7 +96,7 @@
   </bean>
 
   <!-- 事务管理器配置, Hibernate单数据源事务 -->
-  <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+  <bean id="defaultTransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
     <property name="sessionFactory" ref="sessionFactory" />
   </bean>
 
@@ -107,7 +106,7 @@
   </bean>
 
   <!-- 使用annotation定义事务 -->
-  <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+  <tx:annotation-driven transaction-manager="defaultTransactionManager" proxy-target-class="true" />
 
   <bean
     class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />

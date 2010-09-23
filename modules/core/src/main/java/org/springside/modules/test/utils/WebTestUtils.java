@@ -1,9 +1,9 @@
 /**
- * Copyright (c) 2005-2009 springside.org.cn
+ * Copyright (c) 2005-2010 springside.org.cn
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * 
- * $Id: WebTestUtils.java 1068 2010-05-07 16:00:06Z calvinxiu $
+ * $Id: WebTestUtils.java 1185 2010-08-29 15:56:19Z calvinxiu $
  */
 package org.springside.modules.test.utils;
 
@@ -27,18 +27,16 @@ import com.opensymphony.xwork2.ActionContext;
  * Web集成测试工具类.
  * 
  * 1.Spring WebApplicationContext初始化到ServletContext.
- * 2.将MockRequest/Response放入Struts2的ServletActionContext.
+ * 2.将MockRequest/MockResponse放入Struts2的ServletActionContext.
  * 
  * @author calvin
  */
 public class WebTestUtils {
 
-	private static boolean struts2ContextInited = false;
-
 	/**
 	 * 在ServletContext里初始化Spring WebApplicationContext.
 	 * 
-	 * @param configLocations application context路径列表.
+	 * @param configLocations application context文件路径列表.
 	 */
 	public static void initWebApplicationContext(MockServletContext servletContext, String... configLocations) {
 		String configLocationsString = StringUtils.join(configLocations, ",");
@@ -85,13 +83,12 @@ public class WebTestUtils {
 	}
 
 	/**
-	 * 初始化 Struts2 ActionContext.
+	 * 如果Struts2 ActionContext未初始化则进行初始化.
 	 */
 	@SuppressWarnings("unchecked")
 	private static void initStruts2ActionContext() {
-		if (!struts2ContextInited) {
+		if (ActionContext.getContext() == null) {
 			ActionContext.setContext(new ActionContext(new HashMap()));
-			struts2ContextInited = true;
 		}
 	}
 }

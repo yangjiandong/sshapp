@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beansProjectDescription>
 	<version>1</version>
-	<pluginVersion><![CDATA[2.3.0.200912170948-RELEASE]]></pluginVersion>
+	<pluginVersion><![CDATA[2.3.2.201003220227-RELEASE]]></pluginVersion>
 	<configSuffixes>
 		<configSuffix><![CDATA[xml]]></configSuffix>
 	</configSuffixes>
@@ -18,10 +18,13 @@
 		<config>src/main/resources/schedule/applicationContext-quartz-cron-local.xml</config>
 		<config>src/main/resources/schedule/applicationContext-quartz-timer-cluster.xml</config>
 		<config>src/main/resources/webservice/applicationContext-cxf-client.xml</config>
-		<config>src/main/resources/jms/applicationContext-advanced.xml</config>
-		<config>src/main/resources/jms/applicationContext-simple.xml</config>
 		<config>src/main/resources/cache/applicationContext-ehcache.xml</config>
 		<config>src/main/resources/common/applicationContext-jdbc.xml</config>
+		<config>src/main/resources/cache/applicationContext-memcached.xml</config>
+		<config>src/test/resources/applicationContext-test-functional.xml</config>
+		<config>src/test/resources/applicationContext-test.xml</config>
+		<config>src/main/resources/jms/applicationContext-jms-simple.xml</config>
+		<config>src/main/resources/jms/applicationContext-jms-advanced.xml</config>
 	</configs>
 	<configSets>
 	</configSets>

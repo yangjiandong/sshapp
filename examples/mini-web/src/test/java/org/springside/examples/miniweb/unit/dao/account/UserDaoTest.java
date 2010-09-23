@@ -1,11 +1,19 @@
 package org.springside.examples.miniweb.unit.dao.account;
 
+import static org.junit.Assert.*;
+
+import javax.sql.DataSource;
+
+import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 import org.springside.examples.miniweb.dao.account.UserDao;
 import org.springside.examples.miniweb.data.AccountData;
 import org.springside.examples.miniweb.entity.account.User;
-import org.springside.examples.miniweb.unit.dao.BaseTxTestCase;
+import org.springside.modules.test.spring.SpringTxTestCase;
+import org.springside.modules.test.utils.DbUnitUtils;
 
 /**
  * UserDao的测试用例, 测试ORM映射及特殊的DAO操作.
@@ -14,10 +22,25 @@ import org.springside.examples.miniweb.unit.dao.BaseTxTestCase;
  * 
  * @author calvin
  */
-public class UserDaoTest extends BaseTxTestCase {
+@ContextConfiguration(locations = { "/applicationContext-test.xml" })
+public class UserDaoTest extends SpringTxTestCase {
+	private static DataSource dataSourceHolder = null;
 
 	@Autowired
 	private UserDao entityDao;
+
+	@Before
+	public void loadDefaultData() throws Exception {
+		if (dataSourceHolder == null) {
+			DbUnitUtils.loadData(dataSource, "/data/default-data.xml");
+			dataSourceHolder = dataSource;
+		}
+	}
+
+	@AfterClass
+	public static void cleanDefaultData() throws Exception {
+		DbUnitUtils.removeData(dataSourceHolder, "/data/default-data.xml");
+	}
 
 	@Test
 	//如果你需要真正插入数据库,将Rollback设为false

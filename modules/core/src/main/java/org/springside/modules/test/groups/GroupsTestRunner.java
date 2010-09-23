@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005-2009 springside.org.cn
+ * Copyright (c) 2005-2010 springside.org.cn
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * 
@@ -37,7 +37,7 @@ import org.junit.runners.model.InitializationError;
  */
 public class GroupsTestRunner extends BlockJUnit4ClassRunner {
 
-	/** 在Properties文件或JVM参数-D中定义执行分组的变量名称. */
+	/** 在JVM参数-D中定义执行分组的变量名称. */
 	public static final String PROPERTY_NAME = "test.groups";
 
 	private static List<String> groups;
@@ -121,17 +121,17 @@ public class GroupsTestRunner extends BlockJUnit4ClassRunner {
 	/**
 	 * 从环境变量读取test.groups定义, 多个group用逗号分隔.
 	 * eg. java -Dtest.groups=Mini,Major
-	 * 如果均无定义则返回ALL.
+	 * 如果无定义则返回ALL.
 	 */
 	protected static void initGroups() {
 
-		String groupsDefine = System.getProperty(PROPERTY_NAME);
+		String groupsProperty = System.getProperty(PROPERTY_NAME);
 
 		//如果环境变量未定义test.groups,尝试从property文件读取.
-		if (StringUtils.isBlank(groupsDefine)) {
-			groupsDefine = Groups.ALL;
+		if (StringUtils.isBlank(groupsProperty)) {
+			groupsProperty = Groups.ALL;
 		}
 
-		groups = Arrays.asList(groupsDefine.split(","));
+		groups = Arrays.asList(groupsProperty.split(","));
 	}
 }

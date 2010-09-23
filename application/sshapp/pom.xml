@@ -11,7 +11,7 @@
   <parent>
     <groupId>org.springside</groupId>
     <artifactId>springside3-parent</artifactId>
-    <version>3.3.3</version>
+    <version>3.3.4</version>
     <relativePath>../../modules/parent/pom.xml</relativePath>
   </parent>
 
@@ -32,7 +32,7 @@
 
   <developers>
     <developer>
-      <id>guoxp</id>
+      <id>yjd</id>
       <name>yangjiandong</name>
       <email>young.jiandong@gmail.com</email>
       <url>http://freecode.javaeye.com/</url>
@@ -95,8 +95,11 @@
     </dependency>
     <dependency>
       <groupId>org.aspectj</groupId>
+      <artifactId>aspectjrt</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.aspectj</groupId>
       <artifactId>aspectjweaver</artifactId>
-      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>cglib</groupId>
@@ -352,12 +355,12 @@
     </dependency>
 
     <!-- logging end
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>0.9.18</version>
-    </dependency>
-    -->
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>0.9.18</version>
+      </dependency>
+      -->
 
     <!-- email begin -->
     <dependency>
@@ -385,10 +388,15 @@
     </dependency>
 
     <dependency>
-      <groupId>com.google.collections</groupId>
-      <artifactId>google-collections</artifactId>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
     </dependency>
-
+    <!--
+      <dependency>
+        <groupId>com.google.collections</groupId>
+        <artifactId>google-collections</artifactId>
+      </dependency>
+      -->
     <dependency>
       <groupId>commons-logging</groupId>
       <artifactId>commons-logging</artifactId>
@@ -404,11 +412,11 @@
     </dependency>
 
     <!--
-    <dependency>
-      <groupId>com.googlecode.xmemcached</groupId>
-      <artifactId>xmemcached</artifactId>
-    </dependency>
-    -->
+      <dependency>
+        <groupId>com.googlecode.xmemcached</groupId>
+        <artifactId>xmemcached</artifactId>
+      </dependency>
+      -->
 
     <!-- Apache Tiles -->
     <dependency>
@@ -495,6 +503,8 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+      <!-- for xxxDemo class -->
+      <scope>compile</scope>
     </dependency>
 
     <dependency>
@@ -505,6 +515,8 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
+      <!-- for xxxDemo class -->
+      <scope>compile</scope>
     </dependency>
 
     <!-- selenium 2.0 -->
@@ -554,6 +566,23 @@
     <dependency>
       <groupId>com.yahoo.platform.yui</groupId>
       <artifactId>yuicompressor</artifactId>
+    </dependency>
+
+    <!-- for jsw -->
+    <!-- assembly -->
+    <dependency>
+      <groupId>tanukisoft</groupId>
+      <artifactId>jsw</artifactId>
+      <type>zip</type>
+    </dependency>
+
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty-management</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>start</artifactId>
     </dependency>
 
     <!-- javamelody -->
@@ -647,4 +676,37 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <!-- 使用Assembly打包jsw+jetty+webapp可运行包的profile -->
+    <profile>
+      <id>package-bin</id>
+      <activation>
+        <property>
+          <name>package.classifier</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+                <configuration>
+                  <descriptors>
+                    <descriptor>assembly/assembly.xml</descriptor>
+                  </descriptors>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

@@ -1,72 +1,33 @@
 /**
- * Copyright (c) 2005-2009 springside.org.cn
+ * Copyright (c) 2005-2010 springside.org.cn
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * 
- * $Id: SpringTxTestCase.java 1141 2010-07-31 17:54:22Z calvinxiu $
+ * $Id: SpringTxTestCase.java 1215 2010-09-12 04:14:26Z calvinxiu $
  */
 package org.springside.modules.test.spring;
 
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.EncodedResource;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
-import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
-import org.springframework.test.jdbc.SimpleJdbcTestUtils;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Spring的支持数据库访问和依赖注入的JUnit4 集成测试基类.
- * 
- *  1.Spring Context IOC support
- *  2.Spring Transaction support 
- *  3.Spring JdbcTemplate and util functions
- *  4.JUnit Assert functions 
- *  
+ * Spring的支持数据库访问,事务控制和依赖注入的JUnit4 集成测试基类,相比Spring原基类名字更短.
+ *   
  * 子类需要定义applicationContext文件的位置, 如:
  * @ContextConfiguration(locations = { "/applicationContext-test.xml" })
- *  
- * @see AbstractTransactionalJUnit4SpringContextTests
- * @see SpringContextTestCase
  * 
  * @author calvin
  */
-@Transactional
-@TestExecutionListeners(TransactionalTestExecutionListener.class)
-public abstract class SpringTxTestCase extends SpringContextTestCase {
+public abstract class SpringTxTestCase extends AbstractTransactionalJUnit4SpringContextTests {
 
 	protected DataSource dataSource;
 
-	protected SimpleJdbcTemplate jdbcTemplate;
-
-	protected String sqlScriptEncoding;
-
+	@Override
 	@Autowired
 	public void setDataSource(DataSource dataSource) {
-		this.jdbcTemplate = new SimpleJdbcTemplate(dataSource);
+		super.setDataSource(dataSource);
 		this.dataSource = dataSource;
-	}
-
-	public void setSqlScriptEncoding(String sqlScriptEncoding) {
-		this.sqlScriptEncoding = sqlScriptEncoding;
-	}
-
-	protected int countRowsInTable(String tableName) {
-		return SimpleJdbcTestUtils.countRowsInTable(this.jdbcTemplate, tableName);
-	}
-
-	protected int deleteFromTables(String... names) {
-		return SimpleJdbcTestUtils.deleteFromTables(this.jdbcTemplate, names);
-	}
-
-	protected void runSql(String sqlResourcePath, boolean continueOnError) throws DataAccessException {
-		Resource resource = this.applicationContext.getResource(sqlResourcePath);
-		SimpleJdbcTestUtils.executeSqlScript(this.jdbcTemplate, new EncodedResource(resource, this.sqlScriptEncoding),
-				continueOnError);
 	}
 }

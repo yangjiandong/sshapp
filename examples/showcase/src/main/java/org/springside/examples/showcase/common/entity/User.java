@@ -17,7 +17,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springside.examples.showcase.orm.hibernate.AuditableEntity;
-import org.springside.modules.utils.ReflectionUtils;
+import org.springside.modules.utils.reflection.ConvertUtils;
 
 import com.google.common.collect.Lists;
 
@@ -123,7 +123,7 @@ public class User extends AuditableEntity {
 	@Transient
 	@JsonIgnore
 	public String getRoleNames() {
-		return ReflectionUtils.convertElementPropertyToString(roleList, "name", ", ");
+		return ConvertUtils.convertElementPropertyToString(roleList, "name", ", ");
 	}
 
 	@Override

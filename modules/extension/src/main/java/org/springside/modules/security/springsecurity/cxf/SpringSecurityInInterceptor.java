@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2005-2010 springside.org.cn
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * 
+ * $Id: Log4jMBean.java 1192 2010-09-03 15:42:13Z calvinxiu $
+ */
 package org.springside.modules.security.springsecurity.cxf;
 
 import java.util.Vector;
@@ -28,13 +35,13 @@ public class SpringSecurityInInterceptor extends AbstractPhaseInterceptor<Messag
 
 	private UserDetailsService userDetailsService;
 
-	public void setUserDetailsService(UserDetailsService userDetailsService) {
-		this.userDetailsService = userDetailsService;
-	}
-
 	public SpringSecurityInInterceptor() {
 		super(Phase.POST_PROTOCOL);
 		addAfter(WSS4JInInterceptor.class.getName());
+	}
+
+	public void setUserDetailsService(UserDetailsService userDetailsService) {
+		this.userDetailsService = userDetailsService;
 	}
 
 	public void handleMessage(Message message) throws Fault {

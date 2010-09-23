@@ -39,5 +39,5 @@
 	<!-- 使用annotation定义事务 -->
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 	
-	<bean id="springContextHolder" class="org.springside.modules.utils.SpringContextHolder" lazy-init="false"/>
+	<bean id="springContextHolder" class="org.springside.modules.utils.spring.SpringContextHolder" lazy-init="false"/>
 </beans>

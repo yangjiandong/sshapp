@@ -23,8 +23,8 @@ import org.springside.modules.utils.ThreadUtils.CustomizableThreadFactory;
 public class JdkExecutorJob implements Runnable {
 
 	private static Logger logger = LoggerFactory.getLogger(JdkExecutorJob.class);
-	
-	private int initialDelay=0;
+
+	private int initialDelay = 0;
 
 	private int period = 0;
 
@@ -61,7 +61,7 @@ public class JdkExecutorJob implements Runnable {
 		long userCount = accountManager.getUserCount();
 		logger.info("There are {} user in database.", userCount);
 	}
-	
+
 	/**
 	 * 设置任务初始启动延时时间.
 	 */

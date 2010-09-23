@@ -22,7 +22,7 @@ import org.springside.examples.showcase.common.service.AccountManager;
 @Results( { @Result(name = CrudActionSupport.RELOAD, location = "user.action", type = "redirect") })
 public class UserAction extends CrudActionSupport<User> {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7240853226114035208L;
 
 	private AccountManager accountManager;
 

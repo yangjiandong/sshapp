@@ -1,0 +1,64 @@
+1. 选型
+      Memcached独此一家别无分号。
+
+      在Windows系统中开发调试时，建议使用JMemcached，既可以命令行启动，也可以在自动化测试中嵌入式使用.
+
+      Java客户端，保险起见选了比较著名的SpyMemcached.
+
+      SpyMemcached与JMemcached的Maven Repository都是离群索居的，干脆用SpringSide自己的Repository给承包了。
+
+2. Memcached
+2.1 启动关闭
+      memcached -d -m 4096 -t 4  -p 11211 在默认的11211端口, 使用默认的4条线程, 启动4G内存(默认为64M)的Memcached实例.
+
+      ps -ef|grep memcached|grep -v grep|awk '{print $2}'|xargs kill -9 网上抄的关闭脚本, 当然更讲究的写法是在启动时指定pid文件.
+
+2.2 监控
+     telnet localhost 11211 ,输入stats 与 stats slabs, stats items 就可以看到你想知道的很多东西, Hyperic HQ也提供了相应的插件.
+
+2.3 性能
+    经测试，各个Java Client的性能差不多，甚至Text与二进制协议的性能也差不多(传说中并发连接很多时有少量差距)，差距最明显的是内容的长度，比如某个Java对象的存储，序列化后的长度有800字节，而如果用JSON的抠门式存放(初始化值未发生改变的不输出)只有300字节，性能就大幅提升了，耗时随长度线性提高，与大小是否在一个tcp包大小范围内无关。
+
+   因此强烈建议存储对象时不要使用普通的Java对象序列化，而是用JSON进行设置，并且设置不输出未发生变化的属性, 详见JSON。
+
+   同理，如果key很长(如一条SQL)，也可以先hash+base64编码.
+
+   Memcached默认为4条线程，如果CPU数为8(4*双核), 设置线程数为8(CPU数)可以成倍提高性能，但设置为大于CPU数则不会比等于CPU数没有什么变化。
+
+2.4 其他
+ExpiredTime单位为秒, 最长30天,超过30天就会认为是一个TimeStamp. ExpiredTime是TimeToLive而不是IdleTime, 初始时间只在add/set时更新，
+因此也有一个做法是用add方法(如果对象不存在就更新,否则出错)来touch更新时间戳。
+key最大255字符，data最大1M.
+超出内存时，按Slab中的LRU(最近使用)算法移除旧元素, Slab是个特殊的东西，详见Memcached wiki
+gets与cas(CheckAndSet)原语实现的乐观锁机制。
+3. SpyMemcached
+3.1 SpyMemcached
+  SpyMemcached最可贵的地方，就是提供了很强的健壮性，对某个Memcached服务器的倒掉与重起，SpyMemcached能够在后台进行很好的管理, 如不断Double间隔时间重连直到默认最大值30秒后不再增加等。
+
+3.2 SpringSide封装
+   SpringSide封装了SpyMemcachedClient与SpyMemcachedClientFactory.
+
+Factory负责维护一个SpyMemcached Client连接的启动与关闭.
+SpyMemcached特别设计了一个连接打天下的架构, 再多的Client实例在性能测试时没有什么不同.
+Client提供常用的Get/GetBulk/Set/Delete/Incr/Decr函数的封装，如忽略异常，转换对象类型.
+Client未提供封装的函数可直接调用getClient()取出Spy的原版MemcachedClient来使用.
+3.3 其他
+SpyMemcache的默认使用压缩的阀值是16k，一般遇不到.
+但SpyMemcached默认超时是1秒, 在性能要求比较高时这个反应有点慢了, 最好将它设为200毫秒.
+incr/decr的可设默认值，但只有Binary协议支持，AscII协议其实通过Spy后补一个add操作实现.
+在不设默认值时，如果key不存在则返回-1.
+如果不关心返回值，多使用asyncIncr与asyncDecr，充分发挥异步的优势, 可惜的是为兼顾文本协议，不支持默认值.
+getBulk()函数因为memcached实际并无提供getBulk的原语，只是spy在client进行的封装.
+4. JMemcached
+4.1 命令行启动
+   java -jar jmemcached-cli-0.8-main.jar
+
+4.2 代码启动关闭
+   SpringSide封装了一个JmemcachedServer, 负责JMemcached启动与关闭.
+
+Comments  (Hide)
+hibernate - memcached
+
+http://code.google.com/p/hibernate-memcached/
+
+白衣可以考虑整合一下........

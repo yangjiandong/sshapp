@@ -16,9 +16,9 @@ import org.springside.modules.security.springsecurity.SpringSecurityUtils;
  *
  * @author calvin
  */
-@SuppressWarnings("serial")
 public class AuditListener implements SaveOrUpdateEventListener {
 
+    private static final long serialVersionUID = -7481545873785342485L;
     private static Logger logger = LoggerFactory.getLogger(AuditListener.class);
 
     public void onSaveOrUpdate(SaveOrUpdateEvent event) throws HibernateException {

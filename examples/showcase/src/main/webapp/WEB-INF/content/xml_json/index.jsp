@@ -25,8 +25,8 @@
 		</ul>
 
 		<h2>用户故事：</h2>
-		<p>在JaxbTest测试用例中演示XML与Java对象的转换及Dom4j的使用.</p>
-		<p>在JacksonTest测试用例中演示JSON字符串与Bean, Map, List<String>, List<Bean>, Bean[]之间的转换.</p>
+		<p>在JaxbDemo.java中演示XML与Java对象的转换及Dom4j的使用.</p>
+		<p>在JsonDemo.java测试用例中演示JSON字符串与Bean, Map, List<String>, List<Bean>, Bean[],Enum之间的转换.</p>
 		</div>
 	</div>
 </div>

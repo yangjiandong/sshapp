@@ -41,6 +41,8 @@ import com.google.common.collect.Lists;
 @Path("/users")
 public class UserResourceService {
 
+	private static final String CHARSET = ";charset=UTF-8";
+
 	private static Logger logger = LoggerFactory.getLogger(UserResourceService.class);
 
 	@Autowired
@@ -54,7 +56,7 @@ public class UserResourceService {
 	 */
 	@GET
 	@Secured("ROLE_User")
-	@Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML + CHARSET })
 	public List<UserDTO> getAllUser() {
 		try {
 			List<User> entityList = accountManager.getAllUserWithRole();
@@ -74,10 +76,10 @@ public class UserResourceService {
 	 */
 	@GET
 	@Path("{id}")
-	@Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML + CHARSET })
 	public UserDTO getUser(@PathParam("id") String id) {
 		try {
-			User entity = accountManager.getLoadedUser(id);
+			User entity = accountManager.getInitedUser(id);
 			UserDTO dto = dozer.map(entity, UserDTO.class);
 			return dto;
 		} catch (ObjectNotFoundException e) {
@@ -104,7 +106,7 @@ public class UserResourceService {
 			if ("html".equals(format)) {
 				//返回html格式的特定字符串.
 				String html = "<div>" + entity.getName() + ", your mother call you...</div>";
-				return Response.ok(html, MediaType.TEXT_HTML).build();
+				return Response.ok(html, MediaType.TEXT_HTML + CHARSET).build();
 			} else {
 				//返回JSON格式的对象.
 				UserDTO dto = dozer.map(entity, UserDTO.class);
@@ -137,8 +139,10 @@ public class UserResourceService {
 			userName = queryParams.getFirst("userName");
 		}
 
-		if (userName == null)
+		if (userName == null) {
 			buildException(450, "用戶名既不在Http Header也不在URL参数中");
+		}
+
 		return userName;
 	}
 

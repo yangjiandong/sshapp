@@ -11,7 +11,7 @@ import org.dom4j.Element;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.springside.examples.showcase.report.DummyDataFetcher.TemperatureAnomaly;
-import org.springside.modules.web.struts2.Struts2Utils;
+import org.springside.modules.utils.web.struts2.Struts2Utils;
 
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -21,8 +21,9 @@ import com.opensymphony.xwork2.ActionSupport;
  * @author calvin
  */
 @Namespace("/report/flashchart")
-@SuppressWarnings("serial")
 public class ChartDataAction extends ActionSupport {
+
+	private static final long serialVersionUID = -7651947806236556649L;
 
 	/**
 	 * 生成CSV格式的内容.

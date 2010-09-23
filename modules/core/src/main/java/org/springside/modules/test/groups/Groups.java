@@ -1,9 +1,9 @@
 /**
- * Copyright (c) 2005-2009 springside.org.cn
+ * Copyright (c) 2005-2010 springside.org.cn
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * 
- * $Id: Groups.java 1141 2010-07-31 17:54:22Z calvinxiu $
+ * $Id: Groups.java 1185 2010-08-29 15:56:19Z calvinxiu $
  */
 package org.springside.modules.test.groups;
 
@@ -26,7 +26,7 @@ public @interface Groups {
 	/**
 	 * 执行所有组别的测试.
 	 */
-	final String ALL = "all";
+	String ALL = "all";
 
 	/**
 	 * 组别定义,默认为ALL.

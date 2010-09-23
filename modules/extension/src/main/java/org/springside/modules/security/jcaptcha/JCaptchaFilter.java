@@ -1,9 +1,9 @@
 /**
- * Copyright (c) 2005-2009 springside.org.cn
+ * Copyright (c) 2005-2010 springside.org.cn
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * 
- * $Id: JCaptchaFilter.java 863 2010-01-11 16:46:32Z calvinxiu $
+ * $Id: JCaptchaFilter.java 1213 2010-09-11 16:28:22Z calvinxiu $
  */
 package org.springside.modules.security.jcaptcha;
 
@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
-import org.springside.modules.web.ServletUtils;
+import org.springside.modules.utils.web.ServletUtils;
 
 import com.octo.captcha.service.CaptchaService;
 import com.octo.captcha.service.CaptchaServiceException;
@@ -150,7 +150,7 @@ public class JCaptchaFilter implements Filter {
 	protected void genernateCaptchaImage(final HttpServletRequest request, final HttpServletResponse response)
 			throws IOException {
 
-		ServletUtils.setNoCacheHeader(response);
+		ServletUtils.setDisableCacheHeader(response);
 		response.setContentType("image/jpeg");
 
 		ServletOutputStream out = response.getOutputStream();

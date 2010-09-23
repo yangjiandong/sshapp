@@ -21,13 +21,16 @@
 
 		<h2>技术说明：</h2>
 		<ul>
-			<li>演示在Spring中使用Ehcache.</li>
-			<li>演示最简单的SoftRerence的,每个元素一天后过期的ConcurrentMap</li>
+			<li>演示Memcached的使用</li>
+			<li>演示Spring与Ehcache的集成</li>
+			<li>演示基于Google Collection的简单MapCache, 每个元素一天后过期, 当key不存在时需要重新计算时能避免并发访问造成的重复计算</li>
 		</ul>
 		
 		<h2>用户故事：</h2>
 		<ul>
-			<li>在Web高级演示的ContentServlet中使用Ehcache缓存静态文件的元数据.</li>
+			<li>在AccountManager.java中演示了对Memcached的使用</li>
+			<li>EhcacheDemo.java演示了Ehcache与Spring的集成</li>
+			<li>MapCacheDemo.java演示了基于Google Collection实现的MapCache</li>
 		</ul>
 		</div>
 	</div>

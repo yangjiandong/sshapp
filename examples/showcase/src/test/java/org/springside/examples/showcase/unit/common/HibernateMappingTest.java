@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springside.modules.test.spring.SpringTxTestCase;
 import org.springside.modules.test.utils.DbUnitUtils;
 
@@ -24,6 +25,7 @@ import org.springside.modules.test.utils.DbUnitUtils;
  * @author calvin
  */
 @ContextConfiguration(locations = { "/applicationContext-test.xml" })
+@TransactionConfiguration(transactionManager = "defaultTransactionManager")
 public class HibernateMappingTest extends SpringTxTestCase {
 	private static Logger logger = LoggerFactory.getLogger(HibernateMappingTest.class);
 

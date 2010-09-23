@@ -1,0 +1,40 @@
+
+
+
+1. Overview
+   数据库连接池可以使用应用服务器自带的实现，也可以使用开源的连接词如DBCP，可怜Tomcat/JBoss/Jetty貌似用的都是它。
+
+   使用ApplicationServer级别的连接池， 在ApplicationServer内的几个webapp间共享连接池以节约总的连接数，也可以为每个webapp独立分配以保证关键应用的供应。
+
+   DBCP好还是Hibernate CP30 好，个人没有太深的感觉。因为Tomcat 还有 Spring的示例都是用DBCP的，那就DBCP吧。
+
+2. 配置参数
+2.1 池大小参数
+   DBCP的性能配置实际只需2个参数
+
+   #最大空闲值,即连接池的大小。
+    dbcp.maxIdle=20
+
+   #连接池瞬时能打开的最大值,大于MaxIdle的连接在使用完毕后会立即释放。在达到MaxActive后，池将不会再创建连接，而会等待其他使用者释放连接。
+   dbcp.maxActive=50
+
+  一般这几个参数应该放在applicationContext.properties里方便部署时快速修改。
+
+  有两种配置风格，
+
+  比如较少使用者的管理界面，平时的使用者不多，但瞬时可能会有较多的使用者，如Mini-Web，会设置一个较低的maxIdle 而设置较高的maxActive。
+
+  比如长期高负荷运行的业务系统，会设置一个合理的maxIdle值，且maxActive==maxIdle
+
+2.2 长期idle连接的处理
+   Mysql服务端会断开超过8小时的空闲连接，如果系统只在白天工作时间被使用，DBCP的连接就很容易被断开的连接，而且DBCP对jdbc url里设置autoReconnect=true是无效。
+
+   更好的做法DBCP主动断开超时的连接。
+
+  #运行判断连接超时任务的时间间隔，单位为毫秒，默认为-1，即不执行任务。
+  timeBetweenEvictionRunsMillis=3600000
+
+ #连接的超时时间，默认为半小时。
+  minEvictableIdleTimeMillis=3600000
+
+  经测试，按上面的设置，DBCP会在连接idle两小时后将其断开。

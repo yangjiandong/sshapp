@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) 2005-2010 springside.org.cn
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * 
+ * $Id: DbUnitUtils.java 1186 2010-08-29 16:34:10Z calvinxiu $
+ */
 package org.springside.modules.test.utils;
 
 import java.io.IOException;
@@ -18,13 +25,20 @@ import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.ResourceLoader;
 import org.springside.modules.utils.PropertiesUtils;
 
+/**
+ * 使用DBUnit初始化测试用H2嵌入式数据库数据的工具类.
+ */
 public class DbUnitUtils {
 
 	private static Logger logger = LoggerFactory.getLogger(PropertiesUtils.class);
 	private static ResourceLoader resourceLoader = new DefaultResourceLoader();
 
 	/**
-	 * 初始化XML数据文件到H2数据库, XML数据文件中涉及的表在插入数据前先进行清除. 
+	 * 清除并插入XML数据文件到H2数据库.
+	 * 
+	 * XML数据文件中涉及的表在插入数据前会先进行清除. 
+	 * 
+	 * @param xmlFilePaths 符合Spring Resource路径格式的文件列表.
 	 */
 	public static void loadData(DataSource h2DataSource, String... xmlFilePaths) throws Exception {
 		execute(DatabaseOperation.CLEAN_INSERT, h2DataSource, xmlFilePaths);
@@ -45,7 +59,9 @@ public class DbUnitUtils {
 	}
 
 	/**
-	 * 在ClassPath中查找XML数据文件并执行DBUnit Operation.
+	 * 按DBUnit Operation执行XML数据文件的数据.
+	 * 
+	 * @param xmlFilePaths 符合Spring Resource路径格式的文件列表.
 	 */
 	private static void execute(DatabaseOperation operation, DataSource h2DataSource, String... xmlFilePaths)
 			throws DatabaseUnitException, SQLException {

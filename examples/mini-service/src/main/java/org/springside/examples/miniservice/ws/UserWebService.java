@@ -24,21 +24,20 @@ public interface UserWebService {
 	/**
 	 * 获取所有用户.
 	 */
-	public GetAllUserResult getAllUser();
+	GetAllUserResult getAllUser();
 
 	/**
 	 * 获取用户.
 	 */
-	public GetUserResult getUser(@WebParam(name = "id") Long id);
+	GetUserResult getUser(@WebParam(name = "id") Long id);
 
 	/**
 	 * 新建用户.
 	 */
-	public CreateUserResult createUser(@WebParam(name = "user") UserDTO user);
+	CreateUserResult createUser(@WebParam(name = "user") UserDTO user);
 
 	/**
 	 * 验证用户名密码.
 	 */
-	public AuthUserResult authUser(@WebParam(name = "loginName") String loginName,
-			@WebParam(name = "password") String password);
+	AuthUserResult authUser(@WebParam(name = "loginName") String loginName, @WebParam(name = "password") String password);
 }

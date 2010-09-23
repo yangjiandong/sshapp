@@ -20,7 +20,7 @@
 				<!-- 本地开发环境配置 -->
 				<value>classpath*:/application.local.properties</value>
 				<!-- 服务器生产环境配置 -->
-				<value>file:/var/springside/application.server.properties</value>
+				<value>file:/var/mini-web/application.server.properties</value>
 			</list>
 		</property>
 	</bean>
@@ -37,10 +37,11 @@
 		<property name="password" value="${jdbc.password}" />
 
 		<!-- Connection Pooling Info -->
-		<property name="initialSize" value="${dbcp.initialSize}" />
-		<property name="maxActive" value="${dbcp.maxActive}" />
 		<property name="maxIdle" value="${dbcp.maxIdle}" />
+		<property name="maxActive" value="${dbcp.maxActive}" />
 		<property name="defaultAutoCommit" value="false" />
+		<property name="timeBetweenEvictionRunsMillis" value="3600000" />
+		<property name="minEvictableIdleTimeMillis" value="3600000" />
 	</bean>
 
 	<!-- 数据源配置,使用应用服务器的数据库连接池 -->

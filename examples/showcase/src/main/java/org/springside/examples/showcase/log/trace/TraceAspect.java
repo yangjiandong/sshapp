@@ -40,7 +40,7 @@ public class TraceAspect {
 	 */
 	@Around("execution(@Traced * *(..))")
 	public Object logAground(ProceedingJoinPoint pjp) throws Throwable {
-		Class sourceClass = pjp.getSignature().getDeclaringType();
+		Class<?> sourceClass = pjp.getSignature().getDeclaringType();
 		Logger logger = LoggerFactory.getLogger(sourceClass);
 		Object result = null;
 

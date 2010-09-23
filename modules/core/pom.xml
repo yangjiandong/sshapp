@@ -4,10 +4,10 @@
   <parent>
     <groupId>org.springside</groupId>
     <artifactId>springside3-parent</artifactId>
-    <version>3.3.3</version>
+    <version>3.3.4</version>
   </parent>
   <artifactId>springside3-core</artifactId>
-    <packaging>jar</packaging>
+  <packaging>jar</packaging>
   <name>Springside3's Core Module</name>
 
   <dependencies>
@@ -22,11 +22,6 @@
       <artifactId>spring-jdbc</artifactId>
       <optional>true</optional>
     </dependency>
-    <dependency>
-      <groupId>org.apache.geronimo.specs</groupId>
-      <artifactId>geronimo-annotation_1.0_spec</artifactId>
-      <optional>true</optional>
-    </dependency>
 
     <!-- hibernate -->
     <dependency>
@@ -38,6 +33,15 @@
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate-annotations</artifactId>
       <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-entitymanager</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javassist</groupId>
+      <artifactId>javassist</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <!-- web -->
@@ -101,8 +105,8 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>com.google.collections</groupId>
-      <artifactId>google-collections</artifactId>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -207,6 +211,12 @@
       <artifactId>cglib-nodep</artifactId>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>mockit</groupId>
+      <artifactId>jmockit</artifactId>
+    </dependency>
+
   </dependencies>
 
   <build>

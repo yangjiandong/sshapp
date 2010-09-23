@@ -43,7 +43,7 @@ public class RoleController {
         String name = request.getParameter("name");
 
         if (!StringUtils.isEmpty(name)) {
-            PropertyFilter filter = new PropertyFilter("name", MatchType.LIKE, name);
+            PropertyFilter filter = new PropertyFilter("name_"+MatchType.LIKE, name);
             filters.add(filter);
         }
 

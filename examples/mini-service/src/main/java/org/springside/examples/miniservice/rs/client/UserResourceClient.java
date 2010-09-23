@@ -43,5 +43,4 @@ public class UserResourceClient {
 				ClientResponse.class);
 		return response.getLocation();
 	}
-
 }

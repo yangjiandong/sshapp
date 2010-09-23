@@ -1,0 +1,30 @@
+1. 选型
+    大家爽完Memcached之后，难免会想再找一个可持久化数据的，我们选了Tokyo Tyrant。
+
+    好处是速度不错，而且大至兼容Memcached的文本协议，客户端可以继续使用SpyMemcached。
+
+    坏处是只是大致兼容，像Expired Time，CheckAndSet这些重要的原语都不支持，而且在可扩展性上没什么想象空间，和传统数据库一样的Active-Active replication。
+
+    Anyway看了一圈最后还是选了它。
+
+2. In SpringSide3
+2.1  客户端
+    在modules/extension项目封装了SpyMemcached客户端，屏蔽了一些TT不支持的Binary协议，Expired Time，CheckAndSet语句，而且实现了一个spy client池--对Memcached，一个spy client单线程已足够，而对TT必须使用池。
+
+2.2 服务器配置
+    在servers/tokyotyrant中，演示了生产环境active-active HA模式与测试环境单机版本两种启动脚本。
+
+    生产环境脚本在原有ttservctrl的基础上作了如下修改:
+
+打开了ulogdir，ulimsiz，sid(必须不一样)，mhost(直接填写对方的IP或用相同的host名字然后在/etc/hosts中设定对方的IP)，mport ，rtsfile 这几个HA 同步复制相关的选项。
+在cmd中添加-thnum 32 （32线程，默认为8），-uas（异步写日志）的参数
+在dbname中设置参数：xmsiz=2147483648 （用mmap映射2G内存)，bnum=1000000(桶数量从100万增加到1000万，假设TT中有大约1000万数据)
+   测试环境脚本等于原来的ttservctrl.
+
+2.3 HQ监控
+    在servers/hq中，增加了tokyotyrant -plugin.jar，在原有memcached-plugin.jar的基础上，对tokyotyrant实际支持的输出值进行了微调。
+
+    原理都是telnet 1978端口，执行status命令。
+
+2.4 后续 演示
+    在下个版本，将会演示TT的一个很重要的私有协议--PrefixMatch，找出超时对象就靠它了，而且会扩展JMemcached支持该原语以方便测试用例编写与Windows上的开发。

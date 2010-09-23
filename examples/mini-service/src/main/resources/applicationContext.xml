@@ -18,7 +18,7 @@
 				<!-- 本地开发环境配置 -->
 				<value>classpath*:/application.local.properties</value>
 				<!-- 服务器生产环境配置 -->
-				<value>file:/var/springside/application.server.properties</value>
+				<value>file:/var/mini-service/application.server.properties</value>
 			</list>
 		</property>
 	</bean>
@@ -26,7 +26,7 @@
 	<!-- 使用annotation 自动注册bean,并保证@Required,@Autowired的属性被注入 -->
 	<context:component-scan base-package="org.springside.examples.miniservice" />
 
-	<!-- 数据源配置,使用应用中的DBCP数据库连接池 -->
+	<!-- 数据源配置, 使用应用中的DBCP数据库连接池 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<!-- Connection Info -->
 		<property name="driverClassName" value="${jdbc.driver}" />
@@ -35,13 +35,14 @@
 		<property name="password" value="${jdbc.password}" />
 
 		<!-- Connection Pooling Info -->
-		<property name="initialSize" value="${dbcp.initialSize}" />
 		<property name="maxActive" value="${dbcp.maxActive}" />
 		<property name="maxIdle" value="${dbcp.maxIdle}" />
 		<property name="defaultAutoCommit" value="false" />
+		<property name="timeBetweenEvictionRunsMillis" value="3600000"/>
+		<property name="minEvictableIdleTimeMillis" value="3600000"/>
 	</bean>
-
-	<!-- 数据源配置,在生产环境使用应用服务器的数据库连接池 -->
+	
+	<!-- 数据源配置,在生产环境可选择使用应用服务器的数据库连接池 -->
 	<!-- <jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/ExampleDB" />-->
 
 	<!-- Hibernate配置 -->

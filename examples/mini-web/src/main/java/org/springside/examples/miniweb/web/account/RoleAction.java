@@ -6,11 +6,11 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springside.examples.miniweb.dao.HibernateUtils;
 import org.springside.examples.miniweb.entity.account.Authority;
 import org.springside.examples.miniweb.entity.account.Role;
 import org.springside.examples.miniweb.service.account.AccountManager;
 import org.springside.examples.miniweb.web.CrudActionSupport;
-import org.springside.modules.orm.hibernate.HibernateUtils;
 
 /**
  * 角色管理Action.
@@ -23,9 +23,8 @@ import org.springside.modules.orm.hibernate.HibernateUtils;
 @Results( { @Result(name = CrudActionSupport.RELOAD, location = "role.action", type = "redirect") })
 public class RoleAction extends CrudActionSupport<Role> {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -4052047494894591406L;
 
-	@Autowired
 	private AccountManager accountManager;
 
 	//-- 页面属性 --//
@@ -109,5 +108,10 @@ public class RoleAction extends CrudActionSupport<Role> {
 	 */
 	public void setCheckedAuthIds(List<Long> checkedAuthIds) {
 		this.checkedAuthIds = checkedAuthIds;
+	}
+
+	@Autowired
+	public void setAccountManager(AccountManager accountManager) {
+		this.accountManager = accountManager;
 	}
 }

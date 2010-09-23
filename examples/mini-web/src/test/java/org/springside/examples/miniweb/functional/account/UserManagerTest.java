@@ -1,5 +1,7 @@
 package org.springside.examples.miniweb.functional.account;
 
+import static org.junit.Assert.*;
+
 import java.util.List;
 
 import org.apache.commons.collections.ListUtils;

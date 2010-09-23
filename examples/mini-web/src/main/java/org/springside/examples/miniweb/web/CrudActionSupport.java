@@ -16,8 +16,9 @@ import com.opensymphony.xwork2.Preparable;
  * 
  * @author calvin
  */
-@SuppressWarnings("serial")
 public abstract class CrudActionSupport<T> extends ActionSupport implements ModelDriven<T>, Preparable {
+
+	private static final long serialVersionUID = -1653204626115064950L;
 
 	/** 进行增删改操作后,以redirect方式重新打开action默认页的result名.*/
 	public static final String RELOAD = "reload";
@@ -60,20 +61,20 @@ public abstract class CrudActionSupport<T> extends ActionSupport implements Mode
 
 	//-- Preparable函数 --//
 	/**
-	 * 实现空的prepare()函数,屏蔽所有Action函数公共的二次绑定.
+	 * 实现空的prepare()函数,屏蔽了所有Action函数都会执行的公共的二次绑定.
 	 */
 	public void prepare() throws Exception {
 	}
 
 	/**
-	 * 在input()前执行二次绑定.
+	 * 定义在input()前执行二次绑定.
 	 */
 	public void prepareInput() throws Exception {
 		prepareModel();
 	}
 
 	/**
-	 * 在save()前执行二次绑定.
+	 * 定义在save()前执行二次绑定.
 	 */
 	public void prepareSave() throws Exception {
 		prepareModel();

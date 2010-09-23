@@ -1,5 +1,6 @@
 package org.springside.examples.showcase.unit.jmx;
 
+import static org.junit.Assert.*;
 import java.util.List;
 
 import org.apache.log4j.Logger;

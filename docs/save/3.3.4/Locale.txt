@@ -1,0 +1,16 @@
+1. 多时区
+    showcase中的JodaDemo演示了关于多时区的使用。
+
+1.1 testTimeZone
+    一个基本原则是，Joda的DateTime内在由1970至今的UTC的毫秒数(与System.currentTimeMillis相同)及时区名称两个变量组成，字符串只是外在的输入输出途径。
+
+1.2 testLocale
+   同一时间可以显示为不同语言，不同默认格式的字符串，Joda也做了良好的支持，详见JodaDemo中的对中英文不同长度格式的演示。
+
+    如LL风格(日期与时间均为Long格式)的中文，2010年8月24日 下午03时58分51秒，
+
+    MM风格的英文，Aug 24, 2010 3:58:51 PM。
+
+    默认的Locale不多，一般是用语言作为构造函数参数构造Locale.
+
+    DateTimeFormatter formatter = DateTimeFormat.forStyle("ML").withLocale(new Locale("zh"));

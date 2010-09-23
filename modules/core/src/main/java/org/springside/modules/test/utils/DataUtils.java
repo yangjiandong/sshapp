@@ -1,9 +1,9 @@
 /**
- * Copyright (c) 2005-2009 springside.org.cn
+ * Copyright (c) 2005-2010 springside.org.cn
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * 
- * $Id: DataUtils.java 889 2010-01-22 17:27:11Z calvinxiu $
+ * $Id: DataUtils.java 1185 2010-08-29 15:56:19Z calvinxiu $
  */
 package org.springside.modules.test.utils;
 
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * 数据生成工具类.
+ * 测试数据生成工具类.
  * 
  * @author calvin
  */
@@ -27,7 +27,7 @@ public class DataUtils {
 	}
 
 	/**
-	 * 返回随机名称, prefix字符串+随机数字.
+	 * 返回随机名称, prefix字符串+5位随机数字.
 	 */
 	public static String randomName(String prefix) {
 		return prefix + random.nextInt(10000);

@@ -84,7 +84,7 @@ public class UserWebServiceImpl implements UserWebService {
 		try {
 
 			StopWatch dbStopWatch = new Slf4JStopWatch("GetUser.fetchDB");
-			User entity = accountManager.getLoadedUser(id);
+			User entity = accountManager.getInitedUser(id);
 			dbStopWatch.stop();
 
 			UserDTO dto = dozer.map(entity, UserDTO.class);

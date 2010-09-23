@@ -14,9 +14,9 @@ import com.opensymphony.xwork2.ActionSupport;
  * @author calvin
  */
 @Namespace("/log")
-@SuppressWarnings("serial")
 public class LogAction extends ActionSupport {
 
+	private static final long serialVersionUID = 3331334076147567129L;
 	/**
 	 * 在log4j.properties中,本logger已被指定使用asyncAppender.
 	 */
@@ -42,9 +42,9 @@ public class LogAction extends ActionSupport {
 		logger.debug("Hello, a debug message");
 		TraceUtils.endTrace();
 	}
-	
+
 	@Traced
-	private int logAop(int i){
-		return i;	
+	private int logAop(int i) {
+		return i;
 	}
 }

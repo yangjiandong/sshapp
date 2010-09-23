@@ -1,25 +1,50 @@
 package org.springside.examples.miniweb.unit.dao.account;
 
+import static org.junit.Assert.*;
+
+import javax.sql.DataSource;
+
+import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 import org.springside.examples.miniweb.dao.account.RoleDao;
 import org.springside.examples.miniweb.dao.account.UserDao;
 import org.springside.examples.miniweb.entity.account.Role;
 import org.springside.examples.miniweb.entity.account.User;
-import org.springside.examples.miniweb.unit.dao.BaseTxTestCase;
+import org.springside.modules.test.spring.SpringTxTestCase;
 import org.springside.modules.test.utils.DataUtils;
+import org.springside.modules.test.utils.DbUnitUtils;
 
 /**
  * RoleDao的测试用例, 测试ORM映射及特殊的DAO操作.
  * 
  * @author calvin
  */
-public class RoleDaoTest extends BaseTxTestCase {
+@ContextConfiguration(locations = { "/applicationContext-test.xml" })
+public class RoleDaoTest extends SpringTxTestCase {
+
+	private static DataSource dataSourceHolder = null;
+
 	@Autowired
 	private RoleDao roleDao;
 
 	@Autowired
 	private UserDao userDao;
+
+	@Before
+	public void loadDefaultData() throws Exception {
+		if (dataSourceHolder == null) {
+			DbUnitUtils.loadData(dataSource, "/data/default-data.xml");
+			dataSourceHolder = dataSource;
+		}
+	}
+
+	@AfterClass
+	public static void cleanDefaultData() throws Exception {
+		DbUnitUtils.removeData(dataSourceHolder, "/data/default-data.xml");
+	}
 
 	/**
 	 * 测试删除角色时删除用户-角色的中间表.

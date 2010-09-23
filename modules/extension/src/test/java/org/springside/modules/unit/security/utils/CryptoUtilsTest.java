@@ -1,11 +1,12 @@
 package org.springside.modules.unit.security.utils;
 
-import org.junit.Assert;
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 import org.springside.modules.security.utils.CryptoUtils;
-import org.springside.modules.utils.EncodeUtils;
+import org.springside.modules.utils.encode.EncodeUtils;
 
-public class CryptoUtilsTest extends Assert {
+public class CryptoUtilsTest {
 	@Test
 	public void mac() {
 		String input = "foo message";

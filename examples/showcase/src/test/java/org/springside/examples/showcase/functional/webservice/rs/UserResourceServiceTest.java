@@ -1,5 +1,7 @@
 package org.springside.examples.showcase.functional.webservice.rs;
 
+import static org.junit.Assert.*;
+
 import java.util.List;
 
 import org.junit.BeforeClass;

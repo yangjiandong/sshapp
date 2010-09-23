@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2005-2009 springside.org.cn
+ * Copyright (c) 2005-2010 springside.org.cn
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * 
@@ -12,7 +12,7 @@ import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 
-import org.springside.modules.utils.EncodeUtils;
+import org.springside.modules.utils.encode.EncodeUtils;
 
 /**
  * 支持SHA-1/MD5消息摘要的工具类.

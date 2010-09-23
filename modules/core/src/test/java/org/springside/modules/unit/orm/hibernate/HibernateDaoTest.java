@@ -1,11 +1,14 @@
 package org.springside.modules.unit.orm.hibernate;
 
+import static org.junit.Assert.*;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.lang.xwork.StringUtils;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.MatchMode;
@@ -33,8 +36,9 @@ public class HibernateDaoTest extends SpringTxTestCase {
 
 	@Before
 	public void setUp() throws Exception {
-		jdbcTemplate.update("drop all objects");
-		jdbcTemplate.update("runscript from 'src/test/resources/schema.sql'");
+		simpleJdbcTemplate.update("drop all objects");
+
+		executeSqlScript("classpath:/schema.sql", false);
 
 		DbUnitUtils.loadData((DataSource) applicationContext.getBean("dataSource"), "/test-data.xml");
 
@@ -84,7 +88,6 @@ public class HibernateDaoTest extends SpringTxTestCase {
 		page.setPageNo(2);
 		dao.findPage(page, "from User u where email like :email", paraMap);
 		assertEquals(1, page.getResult().size());
-
 	}
 
 	@Test
@@ -139,13 +142,13 @@ public class HibernateDaoTest extends SpringTxTestCase {
 		assertEquals(1, users.size());
 		assertEquals("admin", users.get(0).getLoginName());
 
-		//LIKE filter
-		PropertyFilter likeFilter = new PropertyFilter("LIKES_email", "springside.org.cn");
-		filters = Lists.newArrayList(likeFilter);
+		//LIKE filter and OR
+		PropertyFilter likeAndOrFilter = new PropertyFilter("LIKES_email_OR_loginName", "springside.org.cn");
+		filters = Lists.newArrayList(likeAndOrFilter);
 
 		users = dao.find(filters);
 		assertEquals(6, users.size());
-		assertTrue(users.get(0).getEmail().indexOf("springside.org.cn") != -1);
+		assertTrue(StringUtils.contains(users.get(0).getEmail(), "springside.org.cn"));
 
 		//Filter with Page
 		Page<User> page = new Page<User>(5);
@@ -167,13 +170,6 @@ public class HibernateDaoTest extends SpringTxTestCase {
 		filters = Lists.newArrayList(dateGtFilter);
 		users = dao.find(filters);
 		assertEquals(0, users.size());
-	}
-
-	@Test
-	public void isPropertyUnique() {
-		assertEquals(true, dao.isPropertyUnique("loginName", "admin", "admin"));
-		assertEquals(true, dao.isPropertyUnique("loginName", "user6", "admin"));
-		assertEquals(false, dao.isPropertyUnique("loginName", "user2", "admin"));
 	}
 
 	@Test

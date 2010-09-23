@@ -3,7 +3,6 @@ package org.ssh.app.common.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +10,8 @@ import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springside.modules.binder.JsonBinder;
+import org.springside.modules.utils.encode.JsonBinder;
 import org.springside.modules.memcached.SpyMemcachedClient;
-import org.springside.modules.memcached.SpyMemcachedClientFactory;
 import org.springside.modules.security.springsecurity.SpringSecurityUtils;
 import org.ssh.app.cache.MemcachedObjectType;
 import org.ssh.app.common.dao.RoleDao;
@@ -38,9 +36,9 @@ public class AccountManager {
 
     private UserJdbcDao userJdbcDao;
 
-    private SpyMemcachedClientFactory spyClientFactory;
+    private SpyMemcachedClient spyMemcachedClient;
 
-    private JsonBinder jsonBinder = new JsonBinder(Inclusion.NON_DEFAULT);
+    private JsonBinder jsonBinder = JsonBinder.buildNonDefaultBinder();
 
     private ServerConfig serverConfig; //系统配置
 
@@ -92,7 +90,7 @@ public class AccountManager {
      */
     @Transactional(readOnly = true)
     public User getLoadedUser(String id) {
-        if (spyClientFactory != null) {
+        if (spyMemcachedClient != null) {
             logger.debug("use memecache!!!");
             return getUserFromMemcached(id);
         } else {
@@ -104,12 +102,11 @@ public class AccountManager {
      * 访问Memcached, 使用JSON字符串存放对象以节约空间.
      */
     private User getUserFromMemcached(String id) {
-        SpyMemcachedClient spyClient = spyClientFactory.getClient();
 
         String key = MemcachedObjectType.USER.getPrefix() + id;
 
         User user = null;
-        String jsonString = spyClient.get(key);
+        String jsonString = spyMemcachedClient.get(key);
 
         if (jsonString == null) {
             //用户不在 memcached中,从数据库中取出并放入memcached.
@@ -117,7 +114,7 @@ public class AccountManager {
             user = userJdbcDao.queryObject(id);
             if (user != null) {
                 jsonString = jsonBinder.toJson(user);
-                spyClient.set(key, MemcachedObjectType.USER.getExpiredTime(), jsonString);
+                spyMemcachedClient.set(key, MemcachedObjectType.USER.getExpiredTime(), jsonString);
             }
         } else {
             user = jsonBinder.fromJson(jsonString, User.class);
@@ -202,8 +199,8 @@ public class AccountManager {
     }
 
     @Autowired(required = false)
-    public void setSpyClientFactory(SpyMemcachedClientFactory spyClientFactory) {
-        this.spyClientFactory = spyClientFactory;
+    public void setSpyMemcachedClient(SpyMemcachedClient spyMemcachedClient) {
+        this.spyMemcachedClient = spyMemcachedClient;
     }
 
     //初始

@@ -1,11 +1,19 @@
 package org.springside.examples.miniservice.unit.dao.account;
 
+import static org.junit.Assert.*;
+
+import javax.sql.DataSource;
+
+import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 import org.springside.examples.miniservice.dao.account.UserDao;
 import org.springside.examples.miniservice.data.AccountData;
 import org.springside.examples.miniservice.entity.account.User;
-import org.springside.examples.miniservice.unit.dao.BaseTxTestCase;
+import org.springside.modules.test.spring.SpringTxTestCase;
+import org.springside.modules.test.utils.DbUnitUtils;
 
 /**
  * UserDao的集成测试用例,测试ORM映射及特殊的DAO操作.
@@ -14,15 +22,33 @@ import org.springside.examples.miniservice.unit.dao.BaseTxTestCase;
  * 
  * @author calvin
  */
-public class UserDaoTest extends BaseTxTestCase {
+@ContextConfiguration(locations = { "/applicationContext-test.xml" })
+public class UserDaoTest extends SpringTxTestCase {
+
+	private static DataSource dataSourceHolder = null;
 
 	@Autowired
 	private UserDao entityDao;
 
+	@Before
+	public void loadDefaultData() throws Exception {
+		if (dataSourceHolder == null) {
+			DbUnitUtils.loadData(dataSource, "/data/default-data.xml");
+			dataSourceHolder = dataSource;
+		}
+	}
+
+	@AfterClass
+	public static void cleanDefaultData() throws Exception {
+		DbUnitUtils.removeData(dataSourceHolder, "/data/default-data.xml");
+	}
+
 	@Test
 	//如果你需要真正插入数据库,将Rollback设为false
 	//@Rollback(false) 
-	public void crudEntityWithRole() {
+	public void crudEntityWithRole() throws Exception {
+		DbUnitUtils.loadData(dataSource, "/data/default-data.xml");
+
 		//新建并保存带角色的用户
 		User user = AccountData.getRandomUserWithAdminRole();
 		entityDao.save(user);
@@ -47,7 +73,7 @@ public class UserDaoTest extends BaseTxTestCase {
 	}
 
 	@Test(expected = org.hibernate.exception.ConstraintViolationException.class)
-	public void saveNotUniqueUser() {
+	public void saveNotUniqueUser() throws Exception {
 		User user = AccountData.getRandomUser();
 		user.setLoginName("admin");
 

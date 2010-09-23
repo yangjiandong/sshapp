@@ -1,5 +1,7 @@
 package org.springside.examples.showcase.functional.webservice.ws;
 
+import static org.junit.Assert.*;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;

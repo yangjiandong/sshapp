@@ -1,9 +1,10 @@
-/*
- * $HeadURL: https://springside.googlecode.com/svn/springside3/trunk/modules/core/src/main/java/org/springside/modules/utils/PropertiesUtils.java $
- * $Id: PropertiesUtils.java 1097 2010-05-22 13:11:45Z calvinxiu $
- * Copyright (c) 2010 by Ericsson, all rights reserved.
+/**
+ * Copyright (c) 2005-2010 springside.org.cn
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * 
+ * $Id: PropertiesUtils.java 1211 2010-09-10 16:20:45Z calvinxiu $
  */
-
 package org.springside.modules.utils;
 
 import java.io.IOException;
@@ -34,15 +35,17 @@ public class PropertiesUtils {
 	private static ResourceLoader resourceLoader = new DefaultResourceLoader();
 
 	/**
-	 * 载入多个properties文件, 相同的属性最后载入的文件将会覆盖之前的载入.
+	 * 载入多个properties文件, 相同的属性在最后载入的文件中的值将会覆盖之前的载入.
+	 * 文件路径使用Spring Resource格式, 文件编码使用UTF-8.
+	 * 
 	 * @see org.springframework.beans.factory.config.PropertyPlaceholderConfigurer
 	 */
-	public static Properties loadProperties(String... locations) throws IOException {
+	public static Properties loadProperties(String... resourcesPaths) throws IOException {
 		Properties props = new Properties();
 
-		for (String location : locations) {
+		for (String location : resourcesPaths) {
 
-			logger.debug("Loading properties file from classpath:" + location);
+			logger.debug("Loading properties file from:" + location);
 
 			InputStream is = null;
 			try {

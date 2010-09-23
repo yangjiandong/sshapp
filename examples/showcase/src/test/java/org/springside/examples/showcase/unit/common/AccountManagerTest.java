@@ -1,9 +1,10 @@
 package org.springside.examples.showcase.unit.common;
 
+import static org.junit.Assert.*;
+
 import org.easymock.EasyMock;
 import org.easymock.IMocksControl;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springside.examples.showcase.common.dao.UserDao;
@@ -11,7 +12,7 @@ import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.common.service.AccountManager;
 import org.springside.examples.showcase.common.service.ServiceException;
 
-public class AccountManagerTest extends Assert {
+public class AccountManagerTest {
 
 	private IMocksControl control = EasyMock.createControl();
 

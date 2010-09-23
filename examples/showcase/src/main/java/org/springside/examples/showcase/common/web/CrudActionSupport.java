@@ -16,8 +16,9 @@ import com.opensymphony.xwork2.Preparable;
  * 
  * @author calvin
  */
-@SuppressWarnings("serial")
 public abstract class CrudActionSupport<T> extends ActionSupport implements ModelDriven<T>, Preparable {
+
+	private static final long serialVersionUID = -3250152265646142566L;
 
 	/**
 	 * 进行增删改操作后,以redirect方式重新打开action默认页的result名.

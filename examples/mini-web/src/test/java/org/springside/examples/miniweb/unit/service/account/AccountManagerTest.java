@@ -1,8 +1,10 @@
 package org.springside.examples.miniweb.unit.service.account;
 
+import static org.junit.Assert.*;
+
 import org.easymock.EasyMock;
+import org.easymock.IMocksControl;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springside.examples.miniweb.dao.account.UserDao;
@@ -16,7 +18,9 @@ import org.springside.examples.miniweb.service.account.AccountManager;
  * 
  * @author calvin
  */
-public class AccountManagerTest extends Assert {
+public class AccountManagerTest {
+
+	private IMocksControl control = EasyMock.createControl();
 
 	private AccountManager accountManager;
 	private UserDao mockUserDao;
@@ -24,19 +28,19 @@ public class AccountManagerTest extends Assert {
 	@Before
 	public void setUp() {
 		accountManager = new AccountManager();
-		mockUserDao = EasyMock.createMock(UserDao.class);
+		mockUserDao = control.createMock(UserDao.class);
 		accountManager.setUserDao(mockUserDao);
 	}
 
 	@After
 	public void tearDown() {
-		EasyMock.verify(mockUserDao);
+		control.verify();
 	}
 
 	@Test
 	public void deleteUser() {
 		mockUserDao.delete(2L);
-		EasyMock.replay(mockUserDao);
+		control.replay();
 
 		//正常删除用户.
 		accountManager.deleteUser(2L);

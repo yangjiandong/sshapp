@@ -1,8 +1,5 @@
 package org.springside.examples.miniservice.dao.account;
 
-import java.util.List;
-
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Component;
 import org.springside.examples.miniservice.entity.account.User;
 import org.springside.modules.orm.hibernate.HibernateDao;
@@ -25,15 +22,6 @@ public class UserDao extends HibernateDao<User, Long> {
 	 * 初始化User的延迟加载关联roleList.
 	 */
 	public void initUser(User user) {
-		Hibernate.initialize(user.getRoleList());
-	}
-
-	/**
-	 * 初始化User的延迟加载关联roleList.
-	 */
-	public void initUserList(List<User> userList) {
-		for (User user : userList) {
-			initUser(user);
-		}
+		initProxyObject(user.getRoleList());
 	}
 }

@@ -26,7 +26,7 @@ public class Subject extends Post {
 	private List<Reply> replyList = Lists.newArrayList();
 
 	//与回帖的一对多关系,在删除主题时cascade删除回帖.
-	@OneToMany(mappedBy = "subject", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "subject", cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY, orphanRemoval = true)
 	//按时间排序回帖
 	@OrderBy(value = "modifyTime DESC")
 	public List<Reply> getReplyList() {

@@ -15,7 +15,7 @@ public class Start {
 	public static final String BASE_URL = "http://localhost:8080/showcase";
 
 	public static void main(String[] args) throws Exception {
-		Server server = JettyUtils.buildDebugServer(PORT, CONTEXT);
+		Server server = JettyUtils.buildNormalServer(PORT, CONTEXT);
 		server.start();
 
 		System.out.println("Hit Enter in console to stop server");

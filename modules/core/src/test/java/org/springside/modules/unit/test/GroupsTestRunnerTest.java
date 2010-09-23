@@ -1,17 +1,18 @@
 package org.springside.modules.unit.test;
 
+import static org.junit.Assert.*;
+
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.model.InitializationError;
 import org.springside.modules.test.groups.Groups;
 import org.springside.modules.test.groups.GroupsTestRunner;
-import org.springside.modules.utils.ReflectionUtils;
+import org.springside.modules.utils.reflection.ReflectionUtils;
 
-public class GroupsTestRunnerTest extends Assert {
+public class GroupsTestRunnerTest {
 
 	@Before
 	public void before() {
@@ -24,11 +25,15 @@ public class GroupsTestRunnerTest extends Assert {
 	@SuppressWarnings("unchecked")
 	public void groupsInit() throws InitializationError {
 		GroupsTestRunner groupsTestRunner = new GroupsTestRunner(GroupsTestRunnerTest.class);
+		//Get DAILY,NIGHTLY from system properties.
 		ReflectionUtils.invokeMethod(groupsTestRunner, "initGroups", null, null);
-
 		assertEquals("DAILY", ((List<String>) ReflectionUtils.getFieldValue(groupsTestRunner, "groups")).get(0));
 		assertEquals("NIGHTLY", ((List<String>) ReflectionUtils.getFieldValue(groupsTestRunner, "groups")).get(1));
 
+		//Get all while system property is ""
+		System.setProperty(GroupsTestRunner.PROPERTY_NAME, "");
+		ReflectionUtils.invokeMethod(groupsTestRunner, "initGroups", null, null);
+		assertEquals("all", ((List<String>) ReflectionUtils.getFieldValue(groupsTestRunner, "groups")).get(0));
 	}
 
 	@Test

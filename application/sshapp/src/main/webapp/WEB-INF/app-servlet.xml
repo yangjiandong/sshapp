@@ -45,15 +45,11 @@
   </bean>
 
   <!--annotation-driven transaction manager -->
-  <tx:annotation-driven transaction-manager="transactionManager"  proxy-target-class="true" />
+  <tx:annotation-driven transaction-manager="defaultTransactionManager"  proxy-target-class="true" />
 
   <!--   The controllers are autodetected POJOs labeled with the @Controller annotation. -->
   <context:annotation-config/>
   <context:component-scan base-package="org.ssh.app" />
-
-  <!--annotation-driven transaction manager -->
-  <tx:annotation-driven transaction-manager="transactionManager"  proxy-target-class="true" />
-
   <aop:aspectj-autoproxy />
 
   <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/>

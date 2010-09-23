@@ -1,16 +1,17 @@
 package org.springside.examples.showcase.unit.jmx;
 
+import static org.junit.Assert.*;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.examples.showcase.jmx.client.JmxClientService;
-import org.springside.examples.showcase.jmx.server.ServerConfig;
 import org.springside.examples.showcase.jmx.server.ServerConfigMBean;
-import org.springside.modules.jmx.JmxClientTemplate;
 import org.springside.modules.log.Log4jMBean;
 import org.springside.modules.test.spring.SpringContextTestCase;
+import org.springside.modules.utils.jmx.JmxClientTemplate;
 
 /**
  * springside-extension中{@link JmxClientTemplate}的测试用例.
@@ -27,8 +28,8 @@ public class JmxClientTemplateTest extends SpringContextTestCase {
 
 	@Before
 	public void setUp() throws Exception {
-		jmxClientTemplate = new JmxClientTemplate("service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi");
-		serverConfigMbean = jmxClientTemplate.createMBeanProxy(ServerConfig.SERVER_CONFIG_MBEAN_NAME,
+		jmxClientTemplate = new JmxClientTemplate("service:jmx:rmi:///jndi/rmi://localhost:18080/jmxrmi");
+		serverConfigMbean = jmxClientTemplate.createMBeanProxy(ServerConfigMBean.SERVER_CONFIG_MBEAN_NAME,
 				ServerConfigMBean.class);
 	}
 
@@ -49,12 +50,13 @@ public class JmxClientTemplateTest extends SpringContextTestCase {
 
 	@Test
 	public void accessMBeanAttributeByReflection() {
-		String oldName = (String) jmxClientTemplate.getAttribute(ServerConfig.SERVER_CONFIG_MBEAN_NAME, "NodeName");
+		String oldName = (String) jmxClientTemplate
+				.getAttribute(ServerConfigMBean.SERVER_CONFIG_MBEAN_NAME, "NodeName");
 
-		jmxClientTemplate.setAttribute(ServerConfig.SERVER_CONFIG_MBEAN_NAME, "NodeName", "foo");
-		assertEquals("foo", jmxClientTemplate.getAttribute(ServerConfig.SERVER_CONFIG_MBEAN_NAME, "NodeName"));
+		jmxClientTemplate.setAttribute(ServerConfigMBean.SERVER_CONFIG_MBEAN_NAME, "NodeName", "foo");
+		assertEquals("foo", jmxClientTemplate.getAttribute(ServerConfigMBean.SERVER_CONFIG_MBEAN_NAME, "NodeName"));
 
-		jmxClientTemplate.setAttribute(ServerConfig.SERVER_CONFIG_MBEAN_NAME, "NodeName", oldName);
+		jmxClientTemplate.setAttribute(ServerConfigMBean.SERVER_CONFIG_MBEAN_NAME, "NodeName", oldName);
 	}
 
 	@Test

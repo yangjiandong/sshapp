@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.springside</groupId>
   <artifactId>springside3</artifactId>
-  <version>3.3.3</version>
+  <version>3.3.4</version>
   <name>Springside3's Project</name>
   <packaging>pom</packaging>
 
@@ -14,5 +14,6 @@
     <module>examples/mini-service</module>
     <module>examples/mini-web</module>
     <module>examples/showcase</module>
+    <module>tools/maven/archetype</module>
   </modules>
 </project>

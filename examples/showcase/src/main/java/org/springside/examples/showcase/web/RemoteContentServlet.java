@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
@@ -50,12 +51,16 @@ public class RemoteContentServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//获取内容
+		//获取参数
 		String contentUrl = request.getParameter("contentUrl");
-		HttpEntity entity = fetchContent(contentUrl);
+		if (StringUtils.isBlank(contentUrl)) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "contentUrl parameter is required.");
+		}
 
+		//远程访问获取内容
+		HttpEntity entity = fetchContent(contentUrl);
 		if (entity == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND);
+			response.sendError(HttpServletResponse.SC_NOT_FOUND, contentUrl + "is not found.");
 			return;
 		}
 

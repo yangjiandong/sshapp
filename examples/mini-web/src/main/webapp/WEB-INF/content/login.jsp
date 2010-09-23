@@ -2,7 +2,7 @@
 <%@ include file="/common/taglibs.jsp" %>
 <%@ page import="org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter" %>
 <%@ page import="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter" %>
-<%@ page import="org.springframework.security.core.AuthenticationException" %>
+<%@ page import="org.springframework.security.web.WebAttributes" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -27,7 +27,7 @@
 	<div id="yui-main">
 	<div class="yui-b">
 	<%
-		if (session.getAttribute(AbstractAuthenticationProcessingFilter.SPRING_SECURITY_LAST_EXCEPTION_KEY) != null) {
+		if (session.getAttribute(WebAttributes.AUTHENTICATION_EXCEPTION) != null) {
 	%> 
 	<div class="error"> 登录失败，请重试.</div> 
 	<%

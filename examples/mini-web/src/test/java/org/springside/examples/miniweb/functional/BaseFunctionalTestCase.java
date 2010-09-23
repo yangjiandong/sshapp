@@ -5,7 +5,6 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.runner.RunWith;
@@ -17,8 +16,8 @@ import org.springside.modules.test.groups.GroupsTestRunner;
 import org.springside.modules.test.utils.DbUnitUtils;
 import org.springside.modules.test.utils.JettyUtils;
 import org.springside.modules.test.utils.SeleniumUtils;
-import org.springside.modules.utils.PropertyUtils;
-import org.springside.modules.utils.SpringContextHolder;
+import org.springside.modules.utils.PropertiesUtils;
+import org.springside.modules.utils.spring.SpringContextHolder;
 
 /**
  * 功能测试基类.
@@ -29,12 +28,12 @@ import org.springside.modules.utils.SpringContextHolder;
  */
 @Ignore
 @RunWith(GroupsTestRunner.class)
-public class BaseFunctionalTestCase extends Assert {
+public class BaseFunctionalTestCase {
 
 	protected final static String BASE_URL = Start.BASE_URL;
 
+	//Test Groups define
 	protected final static String DAILY = "DAILY";
-
 	protected final static String NIGHTLY = "NIGHTLY";
 
 	protected static Server server;
@@ -44,27 +43,22 @@ public class BaseFunctionalTestCase extends Assert {
 	protected static WebDriver driver;
 
 	@BeforeClass
-	public static void initAll() throws Exception {
-		if (server == null) {
-			startJetty();
-			fetchDataSource();
-		}
+	public static void startAll() throws Exception {
+		startJetty();
+
+		fetchDataSource();
 		loadDefaultData();
+
 		createWebDriver();
+
 		loginAsAdmin();
 	}
 
 	@AfterClass
-	public static void stopWebDriver() {
-		driver.close();
-	}
-
-	/**
-	 * 删除默认数据.
-	 */
-	@AfterClass
-	public static void cleanDefaultData() throws Exception {
-		DbUnitUtils.removeData(dataSource, "/data/default-data.xml");
+	public static void stopAll() throws Exception {
+		stopWebDriver();
+		cleanDefaultData();
+		stopJetty();
 	}
 
 	/**
@@ -73,6 +67,13 @@ public class BaseFunctionalTestCase extends Assert {
 	protected static void startJetty() throws Exception {
 		server = JettyUtils.buildTestServer(Start.PORT, Start.CONTEXT);
 		server.start();
+	}
+
+	/**
+	 * 关闭Jetty服务器.
+	 */
+	protected static void stopJetty() throws Exception {
+		server.stop();
 	}
 
 	/**
@@ -90,13 +91,27 @@ public class BaseFunctionalTestCase extends Assert {
 	}
 
 	/**
+	 * 删除默认数据.
+	 */
+	protected static void cleanDefaultData() throws Exception {
+		DbUnitUtils.removeData(dataSource, "/data/default-data.xml");
+	}
+
+	/**
 	 * 创建WebDriver.
 	 */
 	protected static void createWebDriver() throws Exception {
-		Properties props = PropertyUtils.loadProperties("classpath:/application.test.properties",
+		Properties props = PropertiesUtils.loadProperties("classpath:/application.test.properties",
 				"classpath:/application.test-local.properties");
 
 		driver = SeleniumUtils.buildDriver(props.getProperty("selenium.driver"));
+	}
+
+	/**
+	 * 关闭WebDriver
+	 */
+	protected static void stopWebDriver() {
+		driver.close();
 	}
 
 	/**

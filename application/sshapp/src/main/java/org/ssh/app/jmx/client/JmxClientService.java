@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.ssh.app.jmx.server.ServerConfigMBean;
-import org.springside.modules.jmx.JmxClientTemplate;
+import org.springside.modules.utils.jmx.JmxClientTemplate;
 
 /**
  * JMX客户端对服务端访问的封装.

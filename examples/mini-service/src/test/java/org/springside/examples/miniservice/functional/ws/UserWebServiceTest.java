@@ -1,14 +1,13 @@
 package org.springside.examples.miniservice.functional.ws;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import static org.junit.Assert.*;
 
-import javax.annotation.Resource;
-import javax.xml.namespace.QName;
-import javax.xml.ws.Service;
+import javax.xml.ws.BindingProvider;
 
+import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -17,7 +16,6 @@ import org.springside.examples.miniservice.data.AccountData;
 import org.springside.examples.miniservice.entity.account.User;
 import org.springside.examples.miniservice.functional.BaseFunctionalTestCase;
 import org.springside.examples.miniservice.ws.UserWebService;
-import org.springside.examples.miniservice.ws.WsConstants;
 import org.springside.examples.miniservice.ws.dto.RoleDTO;
 import org.springside.examples.miniservice.ws.dto.UserDTO;
 import org.springside.examples.miniservice.ws.result.AuthUserResult;
@@ -37,7 +35,7 @@ import org.springside.examples.miniservice.ws.result.WSResult;
 @ContextConfiguration(locations = { "/applicationContext-ws-client.xml" })
 public class UserWebServiceTest extends BaseFunctionalTestCase {
 
-	@Resource
+	@Autowired
 	private UserWebService userWebService;
 
 	/**
@@ -72,16 +70,22 @@ public class UserWebServiceTest extends BaseFunctionalTestCase {
 	}
 
 	/**
-	 * 测试获取全部用户,使用JAXWS的API自行创建Client.
+	 * 测试获取全部用户,使用CXF的API自行动态创建Client.
 	 */
 	@Test
-	public void getAllUser() throws MalformedURLException {
-		URL wsdlURL = new URL(BASE_URL + "/ws/userservice?wsdl");
-		QName UserServiceName = new QName(WsConstants.NS, "UserService");
-		Service service = Service.create(wsdlURL, UserServiceName);
-		UserWebService userWebService = service.getPort(UserWebService.class);
+	public void getAllUser() {
+		String address = BASE_URL + "/ws/userservice";
 
-		GetAllUserResult result = userWebService.getAllUser();
+		JaxWsProxyFactoryBean proxyFactory = new JaxWsProxyFactoryBean();
+		proxyFactory.setAddress(address);
+		proxyFactory.setServiceClass(UserWebService.class);
+		UserWebService userWebServiceCreated = (UserWebService) proxyFactory.create();
+
+		//(可选)重新设定endpoint address.
+		((BindingProvider) userWebServiceCreated).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+				address);
+
+		GetAllUserResult result = userWebServiceCreated.getAllUser();
 
 		assertTrue(result.getUserList().size() > 0);
 		UserDTO adminUser = result.getUserList().get(0);

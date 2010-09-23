@@ -1,10 +1,11 @@
 package org.springside.examples.showcase.unit.common;
 
-import org.junit.Assert;
+import static org.junit.Assert.*;
+
 import org.junit.Test;
 import org.springside.examples.showcase.common.dao.UIDGenerator;
 
-public class UIDGeneratorTest extends Assert {
+public class UIDGeneratorTest {
 
 	@Test
 	public void generateId() {

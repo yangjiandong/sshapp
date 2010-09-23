@@ -17,8 +17,8 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.joda.time.DateTime;
 import org.springside.examples.showcase.report.DummyDataFetcher.TemperatureAnomaly;
-import org.springside.modules.web.ServletUtils;
-import org.springside.modules.web.struts2.Struts2Utils;
+import org.springside.modules.utils.web.ServletUtils;
+import org.springside.modules.utils.web.struts2.Struts2Utils;
 
 import com.google.common.collect.Maps;
 import com.opensymphony.xwork2.ActionSupport;
@@ -29,8 +29,9 @@ import com.opensymphony.xwork2.ActionSupport;
  * @author calvin
  */
 @Namespace("/report/excel")
-@SuppressWarnings("serial")
 public class ExcelExportAction extends ActionSupport {
+
+	private static final long serialVersionUID = 2445469348258130369L;
 
 	private Map<String, CellStyle> styles;
 	private int rowIndex = 0;

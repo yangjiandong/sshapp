@@ -7,7 +7,10 @@
 		此参数用于后面的Spring Context Loader -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath*:/applicationContext-test.xml,classpath*:/applicationContext-rs.xml,classpath*:/applicationContext-ws.xml</param-value>
+		<param-value>
+			classpath*:/applicationContext-test.xml
+			classpath*:/applicationContext-ws-server.xml
+		</param-value>
 	</context-param>
 
 	<!--Spring ApplicationContext 载入 -->

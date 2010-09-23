@@ -1,5 +1,7 @@
 package org.springside.examples.showcase.unit.common;
 
+import static org.junit.Assert.*;
+
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -26,7 +28,7 @@ import com.google.common.collect.Lists;
  */
 @ContextConfiguration(locations = { "/applicationContext-test.xml" })
 //演示指定非默认名称的TransactionManager.
-@TransactionConfiguration(transactionManager = "transactionManager")
+@TransactionConfiguration(transactionManager = "defaultTransactionManager")
 public class UserDaoTest extends SpringTxTestCase {
 
 	private static DataSource dataSourceHolder = null;

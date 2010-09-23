@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 import org.springside.examples.showcase.rs.dto.UserDTO;
-import org.springside.modules.web.ServletUtils;
+import org.springside.modules.utils.web.ServletUtils;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.GenericType;

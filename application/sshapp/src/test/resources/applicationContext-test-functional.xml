@@ -32,7 +32,7 @@
   <context:component-scan base-package="org.ssh.app" />
 
   <!-- SpringContextHolder定义 -->
-  <bean class="org.springside.modules.utils.SpringContextHolder" lazy-init="false" />
+  <bean class="org.springside.modules.utils.spring.SpringContextHolder" lazy-init="false" />
 
   <!-- 数据源配置,在测试环境使用JDBC直接连接 -->
   <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -76,14 +76,16 @@
     </property>
   </bean>
 
-  <!-- 事务管理器配置,单数据源事务 -->
-  <bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+  <!-- 事务管理器配置, Hibernate单数据源事务 -->
+  <bean id="defaultTransactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
     <property name="sessionFactory" ref="sessionFactory" />
   </bean>
 
-  <!-- 使用annotation定义事务 -->
-  <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+  <!-- 另一个事务管理器, Jdbc单数据源事务 -->
+  <bean id="quartzTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="quartzDataSource" />
+  </bean>
 
-  <!-- SpringContext Holder -->
-  <bean id="springContextHolder" class="org.springside.modules.utils.SpringContextHolder" lazy-init="false" />
+  <!-- 使用annotation定义事务 -->
+  <tx:annotation-driven transaction-manager="defaultTransactionManager" proxy-target-class="true" />
 </beans>

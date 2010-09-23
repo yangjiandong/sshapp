@@ -1,5 +1,7 @@
 package org.springside.examples.showcase.unit.jms;
 
+import static org.junit.Assert.*;
+
 import javax.annotation.Resource;
 import javax.jms.Destination;
 import javax.jms.JMSException;
@@ -21,7 +23,7 @@ import org.springside.modules.test.spring.SpringContextTestCase;
 import org.springside.modules.utils.ThreadUtils;
 
 @DirtiesContext
-@ContextConfiguration(locations = { "/applicationContext-test.xml", "/jms/applicationContext-advanced.xml" })
+@ContextConfiguration(locations = { "/applicationContext-test.xml", "/jms/applicationContext-jms-advanced.xml" })
 public class JmsAdvancedTest extends SpringContextTestCase {
 
 	@Autowired
@@ -85,5 +87,4 @@ public class JmsAdvancedTest extends SpringContextTestCase {
 		ThreadUtils.sleep(1000);
 		assertTrue(appender.getAllLogs().isEmpty());
 	}
-
 }

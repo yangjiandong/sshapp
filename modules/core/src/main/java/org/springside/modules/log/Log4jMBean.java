@@ -1,18 +1,12 @@
 /**
- * Copyright (c) 2005-2009 springside.org.cn
+ * Copyright (c) 2005-2010 springside.org.cn
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * 
- * $Id: Log4jMBean.java 1113 2010-07-10 08:28:33Z calvinxiu $
+ * $Id: Log4jMBean.java 1192 2010-09-03 15:42:13Z calvinxiu $
  */
 package org.springside.modules.log;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-
-import org.apache.log4j.Appender;
-import org.apache.log4j.Category;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +27,7 @@ public class Log4jMBean {
 	/**
 	 * Log4jMbean的注册名称.
 	 */
-	public static final String LOG4J_MBEAN_NAME = "SpringSide:name=log4j,type=Log4j";
+	public static final String LOG4J_MBEAN_NAME = "Log4j:name=log4j";
 
 	private static org.slf4j.Logger mbeanLogger = LoggerFactory.getLogger(Log4jMBean.class);
 
@@ -48,6 +42,7 @@ public class Log4jMBean {
 
 	/**
 	 * 设置Root Logger的日志级别.
+	 * 如果日志级别名称错误, 设为DEBUG.
 	 */
 	@ManagedAttribute(description = "Logging level of the root logger")
 	public void setRootLoggerLevel(String newLevel) {
@@ -69,6 +64,7 @@ public class Log4jMBean {
 
 	/**
 	 * 设置Logger的日志级别.
+	 * 如果日志级别名称错误, 设为DEBUG.
 	 */
 	@ManagedOperation(description = "Set new logging level to the logger")
 	@ManagedOperationParameters( { @ManagedOperationParameter(name = "loggerName", description = "Logger name"),
@@ -78,53 +74,5 @@ public class Log4jMBean {
 		Level level = Level.toLevel(newLevel);
 		logger.setLevel(level);
 		mbeanLogger.info("设置{}级别到{}", loggerName, newLevel);
-	}
-
-	/**
-	 * 获取Root Logger的所有Appender的名称.
-	 */
-	@ManagedAttribute(description = "Get all appenders of the root logger")
-	public List<String> getRootLoggerAppenders() {
-		Logger root = Logger.getRootLogger();
-		return getLoggerAppenders(root);
-	}
-
-	/**
-	 * 获取Logger的所有Appender的名称.
-	 * 继承而来的Appender名称后将有(parent)标识.
-	 */
-	@ManagedOperation(description = "Get all appenders of the logger")
-	@ManagedOperationParameters( { @ManagedOperationParameter(name = "loggerName", description = "Logger name") })
-	public List<String> getLoggerAppenders(String loggerName) {
-		Logger logger = Logger.getLogger(loggerName);
-		return getLoggerAppenders(logger);
-
-	}
-
-	/**
-	 * 获取Logger的所有Appender的名称.
-	 */
-	@SuppressWarnings("unchecked")
-	private List<String> getLoggerAppenders(Logger logger) {
-		List<String> appenderNameList = new ArrayList<String>();
-		//循环加载logger及其parent的appenders
-		for (Category c = logger; c != null; c = c.getParent()) {
-			Enumeration e = c.getAllAppenders();
-			while (e.hasMoreElements()) {
-				Appender appender = (Appender) e.nextElement();
-				String appenderName = appender.getName();
-				if (c != logger) {//NOSONAR
-					appenderName += "(parent)";
-				}
-				appenderNameList.add(appenderName);
-			}
-
-			//如果logger不继承parent的appender,则停止向上循环.
-			if (!c.getAdditivity()) {
-				break;
-			}
-		}
-
-		return appenderNameList;
 	}
 }

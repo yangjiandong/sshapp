@@ -4,10 +4,13 @@
 
 	<display-name>mini-web</display-name>
 	<!-- Spring ApplicationContext配置文件的路径,可使用通配符,多个路径用,号分隔
-		此参数用于后面的Spring Context Loader -->
+		  此参数用于后面的Spring Context Loader -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath*:/applicationContext-test.xml,classpath*:/applicationContext-security.xml</param-value>
+		<param-value>
+			classpath*:/applicationContext-test.xml
+			classpath*:/applicationContext-security.xml
+		</param-value>
 	</context-param>
 
 	<!-- Filter 定义  -->

@@ -1,52 +1,53 @@
 @echo off
-echo [INFO] È·±£Ä¬ÈÏJDK°æ±¾ÎªJDK5.0¼°ÒÔÉÏ°æ±¾.
+echo [INFO] ç¡®ä¿é»˜è®¤JDKç‰ˆæœ¬ä¸ºJDK6.0åŠä»¥ä¸Šç‰ˆæœ¬,å·²é…ç½®JAVA_HOME.
 
-echo [INFO] Èç²»ÄÜÁ¬½ÓMaven¹Ù·½ÍøÕ¾, ĞŞ¸Ä±¾ÎÄ¼şÈ¥µôÏÂÃæÒ»ĞĞµÄ×¢ÊÍ.
-set OFF_LINE=-o
+echo [INFO] å¦‚ä¸èƒ½è¿æ¥Mavenå®˜æ–¹ç½‘ç«™, ä¿®æ”¹æœ¬æ–‡ä»¶å»æ‰ä¸‹é¢ä¸€è¡Œçš„æ³¨é‡Š.
+rem set OFF_LINE=-o
 
 set MVN=mvn
 set ANT=ant
+set MAVEN_OPTS=%MAVEN_OPTS% -XX:MaxPermSize=128m
 
 if exist "tools\maven\apache-maven-2.2.1\" set MVN="%cd%\tools\maven\apache-maven-2.2.1\bin\mvn.bat"
-if exist "tools\ant\apache-ant-1.7.1\" set ANT="%cd%\tools\ant\apache-ant-1.7.1\bin\ant.bat"
-echo MavenÃüÁîÎª%MVN%
-echo AntÃüÁîÎª%ANT%
+if exist "tools\ant\apache-ant-1.8.1\" set ANT="%cd%\tools\ant\apache-ant-1.8.1\bin\ant.bat"
+echo Mavenå‘½ä»¤ä¸º%MVN%
+echo Antå‘½ä»¤ä¸º%ANT%
 
-echo [Step 1] ¸´ÖÆtools/maven/central-repository µ½ %userprofile%\.m2\repository
-rem xcopy /s/e/i/h/d/y "tools\maven\central-repository" "%USERPROFILE%\.m2\repository"
+echo [Step 1] å¤åˆ¶tools/maven/central-repository åˆ° %userprofile%\.m2\repository
+xcopy /s/e/i/h/d/y "tools\maven\central-repository" "%USERPROFILE%\.m2\repository"
 
-echo [Step 2] Æô¶¯H2Êı¾İ¿â.
-cd tools/h2
-call %MVN% %OFF_LINE% initialize -Pstartdb
-cd ..\..\
-
-echo [Step 3] °²×°SpringSide3 ËùÓĞmodules,examplesÏîÄ¿µ½±¾µØMaven²Ö¿â,Éú³ÉEclipseÏîÄ¿ÎÄ¼ş.
-call %MVN% %OFF_LINE% eclipse:clean eclipse:eclipse
+echo [Step 2] å®‰è£…SpringSide3 æ‰€æœ‰modules, examplesé¡¹ç›®åŠminié …ç›®ç”Ÿæˆæ¨¡æ¿åˆ°æœ¬åœ°Mavenä»“åº“, ç”ŸæˆEclipseé¡¹ç›®æ–‡ä»¶.
 call %MVN% %OFF_LINE% clean install -Dmaven.test.skip=true
+call %MVN% %OFF_LINE% eclipse:clean eclipse:eclipse
 
-echo [Step 4] ÎªMini-Service ³õÊ¼»¯Êı¾İ¿â, Æô¶¯Jetty.
+echo [Step 3] å¯åŠ¨H2æ•°æ®åº“.
+cd tools/h2
+start "H2" %MVN% %OFF_LINE% exec:java
+cd ..\..\
+
+echo [Step 4] ä¸ºMini-Service åˆå§‹åŒ–æ•°æ®åº“, å¯åŠ¨Jetty.
 cd examples\mini-service
-call %ANT% -f bin/build.xml init-db 
-start "Mini-Service" %MVN% %OFF_LINE% -Djetty.port=8084 jetty:run
+call %ANT% -f bin/build.xml init-db
+start "Mini-Service" %MVN% %OFF_LINE% -Djetty.port=8083 jetty:run
 cd ..\..\
 
-echo [Step 5] ÎªMini-Web ³õÊ¼»¯Êı¾İ¿â, Æô¶¯Jetty.
+echo [Step 5] ä¸ºMini-Web åˆå§‹åŒ–æ•°æ®åº“, å¯åŠ¨Jetty.
 cd examples\mini-web
-call %ANT% -f bin/build.xml init-db 
-start "Mini-Web" %MVN% %OFF_LINE% -Djetty.port=8085 jetty:run
+call %ANT% -f bin/build.xml init-db
+start "Mini-Web" %MVN% %OFF_LINE% -Djetty.port=8084 jetty:run
 cd ..\..\
 
-echo [Step 6] ÎªShowcase Éú³ÉEclipseÏîÄ¿ÎÄ¼ş, ±àÒë, ´ò°ü, ³õÊ¼»¯Êı¾İ¿â, Æô¶¯Jetty.
+echo [Step 6] ä¸ºShowcase ç”ŸæˆEclipseé¡¹ç›®æ–‡ä»¶, ç¼–è¯‘, æ‰“åŒ…, åˆå§‹åŒ–æ•°æ®åº“, å¯åŠ¨Jetty.
 cd examples\showcase
 call %ANT% -f bin/build.xml init-db
-start "Showcase" %MVN% %OFF_LINE% -Djetty.port=8086 jetty:run
+start "Showcase" %MVN% %OFF_LINE% -Djetty.port=8085 jetty:run
 cd ..\..\
 
-echo [INFO] SpringSide3.0 ¿ìËÙÆô¶¯Íê±Ï.
-echo [INFO] ¿É·ÃÎÊÒÔÏÂÑİÊ¾ÍøÖ·:
-echo [INFO] http://localhost:8084/mini-service
-echo [INFO] http://localhost:8085/mini-web
-echo [INFO] http://localhost:8086/showcase
+echo [INFO] SpringSide3.0 å¿«é€Ÿå¯åŠ¨å®Œæ¯•.
+echo [INFO] å¯è®¿é—®ä»¥ä¸‹æ¼”ç¤ºç½‘å€:
+echo [INFO] http://localhost:8083/mini-service
+echo [INFO] http://localhost:8084/mini-web
+echo [INFO] http://localhost:8085/showcase
 
 :end
 pause

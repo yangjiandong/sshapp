@@ -60,6 +60,6 @@ public class UserDao extends HibernateDao<User, String> {
 	 * 初始化User的延迟加载关联roleList.
 	 */
 	public void initUser(User user) {
-		initProxyProperty(user.getRoleList());
+		initProxyObject(user.getRoleList());
 	}
 }

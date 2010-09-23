@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * 
- * $Id: QueueAppender.java 1099 2010-05-29 14:33:47Z calvinxiu $
+ * $Id: QueueAppender.java 1189 2010-09-01 17:24:12Z calvinxiu $
  */
 package org.springside.examples.showcase.log.appender;
 
@@ -11,7 +11,7 @@ import java.util.concurrent.BlockingQueue;
 
 import org.apache.log4j.helpers.LogLog;
 import org.apache.log4j.spi.LoggingEvent;
-import org.springside.modules.queue.QueuesHolder;
+import org.springside.examples.showcase.queue.QueuesHolder;
 
 /**
  * 轻量级的Log4j异步Appender.

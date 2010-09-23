@@ -1,11 +1,12 @@
 package org.springside.modules.unit.security.jcaptcha;
 
+import static org.junit.Assert.*;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
 
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.mock.web.MockFilterChain;
@@ -16,7 +17,7 @@ import org.springframework.mock.web.MockServletContext;
 import org.springside.modules.security.jcaptcha.JCaptchaFilter;
 import org.springside.modules.test.utils.WebTestUtils;
 
-public class JCaptchaFilterTest extends Assert {
+public class JCaptchaFilterTest {
 
 	private static String failUrl = "403.jsp";
 	private static MockFilterConfig config = new MockFilterConfig();

@@ -2,7 +2,6 @@ package org.springside.examples.showcase.common.service;
 
 import java.util.List;
 
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +15,9 @@ import org.springside.examples.showcase.common.dao.UserJdbcDao;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.jms.simple.NotifyMessageProducer;
 import org.springside.examples.showcase.jmx.server.ServerConfig;
-import org.springside.modules.binder.JsonBinder;
 import org.springside.modules.memcached.SpyMemcachedClient;
-import org.springside.modules.memcached.SpyMemcachedClientFactory;
 import org.springside.modules.security.springsecurity.SpringSecurityUtils;
+import org.springside.modules.utils.encode.JsonBinder;
 
 /**
  * 用户管理类.
@@ -35,9 +33,9 @@ public class AccountManager {
 
 	private UserJdbcDao userJdbcDao;
 
-	private SpyMemcachedClientFactory spyClientFactory;
+	private SpyMemcachedClient spyMemcachedClient;
 
-	private JsonBinder jsonBinder = new JsonBinder(Inclusion.NON_DEFAULT);
+	private JsonBinder jsonBinder = JsonBinder.buildNonDefaultBinder();
 
 	private ServerConfig serverConfig; //系统配置
 
@@ -52,7 +50,7 @@ public class AccountManager {
 	 * 
 	 */
 	//演示指定非默认名称的TransactionManager.
-	@Transactional("transactionManager")
+	@Transactional("defaultTransactionManager")
 	public void saveUser(User user) {
 
 		if (isSupervisor(user)) {
@@ -72,7 +70,7 @@ public class AccountManager {
 	 * 判断是否超级管理员.
 	 */
 	private boolean isSupervisor(User user) {
-		return (user.getId() != null && user.getId().equals("1"));
+		return (user.getId() != null && "1".equals(user.getId()));
 	}
 
 	@Transactional(readOnly = true)
@@ -84,8 +82,8 @@ public class AccountManager {
 	 * 取得用户, 并对用户的延迟加载关联进行初始化.
 	 */
 	@Transactional(readOnly = true)
-	public User getLoadedUser(String id) {
-		if (spyClientFactory != null) {
+	public User getInitedUser(String id) {
+		if (spyMemcachedClient != null) {
 			return getUserFromMemcached(id);
 		} else {
 			return userJdbcDao.queryObject(id);
@@ -96,12 +94,11 @@ public class AccountManager {
 	 * 访问Memcached, 使用JSON字符串存放对象以节约空间.
 	 */
 	private User getUserFromMemcached(String id) {
-		SpyMemcachedClient spyClient = spyClientFactory.getClient();
 
 		String key = MemcachedObjectType.USER.getPrefix() + id;
 
 		User user = null;
-		String jsonString = spyClient.get(key);
+		String jsonString = spyMemcachedClient.get(key);
 
 		if (jsonString == null) {
 			//用户不在 memcached中,从数据库中取出并放入memcached.
@@ -109,7 +106,7 @@ public class AccountManager {
 			user = userJdbcDao.queryObject(id);
 			if (user != null) {
 				jsonString = jsonBinder.toJson(user);
-				spyClient.set(key, MemcachedObjectType.USER.getExpiredTime(), jsonString);
+				spyMemcachedClient.set(key, MemcachedObjectType.USER.getExpiredTime(), jsonString);
 			}
 		} else {
 			user = jsonBinder.fromJson(jsonString, User.class);
@@ -194,8 +191,7 @@ public class AccountManager {
 	}
 
 	@Autowired(required = false)
-	public void setSpyClientFactory(SpyMemcachedClientFactory spyClientFactory) {
-		this.spyClientFactory = spyClientFactory;
+	public void setSpyMemcachedClient(SpyMemcachedClient spyMemcachedClient) {
+		this.spyMemcachedClient = spyMemcachedClient;
 	}
-
 }

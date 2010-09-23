@@ -1,4 +1,11 @@
-package org.springside.modules.memcached;
+/**
+ * Copyright (c) 2005-2010 springside.org.cn
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * 
+ * $Id: SpyTokyotyrantClientPool.java 1211 2010-09-10 16:20:45Z calvinxiu $
+ */
+package org.springside.modules.tokyotyrant;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,11 +35,11 @@ import org.springframework.beans.factory.InitializingBean;
  * 
  * @author calvin
  */
-public class SpyMemcachedClientFactory implements InitializingBean, DisposableBean {
+public class SpyTokyotyrantClientPool implements InitializingBean, DisposableBean {
 
-	private static Logger logger = LoggerFactory.getLogger(SpyMemcachedClientFactory.class);
+	private static Logger logger = LoggerFactory.getLogger(SpyTokyotyrantClientPool.class);
 
-	private List<SpyMemcachedClient> clientPool;
+	private List<SpyTokyotyrantClient> clientPool;
 
 	private int poolSize = 1;
 
@@ -40,22 +47,20 @@ public class SpyMemcachedClientFactory implements InitializingBean, DisposableBe
 
 	private String memcachedNodes = "localhost:11211";
 
-	private boolean isBinaryProtocol = false;
-
 	private boolean isConsistentHashing = false;
 
 	private long operationTimeout = 1000; //default value in Spy is 1000ms
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		clientPool = new ArrayList<SpyMemcachedClient>(poolSize);
+		clientPool = new ArrayList<SpyTokyotyrantClient>(poolSize);
 
 		for (int i = 0; i < poolSize; i++) {
 			ConnectionFactoryBuilder cfb = new ConnectionFactoryBuilder();
 
 			cfb.setFailureMode(FailureMode.Redistribute);
 			cfb.setDaemon(true);
-			cfb.setProtocol(isBinaryProtocol ? Protocol.BINARY : Protocol.TEXT);
+			cfb.setProtocol(Protocol.TEXT);
 
 			if (isConsistentHashing) {
 				cfb.setLocatorType(Locator.CONSISTENT);
@@ -66,7 +71,7 @@ public class SpyMemcachedClientFactory implements InitializingBean, DisposableBe
 
 			try {
 				MemcachedClient spyClient = new MemcachedClient(cfb.build(), AddrUtil.getAddresses(memcachedNodes));
-				clientPool.add(new SpyMemcachedClient(spyClient));
+				clientPool.add(new SpyTokyotyrantClient(spyClient));
 			} catch (IOException e) {
 				logger.error("MemcachedClient initilization error: ", e);
 				throw e;
@@ -76,9 +81,9 @@ public class SpyMemcachedClientFactory implements InitializingBean, DisposableBe
 
 	@Override
 	public void destroy() throws Exception {
-		for (SpyMemcachedClient spyClient : clientPool) {
+		for (SpyTokyotyrantClient spyClient : clientPool) {
 			if (spyClient != null) {
-				spyClient.getClient().shutdown();
+				spyClient.getMemcachedClient().shutdown();
 			}
 		}
 	}
@@ -86,7 +91,7 @@ public class SpyMemcachedClientFactory implements InitializingBean, DisposableBe
 	/**
 	 * 随机取出Pool中的SpyMemcached Client.
 	 */
-	public SpyMemcachedClient getClient() {
+	public SpyTokyotyrantClient getClient() {
 		return clientPool.get(random.nextInt(poolSize));
 	}
 
@@ -100,10 +105,6 @@ public class SpyMemcachedClientFactory implements InitializingBean, DisposableBe
 	 */
 	public void setMemcachedNodes(String memcachedNodes) {
 		this.memcachedNodes = memcachedNodes;
-	}
-
-	public void setBinaryProtocol(boolean isBinaryProtocol) {
-		this.isBinaryProtocol = isBinaryProtocol;
 	}
 
 	public void setConsistentHashing(boolean isConsistentHashing) {

@@ -62,6 +62,6 @@ public class UserDao extends HibernateDao<User, String> {
      */
     public void initUser(User user) {
         //Hibernate.initialize(user.getRoleList());
-        initProxyProperty(user.getRoleList());
+        initProxyObject(user.getRoleList());
     }
 }

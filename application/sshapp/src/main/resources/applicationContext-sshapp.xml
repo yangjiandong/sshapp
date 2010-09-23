@@ -12,8 +12,8 @@
   <import resource="cache/applicationContext-memcached.xml" />
   <import resource="security/applicationContext-security.xml" />
   <import resource="email/applicationContext-email.xml" />
-  <import resource="jms/applicationContext-simple.xml" />
-  <import resource="jms/applicationContext-advanced.xml" />
+  <import resource="jms/applicationContext-jms-simple.xml" />
+  <import resource="jms/applicationContext-jms-advanced.xml" />
   <import resource="jmx/applicationContext-jmx-server.xml" />
   <import resource="jmx/applicationContext-jmx-client.xml" />
 

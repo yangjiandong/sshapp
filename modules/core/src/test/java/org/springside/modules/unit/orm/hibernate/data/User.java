@@ -15,7 +15,7 @@ import javax.persistence.Transient;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.springside.modules.utils.ReflectionUtils;
+import org.springside.modules.utils.reflection.ConvertUtils;
 
 import com.google.common.collect.Lists;
 
@@ -106,7 +106,7 @@ public class User extends IdEntity {
 
 	@Transient
 	public String getRoleNames() {
-		return ReflectionUtils.convertElementPropertyToString(roleList, "name", ", ");
+		return ConvertUtils.convertElementPropertyToString(roleList, "name", ", ");
 	}
 
 	@Override

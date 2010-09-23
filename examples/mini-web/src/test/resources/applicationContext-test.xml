@@ -27,6 +27,10 @@
 
 	<!-- 使用annotation 自动注册bean,并保证@Required,@Autowired的属性被注入 -->
 	<context:component-scan base-package="org.springside.examples.miniweb" />
+	
+	<!-- SpringContext Holder -->
+	<bean id="springContextHolder" class="org.springside.modules.utils.spring.SpringContextHolder" lazy-init="false"/>
+
 
 	<!-- 数据源配置,在测试环境使用JDBC直接连接 -->
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -66,7 +70,4 @@
 
 	<!-- 使用annotation定义事务 -->
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
-	
-	<!-- SpringContext Holder -->
-	<bean id="springContextHolder" class="org.springside.modules.utils.SpringContextHolder" lazy-init="false"/>
 </beans>

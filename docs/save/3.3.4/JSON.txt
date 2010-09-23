@@ -1,0 +1,44 @@
+1.资料
+Json
+Jackson
+2.选型
+   json.org有参考实现，json-lib是在参考实现上的一个扩展，但还是jackson提供了最好的性能， 以及用Jackson的和JAXB的annotation对Java对象的持久化进行定制。
+
+3.in SpringSide3
+3.1. JsonBinder
+  在Core中提供了JsonBinder封装，  在showcase中提供了JsonDemo演示用例，详细演示了JSON字符串与Bean, Map, List<String>, List<Bean>, Bean[]之间的转换.
+
+3.1.1 特殊类型转换
+  其中读取泛型的集合<TestBean>时，TypeReference式的绝招再现 ： mapper.readValue(listString, new TypeReference<List<TestBean>>() {});
+
+  对于最麻烦枚举序列化时会以枚举的名称，而反序列化时则可以以枚举值名称或枚举值的序号转换。
+
+  日期默认打印为TimeStamp毫秒，也可以调用JsonBinder的函数设定打印的日期格式, binder中也提供了这个设定函数，注意尽量用Date而不要用joda的DateTime，后者的时区什么的还比较乱。
+
+3.1.2 其他
+   为了节约空间，可以设置忽略等于Null的值, JsonSerialize.Inclusion.NON_NULL。如果接收方有相同的Class文件，还可以设置忽略木有变化的属性,节省更多空间，JsonSerialize.Inclusion.NON_DEFAULT。可以使用JsonBinder.buildXXXBinder()获得自己需要的Mapper。
+
+  Jackson对null字符串,"null"字符串,空对象的处理, 见Binder上的注释与JsonDemo中的演示，切莫大意。
+
+  同时，TestBean中演示了使用@JsonIgnoreProperties截断了对象的循环引用。在Json还是Jaxb的annotation之间，选择前者，毕竟前者为JSON量身订造，会有一些特别的设定。
+
+3.2. 实际应用
+  在Struts2Utils中封装了两个JSON输出函数和一个JSONP输出函数.
+
+void renderJson(final String jsonString, final String... headers)
+直接输出json字符串。
+void renderJson(final Object data, final String... headers)
+data 可以是List<POJO>, POJO[], POJO, 也可以是Map名值对.
+使用jackson的mapper.writeValue(response.getWriter(), data); 直接输出到HttpResponse。
+void renderJsonp(final Object data, final String... headers)
+使用jackson的mapper.writeValueAsString(object); 在加上jsonP的callback头.
+  在JmxClientAction演示了renderJson(map)的使用
+
+  在MashupServerAction演示了renderJsonp(map)
+
+Comments  (Hide)
+jackson时有没有像json-lib里的
+
+jsonConfig.setExcludes(new String[] { "hibernateLazyInitializer","handler"{color}});
+
+可以手动设置排除指定属性，如果用注释不是很方便，

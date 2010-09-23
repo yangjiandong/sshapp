@@ -1,19 +1,13 @@
 package org.springside.modules.unit.orm.hibernate;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.SQLException;
+import static org.junit.Assert.*;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.dbunit.DatabaseUnitException;
-import org.dbunit.database.DatabaseDataSourceConnection;
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
-import org.dbunit.operation.DatabaseOperation;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Hibernate;
@@ -23,13 +17,15 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.modules.orm.hibernate.SimpleHibernateDao;
 import org.springside.modules.test.spring.SpringTxTestCase;
+import org.springside.modules.test.utils.DbUnitUtils;
 import org.springside.modules.unit.orm.hibernate.data.User;
+import org.springside.modules.utils.reflection.ReflectionUtils;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 @ContextConfiguration(locations = { "/applicationContext-core-test.xml" })
@@ -43,16 +39,12 @@ public class SimpleHibernateDaoTest extends SpringTxTestCase {
 	private SessionFactory sessionFactory;
 
 	@Before
-	public void setUp() throws BeansException, SQLException, DatabaseUnitException, IOException {
-		jdbcTemplate.update("drop all objects");
-		jdbcTemplate.update("runscript from 'src/test/resources/schema.sql'");
+	public void setUp() throws Exception {
+		simpleJdbcTemplate.update("drop all objects");
 
-		DatabaseDataSourceConnection connection = new DatabaseDataSourceConnection((DataSource) applicationContext
-				.getBean("dataSource"));
-		InputStream stream = applicationContext.getResource("classpath:/test-data.xml").getInputStream();
-		IDataSet dataSet = new FlatXmlDataSetBuilder().build(stream);
-		DatabaseOperation.INSERT.execute(connection, dataSet);
-		connection.close();
+		executeSqlScript("classpath:/schema.sql", false);
+
+		DbUnitUtils.loadData((DataSource) applicationContext.getBean("dataSource"), "classpath:/test-data.xml");
 
 		dao = new SimpleHibernateDao<User, Long>(sessionFactory, User.class);
 	}
@@ -62,17 +54,42 @@ public class SimpleHibernateDaoTest extends SpringTxTestCase {
 		User user = new User();
 		user.setName("foo");
 		user.setLoginName("foo");
+		//add
 		dao.save(user);
+		dao.flush();
+		//update
 		user.setName("boo");
 		dao.save(user);
+		dao.flush();
+
+		//delete object
 		dao.delete(user);
+		dao.flush();
+
+		//delete by id
+		User user2 = new User();
+		user2.setName("foo2");
+		user2.setLoginName("foo2");
+		dao.save(user2);
+		dao.flush();
+		dao.delete(user2.getId());
+		dao.flush();
 	}
 
 	@Test
-	public void getAll() {
-		List<User> users = dao.getAll("id", true);
+	public void getSome() {
+		//get all
+		List<User> users = dao.getAll();
+		assertEquals(6, users.size());
+
+		//get all with order
+		users = dao.getAll("id", true);
 		assertEquals(6, users.size());
 		assertEquals(DEFAULT_LOGIN_NAME, users.get(0).getLoginName());
+
+		//get by id list
+		users = dao.get(Lists.newArrayList(1L, 2L));
+		assertEquals(2, users.size());
 	}
 
 	@Test
@@ -114,8 +131,6 @@ public class SimpleHibernateDaoTest extends SpringTxTestCase {
 
 		User user = dao.findUnique(c);
 		assertEquals(DEFAULT_LOGIN_NAME, user.getLoginName());
-
-		dao.findUnique(c);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -148,8 +163,29 @@ public class SimpleHibernateDaoTest extends SpringTxTestCase {
 	}
 
 	@Test
+	public void misc() {
+		getIdName();
+		isPropertyUnique();
+		constructor();
+	}
+
 	public void getIdName() {
 		assertEquals("id", dao.getIdName());
 	}
 
+	public void isPropertyUnique() {
+		assertEquals(true, dao.isPropertyUnique("loginName", "admin", "admin"));
+		assertEquals(true, dao.isPropertyUnique("loginName", "user6", "admin"));
+		assertEquals(false, dao.isPropertyUnique("loginName", "user2", "admin"));
+	}
+
+	@SuppressWarnings("unchecked")
+	public void constructor() {
+		MyUserDao myDao = new MyUserDao();
+		Class entityClazz = (Class) ReflectionUtils.getFieldValue(myDao, "entityClass");
+		assertEquals(User.class, entityClazz);
+	}
+
+	static class MyUserDao extends SimpleHibernateDao<User, Long> {
+	}
 }

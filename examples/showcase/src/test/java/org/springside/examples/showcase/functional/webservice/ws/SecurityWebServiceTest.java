@@ -1,6 +1,7 @@
 package org.springside.examples.showcase.functional.webservice.ws;
 
-import java.net.MalformedURLException;
+import static org.junit.Assert.*;
+
 import java.util.Map;
 
 import javax.xml.ws.soap.SOAPFaultException;
@@ -47,7 +48,7 @@ public class SecurityWebServiceTest extends BaseFunctionalTestCase implements Ap
 	 * @throws InterruptedException 
 	 */
 	@Test
-	public void getAllUserWithDigestPassword() throws MalformedURLException, InterruptedException {
+	public void getAllUserWithDigestPassword() throws InterruptedException {
 
 		BusFactory.setDefaultBus(null);
 

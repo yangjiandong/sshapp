@@ -1,5 +1,7 @@
 package org.springside.examples.miniservice.functional.rs;
 
+import static org.junit.Assert.*;
+
 import java.net.URI;
 import java.util.List;
 
@@ -28,16 +30,15 @@ public class UserResourceServiceTest extends BaseFunctionalTestCase {
 	public void getAllUser() {
 		List<UserDTO> userList = client.getAllUser();
 		assertTrue(userList.size() >= 6);
-		UserDTO admin = userList.iterator().next();
-		assertEquals("admin", admin.getLoginName());
+		assertEquals("admin", userList.get(0).getLoginName());
 	}
 
 	@Test
 	public void getUser() {
-		UserDTO user = client.getUser(1L);
-		assertEquals("admin", user.getLoginName());
-		assertEquals(2, user.getRoleList().size());
-		assertEquals("管理员", user.getRoleList().get(0).getName());
+		UserDTO admin = client.getUser(1L);
+		assertEquals("admin", admin.getLoginName());
+		assertEquals(2, admin.getRoleList().size());
+		assertEquals("管理员", admin.getRoleList().get(0).getName());
 	}
 
 	@Test

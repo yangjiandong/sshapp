@@ -3,7 +3,7 @@ package org.springside.examples.showcase.ws.server.result;
 import javax.xml.bind.annotation.XmlType;
 
 import org.springside.examples.showcase.ws.server.WsConstants;
-import org.springside.modules.utils.ReflectionUtils;
+import org.springside.modules.utils.reflection.ReflectionUtils;
 
 /**
  * WebService返回结果基类,定义所有返回码.

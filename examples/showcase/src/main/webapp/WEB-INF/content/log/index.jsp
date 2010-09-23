@@ -29,7 +29,7 @@
 		
 		<h2>用户故事：</h2>
 		<ul>
-			<li>使用JConsole动态修改log4j的日志等级.(路径service:jmx:rmi:///jndi/rmi://localhost:1099/showcase,名称SpringSide:type=Log4jManagement)</li>
+			<li>使用JConsole动态修改log4j的日志等级.(路径service:jmx:rmi:///jndi/rmi://localhost:18080/jmxrmi,名称SpringSide:type=Log4jManagement)</li>
 			<li>Schedule测试用例使用MockAppender校验日志输出.</li>
 			<li>UserWebService服务通过TraceLogAspect, 使用TraceUtils在Log4j MDC中设置TraceId.</li>
 			<li>每次进入本页面, logger都会通过AOp自动生成一条调试记录，记录在另外的showcase_trace.log.</li>
