@@ -1,6 +1,42 @@
 ssh
 ======
 
+2010.09.24
+----------
+
+   1. 采用spring3.0.4 resources
+   以前采用自定义resources，app-servlet.xml
+  <?xml version="1.0" encoding="UTF-8"?>
+  <beans xmlns:mvc="http://www.springframework.org/schema/mvc"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:p="http://www.springframework.org/schema/p"
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:tx="http://www.springframework.org/schema/tx"
+  xmlns:aop="http://www.springframework.org/schema/aop"
+  xmlns:springside="http://www.springframework.org/schema/springside"
+  xsi:schemaLocation="
+  http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+  http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+  http://www.springframework.org/schema/springside http://www.springframework.org/schema/springside/spring-springside-3.0.xsd
+  http://www.springframework.org/schema/aop  http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+  <springside:resources />
+
+  采用3.0.4的resources，可灵活定义目录路径
+  <mvc:resources location="/resources/" mapping="/resources/**"/>
+  <!--
+  <mvc:resources mapping="/js/**" location="/js/" />
+  <mvc:resources mapping="/image/**" location="/image/" />
+  -->
+
+   2. wrapper.conf
+
+   错误: 必须限制口令文件读取访问
+   设置 wrapper.java.additional.7=-Dcom.sun.management.jmxremote.authenticate=false，但不能正常运行
+
 2010.09.23
 ----------
 
@@ -11,11 +47,13 @@ ssh
 
       bin/package-production.bat -- 打包成jsw 样式，可单独部署
 
+      升级时，主要要考虑 org.springside.modules.orm.Page ,
+
    2. appliation\sshapp 增加 jsw 支持
       \assembly
       \bin\package-production.bat...
 
-   3. jsw 确实不错，可打包成单独的可运行文件包
+   3. jsw 确实不错，可打包成单独的可运行文件包，以后发布产品可通过package-production.bat
 
 
 2010.09.19
