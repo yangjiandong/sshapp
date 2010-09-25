@@ -46,6 +46,13 @@ tar -xvf hcost.tar.gz
    错误: 必须限制口令文件读取访问
    设置 wrapper.java.additional.7=-Dcom.sun.management.jmxremote.authenticate=false，但不能正常运行
 
+   Tips: On Solaris and Linux systems, you can set the file permissions for the password file by running:
+   chmod 600 jmxremote.password
+
+   参考 http://download.oracle.com/javase/1.5.0/docs/guide/management/agent.html#PasswordAccessFiles
+   http://download.oracle.com/javase/1.5.0/docs/guide/management/security-windows.html
+   save/security-windows.html
+
 2010.09.23
 ----------
 

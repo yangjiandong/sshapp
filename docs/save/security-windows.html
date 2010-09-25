@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head>
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=us-ascii">
+  <title>How to Secure a Password File on Microsoft Windows Systems</title>
+<meta name="collection" content="reference">
+  <link rel="stylesheet" href="security-windows_files/doc.css" type="text/css"></head><body>
+
+<h1>How to a Secure Password File on Microsoft Windows Systems</h1>
+
+<p>For remote monitoring and management, it uses the password and access
+files to control security.  Details are documented in 
+<a href="http://download.oracle.com/javase/1.5.0/docs/guide/management/agent.html#PasswordAccessFiles">Using Password and Access Files</a>.
+</p>
+
+<p>Below describes how to set the file permissions of the password
+file on a Windows system using NTFS so that only the owner has read 
+and write permissions on this file.  If the file system is FAT32, 
+the file system security is not supported and the password
+file cannot be secured.</p>
+
+<ol>
+<li>Right-click on the <code>jmxremote.password</code> file and 
+select the <i>Properties</i> option.
+
+<p><img src="security-windows_files/security1.jpg" title="" alt="Explorer"></p>
+<br>
+
+</li> 
+
+<li>Select the <i>Security</i> tab:
+
+<p><img src="security-windows_files/security2.jpg" title="" alt="File Properties"></p>
+
+<p><b>Note:</b> If you are on Windows XP and the computer is not part of 
+a domain, then the <i>Security</i> tab may be missing. 
+To reveal the <i>Security</i> tab, do the following:
+</p><ol>
+  <li>Open Windows Explorer, and choose <i>Folder Options</i> from the 
+      <i>Tools</i> menu.</li>
+  <li>Select the <i>View</i> tab and scroll to the bottom of 
+      the <i>Advanced Settings</i> and clear the check box next to "Use 
+      Simple File Sharing."</li>
+  <li>Click OK to apply the change</li>
+</ol>
+
+<p><img src="security-windows_files/security3.jpg" title="" alt="Folder Options"></p>
+
+<p>When you restart Windows Explorer, the <i>Security</i> tab should now be 
+visible.</p><br> 
+</li>
+
+<li>Select the <i>Advanced</i> button in the <i>Security</i> tab:
+
+<p><img src="security-windows_files/security4.jpg" title="" alt="Security"></p>
+<br>
+</li>
+
+<li>Select the <i>Owner</i> tab to check if the file owner matches
+the user under which the VM is running:
+
+<p><img src="security-windows_files/security5.jpg" title="" alt="Advanced Security Setting"></p>
+<br>
+
+</li>
+
+<li>Select the <i>Permission</i> tab to set the permissions:
+
+If there are permission entries inherited from a parent directory that 
+allow users or groups other than the owner access to the file,
+then clear the "Inherit from parent the permission entries that apply to 
+child objects" checkbox as shown in the following:
+
+<p><img src="security-windows_files/security6.jpg" title="" alt="Clear Inherit"></p>
+
+At this point it will prompt you to ask if the inherited permissions should 
+be copied from the parent or removed. Press the <i>Copy</i> button:
+
+<p><img src="security-windows_files/security7.jpg" title="" alt="Copy Permission"></p>
+
+<p>Then remove all permission entries that grant access to users or groups 
+other than the file owner by clicking the user or group and press
+the <i>Remove</i> button for all users and groups except the file owner.
+Now there should be a single permission entry which grants 
+<i>Full Control</i> to the owner.
+
+</p><p><img src="security-windows_files/security8.jpg" title="" alt="Complete"></p>
+</li></ol>
+
+<p>Press OK to apply the file security change.  The password file is now secure and can only be accessed by the owner.</p>
+
+<!-- Start SiteCatalyst code   -->
+<script language="JavaScript" src="security-windows_files/s_code_download.js"></script>
+<script language="JavaScript" src="security-windows_files/s_code.js"></script>
+ 
+<!-- ********** DO NOT ALTER ANYTHING BELOW THIS LINE ! *********** -->
+<!--  Below code will send the info to Omniture server -->
+<script language="javascript">var s_code=s.t();if(s_code)document.write(s_code)</script>
+ 
+<!-- End SiteCatalyst code -->
+</body></html>
