@@ -1,6 +1,15 @@
 ssh
 ======
 
+2010.09.25
+----------
+
+
+   1. git archive -- 导出
+
+git archive -v --format=tar HEAD |gzip > e:\hcost.tar.gz
+tar -xvf hcost.tar.gz
+
 2010.09.24
 ----------
 
