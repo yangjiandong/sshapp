@@ -43,6 +43,13 @@
     <property name="password" value="${jdbc.password}" />
   </bean>
 
+  <bean id="quartzDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="${quartz.jdbc.driver}" />
+    <property name="url" value="${quartz.jdbc.url}" />
+    <property name="username" value="${quartz.jdbc.username}" />
+    <property name="password" value="${quartz.jdbc.password}" />
+  </bean>
+
   <!-- 运行脚本初始化内存数据库 -->
   <jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
     <jdbc:script location="classpath:sql/h2/schema.sql" />
