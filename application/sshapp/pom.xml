@@ -606,6 +606,12 @@
   <build>
     <plugins>
 
+      <!-- war插件-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+      </plugin>
+
       <!-- compiler插件, 设定JDK版本 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

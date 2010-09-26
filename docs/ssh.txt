@@ -1,6 +1,17 @@
 ssh
 ======
 
+2010.09.26
+----------
+
+   1. 参考 http://www.dzone.com/links/r/how_to_display_maven_project_version_in_your_weba_2.html
+   在jar，war中增加版本、生成时间的信息
+   maven-assembly-plugin 方式没试验成功
+
+   在web.xml 中增加 ManifestAdapterContextLoadListener
+   in your JSPs, simply access the values from the manifest via the context variables as so:
+   Application Version. ${manifest['app-version']} / Build Date: ${manifest['build-date']}
+
 2010.09.25
 ----------
 

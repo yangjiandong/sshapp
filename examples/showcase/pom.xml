@@ -406,6 +406,13 @@
 
   <build>
     <plugins>
+
+      <!-- war插件-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+      </plugin>
+
       <!-- test插件,加大内存 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -502,6 +509,12 @@
                   <descriptors>
                     <descriptor>assembly/assembly.xml</descriptor>
                   </descriptors>
+                  <archive>
+                    <manifestEntries>
+                      <app-version>${project.version}</app-version>
+                      <build-date>${buildDate}</build-date>
+                    </manifestEntries>
+                  </archive>
                 </configuration>
               </execution>
             </executions>

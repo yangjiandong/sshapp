@@ -69,6 +69,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.build.directory>./</project.build.directory>
+
+    <!-- http://www.dzone.com/links/r/how_to_display_maven_project_version_in_your_weba_2.html -->
+    <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss.SSS</maven.build.timestamp.format>
+    <buildDate>${maven.build.timestamp}</buildDate>
   </properties>
 
   <!-- 设定除中央仓库(repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查找. -->
@@ -1054,7 +1058,13 @@
           <artifactId>maven-war-plugin</artifactId>
           <version>2.1</version>
           <configuration>
-            <warName>${project.artifactId}</warName>
+            <warName>${project.artifactId}-${version}</warName>
+            <archive>
+              <manifestEntries>
+                <app-version>${project.version}</app-version>
+                <build-date>${buildDate}</build-date>
+              </manifestEntries>
+            </archive>
           </configuration>
         </plugin>
 
@@ -1079,6 +1089,10 @@
                 <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                 <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
               </manifest>
+              <manifestEntries>
+                <app-version>${project.version}</app-version>
+                <build-date>${buildDate}</build-date>
+              </manifestEntries>
             </archive>
           </configuration>
         </plugin>
@@ -1138,14 +1152,14 @@
                 <maxIdleTime>3600000</maxIdleTime>
               </connector>
               <!--
-              <connector implementation="org.eclipse.jetty.server.ssl.SslSocketConnector">
-                <port>8443</port>
-                <maxIdleTime>60000</maxIdleTime>
-                <keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
-                <password>jetty6</password>
-                <keyPassword>jetty6</keyPassword>
-              </connector>
-              -->
+                <connector implementation="org.eclipse.jetty.server.ssl.SslSocketConnector">
+                  <port>8443</port>
+                  <maxIdleTime>60000</maxIdleTime>
+                  <keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
+                  <password>jetty6</password>
+                  <keyPassword>jetty6</keyPassword>
+                </connector>
+                -->
             </connectors>
 
             <stopPort>9966</stopPort>
@@ -1179,6 +1193,14 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
           <version>2.2-beta-5</version>
+          <configuration>
+            <archive>
+              <manifestEntries>
+                <app-version>${project.version}</app-version>
+                <build-date>${buildDate}</build-date>
+              </manifestEntries>
+            </archive>
+          </configuration>
         </plugin>
 
         <plugin>
