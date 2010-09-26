@@ -19,7 +19,7 @@ public class ResourceDao extends HibernateDao<Resource, Long> {
     public Query createQueryByCache(final String queryString, final Map<String, ?> values) {
         Assert.hasText(queryString, "queryString不能为空");
         Query query = getSession().createQuery(queryString);
-        query.setCacheable(true);
+        //query.setCacheable(true);
         if (values != null) {
             query.setProperties(values);
         }
@@ -36,7 +36,7 @@ public class ResourceDao extends HibernateDao<Resource, Long> {
     public Query createQueryByCache(final String queryString, final Object... values) {
         Assert.hasText(queryString, "queryString不能为空");
         Query query = getSession().createQuery(queryString);
-        query.setCacheable(true);
+        //query.setCacheable(true);
         if (values != null) {
             for (int i = 0; i < values.length; i++) {
                 query.setParameter(i, values[i]);

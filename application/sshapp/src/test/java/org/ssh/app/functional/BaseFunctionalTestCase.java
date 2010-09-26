@@ -1,5 +1,4 @@
 package org.ssh.app.functional;
-
 import java.util.Properties;
 
 import javax.sql.DataSource;
@@ -15,8 +14,8 @@ import org.springside.modules.test.utils.DbUnitUtils;
 import org.springside.modules.test.utils.JettyUtils;
 import org.springside.modules.test.utils.SeleniumUtils;
 import org.springside.modules.utils.PropertiesUtils;
-import org.springside.modules.utils.SpringContextHolder;
-import org.ssh.app.Start;
+import org.springside.modules.utils.spring.SpringContextHolder;
+import org.ssh.app.tools.Start;
 
 /**
  * 功能测试基类.

@@ -27,7 +27,7 @@ public class BookDao extends HibernateDao<Book, String> {
 
     public List<Book> getAll2() {
         Criteria criteria = getSession().createCriteria(entityClass);
-        criteria.setCacheable(true);
+        //criteria.setCacheable(true);
 
         return criteria.list();
     }

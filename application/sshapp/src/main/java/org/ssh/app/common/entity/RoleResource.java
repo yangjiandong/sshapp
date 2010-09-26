@@ -18,7 +18,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Table(name = "t_role_resource")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class RoleResource {
 
     private Long oid;

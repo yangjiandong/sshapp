@@ -46,7 +46,7 @@ public class ContactDao extends HibernateDao<Contact, String> {
 
     public List<Contact> getAll2() {
         Criteria criteria = getSession().createCriteria(entityClass);
-        criteria.setCacheable(true);
+        //criteria.setCacheable(true);
         return criteria.list();
     }
 

@@ -188,10 +188,12 @@
       <artifactId>javassist</artifactId>
     </dependency>
 
-    <!--
-        dbcp <dependency> <groupId>commons-dbcp</groupId>
-        <artifactId>commons-dbcp</artifactId> </dependency>
-      -->
+    <!-- dbcp -->
+    <dependency>
+      <groupId>commons-dbcp</groupId>
+      <artifactId>commons-dbcp</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>c3p0</groupId>
       <artifactId>c3p0</artifactId>

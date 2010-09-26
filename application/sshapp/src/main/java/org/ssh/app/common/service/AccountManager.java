@@ -56,7 +56,7 @@ public class AccountManager {
      *
      */
     //演示指定非默认名称的TransactionManager.
-    @Transactional("transactionManager")
+    @Transactional("defaultTransactionManager")
     public void saveUser(User user) {
 
         if (isSupervisor(user)) {

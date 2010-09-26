@@ -1,8 +1,10 @@
 package org.ssh.app.unit.common;
 
+import static org.junit.Assert.*;
+
 import org.easymock.EasyMock;
+import org.easymock.IMocksControl;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.ssh.app.common.dao.UserDao;
@@ -10,7 +12,9 @@ import org.ssh.app.common.entity.User;
 import org.ssh.app.common.service.AccountManager;
 import org.ssh.app.common.service.ServiceException;
 
-public class AccountManagerTest extends Assert {
+public class AccountManagerTest {
+
+    private IMocksControl control = EasyMock.createControl();
 
     private AccountManager accountManager;
     private UserDao mockUserDao;
@@ -18,24 +22,26 @@ public class AccountManagerTest extends Assert {
     @Before
     public void setUp() {
         accountManager = new AccountManager();
-        mockUserDao = EasyMock.createMock(UserDao.class);
+        mockUserDao = control.createMock(UserDao.class);
         accountManager.setUserDao(mockUserDao);
     }
 
     @After
     public void tearDown() {
-        EasyMock.verify(mockUserDao);
+        control.verify();
     }
 
     @Test
     public void saveUser() {
         User admin = new User();
         admin.setId("1");
+        admin.setLoginName("admin");
         User user = new User();
         user.setId("2");
+        user.setLoginName("test2");
 
         mockUserDao.save(user);
-        EasyMock.replay(mockUserDao);
+        control.replay();
 
         //正常保存用户.
         accountManager.saveUser(user);
