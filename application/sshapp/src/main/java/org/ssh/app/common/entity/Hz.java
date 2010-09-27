@@ -11,7 +11,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 @Entity
 @Table(name = "T_HZK")
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 public class Hz {
     private Long oid;
 

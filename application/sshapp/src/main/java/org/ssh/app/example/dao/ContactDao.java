@@ -101,7 +101,8 @@ public class ContactDao extends HibernateDao<Contact, String> {
     public List<Contact> getContactByNaturalId(String p_name) {
         List results =
                 getSession().createCriteria(Contact.class)
-                        .add(Restrictions.naturalId().set("name", p_name)).setCacheable(true)
+                        .add(Restrictions.naturalId().set("name", p_name))
+                        //.setCacheable(true)
                         .list();
 
         return results;

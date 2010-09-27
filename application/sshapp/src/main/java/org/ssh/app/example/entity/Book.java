@@ -17,7 +17,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Table(name = "t_book")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Book {
 
     private Long oid;

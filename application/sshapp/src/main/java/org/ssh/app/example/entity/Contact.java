@@ -14,7 +14,6 @@ import org.ssh.app.common.entity.IdEntity;
 
 @Entity
 @Table(name = "t_contact")
-@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Contact extends IdEntity {
 
     private String name;

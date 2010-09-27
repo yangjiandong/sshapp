@@ -11,7 +11,7 @@
     class="org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean">
     <property
       name="serviceUrl"
-      value="http://127.0.0.1:8089/sshapp/remote/httpInvoke" />
+      value="http://localhost:8089/sshapp/remote/httpInvoke" />
     <property
       name="serviceInterface"
       value="org.ssh.app.httpinvoke.service.UserService" />

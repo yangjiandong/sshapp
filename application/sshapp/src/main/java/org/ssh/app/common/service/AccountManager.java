@@ -46,7 +46,6 @@ public class AccountManager {
 
     private PasswordEncoder encoder = new ShaPasswordEncoder();
 
-    @Autowired
     private RoleDao roleDao;
 
     /**
@@ -235,6 +234,11 @@ public class AccountManager {
         userDao.save(u);
 
         //saveUser(u);
+    }
+
+    @Autowired
+    public void setRoleDao(RoleDao roleDao) {
+        this.roleDao = roleDao;
     }
 
 }
