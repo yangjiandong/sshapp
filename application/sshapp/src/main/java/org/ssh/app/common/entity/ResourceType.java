@@ -7,15 +7,12 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * 资源类型
  */
 @Entity
 @Table(name = "t_resource_type")
-//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class ResourceType {
     private Long oid;
     private String typeName;

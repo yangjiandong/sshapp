@@ -10,15 +10,12 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * 菜单资源
  */
 @Entity
 @Table(name = "t_resources")
-//@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Resource {
     private Long id;
     private String resourceName;

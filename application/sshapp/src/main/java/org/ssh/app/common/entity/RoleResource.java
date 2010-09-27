@@ -10,8 +10,6 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * 角色-菜单权限(仅控制到菜单项)
