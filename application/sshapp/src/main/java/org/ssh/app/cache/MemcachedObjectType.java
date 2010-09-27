@@ -12,6 +12,8 @@ import org.ssh.app.common.service.AccountManager;
  * @author calvin
  */
 public enum MemcachedObjectType {
+    //60*60*24*30 (number of seconds in 30 days)
+    HZK("hz:", 60 * 60 * 24),
     USER("user:", 60 * 60 * 1);
 
     private String prefix;

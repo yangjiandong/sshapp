@@ -5,6 +5,7 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -12,14 +13,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springside.modules.memcached.SpyMemcachedClient;
+import org.springside.modules.utils.encode.JsonBinder;
+import org.ssh.app.cache.MemcachedObjectType;
 import org.ssh.app.common.dao.HzDao;
 import org.ssh.app.common.entity.Hz;
+import org.ssh.app.common.entity.User;
 
 @Service("hzService")
 @Transactional
 public class HzService {
     protected Logger logger = LoggerFactory.getLogger(getClass());
     private HzDao hzDao;
+
+    private SpyMemcachedClient spyMemcachedClient;
+    private JsonBinder jsonBinder = JsonBinder.buildNonDefaultBinder();
 
     @Autowired
     public void setHzDao(HzDao hzDao) {
@@ -31,8 +39,60 @@ public class HzService {
      */
     @Transactional(readOnly = true)
     public Map<String, String> getMemo(String hzStr) {
-        return this.hzDao.getMemo(hzStr);
+        Map<String, String> map = new HashMap<String, String>();
+        String oneS = null;
+        StringBuffer bfWb = new StringBuffer();
+        StringBuffer bfPy = new StringBuffer();
+        Hz hz = null;
+        for (int i = 0; i < hzStr.length(); i++) {
+            oneS = hzStr.substring(i, i + 1);
+//            hz = this.findUnique("from " + Hz.class.getName()
+//                    + " where hz=?", oneS);
+            if (hz != null) {
+                bfWb.append(hz.getWb().substring(0, 1));
+                bfPy.append(hz.getPy().substring(0, 1));
+            }
+        }
 
+        String py = bfPy.toString();
+        String wb = bfWb.toString();
+
+        if (py.length() > 10) {
+            py = py.substring(0, 10);
+        }
+
+        if (wb.length() > 10) {
+            wb = wb.substring(0, 10);
+        }
+
+        map.put("py", py);
+        map.put("wb", wb);
+
+        return map;
+    }
+
+    /**
+     * 访问Memcached, 使用JSON字符串存放对象以节约空间.
+     */
+    private Hz getUserFromMemcached(String one) {
+
+        String key = MemcachedObjectType.HZK.getPrefix() + one;
+
+        Hz hz = null;
+        String jsonString = spyMemcachedClient.get(key);
+
+        if (jsonString == null) {
+            //用户不在 memcached中,从数据库中取出并放入memcached.
+            //因为hibernate的proxy问题多多,此处使用jdbc
+            //hz = userJdbcDao.queryObject(one);
+            if (hz != null) {
+                jsonString = jsonBinder.toJson(hz);
+                spyMemcachedClient.set(key, MemcachedObjectType.HZK.getExpiredTime(), jsonString);
+            }
+        } else {
+            hz = jsonBinder.fromJson(jsonString, Hz.class);
+        }
+        return hz;
     }
 
     public void initData() {
