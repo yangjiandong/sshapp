@@ -38,7 +38,7 @@
 	<!-- =========================================================== -->
 	<Set name="handler">
 		<New class="org.mortbay.jetty.webapp.WebAppContext">
-			<Set name="contextPath">/showcase</Set>
+			<Set name="contextPath">/sshapp-test</Set>
 			<Set name="war">webapp</Set>
 		</New>
 	</Set>

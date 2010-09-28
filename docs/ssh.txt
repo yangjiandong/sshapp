@@ -15,6 +15,10 @@ ssh
    2. 增加 com.googlecode.aviator ,基于java实现的表达式引擎
    save/User_Guide_zh.htm
 
+   3. 有关混淆编译
+   http://pyx4me.com/pyx4me-maven-plugins/proguard-maven-plugin/
+   http://stackoverflow.com/questions/880839/maven-proguard-and-assembly-issues
+
 2010.09.27
 ----------
 
@@ -104,6 +108,14 @@ tar -xvf hcost.tar.gz
    参考 http://download.oracle.com/javase/1.5.0/docs/guide/management/agent.html#PasswordAccessFiles
    http://download.oracle.com/javase/1.5.0/docs/guide/management/security-windows.html
    save/security-windows.html
+
+   --暂时解决，取消
+   #wrapper.java.additional.5=-Dcom.sun.management.jmxremote.ssl=false
+   #wrapper.java.additional.6=-Dcom.sun.management.jmxremote.port=18080
+   ##wrapper.java.additional.7=-Dcom.sun.management.jmxremote.authenticate=false
+   #wrapper.java.additional.7=-Dcom.sun.management.jmxremote.password.file=conf\jmxremote.password
+   #wrapper.java.additional.8=-Dcom.sun.management.jmxremote.access.file=conf\jmxremote.access
+
 
 2010.09.23
 ----------
