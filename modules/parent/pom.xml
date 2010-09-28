@@ -804,6 +804,12 @@
         </exclusions>
       </dependency>
 
+      <dependency>
+        <groupId>com.googlecode.aviator</groupId>
+        <artifactId>aviator</artifactId>
+        <version>1.0.1</version>
+      </dependency>
+        
       <!-- template engine -->
       <dependency>
         <groupId>org.apache.velocity</groupId>

@@ -1,6 +1,19 @@
 ssh
 ======
 
+2010.09.28
+----------
+
+   1. core SimpleHibernateDao 增加
+   //按属性查找第一个对象, 匹配方式为相等
+     public T findOneBy(final String propertyName, final Object value) {
+    Assert.hasText(propertyName, "propertyName不能为空");
+    Criterion criterion = Restrictions.eq(propertyName, value);
+    return (T) createCriteria(criterion).setMaxResults(1).uniqueResult();
+  }
+
+   2. 增加 com.googlecode.aviator ,基于java实现的表达式引擎
+
 2010.09.27
 ----------
 
@@ -20,15 +33,15 @@ ssh
         <prop key="hibernate.cache.provider_configuration_file_resource_path">${hibernate.ehcache_config_file}</prop>
         <prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
       </props>
-      
+
       showcase 为
-      
+
       <props>
         <prop key="hibernate.dialect">${hibernate.dialect}</prop>
         <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
         <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
       </props>
-      
+
 2010.09.26
 ----------
 
@@ -42,7 +55,6 @@ ssh
 
 2010.09.25
 ----------
-
 
    1. git archive -- 导出
 

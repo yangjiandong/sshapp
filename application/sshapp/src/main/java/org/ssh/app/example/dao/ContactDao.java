@@ -1,6 +1,5 @@
 package org.ssh.app.example.dao;
 
-import java.awt.Color;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -8,7 +7,6 @@ import javax.sql.DataSource;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
-import org.hibernate.annotations.NaturalId;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Property;
@@ -19,7 +17,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springside.modules.orm.hibernate.HibernateDao;
-import org.ssh.app.example.entity.Cat;
 import org.ssh.app.example.entity.Contact;
 
 @Component

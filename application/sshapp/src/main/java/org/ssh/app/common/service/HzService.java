@@ -5,6 +5,7 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +19,6 @@ import org.springside.modules.utils.encode.JsonBinder;
 import org.ssh.app.cache.MemcachedObjectType;
 import org.ssh.app.common.dao.HzDao;
 import org.ssh.app.common.entity.Hz;
-import org.ssh.app.common.entity.User;
 
 @Service("hzService")
 @Transactional
@@ -28,6 +28,11 @@ public class HzService {
 
     private SpyMemcachedClient spyMemcachedClient;
     private JsonBinder jsonBinder = JsonBinder.buildNonDefaultBinder();
+
+    @Autowired(required = false)
+    public void setSpyMemcachedClient(SpyMemcachedClient spyMemcachedClient) {
+        this.spyMemcachedClient = spyMemcachedClient;
+    }
 
     @Autowired
     public void setHzDao(HzDao hzDao) {
@@ -46,8 +51,13 @@ public class HzService {
         Hz hz = null;
         for (int i = 0; i < hzStr.length(); i++) {
             oneS = hzStr.substring(i, i + 1);
-//            hz = this.findUnique("from " + Hz.class.getName()
-//                    + " where hz=?", oneS);
+            if (spyMemcachedClient != null) {
+                logger.debug("get hz use memecache!!!" + oneS);
+                hz = getHzFromMemcached(oneS);
+            } else {
+                hz = hzDao.findOne(oneS);
+
+            }
             if (hz != null) {
                 bfWb.append(hz.getWb().substring(0, 1));
                 bfPy.append(hz.getPy().substring(0, 1));
@@ -74,17 +84,24 @@ public class HzService {
     /**
      * 访问Memcached, 使用JSON字符串存放对象以节约空间.
      */
-    private Hz getUserFromMemcached(String one) {
+    private Hz getHzFromMemcached(String one) {
+        //TODO
+        //不能直接用汉字作为spyMemcachedClient的key
+        String one_code = one;
+        try{
+            one_code=URLEncoder.encode(one,"UTF-8");
+        }catch (Exception e) {
+            // TODO: handle exception
+        }
 
-        String key = MemcachedObjectType.HZK.getPrefix() + one;
+        String key = MemcachedObjectType.HZK.getPrefix() + one_code;
 
         Hz hz = null;
         String jsonString = spyMemcachedClient.get(key);
-
+        logger.debug("get key:" + key + ",jsonString:" + jsonString);
         if (jsonString == null) {
-            //用户不在 memcached中,从数据库中取出并放入memcached.
-            //因为hibernate的proxy问题多多,此处使用jdbc
-            //hz = userJdbcDao.queryObject(one);
+            //hz = hzDao.findOne(one);
+            hz = hzDao.findOneBy("hz", one);
             if (hz != null) {
                 jsonString = jsonBinder.toJson(hz);
                 spyMemcachedClient.set(key, MemcachedObjectType.HZK.getExpiredTime(), jsonString);
@@ -108,22 +125,23 @@ public class HzService {
             String thisLine;
 
             DataInputStream myInput = new DataInputStream(fis);
-            BufferedReader br = new BufferedReader(new InputStreamReader(myInput,"UTF-8"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(myInput, "UTF-8"));
 
             Hz re = new Hz();
             //this.hzDao.batchExecute("delete from " + Hz.class.getName());
-            int line=1;
-            while ((thisLine=br.readLine())!=null){
-                if (line==1) {
+            int line = 1;
+            while ((thisLine = br.readLine()) != null) {
+                if (line == 1) {
                     line++;
                     continue;
                 }
-                String star[]=thisLine.split(",");
+                String star[] = thisLine.split(",");
                 //for(int j=0;j<star.length;j++){
                 //    System.out.println(star[j]);
                 //}
 
-                if (star[1].trim().equals("")) continue;
+                if (star[1].trim().equals(""))
+                    continue;
 
                 re = new Hz();
                 re.setOid(new Long(star[0]));
@@ -132,14 +150,14 @@ public class HzService {
                 re.setWb(star[3]);
                 this.hzDao.save(re);
             }
-//
-//            CSVReader reader = new CSVReader(new InputStreamReader(resourcetxt,"UTF-8"),',');
-//
-//            String[] nextLine;
-//            while ((nextLine = reader.readNext()) != null) {
-//                System.out.println("Name: [" + nextLine[1] + "]\npy: [" + nextLine[2]
-//                        + "]\nwb: [" + nextLine[3] + "]");
-//            }
+            //
+            //            CSVReader reader = new CSVReader(new InputStreamReader(resourcetxt,"UTF-8"),',');
+            //
+            //            String[] nextLine;
+            //            while ((nextLine = reader.readNext()) != null) {
+            //                System.out.println("Name: [" + nextLine[1] + "]\npy: [" + nextLine[2]
+            //                        + "]\nwb: [" + nextLine[3] + "]");
+            //            }
 
         } catch (Exception e) {
             logger.error("装载汉字数据出错:" + e);

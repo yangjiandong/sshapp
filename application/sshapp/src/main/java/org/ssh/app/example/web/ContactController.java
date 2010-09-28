@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
-import org.ssh.app.example.entity.Book;
+import org.ssh.app.common.service.HzService;
 import org.ssh.app.example.entity.Contact;
 import org.ssh.app.example.service.ContactService;
 import org.ssh.app.util.JsonViewUtil;
@@ -30,6 +30,9 @@ public class ContactController extends MultiActionController {
 
     @Autowired
     private ContactService contactService;
+
+    @Autowired
+    private HzService hzService;
 
     @RequestMapping(value = "/getContacts", method = RequestMethod.GET)
     public ModelAndView view(HttpServletRequest request,
@@ -140,5 +143,12 @@ public class ContactController extends MultiActionController {
         return  "showContact" ;
     }
 
+    @RequestMapping(value = "/getHzMemeo")
+    public String getHzMemo(HttpServletRequest request, HttpServletResponse response, Contact book) {
 
+        Map<String, String> allBooks = this.hzService.getMemo(book.getName());
+        JSONArray jsonArray = JSONArray.fromObject(allBooks);
+        request.setAttribute("message", "汉字助记符 is: <b>"+jsonArray.toString()+"</b>");
+        return  "showContact" ;
+    }
 }
