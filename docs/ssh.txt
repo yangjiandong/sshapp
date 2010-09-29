@@ -115,7 +115,11 @@ tar -xvf hcost.tar.gz
    ##wrapper.java.additional.7=-Dcom.sun.management.jmxremote.authenticate=false
    #wrapper.java.additional.7=-Dcom.sun.management.jmxremote.password.file=conf\jmxremote.password
    #wrapper.java.additional.8=-Dcom.sun.management.jmxremote.access.file=conf\jmxremote.access
-
+   --安装服务
+   wrapper-windows-x86-32.exe -i ..\conf\wrapper.conf
+   --卸载
+   wrapper-windows-x86-32.exe -r ..\conf\wrapper.conf
+   --work目录问题,解压zip后需手工建work目录,暂时还没找到解决方法
 
 2010.09.23
 ----------
