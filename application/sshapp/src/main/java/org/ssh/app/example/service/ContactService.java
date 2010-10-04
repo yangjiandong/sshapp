@@ -8,23 +8,30 @@ import java.util.List;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.dozer.Mapper;
+import org.dozer.MappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springside.modules.utils.spring.SpringContextHolder;
+import org.ssh.app.common.dao.UserDao;
 import org.ssh.app.example.dao.ContactDao;
 import org.ssh.app.example.entity.Contact;
+import org.ssh.app.example.entity.UserVO;
 
 @Component
 @Transactional
 public class ContactService {
 
-    private static Logger logger = LoggerFactory
-            .getLogger(ContactService.class);
+    private static Logger logger = LoggerFactory.getLogger(ContactService.class);
 
     @Autowired
     private ContactDao contactDao;
+
+    @Autowired
+    private UserDao userDao;
 
     @Transactional(readOnly = true)
     public List<Contact> getContacts() {
@@ -175,8 +182,7 @@ public class ContactService {
      */
     public Contact getContactFromJSON(Object data) {
         JSONObject jsonObject = JSONObject.fromObject(data);
-        Contact newContact = (Contact) JSONObject.toBean(jsonObject,
-                Contact.class);
+        Contact newContact = (Contact) JSONObject.toBean(jsonObject, Contact.class);
         return newContact;
     }
 
@@ -190,8 +196,7 @@ public class ContactService {
     @SuppressWarnings("unchecked")
     public List<Contact> getListContactsFromJSON(Object data) {
         JSONArray jsonArray = JSONArray.fromObject(data);
-        List<Contact> newContacts = (List<Contact>) JSONArray.toCollection(
-                jsonArray, Contact.class);
+        List<Contact> newContacts = (List<Contact>) JSONArray.toCollection(jsonArray, Contact.class);
         return newContacts;
     }
 
@@ -205,8 +210,7 @@ public class ContactService {
     @SuppressWarnings("unchecked")
     public List<String> getListIdFromJSON(Object data) {
         JSONArray jsonArray = JSONArray.fromObject(data);
-        List<String> idContacts = (List<String>) JSONArray.toCollection(
-                jsonArray, String.class);
+        List<String> idContacts = (List<String>) JSONArray.toCollection(jsonArray, String.class);
         return idContacts;
     }
 
@@ -228,5 +232,20 @@ public class ContactService {
 
     public List getContactBySql(String p_name) {
         return this.contactDao.getContactBySql(p_name);
+    }
+
+    @Transactional(readOnly = true)
+    public UserVO getUserVO(String loginName) {
+        Mapper mapper = SpringContextHolder.getBean("dozer_mapper");
+        UserVO o = null;
+        try {
+            o = mapper.map(userDao.findOneBy("loginName", loginName), UserVO.class);
+        } catch (MappingException me) {
+            this.logger.error("有可能没找到相应记录:loginName=" + loginName);
+        } catch (Exception e) {
+            this.logger.error("dozer conver:" + e);
+        } finally {
+            return o;
+        }
     }
 }

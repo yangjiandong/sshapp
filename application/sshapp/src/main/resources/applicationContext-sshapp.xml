@@ -14,6 +14,7 @@
   <import resource="jms/applicationContext-jms-advanced.xml" />
   <import resource="jmx/applicationContext-jmx-server.xml" />
   <import resource="jmx/applicationContext-jmx-client.xml" />
+  <import resource="dozer/applicationContext-dozer.xml" />
 
   <!--
   <bean id="springContextHolder" class="org.springside.modules.utils.SpringContextHolder"/>

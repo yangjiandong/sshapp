@@ -12,7 +12,9 @@
     <groupId>org.springside</groupId>
     <artifactId>springside3-parent</artifactId>
     <version>3.3.4</version>
-    <relativePath>../../modules/parent/pom.xml</relativePath>
+    <!--
+      <relativePath>../../modules/parent/pom.xml</relativePath>
+      -->
   </parent>
 
   <!-- More Project Information -->
@@ -417,7 +419,15 @@
       <groupId>com.googlecode.aviator</groupId>
       <artifactId>aviator</artifactId>
     </dependency>
-    
+    <dependency>
+      <groupId>net.sf.dozer</groupId>
+      <artifactId>dozer</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.xmlbeans</groupId>
+      <artifactId>xmlbeans</artifactId>
+    </dependency>
+
     <!--
       <dependency>
         <groupId>com.googlecode.xmemcached</groupId>

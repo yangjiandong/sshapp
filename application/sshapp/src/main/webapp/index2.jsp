@@ -78,5 +78,13 @@
     <INPUT TYPE="submit"  value=" 取得助记符 ">
  <br>
 </FORM>
+
+<FORM METHOD=POST ACTION="book/getUserVO">
+    <INPUT TYPE="text" NAME="name" value="请输入汉字"><br><br>
+
+    <INPUT TYPE="submit"  value=" dozer-getUserVO ">
+ <br>
+</FORM>
+
 </body>
 </html>

@@ -13,12 +13,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
+import org.ssh.app.common.entity.User;
 import org.ssh.app.common.service.HzService;
 import org.ssh.app.example.entity.Contact;
+import org.ssh.app.example.entity.UserVO;
 import org.ssh.app.example.service.ContactService;
 import org.ssh.app.util.JsonViewUtil;
 
@@ -149,6 +152,15 @@ public class ContactController extends MultiActionController {
         Map<String, String> allBooks = this.hzService.getMemo(book.getName());
         JSONArray jsonArray = JSONArray.fromObject(allBooks);
         request.setAttribute("message", "汉字助记符 is: <b>"+jsonArray.toString()+"</b>");
+        return  "showContact" ;
+    }
+
+    @RequestMapping(value = "/getUserVO")
+    public String getUserVO(HttpServletRequest request, HttpServletResponse response, Contact book) {
+
+        UserVO allBooks = this.contactService.getUserVO(book.getName());
+        JSONArray jsonArray = JSONArray.fromObject(allBooks);
+        request.setAttribute("message", "userVO is: <b>"+jsonArray.toString()+"</b>");
         return  "showContact" ;
     }
 }
