@@ -106,6 +106,7 @@ public class ContactDao extends HibernateDao<Contact, String> {
     }
 
     // 采用原生的sql，注意，表名、字段名都必须是原生
+    // 注意此次返回Object，包含三个字段的信息
     public List getContactBySql(String p_name) {
         Query query = getSession().createSQLQuery("SELECT * FROM t_contact where name like ?")
                         .addScalar("id", Hibernate.STRING).addScalar("name").addScalar("num");

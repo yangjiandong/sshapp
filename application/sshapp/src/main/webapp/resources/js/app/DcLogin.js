@@ -1,37 +1,5 @@
 Ext.ns("App.dc");
 
-// http://www.extjs.com/forum/showthread.php?t=59623
-Ext.ux.Image = Ext.extend(Ext.BoxComponent, {
-      src : Ext.BLANK_IMAGE_URL,
-
-      autoEl : {
-        tag : 'img',
-        cls : 'tng-managed-image',
-        src : Ext.BLANK_IMAGE_URL
-      },
-
-      initComponent : function() {
-        Ext.ux.Image.superclass.initComponent.apply(this, arguments);
-      },
-
-      onRender : function() {
-        Ext.ux.Image.superclass.onRender.apply(this, arguments);
-
-        if (!Ext.isEmpty(this.src) && (this.src !== Ext.BLANK_IMAGE_URL)) {
-          this.setSrc(this.src);
-        }
-        this.relayEvents(this.el, ["click", "dblclick", "mousedown", "mouseup",
-                "mouseover", "mousemove", "mouseout", "keypress", "keydown",
-                "keyup"]);
-      },
-
-      setSrc : function(src) {
-        this.el.dom.src = CFG_PATH_ICONS + '/' + src;
-      }
-    });
-
-Ext.reg('image', Ext.ux.Image);
-
 App.dc.DcLogin = Ext.extend(Ext.Window, {
       fields : new Ext.util.MixedCollection(),
       authServerUrl : null,
@@ -90,9 +58,9 @@ App.dc.DcLogin = Ext.extend(Ext.Window, {
                   this.fields.get("password") ],
               buttons : [{
                     id : 'signin',
-                    // xtype : "button",
+                    xtype : "submitbutton",
                     scope : this,
-                    text : L('/Login/OK'),
+                    //text : L('/Login/OK'),
                     handler : this.onLogin
                   }],
               keys : [{

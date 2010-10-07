@@ -37,7 +37,7 @@ public class JsonViewUtil {
         modelMap.put("data", data);
         modelMap.put("success", true);
 
-        //logger.info("json,getModelMap...");
+        logger.debug("json,getModelMap...");
 
         return new ModelAndView("jsonView", modelMap);
     }
@@ -155,7 +155,7 @@ public class JsonViewUtil {
         ServletUtils.setNoCacheHeader(response);
 
         PrintWriter out = response.getWriter();
-        //logger.info(jsonObject.toString());
+        logger.debug(jsonObject.toString());
         out.write(jsonObject.toString());
     }
 

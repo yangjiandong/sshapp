@@ -1,6 +1,19 @@
 ssh
 ======
 
+2010.10.05
+----------
+
+   1. sshapp web.xml 增加h2嵌入数据库启动
+
+   2. sshapp 增加 leona 工具包
+      util.leona
+
+      他的JsonUtils 考虑的比较全面，例子参考 ContactController.getUserVO
+
+      -- 关注下 leona 项目 AbstractGridAction.pagedQuery
+      -- json 这样处理后，可以解决实体类中冗余字段的存在
+
 2010.10.02
 ----------
 
@@ -23,6 +36,18 @@ ssh
 
 2010.10.01
 ----------
+
+   2010.10.05
+   ----------
+   中午吃加州风情自助餐，49一位，三个人，晨晨半价，共123元，感觉没什么可吃的，咖啡比以前淡。
+
+   2010.10.05
+   ----------
+   支付宝充值100元，网上订了盲人钟、电池、UBS按摩器，大阿姨想要俩个盲人钟。
+   卫生间换龙头，150加人工费35元。
+   下午没到人寿，在家陪晨晨，其实也没什么事，小丫头撒娇。
+   看了几部电影，晚上看的弯刀比较过瘾。
+   ipv6 翻墙，ipv6.txt
 
    2010.10.04
    ----------
@@ -195,6 +220,9 @@ tar -xvf hcost.tar.gz
    ##wrapper.java.additional.7=-Dcom.sun.management.jmxremote.authenticate=false
    #wrapper.java.additional.7=-Dcom.sun.management.jmxremote.password.file=conf\jmxremote.password
    #wrapper.java.additional.8=-Dcom.sun.management.jmxremote.access.file=conf\jmxremote.access
+   --网上答复
+   Java很扯的，要求用户对这两个文件不能有写权限，在window上实现这点尤其麻烦，具体参见wiki文档
+
    --安装服务
    wrapper-windows-x86-32.exe -i ..\conf\wrapper.conf
    --卸载

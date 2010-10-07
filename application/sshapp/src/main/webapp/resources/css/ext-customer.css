@@ -138,3 +138,11 @@ span.uiName { color:red;padding-right:4px; font-size:10px; }
   background: white;
   height: auto;
 }
+
+.icon-submit {
+        background: url(ux/accept.png) left top no-repeat !important;
+}
+
+.icon-undo {
+        background: url(ux/accept.png) left top no-repeat !important;
+}

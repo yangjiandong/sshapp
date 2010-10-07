@@ -13,17 +13,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 import org.ssh.app.common.entity.User;
+import org.ssh.app.common.service.AccountManager;
 import org.ssh.app.common.service.HzService;
 import org.ssh.app.example.entity.Contact;
 import org.ssh.app.example.entity.UserVO;
 import org.ssh.app.example.service.ContactService;
 import org.ssh.app.util.JsonViewUtil;
+import org.ssh.app.util.leona.JsonUtils;
+import org.ssh.app.util.leona.JsonUtils.Bean;
 
 @Controller
 @RequestMapping("/book")
@@ -36,6 +38,9 @@ public class ContactController extends MultiActionController {
 
     @Autowired
     private HzService hzService;
+
+    @Autowired
+    private AccountManager accountManager;
 
     @RequestMapping(value = "/getContacts", method = RequestMethod.GET)
     public ModelAndView view(HttpServletRequest request,
@@ -137,10 +142,24 @@ public class ContactController extends MultiActionController {
         return  "showContact" ;
     }
 
+//    public PrintWriter getWriter() throws IOException {
+//        return ServletActionContext.getResponse().getWriter();
+//    }
+
     @RequestMapping(value = "/getContactBySql")
     public String getContactBySql(HttpServletRequest request, HttpServletResponse response, Contact book) {
 
-        List<Contact> allBooks = this.contactService.getContactBySql(book.getName());
+        List allBooks = this.contactService.getContactBySql(book.getName());
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("success", true);
+        map.put("subSystems", allBooks);
+        try{
+        JsonViewUtil.buildCustomJSONDataResponse(response, map);
+        }catch (Exception e) {
+            // TODO: handle exception
+        }
+
         JSONArray jsonArray = JSONArray.fromObject(allBooks);
         request.setAttribute("message", "You Input Contact title is: <b>"+jsonArray.toString()+"</b>");
         return  "showContact" ;
@@ -158,9 +177,38 @@ public class ContactController extends MultiActionController {
     @RequestMapping(value = "/getUserVO")
     public String getUserVO(HttpServletRequest request, HttpServletResponse response, Contact book) {
 
-        UserVO allBooks = this.contactService.getUserVO(book.getName());
+      List<User>list = accountManager.getAllUserWithRole();
+      try{
+      Bean bean = new Bean(true, "已经登陆", list);
+      JsonUtils.write(bean, response.getWriter(),
+          new String[] {
+              "parent", "roleList", "hibernateLazyInitializer",
+              "handler", "checked"
+          }, "yyyy.MM.dd");
+
+      //DEBUG: org.ssh.app.util.leona.JsonUtils - "{"info":[{"createBy":"初始化","createTime":"2010.08.14 22:41:04","email":"ad
+      //in@gmail.com","id":"00012a710bfb8a02","lastModifyBy":"","lastModifyTime":"","loginName":"admin","name":"管理员","plainP
+      //ssword":"123","roleNames":"admin","shaPassword":"40bd001563085fc35165329ea1ff5c5ecbdbbeef","status":"enabled","version"
+      //0}],"msg":"已经登陆","success":true}"
+
+      JsonUtils.write(bean, response.getWriter(),
+              new String[] {
+                  "handler", "checked"
+              }, "yyyy.MM.dd");
+      //DEBUG: org.ssh.app.util.leona.JsonUtils - "{"info":[{"createBy":"初始化","createTime":"2010.08.14 22:41:04","email":"adm
+      //in@gmail.com","id":"00012a710bfb8a02","lastModifyBy":"","lastModifyTime":"","loginName":"admin","name":"管理员","plainPa
+      //ssword":"123","roleList":[{"desc":"系统管理员角色","id":"00012a710bfb6b01","name":"admin"}],"roleNames":"admin","shaPass
+      //word":"40bd001563085fc35165329ea1ff5c5ecbdbbeef","status":"enabled","version":0}],"msg":"已经登陆","success":true}"
+
+      }catch (Exception e) {
+          // TODO: handle exception
+      }
+
+      UserVO allBooks = this.contactService.getUserVO(book.getName());
         JSONArray jsonArray = JSONArray.fromObject(allBooks);
         request.setAttribute("message", "userVO is: <b>"+jsonArray.toString()+"</b>");
         return  "showContact" ;
     }
+
+
 }

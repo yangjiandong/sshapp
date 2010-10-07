@@ -14,6 +14,7 @@
     <param-name>webAppRootKey</param-name>
     <param-value>sshapp.root</param-value>
   </context-param>
+
   <!-- log4j + spring  -->
   <context-param>
     <param-name>log4jConfigLocation</param-name>
@@ -34,6 +35,22 @@
   </context-param>
   <listener>
     <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+  </listener>
+
+  <context-param>
+    <param-name>db.url</param-name>
+    <param-value>jdbc:h2:~/ssh.data</param-value>
+  </context-param>
+  <context-param>
+    <param-name>db.user</param-name>
+    <param-value>sa</param-value>
+  </context-param>
+  <context-param>
+    <param-name>db.password</param-name>
+    <param-value>sa</param-value>
+  </context-param>
+  <listener>
+    <listener-class>org.h2.server.web.DbStarter</listener-class>
   </listener>
 
   <listener>
@@ -225,9 +242,9 @@
   <!-- mappings may be specified here                                       -->
   <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  -->
   <!-- UNCOMMENT TO ACTIVATE
-  <mime-mapping>
-    <extension>mysuffix</extension>
-    <mime-type>image/x-png</mime-type>
-  </mime-mapping>
-  -->
+    <mime-mapping>
+      <extension>mysuffix</extension>
+      <mime-type>image/x-png</mime-type>
+    </mime-mapping>
+    -->
 </web-app>

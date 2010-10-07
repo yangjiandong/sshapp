@@ -14,15 +14,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta http-equiv="CACHE-CONTROL" content="NO-CACHE" />
+<meta http-equiv="Cache-Control" content="no-store"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
 <link rel="shortcut icon" href="${apath}/resources/img/icon/extjs.ico" />
-
 <link rel="stylesheet" type="text/css" href="<c:url value="/resources/ext/resources/css/ext-all.css"/>" />
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/ext-customer.css"/>" />
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/ext-patch.css"/>" />
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/xtheme-nbs.css"/>" />
+
 <script type="text/javascript" src="<c:url value="/resources/ext/ext-base.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/ext/ext-all.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/ext/ext-lang-zh_CN.js"/>"></script>
 
 <script type="text/javascript">
+      Ext.BLANK_IMAGE_URL = '${ext}/resources/images/default/s.gif';
+
       // Deployment type: Production(PROD) or development(DEV). In development mod does not cache
       CFG_DEPLOYMENT_TYPE = '${deployment_type}';
       //javascript
@@ -44,9 +51,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="<c:url value="/resources/js/app/UiLoadingHelper.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/resources/js/DcIncludesMap.js"/>"></script>
 
-<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/ext-customer.css"/>" />
-<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/ext-patch.css"/>" />
-<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/xtheme-nbs.css"/>" />
 <script>
       document.write('<title>' + L("/Application/Name")+'-'+ CFG_PRODUCT_VERSION + '</title>');
 </script>
@@ -76,6 +80,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   FRAMEBORDER="no"></iframe></div>
 
 <script type="text/javascript">document.getElementById('app-loading-msg').innerHTML = '装载资源...';</script>
+<script type="text/javascript" src="<c:url value='/resources/js/lib/App.base.Component.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/resources/js/ux/Ext.ux.Image.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/js/lib/lib.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/js/app/DcLogin.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/js/app/DcMenuTree.js'/>"></script>

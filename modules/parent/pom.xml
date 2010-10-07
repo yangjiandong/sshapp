@@ -25,6 +25,7 @@
     <activemq.version>5.4.0</activemq.version>
     <jetty.version>6.1.25</jetty.version>
     <h2.version>1.2.142</h2.version>
+    <hsqldb.version>1.8.0.7</hsqldb.version>
     <mysql.version>5.1.6</mysql.version>
     <mssql.jtds.version>1.2.2</mssql.jtds.version>
     <oracle.version>10.2.0.2.0</oracle.version>
@@ -384,6 +385,14 @@
         <scope>runtime</scope>
       </dependency>
 
+      <!-- 嵌入式数据库hsqldb -->
+      <!--
+      <dependency>
+        <groupId>hsqldb</groupId>
+        <artifactId>hsqldb</artifactId>
+        <version>${hsqldb.version}</version>
+      </dependency>
+      -->
       <!--监听数据库操作-->
       <dependency>
         <groupId>p6spy</groupId>
