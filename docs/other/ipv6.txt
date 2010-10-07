@@ -19,9 +19,9 @@
 
     netsh int ter set state enterpriseclient
 
-经过以上安装, 你已经可以访问任何IPv6 网站了。 
+经过以上安装, 你已经可以访问任何IPv6 网站了。
 
-如果你使用的是Windowsxp:
+如果你使用的是Windowsxp（注意，需每次启动系统后，重新运行以下命令）:
 
 1. 请先以管理员身份登陆你的电脑
 
@@ -50,10 +50,10 @@
 
 # 以下为hcost参考内容
 
-#Google和各种网站的IPv6服务hosts  
+#Google和各种网站的IPv6服务hosts
 #利用IPv6技术翻墙，保证Google服务可用，校园网用户使用IPv6应该不收取上网费用（至少我们学校如此）
 #最下方有各种网站的IPv6hosts列表
-#欢迎转载，请注明来源，谢谢 
+#欢迎转载，请注明来源，谢谢
 #本文的发布地址：http://docs.google.com/View?id=dfkdmxnt_61d9ck9ffq
 #本文的共享链接：http://docs.google.com/Doc?docid=0ARhAbsvps1PlZGZrZG14bnRfNjFkOWNrOWZmcQ&hl=zh_CN
 #表格版的host列表地址：http://spreadsheets.google.com/ccc?key=0AhhAbsvps1PldEVXVzBkR3hBaWFnbEQ0OWIwMU5ycmc&hl=zh_CN
@@ -163,7 +163,7 @@
 2401:3800:c001::68 pack.google.cn                      #软件精选（跳转）
 2401:3800:c001::68 news.google.cn                      #新闻（跳转）
 2401:3800:c001::68 video.google.cn                      #视频（跳转）
-#2401:3800:c001::68 ipv6cn.l.google.com 
+#2401:3800:c001::68 ipv6cn.l.google.com
 #2401:3800:c001::68 ipv6.google.cn
 #2401:3800:c001::68 ipv6cn.l.google.com
 2401:3800:c001::84 music.googleusercontent.cn
@@ -260,8 +260,8 @@
 2404:6800:8005::62 video-stats.video.google.com
 2404:6800:8005::74 upload.video.google.com
 2404:6800:8005::74 sslvideo-upload.l.google.com
-2404:6800:8005::62 vp.video.google.com 
-2404:6800:8005::62 vp.video.l.google.com 
+2404:6800:8005::62 vp.video.google.com
+2404:6800:8005::62 vp.video.l.google.com
 2404:6800:8005::62 qwqy.vp.video.l.google.com
 2404:6800:8005::62 nz.vp.video.l.google.com
 2404:6800:8005::62 nztdug.vp.video.l.google.com
@@ -343,7 +343,7 @@
 
 #News              资讯
 2404:6800:8005::68 news.google.com                    #主页
-2404:6800:8005::68 news.l.google.com                  
+2404:6800:8005::68 news.l.google.com
 2404:6800:8005::62 nt0.ggpht.com
 2404:6800:8005::62 nt1.ggpht.com
 2404:6800:8005::62 nt2.ggpht.com
@@ -366,18 +366,18 @@
 2404:6800:8005::62 gmail.com                          #Gmail主页
 2404:6800:8005::62 pop.gmail.com                      #pop服务
 2404:6800:8005::62 smtp.gmail.com                     #smtp服务
-2404:6800:8005::62 smtp1.google.com 
-2404:6800:8005::62 smtp2.google.com 
-2404:6800:8005::62 smtp3.google.com 
-2404:6800:8005::62 smtp4.google.com 
-2404:6800:8005::62 smtp5.google.com 
+2404:6800:8005::62 smtp1.google.com
+2404:6800:8005::62 smtp2.google.com
+2404:6800:8005::62 smtp3.google.com
+2404:6800:8005::62 smtp4.google.com
+2404:6800:8005::62 smtp5.google.com
 2404:6800:8005::62 smtp-out.google.com
 2404:6800:8005::62 smtp-out2.google.com
 2404:6800:8005::62 smtp-out3.google.com
 2404:6800:8005::62 imap.google.com                    #
-2404:6800:8005::62 gmail-pop.l.google.com 
-2404:6800:8005::62 gmail-smtp.l.google.com 
-2404:6800:8005::62 gmail-smtp-in.l.google.com 
+2404:6800:8005::62 gmail-pop.l.google.com
+2404:6800:8005::62 gmail-smtp.l.google.com
+2404:6800:8005::62 gmail-smtp-in.l.google.com
 2404:6800:8005::62 gmr-smtp-in.l.google.com
 
 #Books             图书
@@ -676,14 +676,14 @@
 2404:6800:8005::8d go2china9.appspot.com
 2404:6800:8005::8d mirrorrr.appspot.com
 2404:6800:8005::8d mirrornt.appspot.com
-2404:6800:8005::8d soproxy.appspot.com 
+2404:6800:8005::8d soproxy.appspot.com
 2404:6800:8005::8d so-proxy.appspot.com
 2404:6800:8005::8d go-west.appspot.com
-2404:6800:8005::8d proxytea.appspot.com 
+2404:6800:8005::8d proxytea.appspot.com
 2404:6800:8005::8d sivanproxy.appspot.com
 2404:6800:8005::8d proxybay.appspot.com
 2404:6800:8005::8d ipgoto.appspot.com
-2404:6800:8005::8d meme2028.appspot.com 
+2404:6800:8005::8d meme2028.appspot.com
 2404:6800:8005::8d autoproxy2pac.appspot.com
 
 #Google APIs       开发接口服务
@@ -867,7 +867,7 @@
 2404:6800:8005::76 wave1.google.com
 2404:6800:8005::62 googlewave.com
 
-#WiFi              
+#WiFi
 2404:6800:8005::7b wifi.google.com
 2404:6800:8005::62 wifi.l.google.com
 
@@ -1216,7 +1216,7 @@
 #
 2404:6800:8005::62 pagead.google.com
 2404:6800:8005::62 pagead.l.google.com
-2404:6800:8005::62 pagead2.google.com 
+2404:6800:8005::62 pagead2.google.com
 
 #Goo.gl            Google短网址服务
 2404:6800:8005::62 goo.gl
@@ -1439,7 +1439,7 @@
 #88.221.84.18 static.ak.fbcdn.net                      #网站资源（图像、脚本等），新机制暂无 ipv6 入口
 
 ##France                                               法国
-#alwaysData                                           
+#alwaysData
 2001:41d0:1:8f78::1 www.alwaysdata.com                 #主页
 2001:41d0:2:4139::1 fanfou.alwaysdata.net              #饭否
 

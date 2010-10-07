@@ -15,5 +15,11 @@ ok 采用spring3.03 + 自定义 resource 不采用urlrewrite ，可直接用rest
 
    hibernate SaveOrUpdateEventListener
 
+5、sonar 代码质量管理平台
+
+   http://docs.codehaus.org/display/SONAR/Install+Sonar
+
+   参考http://sw1982.javaeye.com/blog/705298
+   http://macrochen.javaeye.com/blog/689220
 
    --END
