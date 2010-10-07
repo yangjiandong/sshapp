@@ -11,7 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springside.modules.orm.Page;
 import org.springside.modules.orm.PropertyFilter;
 import org.ssh.app.example.dao.BookDao;
+import org.ssh.app.example.dao.ContactDao;
 import org.ssh.app.example.entity.Book;
+import org.ssh.app.example.entity.Contact;
 
 
 @Component
@@ -24,6 +26,9 @@ public class BookService {
 
     @Autowired
     private BookDao bookDao;
+
+    @Autowired
+    private ContactDao contactDao;
 
     //采用了方法缓存
     @Transactional(readOnly = true)
@@ -64,12 +69,20 @@ public class BookService {
             return;
         }
 
+        //预置contact
+        Contact c = contactDao.findOneBy("name", "yang");
+        if (c==null){
+            logger.debug("contact name yang is null");
+            return;
+        }
+
         Book b = new Book();
         b.setIsbn("comto ok");
         b.setTitle("goto American");
         b.setEdition(10L);
         b.setPages(200L);
         b.setPublished("AM");
+        b.setContact(c);
         bookDao.save(b);
 
         b = new Book();
@@ -78,6 +91,7 @@ public class BookService {
         b.setEdition(10L);
         b.setPages(2000L);
         b.setPublished("AM");
+        b.setContact(c);
         bookDao.save(b);
 
         b = new Book();
@@ -86,6 +100,7 @@ public class BookService {
         b.setEdition(910L);
         b.setPages(5300L);
         b.setPublished("AM");
+        b.setContact(c);
         bookDao.save(b);
     }
 

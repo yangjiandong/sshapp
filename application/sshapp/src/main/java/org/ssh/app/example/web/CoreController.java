@@ -29,8 +29,8 @@ public class CoreController {
             HttpServletResponse response) throws Exception {
         logger.info("开始初始化Example数据...");
 
-        this.bookService.initData();
         this.contactService.initData();
+        this.bookService.initData();
 
         return new ModelAndView("redirect:/index2.jsp");
 

@@ -1,9 +1,14 @@
 package org.ssh.app.example.entity;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -14,56 +19,69 @@ import org.ssh.app.common.entity.IdEntity;
 @Table(name = "t_contact")
 public class Contact extends IdEntity {
 
-	private String name;
-	private String phone;
-	private String email;
-	private String birthday;
-	private BigDecimal nums;
+    private String name;
+    private String phone;
+    private String email;
+    private String birthday;
+    private BigDecimal nums;
 
-	@NaturalId
-	public String getName() {
-		return name;
-	}
+    //book
+    private Set<Book> books = new HashSet<Book>(0);
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "contact")
+    public Set<Book> getBooks() {
+        return books;
+    }
 
-	public String getPhone() {
-		return phone;
-	}
+    public void setBooks(Set<Book> books) {
+        this.books = books;
+    }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+    @NaturalId
+    @Column(nullable = false, unique = true, length=50)
+    public String getName() {
+        return name;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public String getPhone() {
+        return phone;
+    }
 
-	public String getBirthday() {
-		return birthday;
-	}
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
-	public void setBirthday(String birthday) {
-		this.birthday = birthday;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	@Override
-	public String toString() {
-		return ToStringBuilder.reflectionToString(this);
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	@Column(name = "num", length = 12, scale = 2)
-	public BigDecimal getNums() {
-		return nums;
-	}
+    public String getBirthday() {
+        return birthday;
+    }
 
-	public void setNums(BigDecimal nums) {
-		this.nums = nums;
-	}
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
+
+    @Column(name = "num", length = 12, scale = 2)
+    public BigDecimal getNums() {
+        return nums;
+    }
+
+    public void setNums(BigDecimal nums) {
+        this.nums = nums;
+    }
 }

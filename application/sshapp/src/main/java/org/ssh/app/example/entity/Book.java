@@ -2,9 +2,12 @@ package org.ssh.app.example.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
@@ -23,6 +26,17 @@ public class Book {
     private Long edition;
     private Long pages;
     private String published;
+    private Contact contact;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contact_id")
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "Id_Generator")
@@ -40,7 +54,7 @@ public class Book {
         return ToStringBuilder.reflectionToString(this);
     }
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, length=20)
     public String getIsbn() {
         return isbn;
     }
@@ -49,6 +63,7 @@ public class Book {
         this.isbn = isbn;
     }
 
+    @Column(nullable = false, unique = true, length=50)
     public String getTitle() {
         return title;
     }

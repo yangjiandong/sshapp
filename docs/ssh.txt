@@ -1,6 +1,13 @@
 ssh
 ======
 
+2010.10.06
+----------
+
+   1. Book, Contact 增加 @ManyToOne , @OneToMany 测试
+   drop table T_BOOK ;
+   drop table t_contact;
+
 2010.10.05
 ----------
 
@@ -13,6 +20,10 @@ ssh
 
       -- 关注下 leona 项目 AbstractGridAction.pagedQuery
       -- json 这样处理后，可以解决实体类中冗余字段的存在
+      -- 参考 App.Grid.js
+         'list-emp'
+            {name: 'departmentName',fieldLabel: '部门',xtype:'hidden',mapping:'department.name'},
+            {name: 'departmentId',fieldLabel: '部门',allowBlank: false,xtype:'departmentcombo',hideGrid:true,mapping:'department.id'},
 
 2010.10.02
 ----------
