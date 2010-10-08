@@ -1,0 +1,224 @@
+4. hibernate如何根据pojo来更新数据库
+-------------------------------------
+
+4.0  在commit/flush之前，hibernate不会对pojo对象作神秘的处理。
+  4.0.1 在select查询出pojo时，hibernate根据“字段--属性”的对应关系，用字段的值填充pojo的属性；
+    然后根据“关系标记”生成sql语句从relationTable中查询出满足条件的relationPojo，并把这些relatinPojo
+    放到“关系属性”中。这个过程是机械的。
+
+  4.0.2 在pojo对象被查出来后，到commit(或flush);之前，它将是一个普通的java对象，hibernate不会做额外的手脚。
+    比如，不会限制你设置一个属性的值为null或其它任何值
+       在集合类Set的add(object);操作时， 不会改变object的值，不会检查参数object是否是一个pojo对象
+       设置mainPojo的一个“桥属性”的值，不会自动设置relationPojo的对应的“桥属性”的值。
+       执行session.delete(pojo);时，pojo本身没有变化，他的属性值也没有变化。
+       执行session.save(pojo);时，如果pojo的id不是hibernate或数据库生成,则它的值没有变化。
+                    如果pojo的id是hibernate或数据库生成，则hibernate会把id给pojo设上去。
+
+    extend: 对lazy=true的set，hibernate在进行set的操作(调用java.util.Set中声明的方法);时
+        会先inialize这个set，仅此而已。而inialize仅仅是从数据库中捞出set的数据。
+        如果一个set已经被inialize了，那么对它进行的操作就是java.util.Set接口中定义的语义。
+
+        另外，如果id由hibernate来生成，那么在save(pojo);时，hibernate会改变该pojo，会设置它的id，这
+        可能改变该pojo的hashCode，详细地讨论见帖《》
+
+  mapping文件中标记的某些属性及pojo对象的操作会对数据库操作产生影响，这些影响都是在commit时才会起作用。
+  而在commit前pojo的状态不受它们的影响。
+
+  不过，待commit之时，将由hibernate完全掌控，它好像知道pojo对象从创建到commit这中间的所有变化。
+
+
+4.01. 关联更新
+  "关系标记"对应的属性是一个pojo或一个pojo的集合，修改“关系属性”的值能会导致更新mainTable表，也可能会更新relationTable表。
+
+  这种更新暂叫“关联更新”。
+
+
+4.1.inverse属性的作用（假定没有设置cascade属性）
+  4.1.1 “只有集合标记（set/map/list/array/bag）才有inverse属性”。
+      ————不妨以标记set为例，具体为“一个地区（Address表）的学校（School表）” -- address.schoolSet。
+
+  4.1.2 “set的inverse属性决定是否把对set的改动反映到数据库中去。
+    inverse=false————反映；inverse=true————不反映”
+    inverse属性默认为false
+
+    对<one-to-many>和<many-to-many>子标记，这两条都适用。
+    不管是对set做什么操作，4.1.2都适用。
+
+  4.1.3当inverse=false时，hibernate如何将对set的改动反映到数据库中：
+
+    对set的操作主要有：（1）新增元素 address.getSchoolSet();.add(oneSchool);;
+             （2）删除元素 address.getSchoolSet();.remove(oneSchool);;
+             （3）删除set  address.setSchoolSet(null);;
+             （4）设新set  address.setSchoolSet( newSchoolSet);;
+             （5）转移set  otherSchoolSet = otherAddress.getSchoolSet();;
+                otherAddress.setSchoolSet(null);;
+                address.setSchoolSet(otherSchoolSet);;
+             （6）改变set中元素的属性的值  如果是改变key属性，这会导致异常
+                如果改变的是普通的属性，则hibernate认为set没有变化（在后面可以看出缘由）。
+                所以这种情形不予考虑。
+
+    改变set后，hibernate对数据库的操作根据是<one-to-many>关系还是<many-to-many>关系而有不同。
+
+    对one-to-many，对school set的改动，会改变表SCHOOL中的数据:
+              #SCHOOL_ID是school表的主键，SCHOOL_ADDRESS是school表中的地址栏位
+              #表School的外键为SCHOOL_ADDRESS，它对应表Address的主键ADDRESS_ID
+             （11）insert oneSchool———— sqlInsertRowString:
+                  update SCHOOL set SCHOOL_ADDRESS=? where SCHOOL_ID=?
+                  (仅仅update foreign-key的值。);
+             （22）delete oneSchool———— sqlDeleteRowString:
+                  update SCHOOL set SCHOOL_ADDRESS=null where SCHOOL_ID=?
+                  （很奇怪，把foreign-key设置为null不知道有什么实际意义？）
+             （33）delete 属于某一address的所有school ————sqlDeleteString：
+                  update SCHOOL set SCHOOL_ADDRESS=null where SCHOOL_ADDRESS=?
+             （44）update ————sqlUpdateRowString：""， no need
+
+    对many-to-many，对school set的改动，会改变关系表ADDRESS_SCHOOL中的数据:
+            #“地区————学校”的关系为多对多的关系有点牵强，只是为了方便与上面的one-to-many作比较
+            #假设有一个关系表ADDRESS_SCHOOL，有两个字段ADDRESS_ID, SCHOOL_ID，
+            #这两个字段分别对应ADDRESS和SCHOOL两表的key
+            （11）insert的SQL语句为： insert into ADDRESS_SCHOOL(ADDRESS_ID, SCHOOL_ID);
+                            values(?,?);
+            （22）delete的SQL语句为： delete from ADDRESS_SCHOOL
+                            where ADDRESS_ID=? AND SCHOOL_ID=?
+            （33）delete all的SQL语句为： delete from ADDRESS_SCHOOL
+                            where ADDRESS_ID=?
+            （44）update的sql语句为 ————sqlUpdateRowString：
+                          update ADDRESS_SCHOOL set ADDRESS_ID=?
+                            where ADDRESS_ID=? AND SCHOOL_ID=?
+
+    对set的操作(1);,hibernate会执行(11);sqlInsertRowString
+    对set的操作(2);,hibernate会执行(22);sqlDeleteRowString
+    对set的操作(3);,hibernate会执行(33);sqlDeleteString
+    对set的操作(4);,老的schoolSet因为没有所属的address,所以被全部delete掉，即先执行(33);sqlDeleteString
+          然后新增新的schoolSet,即再执行sqlInsertRowString
+    对set的操作(5);，实际上就是将set从一个pojo转移到另一pojo：
+          首先，执行sqlDeleteString，删除掉otherAddress所属的school
+          然后，执行sqlDeleteString，删除掉address原先的school
+          最后，执行sqlInsertRowString，将otherSchoolSet新增给address
+
+    总结：（1）对one-to-many而言，改变set，会让hibernate执行一系列的update语句， 不会delete/insert数据
+       （2）对many-to-many而言，改变set,只修改关系表的数据，不会影响many-to-many的另一方。
+       （3）虽然one-to-many和many-to-many的数据库操作不一样，但目的都是一个：维护数据的一致性。执行的sql都
+        只涉及到“桥字段”，不会考虑或改变其他的字段，所以对set的操作(6);是没有效果地。
+        extend:对list,可能还会维护index字段。
+
+  4.1.4 “inverse与cascade没有什么关系，互无牵扯。”
+    commit后，这两个属性发挥作用的时机不同，hibernate会根据对pojo对象的改动，及cascade属性的设置，
+    生成一系列的Action，比如UpdateAction,DeleteAction,InsertAction等，每个Action都有execute方法以执行对应的sql语句。
+    待所有这些Action都生成好了后，hibernate再一起执行它们，在执行sql前，inverse属性起作用，
+    当inverse=true时，不执行sql；当inverse=false时，执行sql。
+
+  4.1.5 inverse的默认值为false，所以inverse属性默认会进行“关联更新”。
+
+  4.1.6 建议：只对set + many-to-many设置inverse=false，其他的标记不考虑inverse属性。
+         糟糕的是，不设置inverse属性时，inverse默认为false。
+
+4.2. 级联（cascade）属性的作用：
+  4.2.1 只有“关系标记”才有cascade属性：many-to-one，one-to-one ，any,
+    set(map, bag, idbag, list, array); + one-to-many(many-to-many);
+
+  4.2.2 级联指的是当主控方执行操作时，关联对象（被动方）是否同步执行同一操作。
+    pojo和它的关系属性的关系就是“主控方 -- 被动方”的关系，如果关系属性是一个set，那么被动方就是set中的一个一个元素，。
+    比如：学校（School）有三个属性：地区(Address);,校长（TheMaster）和学生(Set， 元素为Student);
+      执行session.delete(school);时，级联决定是否执行session.delete(Address);,session.delete(theMaster);，
+      是否对每个aStudent执行session.delete(aStudent);。
+
+    extend:这点和inverse属性是有区别的。见4.3.
+
+  4.2.3 一个操作因级联cascade可能触发多个关联操作。前一个操作叫“主控操作”，后一个操作叫“关联操作”。
+    cascade属性的可选值：
+      all : 所有情况下均进行关联操作。
+      none：所有情况下均不进行关联操作。这是默认值。
+      save-update:在执行save/update/saveOrUpdate时进行关联操作。
+      delete：在执行delete时进行关联操作。
+
+    具体执行什么“关联操作”是根据“主控操作”来的：
+        “主控操作”         		“关联操作”
+      session.saveOrUpdate --> session.saveOrUpdate (执行saveOrUpdate实际上会执行save或者update);
+      session.save 		 ----> session.saveOrUpdate
+      session.udpate 		 --> session.saveOrUpdate
+      session.delete 		 --> session.delete
+
+  4.2.4 主控操作和关联操作的先后顺序是“先保存one，再保存many；先删除many，再删除one；先update主控方，再update被动方”
+    对于one-to-one，当其属性constrained="false"（默认值）时，它可看作one-to-many关系；
+             当其属性constrained="true"时，它可看作many-to-one关系；
+    对many-to-many，它可看作one-to-many。
+
+    比如：学校（School）有三个属性：地区(Address);,校长（TheMaster，其constrained="false"）和学生(Set， 元素为Student);
+      当执行session.save(school);时，
+      实际的执行顺序为：session.save(Address);;
+              session.save(school);;
+              session.save(theMaster);;
+              for( 对每一个student );{
+                session.save(aStudent);;
+              }
+
+      当执行session.delete(school);时，
+      实际的执行顺序为：session.delete(theMaster);;
+              for( 对每一个student );{
+                session.delete(aStudent);;
+              }
+              session.delete(school);;
+              session.delete(Address);;
+
+      当执行session.update(school);时，
+      实际的执行顺序为：session.update(school);;
+              session.saveOrUpdate(Address);;
+              session.saveOrUpdate(theMaster);;
+              for( 对每一个student );{
+                session.saveOrUpdate(aStudent);;
+              }
+      注意：update操作因级联引发的关联操作为saveOrUpdate操作，而不是update操作。
+         saveOrUpdate与update的区别是：前者根据操作对象是保存了还是没有保存，而决定执行update还是save
+
+    extends: 实际中，删除学校不会删除地区，即地区的cascade一般设为false
+      另外，many-to-many关系很少设置cascade=true，而是设置inverse=false。这个反映了cascade和inverse的区别。见4.3
+
+  4.2.6 cascade的默认值为false，所以inverse属性默认会进行“关联更新”。
+
+  4.2.7 总结：级联（cascade）就是操作一个对象时，对它的属性（其cascade=true）也进行这个操作。
+
+
+4.3 inverse和cascade的比较
+  这两个属性本身互不影响，但起的作用有些类似，都能引发对关系表的更新。
+
+  4.3.1 inverse只对set+one-to-many(或many-to-many);有效，对many-to-one, one-to-one无效。
+      cascade对关系标记都有效。
+
+  4.3.2 inverse对集合对象整体起作用，cascade对集合对象中的一个一个元素起作用，如果集合为空，那么cascade不会引发关联操作。
+    比如将集合对象置为null， school.setStudentSet(null);
+      inverse导致hibernate执行:udpate STUDENT set SCHOOL_ID=null where SCHOOL_ID=?
+      cascade则不会执行对STUDENT表的关联更新， 因为集合中没有元素。
+
+    再比新增一个school, session.save(school);
+      inverse导致hibernate执行：
+        for( 对(school的每一个student );{
+          udpate STUDENT set SCHOOL_ID=? where STUDENT_ID=? //将学生的school_id改为新的school的id
+        }
+      cascade导致hibernate执行：
+        for( 对school的每一个student );{
+          session.save(aStudent);; //对学生执行save操作
+        }
+
+    extends:如果改变集合中的部分元素（比如新增一个元素），
+      inverse: hibernate先判断哪些元素改变了，对改变的元素执行相应的sql
+      cascade: 它总是对集合中的每个元素执行关联操作。
+        （在关联操作中，hibernate会判断操作的对象是否改变）
+
+  4.3.2 两个起作用的时机不同：
+      cascade：在对主控方操作时，级联发生。
+      inverse: 在flush时（commit会自动执行flush);，对session中的所有set，hibernate判断每个set是否有变化，
+          对有变化的set执行相应的sql，执行之前，会有个判断：if( inverse == true ); return;
+
+    可以看出cascade在先，inverse在后。
+
+  4.3.3 inverse 对set + one-to-many 和 set + many-to-many 起的作用不同。hibernate生成的sql不同。
+          对one-to-many，hibernate对many方的数据库表执行update语句。
+          对many-to-many, hibernate对关系表执行insert/update/delte语句，注意不是对many方的数据库表而是关系表。
+
+      cascase 对set都是一致的，不管one-to-many还是many-to-many。都简单地把操作传递到set中的每个元素。所以它总是更新many
+      方的数据库表。
+
+  4.3.4 建议：只对set + many-to-many设置inverse=false，其他的标记不考虑inverse属性，都设为inverse=true。
+
+         对cascade，一般对many-to-one，many-to-many，constrained=true的one-to-one 不设置级联删除。
