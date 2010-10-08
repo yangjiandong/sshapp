@@ -1,0 +1,178 @@
+安装
+-----
+http://docs.codehaus.org/display/SONAR/Install+Sonar
+
+      a. http://sonar.codehaus.org/downloads/ 下载相应包
+      b. 配置数据库，默认derby。
+      conf/sonar.properties
+      #sonar.jdbc.url: jdbc:derby://localhost:1527/sonar;create=true
+      #sonar.jdbc.driver: org.apache.derby.jdbc.ClientDriver
+      #sonar.jdbc.defaultTransactionIsolation: 1
+      #sonar.jdbc.validationQuery: values(1)
+      sonar.jdbc.url: jdbc:mysql://localhost:3306/sonar?useUnicode=true&characterEncoding=utf8
+      sonar.jdbc.driver: com.mysql.jdbc.Driver
+      sonar.jdbc.validationQuery: select 1
+
+      c. start server
+      * on linux/mac : bin/[YOUR PLATEFORM]/sonar.sh start
+      * on windows : bin/windows-x86-32/StartSonar.bat
+      http://localhost:9000
+      user:admin,admin
+
+      d. Configure Maven2
+      <settings>
+      <profiles>
+        <profile>
+            <id>sonar</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <!-- EXAMPLE FOR MYSQL -->
+                <sonar.jdbc.url>
+                  jdbc:mysql://localhost:3306/sonar?useUnicode=true&amp;characterEncoding=utf8
+                </sonar.jdbc.url>
+                <sonar.jdbc.driver>com.mysql.jdbc.Driver</sonar.jdbc.driver>
+                <sonar.jdbc.username>sonar</sonar.jdbc.username>
+                <sonar.jdbc.password>sonar</sonar.jdbc.password>
+
+                <!-- SERVER ON A REMOTE HOST -->
+                <sonar.host.url>http://localhost:9000</sonar.host.url>
+            </properties>
+        </profile>
+     </profiles>
+     </settings>
+
+     e. mvn
+     mvn sonar:sonar
+
+
+参考
+----
+Full installation in 5 steps
+Step 1 - Create database
+
+Apache Derby is embedded by default with Sonar. It does not need any installation.
+ It's great for demos and tests but we advice you to use a robust database for real use.
+ The following are currently supported : MySQL 5.x, Oracle 10g XE, Postgresql and MS SqlServer 2005.
+ It may work on other versions.
+
+First thing is to create a schema for Sonar.
+Tables and indexes are automatically created when launching for the first time.
+It is therefore necessary that the user that will access the database has sufficient rights to be able to create,
+suppress and update objects.
+
+Step 2 - Install server
+
+Download and unzip the distribution.
+Step 3 - Configure database
+
+If you do not use the default embedded database,
+edit conf/sonar.properties to configure the database access.
+Templates are available for every supported database. Just uncomment them and comment the first four lines dedicated to derby.
+
+    * sonar.jdbc.url : the URL of the database
+    * sonar.jdbc.driver : the class of the driver
+    * sonar.jdbc.user : the username (default value is 'sonar')
+    * sonar.jdbc.password : the password (default value is 'sonar')
+
+Example for MySQL :
+
+#sonar.jdbc.url: jdbc:derby://localhost:1527/sonar;create=true
+#sonar.jdbc.driver: org.apache.derby.jdbc.ClientDriver
+#sonar.jdbc.defaultTransactionIsolation: 1
+#sonar.jdbc.validationQuery: values(1)
+sonar.jdbc.url: jdbc:mysql://localhost:3306/sonar?useUnicode=true&characterEncoding=utf8
+sonar.jdbc.driver: com.mysql.jdbc.Driver
+sonar.jdbc.validationQuery: select 1
+
+For Oracle, copy the JDBC driver to /extensions/jdbc-driver/[YOUR DATABASE]/.
+Other drivers for supported database are already provided.
+
+Step 4 - Start server
+Mode 1 - Start the standalone application
+
+The default listen port is 9000, the default context path is / and Sonar listens by default to all network interfaces : '0.0.0.0'.
+Once launched, the Sonar web server is available on http://localhost:9000.
+Parameters can be changed into the file conf/sonar.properties.
+Here is an example to listen to http://localhost:80/sonar :
+
+sonar.web.host : 192.0.0.1
+sonar.web.port: 80
+sonar.web.context: /sonar
+
+
+Execute the following script to start the server :
+
+    * on linux/mac : bin/[YOUR PLATEFORM]/sonar.sh start
+    * on windows : bin/windows-x86-32/StartSonar.bat
+
+Note that you can also run as a NT service with bin/windows-x86-32/InstallNTService.bat then bin/windows-x86-32/StartNTService.bat
+
+You can now browse to http://localhost:9000.
+  Note
+Prior to Sonar 1.9, it was necessary to follow setup instructions. From 1.9 setup is run automatically on a fresh installation when launching the server.
+Mode 2 - Deploy on Tomcat application server
+
+Sonar can be packaged as a WAR then deployed into an existing JEE application server. To use this method of installation, you must already know how to deploy a web application on the application server of choice. The only supported JEE application servers are Tomcat 5.x, 6.x and 7.x.
+
+Installation steps are :
+
+    * edit conf/sonar.properties as described in standalone mode. The file conf/wrapper.conf is never used when deploying to application server.
+    * execute the script build-war.sh (or build-war.bat on MS Windows) from the directory war/
+    * deploy war/sonar.war to the application server
+    * browse to http://localhost/sonar and follow setup instructions
+        A minimum heap size of 512Mo is required.
+        Prior to Sonar 2.2, the WAR file must be rebuilt each time the configuration is updated (conf/sonar.properties or new extensions).
+
+      From Sonar 2.2 onwards, the WAR file is now linked to the Sonar directory (the directory where the distribution is unzipped). It implies that :
+          o the directory where the distribution is unzipped cannot be removed
+          o there is no need to rebuild the WAR when installing/uninstalling plugins or rule extensions
+          o the WAR file must be deployed on the host which contains the Sonar directory
+          o the WAR file must be rebuilt when the Sonar directory is moved
+          o the WAR file must be rebuilt when a configuration file is updated (directory conf/)
+
+To increase memory heap size, set the CATALINA_OPTS variable before starting Tomcat :
+
+CATALINA_OPTS="-Xms1024m -Xmx1024m -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true -XX:MaxPermSize=256m"
+
+More details on this blog.
+Step 5 - Configure Maven2
+
+Sonar uses a Maven2 plugin to analyze sources and to inject measures into the database. That's why database properties must be defined into the Maven2 configuration. Edit settings.xml file, located into $MAVEN_HOME/conf or ~/.m2, and add the parameters from step 3.
+
+If data collection and server are on different boxes, set the server host with the property 'sonar.host.url'.
+
+Example :
+
+<settings>
+    <profiles>
+        <profile>
+            <id>sonar</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <!-- EXAMPLE FOR MYSQL -->
+                <sonar.jdbc.url>
+                  jdbc:mysql://localhost:3306/sonar?useUnicode=true&amp;characterEncoding=utf8
+                </sonar.jdbc.url>
+                <sonar.jdbc.driver>com.mysql.jdbc.Driver</sonar.jdbc.driver>
+                <sonar.jdbc.username>sonar</sonar.jdbc.username>
+                <sonar.jdbc.password>sonar</sonar.jdbc.password>
+
+                <!-- SERVER ON A REMOTE HOST -->
+                <sonar.host.url>http://localhost:9000</sonar.host.url>
+            </properties>
+        </profile>
+     </profiles>
+</settings>
+
+  Warning : the property sonar.host.url MUST NOT end with a slash character. Otherwise,
+  JDBC driver is not found by the Sonar Maven plugin. See SONAR-1685.
+
+It is recommended to increase the Java heap memory. It avoids getting OutOfMemoryError failures. Set the MAVEN_OPTS environment variable :
+
+export MAVEN_OPTS="-Xmx512m -XX:MaxPermSize=256m"
+
+
