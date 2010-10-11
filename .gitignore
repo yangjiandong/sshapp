@@ -66,3 +66,8 @@ docs/wiki/*.html
 application/sshapp/src/test/resources/data/export-data.xml
 application/sshapp/src/test/resources/data/default-data.xml
 examples/showcase/src/test/resources/data/export-data.xml
+
+# day.txt
+# bcrypt -r day.txt(day.txt.bfe)
+docs/other/no
+docs/other/day.txt
