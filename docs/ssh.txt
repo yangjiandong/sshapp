@@ -1,6 +1,15 @@
 ssh
 ======
 
+2010.10.11
+----------
+
+   1. bcrypt
+   解密加密文件(根据文件后缀名)
+   http://bcrypt.sourceforge.net/
+
+   bcrypt -r filename
+
 2010.10.08
 ----------
 
