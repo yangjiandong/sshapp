@@ -1,3 +1,50 @@
+build soruce
+-------------
+
+svn checkout https://svn.codehaus.org/sonar/trunk sonar
+
+http://docs.codehaus.org/display/SONAR/Build+Sonar
+
+Setup
+Increase the memory allocated to maven (replace 'export' by 'set' on Windows) :
+export MAVEN_OPTS='-Xmx512m'
+
+Check out sources
+Sources can be checked out anonymously from Subversion :
+svn checkout https://svn.codehaus.org/sonar/trunk sonar
+
+Build
+Sources are built using Maven (version 3 is supported) :
+mvn install
+
+To deactivate unit tests (well, it's bad) :
+mvn install -DskipTests=true
+
+Start server in development mode
+The development mode is used to edit Ruby on Rails code. The application is automatically reloaded when Ruby files are saved. It avoids restarting the server. Execute the following command from the /sonar-server directory :
+
+./derby-start.sh        # for embedded database
+./mysql-start.sh        # for MySql
+./postgresql-start.sh   # for PostgreSQL
+
+Debug Maven batch
+    * Execute mvnDebug instead of mvn :
+      mvnDebug sonar:sonar
+    * Attach your IDE to the remote process (the listening port is 8000).
+
+Example on Intellij Idea : Run -> Edit configurations -> Add new configuration -> Remote -> port 8000.
+Profile Maven batch with JProfiler
+
+    * Clone $MAVEN_HOME/bin/mvnDebug to mvnJProfiler and replace the MAVEN_DEBUG_OPTS property by :
+      MAVEN_DEBUG_OPTS="-Xint -agentlib:jprofilerti=port=8849 -Xbootclasspath/a:/Applications/jprofiler5/bin/agent.jar"
+    * Start JProfiler -> Connect to an application on a remote computer
+
+Execute integration tests
+cd tests/integration
+mvn clean install -Pmysql,firefox
+
+Note for Mac OS : add the parameter -Djava.io.tmpdir=/tmp
+
 安装
 -----
 http://docs.codehaus.org/display/SONAR/Install+Sonar
@@ -33,6 +80,14 @@ http://docs.codehaus.org/display/SONAR/Install+Sonar
                   jdbc:mysql://localhost:3306/sonar?useUnicode=true&amp;characterEncoding=utf8
                 </sonar.jdbc.url>
                 <sonar.jdbc.driver>com.mysql.jdbc.Driver</sonar.jdbc.driver>
+                <sonar.jdbc.username>sonar</sonar.jdbc.username>
+                <sonar.jdbc.password>sonar</sonar.jdbc.password>
+
+                <!-- EXAMPLE FOR derby -->
+                <sonar.jdbc.url>
+                  jdbc:derby://localhost:1527/sonar;create=true
+                </sonar.jdbc.url>
+                <sonar.jdbc.driver>org.apache.derby.jdbc.ClientDriver</sonar.jdbc.driver>
                 <sonar.jdbc.username>sonar</sonar.jdbc.username>
                 <sonar.jdbc.password>sonar</sonar.jdbc.password>
 
