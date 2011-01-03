@@ -6,6 +6,7 @@ N21.Other.MenuTree = Ext.extend(Ext.tree.TreePanel, {
               border : false,
               margins : '0 0 0 5',
               layout : 'fit',
+			  useArrows:true,
               autoScroll : true,
               collapseFirst : false,
               loader : new Ext.tree.TreeLoader({
