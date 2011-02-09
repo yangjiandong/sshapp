@@ -1,6 +1,16 @@
 springside3
 ------------
 
+2011.02.09
+----------
+
+1. spring 3.0.5
+
+2. Database Change Management
+http://www.liquibase.org/
+
+3. springside3-extension 增加 org.springside.modules.charts
+
 2010.08.01
 ----------
 
