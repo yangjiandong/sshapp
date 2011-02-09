@@ -9,7 +9,17 @@ springside3
 2. Database Change Management
 http://www.liquibase.org/
 
+wiki/liquibase.textile,save/SpringLiquibase.java.txt
+ant,mvn,servlet
+
+other tool:
+http://scriptella.javaforge.com/
+
 3. springside3-extension 增加 org.springside.modules.charts
+
+4. wiki
+
+create new file, .textile
 
 2010.08.01
 ----------

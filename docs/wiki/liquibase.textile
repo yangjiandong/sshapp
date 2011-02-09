@@ -1,0 +1,100 @@
+h1(#toc). 数据库升级工具liquibase
+
+p{float:left}. "目录":#toc
+
+h2(#1). Servlet Listener
+
+http://www.liquibase.org/manual/servlet_listener
+
+LiquiBase can be run via a servlet listener. This allows you to have your database be updated automatically whenever the site is deployed. Since LiquiBase uses distributed locking, this method will work just fine even if you have a cluster of application servers.
+
+To configure the servlet listener, simply add liquibase.jar to your WEB-INF/lib directory and the following to your web.xml file:
+
+Liquibase 1.9.x
+
+<context-param>
+    <param-name>LIQUIBASE_CHANGELOG</param-name>
+    <param-value>com/example/db.changelog.xml</param-value>
+</context-param>
+
+<context-param>
+    <param-name>LIQUIBASE_DATA_SOURCE</param-name>
+    <param-value>java:comp/env/jdbc/default</param-value>
+</context-param>
+
+<context-param>
+    <param-name>LIQUIBASE_HOST_EXCLUDES</param-name>
+    <param-value>production1.example.com, production2.example.com</param-value>
+</context-param>
+
+<context-param>
+    <param-name>LIQUIBASE_FAIL_ON_ERROR</param-name>
+    <param-value>true</param-value>
+</context-param>
+
+<context-param>
+    <param-name>LIQUIBASE_CONTEXTS</param-name>
+    <param-value>production</param-value>
+</context-param>
+
+<listener>
+    <listener-class>liquibase.servlet.LiquibaseServletListener</listener-class>
+</listener>
+Liquibase 2.0
+
+<context-param>
+    <param-name>liquibase.changelog</param-name>
+    <param-value>com/example/db.changelog.xml</param-value>
+</context-param>
+
+<context-param>
+    <param-name>liquibase.datasource</param-name>
+    <param-value>java:comp/env/jdbc/default</param-value>
+</context-param>
+
+<context-param>
+    <param-name>liquibase.host.includes</param-name>
+    <param-value>production1.example.com, production2.example.com</param-value>
+</context-param>
+
+<context-param>
+    <param-name>liquibase.onerror.fail</param-name>
+    <param-value>true</param-value>
+</context-param>
+
+<context-param>
+    <param-name>liquibase.contexts</param-name>
+    <param-value>production</param-value>
+</context-param>
+
+<listener>
+    <listener-class>liquibase.integration.servlet.LiquibaseServletListener</listener-class>
+</listener>
+
+h2(#2). use java code
+
+public void updateDb(String url, String login, String password, String diffFilePath, String driverClassName) throws Exception{
+        Connection c = //create connection from url/login/password/driverClassName;
+        Liquibase liquibase = null;
+        try {
+            liquibase = createLiquibase(c);
+            liquibase.update(null);
+        } catch (SQLException e) {
+            throw new DatabaseException(e);
+        } finally {
+            if (liquibase != null) {
+                liquibase.forceReleaseLocks();
+            }
+            if (c != null) {
+                try {
+                    c.rollback();
+                    c.close();
+                } catch (SQLException e) {
+                    //nothing to do
+                }
+            }
+        }
+}
+
+@h1(#toc). Hellow World@
+@h2. Servlet@
