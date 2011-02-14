@@ -572,6 +572,7 @@ public class JsonUtils {
         private boolean success;
         private String msg;
         private Object info;
+        private int count;//record count
 
         public Bean(boolean success, String msg, Object info) {
             this.success = success;
