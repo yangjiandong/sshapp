@@ -516,6 +516,15 @@
       <scope>runtime</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy-all</artifactId>
+      <version>1.7.5</version>
+      <!--
+      <scope>compile</scope>
+      -->
+    </dependency>
+
     <!-- test begin -->
     <dependency>
       <groupId>junit</groupId>
