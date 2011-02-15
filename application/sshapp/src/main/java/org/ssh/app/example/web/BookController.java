@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.ehcache.CacheManager;
 import net.sf.json.JSONArray;
 
 import org.slf4j.Logger;
@@ -18,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springside.modules.utils.SpringContextHolder;
 import org.ssh.app.cache.CacheUtil;
 import org.ssh.app.example.entity.Book;
 import org.ssh.app.example.service.BookService;
+import org.ssh.app.example.service.PdfGenerator;
 import org.ssh.app.util.JsonViewUtil;
 import org.ssh.app.util.leona.JsonUtils;
 import org.ssh.app.util.leona.JsonUtils.Bean;
@@ -32,6 +35,10 @@ public class BookController {
 
     @Autowired
     private BookService bookService;
+
+    //直接用groovy bean
+    @Autowired
+    private PdfGenerator pdfGenerator;
 
     @RequestMapping(value="/getBooks2", method = RequestMethod.GET)
     public @ResponseBody Map<String,? extends Object> showBooks2(){
@@ -108,13 +115,16 @@ public class BookController {
     @RequestMapping(value="/getBooks33", method = RequestMethod.GET)
     public void showBooks33(HttpServletRequest request,
             HttpServletResponse response) throws Exception {
+
+        //PdfGenerator manager = (PdfGenerator) SpringContextHolder.getBean("pdfGenerator");
+
         logger.info("table cache list...");
         long start = System.currentTimeMillis();
 
         List<Book> books = bookService.getBooks2();
         logger.info(" table cache 执行共计:" + (System.currentTimeMillis() - start) + " ms");
 
-        Bean bean = new Bean(true, "已经登陆", books);
+        Bean bean = new Bean(true, this.pdfGenerator.pdfFor(), books);
         //避免contact 生成json,会报错
         JsonUtils.write(bean, response.getWriter(),
                 new String[] {

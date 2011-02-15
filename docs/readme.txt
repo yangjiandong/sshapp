@@ -1,6 +1,29 @@
 springside3
 ------------
 
+2011.02.15
+----------
+
+1. groovy 脚本测试
+
+  <lang:groovy id="pdfGenerator"
+    script-source="file:/c:/GroovyPdfGenerator.groovy"
+    refresh-check-delay="1000"
+    customizer-ref="performanceLoggingCustomizer">
+
+    <lang:property name="jdbcDriver" value="${import.jdbc.driver}" />
+    <lang:property name="jdbcUrl" value="${import.jdbc.url}" />
+    <lang:property name="jdbcUser" value="${import.jdbc.username}" />
+    <lang:property name="jdbcPassword" value="${import.jdbc.password}" />
+
+    <lang:property name="companyName" value="Really Groovy Bookstore"/>
+  </lang:groovy>
+
+   grails-spring slf4j1.5.8 与项目有冲突
+
+   测试groovy简单执行sql
+   json支持还需找例子
+
 2011.02.14
 ----------
 

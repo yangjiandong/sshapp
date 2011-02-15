@@ -26,7 +26,7 @@ public class Role extends IdEntity {
         this.name = name;
     }
 
-    @Column(length=100)
+    @Column(name = "description", length=100)
     public String getDesc() {
         return desc;
     }

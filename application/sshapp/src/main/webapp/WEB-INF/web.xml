@@ -37,6 +37,7 @@
     <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
   </listener>
 
+  <!--
   <context-param>
     <param-name>db.url</param-name>
     <param-value>jdbc:h2:~/ssh.data</param-value>
@@ -52,6 +53,7 @@
   <listener>
     <listener-class>org.h2.server.web.DbStarter</listener-class>
   </listener>
+  -->
 
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>

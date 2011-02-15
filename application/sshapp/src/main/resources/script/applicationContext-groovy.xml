@@ -1,17 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:lang="http://www.springframework.org/schema/lang"
-       xmlns:p="http://www.springframework.org/schema/p"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="
-       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-       http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd
-       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:lang="http://www.springframework.org/schema/lang"
+  xmlns:p="http://www.springframework.org/schema/p"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xsi:schemaLocation="
+  http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+  http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd
+  http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-    <lang:groovy id="pdfGenerator"
-        script-source="classpath:org/ssh/app/example/script/groovy/GroovyPdfGenerator.groovy">
-        <lang:property name="companyName" value="Really Groovy Bookstore"/>
-    </lang:groovy>
+  <!-- variables  -->
+  <bean
+    class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+    <property name="ignoreResourceNotFound" value="true" />
+    <property name="locations">
+      <list>
+        <!-- standard config -->
+        <value>classpath*:/application.properties</value>
+      </list>
+    </property>
+  </bean>
+
+  <!--监测脚本执行-->
+  <bean id="performanceLoggingCustomizer"
+    class="org.ssh.app.util.PerformanceLoggingCustomizer"/>
+
+  <!--default refresh 20s -->
+  <lang:defaults refresh-check-delay="20000"/>
+
+  <!--10s refresh, -1 close refresh-->
+  <lang:groovy id="pdfGenerator2"
+    script-source="classpath:org/ssh/app/example/script/groovy/GroovyPdfGenerator.groovy"
+    refresh-check-delay="10000"
+    customizer-ref="performanceLoggingCustomizer">
+
+    <lang:property name="companyName" value="Really Groovy Bookstore"/>
+  </lang:groovy>
+
+  <lang:groovy id="pdfGenerator"
+    script-source="file:/c:/GroovyPdfGenerator.groovy"
+    refresh-check-delay="1000"
+    customizer-ref="performanceLoggingCustomizer">
+
+    <lang:property name="jdbcDriver" value="${import.jdbc.driver}" />
+    <lang:property name="jdbcUrl" value="${import.jdbc.url}" />
+    <lang:property name="jdbcUser" value="${import.jdbc.username}" />
+    <lang:property name="jdbcPassword" value="${import.jdbc.password}" />
+
+    <lang:property name="companyName" value="Really Groovy Bookstore"/>
+  </lang:groovy>
 
 </beans>

@@ -7,6 +7,10 @@
 
    src/main/resources/sql.h2/quartz.sql
 
+   mssql:tables_sqlServer.sql
+
+   oracle:tables_oracle.sql
+
 3、运行程序
 
    http://localhost:8089/sshapp/init/index
