@@ -111,3 +111,5 @@ ssl.port=8443
 http.port=8080
 
 memcache_server=localhost:11211
+
+groovy.script.dir=file:/c:/
