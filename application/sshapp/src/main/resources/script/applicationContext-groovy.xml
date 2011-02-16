@@ -39,7 +39,7 @@
   </lang:groovy>
 
   <lang:groovy id="pdfGenerator"
-    script-source="file:/c:/GroovyPdfGenerator.groovy"
+    script-source="${groovy.script.dir}GroovyPdfGenerator.groovy"
     refresh-check-delay="1000"
     customizer-ref="performanceLoggingCustomizer">
 

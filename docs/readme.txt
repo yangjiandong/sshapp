@@ -1,13 +1,23 @@
 springside3
 ------------
 
+2011.02.16
+----------
+
+1. groovysh in cygwin
+running groovysh with cygwin. If you have troubles, the following may help:
+
+stty -icanon min 1 -echo
+groovysh --terminal=unix
+stty icanon echo
+
 2011.02.15
 ----------
 
 1. groovy 脚本测试
 
   <lang:groovy id="pdfGenerator"
-    script-source="file:/c:/GroovyPdfGenerator.groovy"
+    script-source="${groovy.script.dir}GroovyPdfGenerator.groovy"
     refresh-check-delay="1000"
     customizer-ref="performanceLoggingCustomizer">
 
