@@ -24,6 +24,13 @@ springside3
    测试groovy简单执行sql
    json支持还需找例子
 
+   // Create a Spring application context object
+    def ctx = new ClassPathXmlApplicationContext("RentABike-context.xml")
+
+    //Ask Spring for an instance of CommandLineView, with a
+    //Bike store implementation set by Spring
+    def clv = ctx.getBean("commandLineView")
+
 2011.02.14
 ----------
 
