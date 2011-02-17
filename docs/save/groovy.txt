@@ -1,0 +1,19 @@
+GROOVY
+========
+
+1. SQL batch example
+
+批量操作,性能来去还是比较大的
+
+http://home.so-net.net.tw/tzuyichao/groovy/Sql2.html
+def insertCnts = target.withBatch { stmt ->
+      for( i in 1..batchSize ) {
+          def param = queue.poll()
+          if( param != null ) {
+              def sql = "insert into test ( id, name) values ($param.id, $param.name)"
+              stmt.addBatch( sql )
+
+          }
+      }
+  }
+

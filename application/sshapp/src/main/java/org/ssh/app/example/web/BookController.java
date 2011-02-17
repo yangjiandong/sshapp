@@ -22,7 +22,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.utils.SpringContextHolder;
 import org.ssh.app.cache.CacheUtil;
 import org.ssh.app.example.entity.Book;
+import org.ssh.app.example.entity.Category;
 import org.ssh.app.example.service.BookService;
+import org.ssh.app.example.service.CategoryService;
 import org.ssh.app.example.service.PdfGenerator;
 import org.ssh.app.util.JsonViewUtil;
 import org.ssh.app.util.leona.JsonUtils;
@@ -39,6 +41,9 @@ public class BookController {
     //直接用groovy bean
     @Autowired
     private PdfGenerator pdfGenerator;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @RequestMapping(value="/getBooks2", method = RequestMethod.GET)
     public @ResponseBody Map<String,? extends Object> showBooks2(){
@@ -121,17 +126,21 @@ public class BookController {
         logger.info("table cache list...");
         long start = System.currentTimeMillis();
 
-        List<Book> books = bookService.getBooks2();
-        logger.info(" table cache 执行共计:" + (System.currentTimeMillis() - start) + " ms");
+//        List<Book> books = bookService.getBooks2();
+//        logger.info(" table cache 执行共计:" + (System.currentTimeMillis() - start) + " ms");
+
+        List<Category> books = categoryService.getBooks3();
+        logger.info(" 执行共计:" + (System.currentTimeMillis() - start) + " ms");
 
         Bean bean = new Bean(true, this.pdfGenerator.pdfFor(), books);
         //避免contact 生成json,会报错
         JsonUtils.write(bean, response.getWriter(),
                 new String[] {
-            "parent", "contact", "hibernateLazyInitializer",
+            "hibernateLazyInitializer",
             "handler", "checked"
         }, "yyyy.MM.dd");
         //{"info":[{"edition":10,"isbn":"comto ok","oid":10,"pages":200,"published":"AM","title":"goto American"},{"edition":10,"isbn":"omoo","oid":11,"pages":2000,"published":"AM","title":"计划生育"},{"edition":910,"isbn":"comtosadfad ok","oid":12,"pages":5300,"published":"AM","title":"同要有 面goto American"}],"msg":"已经登陆","success":true}
+
 
     }
 }

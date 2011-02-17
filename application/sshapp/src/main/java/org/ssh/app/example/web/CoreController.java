@@ -11,6 +11,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.ssh.app.example.service.BookService;
+import org.ssh.app.example.service.CategoryService;
 import org.ssh.app.example.service.ContactService;
 
 //http://stsmedia.net/spring-finance-part-2-spring-mvc-spring-30-rest-integration/
@@ -24,6 +25,9 @@ public class CoreController {
     @Autowired
     private ContactService contactService;
 
+    @Autowired
+    private CategoryService categoryService;
+
     @RequestMapping("/init/exampleData")
     public ModelAndView initData(ModelMap modelMap, HttpServletRequest request,
             HttpServletResponse response) throws Exception {
@@ -31,6 +35,9 @@ public class CoreController {
 
         this.contactService.initData();
         this.bookService.initData();
+
+		logger.info("开始初始化Category数据...");
+        this.categoryService.initData();
 
         return new ModelAndView("redirect:/index2.jsp");
 

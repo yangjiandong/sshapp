@@ -1,6 +1,19 @@
 springside3
 ------------
 
+2011.02.17
+----------
+
+1. save/groovy.txt
+
+2. hibernate 保存表操作历史
+http://jeffreyhsu.javaeye.com/blog/191696
+
+hibernate事件:http://www.nautsch.net/2008/05/16/hibernate-eventlisteners-in-spring-konfigurieren/
+save/hibernate-even.txt
+org/ssh/app/orm/hibernate/AbstractEntity,Historizable,HistoryListener,OperationType,entity
+example: example../Category
+
 2011.02.16
 ----------
 
