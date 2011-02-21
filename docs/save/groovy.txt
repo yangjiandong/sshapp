@@ -1,6 +1,33 @@
 GROOVY
 ========
 
+2011.02.19
+-----------
+
+1. Groovy.for.Domain.Specific.Language
+map 操作,还有些其他有趣的操作
+
+p70
+Spread and spread-dot
+Collections also support some useful operators such as the spread-dot operator (*.).
+Spread-dot is used when we need to apply a method call or make a feld or property
+accessible across all members of a collection. This is best illustrated with some
+examples as shown below:
+def map = [a:"apple", o:"orange", p:"pear"]
+def keys = ["a", "o", "p"]
+def values = ["apple", "orange", "pear"]
+// use spread dot to access all values
+assert map*.key == keys
+assert map*.value == values
+// which is equivalent to using the collect method
+assert map.collect { it.key } == keys
+assert map.collect { it.value } == values
+
+p86
+
+2011.02.15
+----------
+
 1. SQL batch example
 
 批量操作,性能来去还是比较大的
