@@ -1,4 +1,4 @@
-h1(#id). An HTML first-level heading
+h1(#id). 中文测试An HTML first-level heading
 
 Textile syntax is really simple. You can _emphasize_ text or *emphasize it even more*.
 
