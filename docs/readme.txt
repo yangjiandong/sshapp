@@ -1,6 +1,16 @@
 springside3
 ------------
 
+2011.03.06
+----------
+
+1. change to servlet2.5
+
+   web.xml
+
+2. add camel ?
+
+
 2011.02.17
 ----------
 
