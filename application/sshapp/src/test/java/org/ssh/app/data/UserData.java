@@ -1,9 +1,11 @@
 package org.ssh.app.data;
 
 import org.springside.modules.test.utils.DataUtils;
+
 import org.ssh.app.common.dao.UIDGenerator;
 import org.ssh.app.common.entity.Role;
 import org.ssh.app.common.entity.User;
+
 
 public class UserData {
     public static String getUserId() {
@@ -26,6 +28,7 @@ public class UserData {
         User user = UserData.getRandomUser();
         Role adminRole = UserData.getAdminRole();
         user.getRoleList().add(adminRole);
+
         return user;
     }
 
