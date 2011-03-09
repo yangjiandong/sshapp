@@ -352,7 +352,7 @@ public class ChineseMoney {
     }
 
     public static void main(String[] args) {
-        double d = -1000123.01;
+        double d = 1000123.01;
 
         System.out.println(hangeToBig(d));
     }
