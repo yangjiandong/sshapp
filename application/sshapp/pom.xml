@@ -234,6 +234,13 @@
       <artifactId>p6spy</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>com.database.liquibase</groupId>
+      <artifactId>liquibase</artifactId>
+      <version>2.0.1</version>
+      <scope>runtime</scope>
+    </dependency>
+
     <!-- database end -->
 
     <!-- web begin -->

@@ -13,6 +13,18 @@
 
   <description>导入sshapp中的applicationContext文件列表</description>
 
+  <!-- databae migrate -->
+  <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
+      <property name="dataSource" ref="dataSource" />
+      <property name="changeLog" value="classpath:db-changelog.xml" />
+
+      <!--
+      contexts specifies the runtime contexts to use.
+      <property name="contexts" value="test, production" />
+      -->
+
+  </bean>
+
   <import resource="common/applicationContext-jdbc.xml" />
   <import resource="cache/applicationContext-ehcache.xml" />
   <import resource="cache/applicationContext-memcached.xml" />

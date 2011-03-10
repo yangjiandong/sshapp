@@ -96,5 +96,177 @@ public void updateDb(String url, String login, String password, String diffFileP
         }
 }
 
+h2(#3). Combning Liquibase with Spring and Jpa
+
+http://www.insaneprogramming.be/?p=56
+
+Managing change on source code is easy. Managing change on database schemas is less so. Especially if your application can be used across many database backend (Oracle, MySQL, SQL Server, ...).
+
+Liquibase provides a database agnostic way of managing changes to a database structure. It uses an XML format which contains various changesets for all the changes made to a schema. Ideally, you'll have a changeset per atomic change (adding a column, creating a table, changing an index,...). The beauty of Liquibase is that the database itself is aware about its state. Liquibase implants a versioning table into your schema and uses this table to do the necessary updating.
+
+When using it in combination with Spring and JPA, there are some things you do need to look out for. First of all, the Spring support for Liquibase isn't very big. There's an initiializing bean that updates a schema based on a changelog xml, but that's about it. For example, I wanted to change the names of the tables Liquibase creates for its versioning. The Spring class in Liquibase does not support this feature. Luckily, using the Spring support in Liquibase as a baseline, it's not that hard.
+
+
+My bean class looks like this:
+
+public class SpringLiquibaseUpdater implements ResourceLoaderAware, InitializingBean {
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Liquibase liquibase = new Liquibase(changeLog, new SpringFileOpener(changeLog, getResourceLoader()), getDatabase());
+        try {
+            liquibase.update(contexts);
+        } catch (LiquibaseException e) {
+            throw new RuntimeException("Could not update database through Liquibase", e);
+        }
+    }
+
+    private DataSource dataSource;
+
+    private String changeLog;
+
+    private String contexts;
+
+    private ResourceLoader resourceLoader;
+
+    private Database getDatabase() {
+        try {
+            Database databaseImplementation = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(dataSource.getConnection());
+            databaseImplementation.setDatabaseChangeLogTableName("liquibase_changelog");
+            databaseImplementation.setDatabaseChangeLogLockTableName("liquibase_lock");
+            return databaseImplementation;
+        } catch (Exception e) {
+            throw new RuntimeException("Error getting database", e);
+        }
+    }
+
+    public DataSource getDataSource() {
+        return dataSource;
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public String getChangeLog() {
+        return changeLog;
+    }
+
+    public void setChangeLog(String changeLog) {
+        this.changeLog = changeLog;
+    }
+
+    public String getContexts() {
+        return contexts;
+    }
+
+    public void setContexts(String contexts) {
+        this.contexts = contexts;
+    }
+
+    public ResourceLoader getResourceLoader() {
+        return resourceLoader;
+    }
+
+    @Override
+    public void setResourceLoader(ResourceLoader resourceLoader) {
+
+        this.resourceLoader = resourceLoader;
+    }
+
+    class SpringFileOpener implements FileOpener {
+        private String parentFile;
+
+        private ResourceLoader resourceLoader;
+
+        public SpringFileOpener(String parentFile, ResourceLoader resourceLoader) {
+            this.parentFile = parentFile;
+            this.resourceLoader = resourceLoader;
+        }
+
+        public InputStream getResourceAsStream(String file) throws IOException {
+            Resource resource = getResource(file);
+
+            return resource.getInputStream();
+        }
+
+        public Enumeration<URL> getResources(String packageName) throws IOException {
+            Vector<URL> tmp = new Vector<URL>();
+            tmp.add(getResource(packageName).getURL());
+            return tmp.elements();
+        }
+
+        public Resource getResource(String file) {
+            return getResourceLoader().getResource(adjustClasspath(file));
+        }
+
+        private String adjustClasspath(String file) {
+            return isClasspathPrefixPresent(parentFile) &amp;&amp; !isClasspathPrefixPresent(file)
+                    ? ResourceLoader.CLASSPATH_URL_PREFIX + file
+                    : file;
+        }
+
+        public boolean isClasspathPrefixPresent(String file) {
+            return file.startsWith(ResourceLoader.CLASSPATH_URL_PREFIX);
+        }
+
+        public ClassLoader toClassLoader() {
+            return getResourceLoader().getClassLoader();
+        }
+
+        public ResourceLoader getResourceLoader() {
+            return resourceLoader;
+        }
+
+        public void setResourceLoader(ResourceLoader resourceLoader) {
+            this.resourceLoader = resourceLoader;
+        }
+    }
+}
+
+The Spring bean doing the schema updating is just an initializing bean that fires up Liquibase using the datasource in the context (assuming you're using a datasource that is). You inject the datasource into the bean and you're off. Now, when usinh JPA (with Hibernate in my case), you need to make sure that the schema updating is done before the entitymanagerfactory bean is created. Why? Say you have a context like this:
+
+ <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+   <property name="driverClass" value="${dataSource.driverClassName}" />
+   <property name="jdbcUrl" value="${dataSource.url}" />
+   <property name="user" value="${dataSource.username}" />
+   <property name="password" value="${dataSource.password}" />
+   <property name="checkoutTimeout" value="60000" />
+   <property name="minPoolSize" value="1" />
+   <property name="maxPoolSize" value="10" />
+   <property name="maxStatements" value="200" />
+   <property name="idleConnectionTestPeriod" value="1800" />
+ </bean>
+
+ <bean id="liquibase" class="SpringLiquibaseUpdater">
+     <property name="dataSource" ref="dataSource" />
+     <property name="changeLog" value="classpath:/META-INF/liquibase/mysql.xml" />
+</bean>
+
+ <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+   <property name="dataSource" ref="dataSource"/>
+   <property name="persistenceUnitName" value="persistenceUnit"/>
+   <property name="jpaVendorAdapter">
+     <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+   </property>
+   <property name="jpaPropertyMap">
+     <map>
+       <entry key="hibernate.dialect" value="${dataSource.hibernate.dialect}" />
+       <entry key="hibernate.hbm2ddl.auto" value="${dataSource.hibernate.hbm2ddl.auto}" />
+       <entry key="hibernate.c3p0.min_size" value="1" />
+       <entry key="hibernate.c3p0.max_size" value="10" />
+       <entry key="hibernate.c3p0.max_statements" value="200" />
+       <entry key="hibernate.c3p0.idle_test_period" value="1800" />
+       <entry key="hibernate.search.default.indexBase" value="${hibernate.search.indexbase}"/>
+     </map>
+   </property>
+ </bean>
+
+There's no telling if the liquibase bean will be created before the entityManagerFactory bean. If it's created afterwards, the entitymanager factory bean will probably throw an exception when the hbm2ddl is set to validate (which is the case in most production systems) because the schema might not have been updated yet.
+Luckily solving this small issue is easy. Change the entityManagerFactory bean definition to this :
+
+<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" depends-on="liquibase">
+
+Voila. Now you have a Spring+JPA application that manages database updates itself.
+
 @h1(#toc). Hellow World@
 @h2. Servlet@

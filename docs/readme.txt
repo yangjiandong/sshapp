@@ -1,6 +1,11 @@
 springside3
 ------------
 
+2011.03.10
+----------
+
+1. update blueprint css
+
 2011.03.06
 ----------
 
@@ -79,6 +84,29 @@ http://www.liquibase.org/
 
 wiki/liquibase.textile,save/SpringLiquibase.java.txt
 ant,mvn,servlet
+
+integration spring:
+
+    <changeSet id="1" author="bob">
+        <createTable tableName="department">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="active" type="boolean" defaultValueBoolean="true"/>
+        </createTable>
+    </changeSet>
+
+    pom.xml add liquibase
+
+--建立mvn
+cd save
+mvn install:install-file -Dfile=liquibase-2.0.1.jar -DgroupId=com.database.liquibase -DartifactId=liquibase -Dversion=2.0.1 -Dpackaging=jar -DgeneratePom=true
+
+--自己建bean
+http://www.insaneprogramming.be/?p=56
 
 other tool:
 http://scriptella.javaforge.com/
