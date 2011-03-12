@@ -6,7 +6,23 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd"
   default-lazy-init="true">
 
-  <description>Spring公共配置</description>
+  <description>Spring - 生成环境公共配置</description>
+
+  <!-- 定义受环境影响易变的变量 -->
+  <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+    <property name="ignoreResourceNotFound" value="true" />
+    <property name="locations">
+      <list>
+        <!-- 标准配置 -->
+        <value>classpath*:/application.properties</value>
+        <!-- 本地开发环境配置 -->
+        <value>classpath*:/application.local.properties</value>
+        <!-- 服务器生产环境配置 -->
+        <value>file:/var/showcase/application.server.properties</value>
+      </list>
+    </property>
+  </bean>
 
   <context:annotation-config />
 
@@ -18,19 +34,6 @@
 
   <aop:aspectj-autoproxy />
 
-  <!-- variables  -->
-  <bean
-    class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-    <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
-    <property name="ignoreResourceNotFound" value="true" />
-    <property name="locations">
-      <list>
-        <!-- standard config -->
-        <value>classpath*:/application.properties</value>
-      </list>
-    </property>
-  </bean>
-
   <!--
       数据源配置,使用应用内的DBCP数据库连接池 <bean id="dataSource"
       class="org.apache.commons.dbcp.BasicDataSource"
@@ -39,8 +42,7 @@
       <property name="username" value="${jdbc.username}" /> <property
       name="password" value="${jdbc.password}" />
     -->
-  <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
-    destroy-method="close">
+  <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
     <property name="driverClass" value="${jdbc.driver}" />
     <property name="jdbcUrl" value="${jdbc.url}" />
     <property name="user" value="${jdbc.username}" />
@@ -89,7 +91,7 @@
         <prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
       </props>
     </property>
-    <property name="packagesToScan" value="org.ssh.app.*.entity" />
+    <property name="packagesToScan" value="org.ssh.app.**.entity" />
     <property name="eventListeners">
       <map>
         <entry key="save-update">
@@ -98,6 +100,22 @@
             <bean class="org.hibernate.event.def.DefaultSaveOrUpdateEventListener" />
           </list>
         </entry>
+        <entry key="post-insert">
+          <list>
+            <bean class="org.ssh.app.orm.hibernate.HistoryListener" />
+          </list>
+        </entry>
+        <entry key="post-update">
+          <list>
+            <bean class="org.ssh.app.orm.hibernate.HistoryListener" />
+          </list>
+        </entry>
+        <entry key="post-delete">
+          <list>
+            <bean class="org.ssh.app.orm.hibernate.HistoryListener" />
+          </list>
+        </entry>
+
       </map>
     </property>
   </bean>
