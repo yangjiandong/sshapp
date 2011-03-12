@@ -1182,7 +1182,7 @@
         <plugin>
           <groupId>org.mortbay.jetty</groupId>
           <artifactId>jetty-maven-plugin</artifactId>
-          <version>7.1.4.v20100610</version>
+          <version>7.2.2.v20101205</version>
           <configuration>
             <webAppConfig>
               <contextPath>/sshapp</contextPath>
