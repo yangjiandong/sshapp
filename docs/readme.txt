@@ -8,6 +8,33 @@ springside3
 
 Windows -> Preferences -> Java -> Compiler -> Errors/Warnings -> Deprecated and trstricted API -> Forbidden reference (access rules): -> change to warning
 
+2. test groovy sql(tools/snippets/groovy.txt)
+这里要重点介绍的是另外一种快捷增加记录的方法--DataSet。
+DataSet将SQL语句隐藏，将数据集放入到一个Map中。可以对这个Map中内容进行查询、增加。请看如下代码：
+def blogs=db.dataSet('blog') /*new DataSet(db, 'blog')或者db.dataSet(Blog)*/
+blogs.each{ println it }
+blogs.add(
+    content:'dateset using',
+    author_id:3,
+    date_created:new Date())
+blogs.findAll {it.id>1 }.sort{it.version desc}.each { println it }
+
+从上述代码中可以看到，创建DateSet实例后，就能够获得一个Map，可以对这个Map执行findAll(whereClosure)以及sort(sortClosure)。
+而这里增加数据使用的是add(Map)方法。
+
+在对数据库进行增加、更新或者删除时，需要考虑事务性，以保证数据的完整性。
+对于此，Groovy同样提供了一个非常方便的用法。对于需要在同一个事务中完成的代码，可以使用Sql或者DataSet的withTransaction(Closure)方法实现，参见如下代码：
+
+db.withTransaction{
+    for (int i=0;i<5;i++){
+        blogs.add(
+        content:"dateset using"+i,
+        author_id:3,
+        date_created:new Date())
+    }
+    db.execute ("delete from iblog where i>20")
+}
+
 2011.03.10
 ----------
 
@@ -75,6 +102,9 @@ stty icanon echo
     //Ask Spring for an instance of CommandLineView, with a
     //Bike store implementation set by Spring
     def clv = ctx.getBean("commandLineView")
+
+   test:
+   curl http://localhost:8089/sshapp/book/getBooks33
 
 2011.02.14
 ----------

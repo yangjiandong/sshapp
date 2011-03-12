@@ -19,5 +19,16 @@
     </createTable>
   </changeSet>
 
+  <changeSet id="2" author="yangjiandong">
+    <createTable tableName="t_test">
+      <column name="id" type="int">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="name" type="varchar(50)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+  </changeSet>
+
 </databaseChangeLog>
 
