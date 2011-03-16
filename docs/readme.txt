@@ -1,6 +1,12 @@
 springside3
 ------------
 
+2011.03.16
+----------
+
+1. json 方案
+   Jackson > Gson > Json-lib
+
 2011.03.12
 ----------
 
@@ -141,6 +147,10 @@ integration spring:
 --建立mvn
 cd save
 mvn install:install-file -Dfile=liquibase-2.0.1.jar -DgroupId=com.database.liquibase -DartifactId=liquibase -Dversion=2.0.1 -Dpackaging=jar -DgeneratePom=true
+
+处理 Waiting for changelog lock..
+delete from DATABASECHANGELOGLOCK
+insert DATABASECHANGELOGLOCK(id,locked) values(1,0)
 
 --自己建bean
 http://www.insaneprogramming.be/?p=56
