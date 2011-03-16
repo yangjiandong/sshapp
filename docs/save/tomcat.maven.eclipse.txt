@@ -1,0 +1,30 @@
+maven tomcat eclipse debug 调试 + hot code replace 热部署
+==========================================================
+
+文章分类:Java编程
+上网找了好久都没找到，网上只有运行mvn package 打包，并利用tomcat manager功能部署到tomcat 下的文章，如果我修改了一个java文件，不得不重新打包部署一下，这佯做开发效率极低，影响用maven的心情，经过自己的反复试验，终于可以实行 hot code replace了，就是修改了一个文件不用重新部署了，就可以使用debug了。
+
+试验环境:
+
+eclipse+ tomcat+ tomcatPlugin+maven3 关于怎么安装，就得大家自己找文章了
+
+我们用petclinic项目为大家演示热部署。petclinic是spring官方的一个非常经典的例子
+
+petclinic svn路径 https://src.springframework.org/svn/spring-samples/petclinic/trunk
+
+配置使用
+
+1。修改tomcat的server.xml文件，加入
+
+     <Context docBase="E:\workspace\petclinic\src\main\webapp" path="/petclinic" reloadable="false"></Context>
+
+意思是指定tomcat运行项目的目录，在这里我们指定E:\workspace\petclinic\src\main\webapp ，src\main\webapp 是maven web规范，存放java web的相关资源。
+
+2。右键单击项目，选择build path，将default output folder设置为 petclinic/src/main/webapp/WEB-INF/classes，并将
+
+petclinic/src/main/resource的Excluded设置为None，默认是**，意思是让eclipse编译java和resource文件编译到petclinic/src/main/webapp/WEB-INF/classes目录
+
+
+3。 运行 mvn war:inplace petclinic/src/main/webapp/WEB-INF下，就有lib文件了
+
+4。用eclipse插件运行tomcat，项目就可以运行了，修改任意一java类，可以实时生效，打断点也能够调试了。

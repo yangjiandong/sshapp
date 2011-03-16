@@ -7,6 +7,20 @@ springside3
 1. json 方案
    Jackson > Gson > Json-lib
 
+2. tomcat + eclipse + maven
+   save/tomcat.maven.eclipse.txt
+
+   注意,需取消 pom.xml
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>jasper-el</artifactId>
+      <version>6.0.26</version>
+    </dependency>
+
+    对 tilesConfigurer 有影响,不知jetty下是否正常
+
+    ? how to set mvn output dir
+
 2011.03.12
 ----------
 
