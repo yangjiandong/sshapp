@@ -5,6 +5,7 @@ springside3
 ----------
 
 1. 参考spring mvc-showcase 使用jquery
+   book/form.jsp,fileupload.jsp
 
 2011.03.16
 ----------
