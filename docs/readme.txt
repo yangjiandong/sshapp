@@ -7,6 +7,25 @@ springside3
 1. 参考spring mvc-showcase 使用jquery
    book/form.jsp,fileupload.jsp
 
+2. JavaScript 实现的 AES 加、解密算法
+   http://www.movable-type.co.uk/scripts/aes.html
+   js/lib/AES.js
+
+   example:
+   var password = 'L0ck it up saf3';
+   var plaintext = 'pssst ... don't tell anyone';
+   var ciphertext = Aes.Ctr.encrypt(plaintext, password, 256);
+   var origtext = Aes.Ctr.decrypt(ciphertext, password, 256);
+
+3. jquery
+
+   cool jquery grid
+   http://www.trirand.com/blog/jqgrid/jqgrid.html
+   https://github.com/tonytomov/jqGrid
+
+   easyui
+   http://jquery-easyui.wikidot.com/
+
 2011.03.16
 ----------
 
