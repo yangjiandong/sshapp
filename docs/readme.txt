@@ -1,6 +1,9 @@
 springside3
 ------------
 
+2011.03.17
+----------
+
 2011.03.16
 ----------
 
@@ -10,7 +13,7 @@ springside3
 2. tomcat + eclipse + maven
    save/tomcat.maven.eclipse.txt
 
-   注意,需取消 pom.xml
+   注意,需取消 pom.xml,但用jetty时需要
     <dependency>
       <groupId>org.apache.tomcat</groupId>
       <artifactId>jasper-el</artifactId>
@@ -19,7 +22,24 @@ springside3
 
     对 tilesConfigurer 有影响,不知jetty下是否正常
 
-    ? how to set mvn output dir
+    how to set mvn output dir
+
+    <outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-eclipse-plugin</artifactId>
+        <version>2.8</version>
+        <configuration>
+          <sourceExcludes>
+            <sourceExclude>**/.svn/</sourceExclude>
+          </sourceExcludes>
+          <downloadSources>true</downloadSources>
+          <buildOutputDirectory>src/main/webapp/WEB-INF/classes</buildOutputDirectory>
+        </configuration>
+      </plugin>
+
+
 
 2011.03.12
 ----------

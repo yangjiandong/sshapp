@@ -1,8 +1,19 @@
 package org.ssh.app.example.web;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import net.sf.ehcache.CacheManager;
 
+import net.sf.json.JSON;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONSerializer;
+import net.sf.json.JsonConfig;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,14 +39,6 @@ import org.ssh.app.util.JsonViewUtil;
 import org.ssh.app.util.leona.JsonUtils;
 import org.ssh.app.util.leona.JsonUtils.Bean;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 
 @Controller
 @RequestMapping("/book")
@@ -51,8 +54,8 @@ public class BookController {
     private CategoryService categoryService;
 
     @RequestMapping(value = "/getBooks2", method = RequestMethod.GET)
-    public @ResponseBody
-    Map<String, ?extends Object> showBooks2() {
+    @ResponseBody
+    public Map<String, ?extends Object> showBooks2() {
         logger.info("list...");
 
         List<Book> books = bookService.getBooksOnMethodCache();
@@ -73,8 +76,8 @@ public class BookController {
         long start = System.currentTimeMillis();
 
         List<Book> books = bookService.getBooksOnMethodCache();
-        logger.info(" method cache 执行共计:" +
-            (System.currentTimeMillis() - start) + " ms");
+        logger.info(" method cache 执行共计:"
+            + (System.currentTimeMillis() - start) + " ms");
 
         return JsonViewUtil.getModelMap(books);
     }
@@ -88,8 +91,8 @@ public class BookController {
         long start = System.currentTimeMillis();
 
         List<Book> books = bookService.getBooks2();
-        logger.info(" table cache 执行共计:" +
-            (System.currentTimeMillis() - start) + " ms");
+        logger.info(" table cache 执行共计:"
+            + (System.currentTimeMillis() - start) + " ms");
 
         return JsonViewUtil.getModelMap(books);
     }
@@ -110,8 +113,8 @@ public class BookController {
             CacheUtil.setCache("bookController", "books", books);
         }
 
-        logger.info(" man hand 执行共计:" + (System.currentTimeMillis() - start) +
-            " ms");
+        logger.info(" man hand 执行共计:"
+            + (System.currentTimeMillis() - start) + " ms");
 
         return JsonViewUtil.getModelMap(books);
     }
@@ -120,9 +123,17 @@ public class BookController {
     public String getBookByTitle(HttpServletRequest request,
         HttpServletResponse response, Book book) {
         List<Book> allBooks = this.bookService.getBooksByTile(book.getTitle());
-        JSONArray jsonArray = JSONArray.fromObject(allBooks);
+        Bean bean = new Bean(true, "cc", allBooks);
+
+        // 取消contact 属性处理
+        JsonConfig jsonConfig = JsonUtils.configJson(new String[] {
+                    "hibernateLazyInitializer", "handler", "contact"
+                }, "yyyy.MM.dd");
+
+        JSON json = JSONSerializer.toJSON(bean, jsonConfig);
+        //JSONArray jsonArray = JSONArray.fromObject(allBooks);
         request.setAttribute("message",
-            "You Input Book title is: <b>" + jsonArray.toString() + "</b>");
+            "You Input Book title is: <b>" + json.toString() + "</b>");
 
         return "showBook";
     }
@@ -150,12 +161,13 @@ public class BookController {
         //        List<Book> books = bookService.getBooks2();
         //        logger.info(" table cache 执行共计:" + (System.currentTimeMillis() - start) + " ms");
         List<Category> books = categoryService.getBooks3();
-        logger.info(" 执行共计:" + (System.currentTimeMillis() - start) + " ms");
+        logger.info(" 执行共计:" + (System.currentTimeMillis() - start)
+            + " ms");
 
         Bean bean = new Bean(true, this.pdfGenerator.pdfFor(), books);
         //避免contact 生成json,会报错
         JsonUtils.write(bean, response.getWriter(),
-            new String[] { "hibernateLazyInitializer", "handler", "checked" },
+            new String[] {"hibernateLazyInitializer", "handler", "checked"},
             "yyyy.MM.dd");
 
         //{"info":[{"edition":10,"isbn":"comto ok","oid":10,"pages":200,"published":"AM","title":"goto American"},{"edition":10,"isbn":"omoo","oid":11,"pages":2000,"published":"AM","title":"计划生育"},{"edition":910,"isbn":"comtosadfad ok","oid":12,"pages":5300,"published":"AM","title":"同要有 面goto American"}],"msg":"已经登陆","success":true}

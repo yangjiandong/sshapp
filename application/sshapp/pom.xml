@@ -276,12 +276,12 @@
       <artifactId>servlet-api</artifactId>
     </dependency>
     <!--
-    <dependency>
-      <groupId>org.apache.tomcat</groupId>
-      <artifactId>jasper-el</artifactId>
-      <version>6.0.26</version>
-    </dependency>
-    -->
+      <dependency>
+        <groupId>org.apache.tomcat</groupId>
+        <artifactId>jasper-el</artifactId>
+        <version>6.0.26</version>
+      </dependency>
+      -->
 
     <!-- web end -->
 
@@ -535,19 +535,19 @@
 
     <!--
 
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-core</artifactId>
-      <version>2.6.0</version>
-    </dependency>
+      <dependency>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-core</artifactId>
+        <version>2.6.0</version>
+      </dependency>
 
-       <dependency>
-          <groupId>org.grails</groupId>
-          <artifactId>grails-spring</artifactId>
-          <version>1.3.6</version>
+         <dependency>
+            <groupId>org.grails</groupId>
+            <artifactId>grails-spring</artifactId>
+            <version>1.3.6</version>
 
-        </dependency>
-        -->
+          </dependency>
+          -->
 
     <!-- test begin -->
     <dependency>
@@ -654,6 +654,8 @@
   </dependencies>
 
   <build>
+    <outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
+
     <plugins>
 
       <!-- war插件-->
@@ -678,6 +680,19 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-eclipse-plugin</artifactId>
+        <version>2.8</version>
+        <configuration>
+          <sourceExcludes>
+            <sourceExclude>**/.svn/</sourceExclude>
+          </sourceExcludes>
+          <downloadSources>false</downloadSources>
+          <buildOutputDirectory>src/main/webapp/WEB-INF/classes</buildOutputDirectory>
+        </configuration>
+      </plugin>
+      <!--
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-eclipse-plugin</artifactId>
         <configuration>
           <wtpversion>2.0</wtpversion>
           <additionalProjectnatures>
@@ -685,7 +700,7 @@
           </additionalProjectnatures>
         </configuration>
       </plugin>
-
+      -->
       <!-- jetty插件 -->
       <plugin>
         <groupId>org.mortbay.jetty</groupId>

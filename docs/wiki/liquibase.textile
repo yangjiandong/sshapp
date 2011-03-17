@@ -100,173 +100,70 @@ h2(#3). Combning Liquibase with Spring and Jpa
 
 http://www.insaneprogramming.be/?p=56
 
-Managing change on source code is easy. Managing change on database schemas is less so. Especially if your application can be used across many database backend (Oracle, MySQL, SQL Server, ...).
+h2(#4). Automation for the people: Hands-free database migration
 
-Liquibase provides a database agnostic way of managing changes to a database structure. It uses an XML format which contains various changesets for all the changes made to a schema. Ideally, you'll have a changeset per atomic change (adding a column, creating a table, changing an index,...). The beauty of Liquibase is that the database itself is aware about its state. Liquibase implants a versioning table into your schema and uses this table to do the necessary updating.
+http://www.ibm.com/developerworks/library/j-ap08058/
 
-When using it in combination with Spring and JPA, there are some things you do need to look out for. First of all, the Spring support for Liquibase isn't very big. There's an initiializing bean that updates a schema based on a changelog xml, but that's about it. For example, I wanted to change the names of the tables Liquibase creates for its versioning. The Spring class in Liquibase does not support this feature. Luckily, using the Spring support in Liquibase as a baseline, it's not that hard.
+Applying refactorings to an existing database
+As new features are added to an application, the need often arises to apply structural changes to a database or modify table constraints. LiquiBase provides support for more than 30 database refactorings (see Resources). This section covers four of these refactorings: Add Column, Drop Column, Create Table, and manipulating data.
+Add Column
+It's sometimes next to impossible to consider all of the possible columns in a database at the beginning of a project. And sometimes users request new features — such as collecting more data for information stored in the system — that can require new columns to be added. Listing 4 adds a column to the distributor table in the database, using the LiquiBase addColumn refactoring:
 
+Listing 4. Using the Add Column database refactoring in a LiquiBase change set
+<changeSet id="4" author="joe">
+  <addColumn tableName="distributor">
+    <column name="phonenumber" type="varchar(255)"/>
+  </addColumn>
+</changeSet>
 
-My bean class looks like this:
+The new phonenumber column is defined as a varchar datatype.
+Drop Column
+Let's say that a couple of releases later, you choose to remove the phonenumber column you added in Listing 4. This is as simple as calling the dropColumn refactoring, as shown in Listing 5:
 
-public class SpringLiquibaseUpdater implements ResourceLoaderAware, InitializingBean {
-    @Override
-    public void afterPropertiesSet() throws Exception {
-        Liquibase liquibase = new Liquibase(changeLog, new SpringFileOpener(changeLog, getResourceLoader()), getDatabase());
-        try {
-            liquibase.update(contexts);
-        } catch (LiquibaseException e) {
-            throw new RuntimeException("Could not update database through Liquibase", e);
-        }
-    }
+Listing 5. Dropping a database column
+<dropColumn tableName="distributor" columnName="phonenumber"/>
 
-    private DataSource dataSource;
+Create Table
+Adding a new table to a database is also a common database refactoring. Listing 6 creates a new table called distributor, defining its columns, constraints, and default values:
 
-    private String changeLog;
+Listing 6. Creating a new database table in LiquiBase
+<changeSet id="3" author="betsey">
+  <createTable tableName="distributor">
+    <column name="id" type="int">
+      <constraints primaryKey="true" nullable="false"/>
+    </column>
+    <column name="name" type="varchar(255)">
+      <constraints nullable="false"/>
+    </column>
+    <column name="address" type="varchar(255)">
+      <constraints nullable="true"/>
+    </column>
+    <column name="active" type="boolean" defaultValue="1"/>
+  </createTable>
+</changeSet>
 
-    private String contexts;
+This example uses the createTable database refactoring as part of a change set (createTable was also used back in Listing 1).
+Manipulating data
+After applying structural database refactorings (such as Add Column and Create Table), you often need to insert data into tables affected by these refactorings. Furthermore, you might need to change the existing data in lookup tables or other types of tables. Listing 7 shows how to insert data using a LiquiBase change set:
 
-    private ResourceLoader resourceLoader;
+Listing 7. Inserting data in a LiquiBase change set
+<changeSet id="3" author="betsey">
+  <code type="section" width="100%">
+  <insert tableName="distributor">
+    <column name="id" valueNumeric="3"/>
+    <column name="name" value="Manassas Beer Company"/>
+  </insert>
+  <insert tableName="distributor">
+    <column name="id" valueNumeric="4"/>
+    <column name="name" value="Harrisonburg Beer Distributors"/>
+  </insert>
+</changeSet>
 
-    private Database getDatabase() {
-        try {
-            Database databaseImplementation = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(dataSource.getConnection());
-            databaseImplementation.setDatabaseChangeLogTableName("liquibase_changelog");
-            databaseImplementation.setDatabaseChangeLogLockTableName("liquibase_lock");
-            return databaseImplementation;
-        } catch (Exception e) {
-            throw new RuntimeException("Error getting database", e);
-        }
-    }
+You may have already written SQL scripts to manipulate data, or the LiquiBase XML change set may be too limiting. And sometimes it's simpler to use SQL scripts to apply mass changes to the database. LiquiBase can accommodate these situations too. Listing 8 calls insert-distributor-data.sql within a change set to insert the distributor table data:
 
-    public DataSource getDataSource() {
-        return dataSource;
-    }
+Listing 8. Running a custom SQL file from a LiquiBase change set
+<changeSet id="6" author="joe">
+  <sqlFile path="insert-distributor-data.sql"/>
+</changeSet>
 
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
-
-    public String getChangeLog() {
-        return changeLog;
-    }
-
-    public void setChangeLog(String changeLog) {
-        this.changeLog = changeLog;
-    }
-
-    public String getContexts() {
-        return contexts;
-    }
-
-    public void setContexts(String contexts) {
-        this.contexts = contexts;
-    }
-
-    public ResourceLoader getResourceLoader() {
-        return resourceLoader;
-    }
-
-    @Override
-    public void setResourceLoader(ResourceLoader resourceLoader) {
-
-        this.resourceLoader = resourceLoader;
-    }
-
-    class SpringFileOpener implements FileOpener {
-        private String parentFile;
-
-        private ResourceLoader resourceLoader;
-
-        public SpringFileOpener(String parentFile, ResourceLoader resourceLoader) {
-            this.parentFile = parentFile;
-            this.resourceLoader = resourceLoader;
-        }
-
-        public InputStream getResourceAsStream(String file) throws IOException {
-            Resource resource = getResource(file);
-
-            return resource.getInputStream();
-        }
-
-        public Enumeration<URL> getResources(String packageName) throws IOException {
-            Vector<URL> tmp = new Vector<URL>();
-            tmp.add(getResource(packageName).getURL());
-            return tmp.elements();
-        }
-
-        public Resource getResource(String file) {
-            return getResourceLoader().getResource(adjustClasspath(file));
-        }
-
-        private String adjustClasspath(String file) {
-            return isClasspathPrefixPresent(parentFile) &amp;&amp; !isClasspathPrefixPresent(file)
-                    ? ResourceLoader.CLASSPATH_URL_PREFIX + file
-                    : file;
-        }
-
-        public boolean isClasspathPrefixPresent(String file) {
-            return file.startsWith(ResourceLoader.CLASSPATH_URL_PREFIX);
-        }
-
-        public ClassLoader toClassLoader() {
-            return getResourceLoader().getClassLoader();
-        }
-
-        public ResourceLoader getResourceLoader() {
-            return resourceLoader;
-        }
-
-        public void setResourceLoader(ResourceLoader resourceLoader) {
-            this.resourceLoader = resourceLoader;
-        }
-    }
-}
-
-The Spring bean doing the schema updating is just an initializing bean that fires up Liquibase using the datasource in the context (assuming you're using a datasource that is). You inject the datasource into the bean and you're off. Now, when usinh JPA (with Hibernate in my case), you need to make sure that the schema updating is done before the entitymanagerfactory bean is created. Why? Say you have a context like this:
-
- <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
-   <property name="driverClass" value="${dataSource.driverClassName}" />
-   <property name="jdbcUrl" value="${dataSource.url}" />
-   <property name="user" value="${dataSource.username}" />
-   <property name="password" value="${dataSource.password}" />
-   <property name="checkoutTimeout" value="60000" />
-   <property name="minPoolSize" value="1" />
-   <property name="maxPoolSize" value="10" />
-   <property name="maxStatements" value="200" />
-   <property name="idleConnectionTestPeriod" value="1800" />
- </bean>
-
- <bean id="liquibase" class="SpringLiquibaseUpdater">
-     <property name="dataSource" ref="dataSource" />
-     <property name="changeLog" value="classpath:/META-INF/liquibase/mysql.xml" />
-</bean>
-
- <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-   <property name="dataSource" ref="dataSource"/>
-   <property name="persistenceUnitName" value="persistenceUnit"/>
-   <property name="jpaVendorAdapter">
-     <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
-   </property>
-   <property name="jpaPropertyMap">
-     <map>
-       <entry key="hibernate.dialect" value="${dataSource.hibernate.dialect}" />
-       <entry key="hibernate.hbm2ddl.auto" value="${dataSource.hibernate.hbm2ddl.auto}" />
-       <entry key="hibernate.c3p0.min_size" value="1" />
-       <entry key="hibernate.c3p0.max_size" value="10" />
-       <entry key="hibernate.c3p0.max_statements" value="200" />
-       <entry key="hibernate.c3p0.idle_test_period" value="1800" />
-       <entry key="hibernate.search.default.indexBase" value="${hibernate.search.indexbase}"/>
-     </map>
-   </property>
- </bean>
-
-There's no telling if the liquibase bean will be created before the entityManagerFactory bean. If it's created afterwards, the entitymanager factory bean will probably throw an exception when the hbm2ddl is set to validate (which is the case in most production systems) because the schema might not have been updated yet.
-Luckily solving this small issue is easy. Change the entityManagerFactory bean definition to this :
-
-<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" depends-on="liquibase">
-
-Voila. Now you have a Spring+JPA application that manages database updates itself.
-
-@h1(#toc). Hellow World@
-@h2. Servlet@
+LiquiBase provides support for many other database refactorings, including Add Lookup Table and Merge Columns. You can define all of them in a manner similar to what I've shown in Listings 4 through 8.
