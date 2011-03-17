@@ -3,6 +3,7 @@
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 <%@ page session="false" %>
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -13,7 +14,8 @@
   <link rel="stylesheet" href="<c:url value="/resources/css/blueprint/screen.css" />" type="text/css" media="screen, projection" />
   <link rel="stylesheet" href="<c:url value="/resources/css/blueprint/print.css" />" type="text/css" media="print" />
   <!--[if lt IE 8]>
-    <link rel="stylesheet" href="<c:url value="/resources/css/blueprint/ie.css" />" type="text/css" media="screen, projection" />
+    <link rel="stylesheet" href="<c:url value="/resources/css/blueprint/ie.css" />"
+    type="text/css" media="screen, projection" />
   <![endif]-->
   <tiles:useAttribute id="styles" name="styles" classname="java.util.List" ignore="true" />
   <c:forEach var="style" items="${styles}">

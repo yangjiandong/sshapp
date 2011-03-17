@@ -4,6 +4,8 @@ springside3
 2011.03.17
 ----------
 
+1. 参考spring mvc-showcase 使用jquery
+
 2011.03.16
 ----------
 
