@@ -11,6 +11,28 @@ springside3
 晨晨睡觉起来发现身上出了风疹块,早上只是觉得身上痒,现在出现小块,三个人到医院看了急诊皮肤科,配了点药膏和药片,24元,加上来回打的,50元.
 回家吃完饭给晨晨吃了药,涂了派瑞松,到8点左右,身上不痒了,小块也消失了,人也活络了,要从床上下来玩.
 
+Hibernate映射有用的策略--公用属性类
+文章分类:Java编程
+
+有时候我们有这种需求，即，很多类有相似的属性，因此需要一个继承方式来描述这些关系，而这些公用的属性我们只想把他用OO的方式表现出来方便组织管理，这个公用的类没有业务属性，更不是业务父类这个时候就需要这种方式了
+@MappedSuperclass
+public class BaseEntity {
+    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getLastUpdate() { ... }
+    public String getLastUpdater() { ... }
+    ...
+}
+
+@Entity class Order extends BaseEntity {
+    @Id public Integer getId() { ... }
+    ...
+}
+
+ @MappedSuperclass可以满足我们这种需求
+
+注意1:没有用这注解注解的父类属性将不在持久化管理之内，换句话说就是只有用这个注解描述的类的属性才能持久化
+
 2011.03.18
 ----------
 
