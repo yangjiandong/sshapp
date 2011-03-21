@@ -19,6 +19,12 @@ http://code.google.com/p/jmemcache-daemon/
 TODO
   启动参数还要看一下
 
+2. sshapp 增加混淆 build.xml 任务,好像只支持jar混淆
+save/yguard_ant_howto.html
+
+3. 以前 wikitext2pdf 不成功
+少了 pdf 生成任务
+
 2011.03.20
 ----------
 Hibernate映射有用的策略--公用属性类
