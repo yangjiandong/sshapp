@@ -195,6 +195,7 @@
         <artifactId>maven-eclipse-plugin</artifactId>
         <configuration>
           <wtpversion>none</wtpversion>
+          <downloadSources>false</downloadSources>
         </configuration>
       </plugin>
 
