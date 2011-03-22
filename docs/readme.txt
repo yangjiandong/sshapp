@@ -23,7 +23,11 @@ TODO
 save/yguard_ant_howto.html
 
 3. 以前 wikitext2pdf 不成功
-少了 pdf 生成任务
+   少了 pdf 生成任务,
+   现采用 wikitext-to-xslfo ,再用 apache fop
+   save/fop.anttask.pdf
+   中文字体: http://wangxc.javaeye.com/blog/598912
+   save/fop.txt
 
 http://peterfriese.wordpress.com/page/2/
 

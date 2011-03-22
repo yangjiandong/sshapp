@@ -1,0 +1,77 @@
+http://wangxc.javaeye.com/blog/598912
+
+步骤1： 生成字体相关的xml文件simhei.xml和simsun.xml
+
+>java -cp build\fop.jar;lib\avalon-framework-4.2.0.jar;lib\batik-all-1.7.jar;lib\commons-io-1.3.1.jar;lib\commons-logging-1.0.4.jar;lib\serializer-2.7.0.jar;lib\xalan-2.7.0.jar;lib\xercesImpl-2.7.1.jar;lib\xml-apis-1.3.04.jar;lib\xml-apis-ext-1.3.04.jar;lib\xmlgraphics-commons-1.4.jar org.apache.fop.fonts.apps.TTFReader -ttcname "SimSun" c:\font\simsun.ttc c:\font\simsun.xml
+>java -cp build\fop.jar;lib\avalon-framework-4.2.0.jar;lib\batik-all-1.7.jar;lib\commons-io-1.3.1.jar;lib\commons-logging-1.0.4.jar;lib\serializer-2.7.0.jar;lib\xalan-2.7.0.jar;lib\xercesImpl-2.7.1.jar;lib\xml-apis-1.3.04.jar;lib\xml-apis-ext-1.3.04.jar;lib\xmlgraphics-commons-1.4.jar org.apache.fop.fonts.apps.TTFReader -ttcname "SimSun" c:\font\simher.ttf c:\font\simher.xml
+
+步骤2：修改用户定义文件，在解压FOP包的目录下conf创建config.xml，文件内容修改为：
+
+<?xml version="1.0"?>
+<fop version="1.0">
+<base>.</base>
+   <renderers>
+    <renderer mime="application/pdf">
+      <filterList>
+         <value>flate</value>
+     </filterList>
+      <fonts>
+        <font metrics-url="file:///c:\font\simhei.xml" kerning="yes" embed-url="file:///c:\font\simhei.ttf">
+          <font-triplet name="simhei" style="normal" weight="normal"/>
+          <font-triplet name="simhei" style="normal" weight="bold"/>
+          <font-triplet name="simhei" style="italic" weight="normal"/>
+          <font-triplet name="simhei" style="italic" weight="bold"/>
+          </font>
+          <font metrics-url="file:///c:\font\simsun.xml" kerning="yes" embed-url="file:///c:\font\simsun.ttc">
+          <font-triplet name="simsun" style="normal" weight="normal"/>
+          <font-triplet name="simsun" style="normal" weight="bold"/>
+          <font-triplet name="simsun" style="italic" weight="normal"/>
+          <font-triplet name="simsun" style="italic" weight="bold"/>
+          </font>
+        </fonts>
+    </renderer>
+</renderers>
+</fop>
+
+步骤3：修改相应的xsl文件，应用上Simsun字体。在相应的节点上添加字体属性font-family="Simsun" ，例如创建文件simplecn.fo，文件内容修改为：
+
+<?xml version="1.0" encoding="utf-8"?>
+<fo:root xmlns:fo="http://www.w3.org/1999/XSL/Format">
+  <fo:layout-master-set>
+    <fo:simple-page-master master-name="simple"
+        page-height="29.7cm"
+        page-width="21cm"
+        margin-top="1cm"
+        margin-bottom="2cm"
+        margin-left="2.5cm"
+        margin-right="2.5cm">
+      <fo:region-body margin-top="3cm"/>
+      <fo:region-before extent="3cm"/>
+      <fo:region-after extent="1.5cm"/>
+    </fo:simple-page-master>
+  </fo:layout-master-set>
+  <fo:page-sequence master-reference="simple">
+    <fo:flow flow-name="xsl-region-body">
+      <fo:block font-size="18pt"
+          font-family="simsun"
+          line-height="24pt"
+          text-align="center"
+          padding-top="3pt">
+        这是宋体
+      </fo:block>
+      <fo:block font-size="18pt"
+          font-family="simhei"
+          line-height="24pt"
+          text-align="center"
+          padding-top="3pt">
+        这是黑体
+      </fo:block>
+    </fo:flow>
+  </fo:page-sequence>
+</fo:root>
+
+步骤4：将XML转为PDF，执行如下：
+fop -c conf/config.xml -fo test/simplecn.fo -pdf pdf/simplecn.pdf
+
+操作结束！
+   生成fo 文件中需设置: font-family="simhei"
