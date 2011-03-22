@@ -29,6 +29,11 @@ save/yguard_ant_howto.html
    中文字体: http://wangxc.javaeye.com/blog/598912
    save/fop.txt
 
+   fo 文件中文字体暂时处理方法:
+      <root font-family="simhei" xmlns="http://www.w3.org/1999/XSL/Format">
+      or
+      <root font-family="YaHeiConsolasHybrid" xmlns="http://www.w3.org/1999/XSL/Format">
+
 http://peterfriese.wordpress.com/page/2/
 
 2011.03.20

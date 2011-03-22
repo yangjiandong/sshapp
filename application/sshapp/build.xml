@@ -3,6 +3,7 @@
 
   <property file="build.txt" />
   <property name="docs.dir" value="docs/wiki" />
+  <property name="docs.dist.dir" value="docs/wiki/dist" />
   <taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop">
     <classpath>
       <fileset dir="${fop.home}/lib">
@@ -32,26 +33,52 @@
 
   <taskdef classpathref="wikitext.classpath" resource="org/eclipse/mylyn/wikitext/core/util/anttask/tasks.properties" />
 
-  <!-- 已无效-->
-  <!--
-  <taskdef classpathref="wikitext.classpath" resource="net/java/textilej/util/anttask/tasks.properties" />
-  <target name="wikitext2pdf" description="Generate PDF from textile">
-    <wikitext-to-pdf markupLanguage="Textile">
-      <fileset dir="${basedir}">
-        <include name="HelloWorld.textile" />
+  <!-- depends="init" -->
+  <target name="generate-help" description="Generate Eclipse help from textile source">
+    <wikitext-to-eclipse-help markupLanguage="Textile" multipleOutputFiles="true" navigationImages="true" helpPrefix="help">
+      <fileset dir="${docs.dir}">
+        <include name="*.textile" />
       </fileset>
-    </wikitext-to-pdf>
+      <stylesheet url="styles/help.css" />
+      <stylesheet url="styles/main.css" />
+    </wikitext-to-eclipse-help>
   </target>
-  -->
+
+  <target name="generate-html" description="Generate HTML from textile source">
+    <wikitext-to-html markupLanguage="Textile">
+      <fileset dir="${docs.dir}">
+        <include name="*.textile" />
+      </fileset>
+      <stylesheet url="styles/main.css" />
+    </wikitext-to-html>
+  </target>
+
+  <target name="generate-docbook" description="Generate DOCBOOK from textile source">
+    <wikitext-to-docbook markupLanguage="Textile">
+      <fileset dir="${docs.dir}">
+        <include name="**/*.textile" />
+      </fileset>
+    </wikitext-to-docbook>
+  </target>
+
+  <target name="generate-dita" description="Generate dita from textile source">
+    <wikitext-to-dita markupLanguage="Textile">
+      <fileset dir="${docs.dir}" includes="*.textile" />
+    </wikitext-to-dita>
+  </target>
 
   <!-- create XSL-FO -->
   <target name="wikitext-to-xslfo" description="Generate xslfo from textile">
-    <wikitext-to-xslfo markupLanguage="Textile" file="${docs.dir}/HelloWorld.textile"  />
+    <wikitext-to-xslfo markupLanguage="Textile">
+      <fileset dir="${docs.dir}">
+        <include name="*.textile" />
+      </fileset>
+    </wikitext-to-xslfo>
   </target>
 
-  <!-- create pdf from XSL-FO -->
-  <target name="generate-pdf" description="Generates a single PDF file">
-    <fop format="application/pdf" fofile="${docs.dir}/HelloWorld.fo" outfile="${docs.dir}/HelloWorld.pdf" messagelevel="verbose" force="true" userconfig="fop-userconfig.xml"/>
+  <!-- create pdf from XSL-FO depends="wikitext-to-xslfo" -->
+  <target name="generate-pdf"  description="Generates a single PDF file">
+    <fop format="application/pdf" fofile="${docs.dir}/HelloWorld.fo" outfile="${docs.dir}/HelloWorld.pdf" messagelevel="verbose" force="true" userconfig="fop-userconfig.xml" />
   </target>
 
   <target name="yguard">
