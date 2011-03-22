@@ -1,0 +1,13 @@
+.wrapperBubble{padding-top:7px;position:absolute;top:0;left:0;z-index:1000;}
+.wrapperBubble .tip{height:8px;width:16px;position:absolute;top:0;z-index:50;background:transparent url(http://cdn.stumble-upon.com/i/bubbleTip/tipPointer.png) no-repeat 50% 0;}
+.wrapperContent{padding:5px;-moz-border-radius:8px;border-radius:8px;background-color:#4f555a;border:1px solid #bbb;}
+.wrapperBubble .content{color:#1A1A1A;padding:6px 20px 6px 8px;-moz-border-radius:5px;border-radius:5px;background-color:#fffbf4;max-width:300px;}
+.wrapperBubble .suBubbleClose{height:14px;width:14px;position:absolute;top:16px;right:10px;text-indent:-999em;line-height:20px;background:#fff url(http://cdn.stumble-upon.com/i/bubbleTip/bgBubbleClose.png) no-repeat 50% 50%;}
+.wrapperBubble .content.hasImg{padding-left:55px;}
+.wrapperBubble .content.hasImg:after{height:0;content:".";display:block;clear:both;visibility:hidden;}
+.wrapperBubble .content img{width:30px;margin-left:-40px;float:left;}
+.wrapperBubble .content.hasImg:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+.wrapperBubble .content.hasImg{display:inline-block;}
+/* Hides from IE-mac \*/ * html .wrapperBubble .content.hasImg{height:1%;}
+.wrapperBubble .content.hasImg{display:block;}
+/* End hide from IE-mac */

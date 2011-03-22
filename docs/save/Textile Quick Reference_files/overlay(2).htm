@@ -1,0 +1,247 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0097)http://www.stumbleupon.com/toolbar/overlay.php?20110321#overlayid%3D7846880%26openerid%3D56274536 -->
+<html style="overflow:hidden;" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:fb="http://www.facebook.com/2008/fbml"><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	<link rel="stylesheet" href="./Textile Quick Reference_files/screen_0708.css" type="text/css">
+	<link rel="stylesheet" href="./Textile Quick Reference_files/bars_su(1).css" type="text/css">
+	<link rel="shortcut icon" href="http://cdn.stumble-upon.com/favicon.ico">
+	<script type="text/javascript" src="./Textile Quick Reference_files/jquery.min.js"></script>
+	<style type="text/css">
+	
+	.wrapperBubble .tip {
+		position: absolute;
+	}
+	.wrapperBubble {
+		position: absolute;
+		top: 0px;
+		width: 300px;
+	}
+	
+	</style>
+<link id="drag-style" rel="stylesheet" href="chrome-extension://mfjkgbjaikamkkojmakjclmkianficch/style.css" type="text/css"></head>
+<body style="margin: 0; padding: 0;">
+
+<script type="text/javascript" src="./Textile Quick Reference_files/plugins_su(1).js"></script>
+
+<style type="text/css">
+	
+	body {
+		background: transparent;
+	}
+	
+</style>
+
+<script type="text/javascript">
+var tooltip;
+var message = new SUJS.Model.Message();
+
+function displayTooltip(data) {
+	if (tooltip) {
+		tooltip.customCallbacks = {};
+		tooltip.hide();
+	}
+	if (data.hidden == 'yes') {
+		message.setMessage('');
+		tooltip = new SUJS.View.Tooltip(message);
+	}
+	else {
+		if (data.config && data.config.buttons) {
+			var buttons = '';
+			for (var i in data.config.buttons) {
+				var button = data.config.buttons[i];
+				if (button.style == 'plain') {
+					if (buttons != '') {
+						buttons += ' | ';
+					}
+					buttons += '<a href="javascript:buttonAction(\''+button.action+'\');">' + button.label + '</a>';
+				}
+				else if (button.style == 'button') {
+					if (buttons != '') {
+						buttons += ' ';
+					}
+					buttons += '<input type="button" value="'+button.label+'" onclick="javascript:buttonAction(\''+button.action+'\');" />';
+				}
+			}
+			data.contents += '<br /> ' + buttons;
+		}
+
+		message.setMessage(data.contents);
+		tooltip = new SUJS.View.Tooltip(message);
+		if (data.config) {
+			if (data.config.permanence) {
+				tooltip.setPersistent(true);
+				var overlay = suExtensionApi.overlay;
+				tooltip.customCallbacks.goAway = function() {
+					suExtensionApi.message.postMessage(overlay.opener, 'tooltipHidden', overlay);
+				}
+				if (data.config.permanence == 'fade10') {
+					setTimeout(function() {
+							tooltip.hide(true);
+							}, 10000);
+				}
+				else if (data.config.permanence == 'close') {
+				}
+			}
+			else {
+				tooltip.setPersistent(false);
+			}
+
+		}
+		else {
+			tooltip.setPersistent(false);
+		}
+		tooltip.reposition = function() {
+		}
+		tooltip.show();
+		var pointer = tooltip.tipNode.find('.tip');
+		var pointerPosition = {
+			'left' : data.pointerPosition,
+			'right' : ''
+		};
+		pointer.css(pointerPosition);
+		if (data.config && data.config.noPointer) {
+			pointer.hide();
+		}
+	}
+}
+
+function displayPanel(data) {
+	suExtensionApi.litebar.setHeight('80px');
+	message.setMessage(data.contents);
+	if (!sharePanel) {
+		sharePanel = new SUJS.View.DirectSharePanel(message);
+		sharePanel.attachBaseNode();
+	}
+	sharePanel.setMessage(message);
+	sharePanel.render();
+}
+
+function displayCloseButton(data) {
+	var closeButton = $('<div>HIDE</hide>');
+	closeButton.click(function() {
+		suExtensionApi.message.postMessage(suExtensionApi.overlay.opener, 'overlayCloseButtonClick', data);
+	});
+	$('body').append(closeButton);
+}
+
+var sharePanel;
+
+SUJS.View.DirectSharePanel = function(message) {
+	this.message = message;
+	this.html = '';
+	this.panelDom = null;
+	this.attachBaseNode = function() {
+		this.html = '<div class="panelMessage" id="shareMessage" style="padding: 10px 18px; background:#FEFBD7;"><span id="tooManySharesBlock" class="right" style="margin-right: 40px;"><span id="tooManySharesText">Too many shares from this user ?</span> <input type="button" id="tooManySharesButton" value="Stop their shares" /></span> <span id="from"><a href="" target="_blank"></a></span> <span id="msg"></span> <input type="button" id="reply" value="Reply Now" /> <div id="replyNow" style="display: none; padding: 10px 0 0 10px;"> <form id="replyForm"> Reply: <input type="text" id="replyText" style="width: 70%;" /> <input type="submit" value="Send" /> <input type="button" id="replyCancel" value="Cancel" /> </form> </div> </div> <a id="closePanel" class="hideTopics" href="javascript:void(0);" style="position: absolute; top:10px; right: 5px; color: #808080; font-weight: bold;">Hide</a> ';
+		this.panelDom = $(this.html);
+		$('body').append(this.panelDom);
+	}
+
+	this.setMessage = function(message) {
+		this.message = message;
+	}
+	
+	this.render = function() {
+		this.panelDom.find('#msg').html(this.message.message);
+		this.panelDom.find('#reply').click(function() {
+			suExtensionApi.litebar.setHeight('120px');
+			$('#replyNow').show();
+			$('#replyText').focus();
+		});
+		var tooManySharesButton = this.panelDom.find('#tooManySharesButton');
+		var tooManySharesText = this.panelDom.find('#tooManySharesText');
+		if (typeof window.clickHandlerInstalled == "undefined") {
+			window.clickHandlerInstalled = true;
+			var stopPending = false;
+			tooManySharesButton.click(function(event) {
+				if (stopPending) return;
+				stopPending = true;
+				var value = tooManySharesButton.attr('value');
+				var action = '';
+				if (value.match(/^Allow/)) {
+					action = 'allow_ds';
+				} else {
+					action = 'remove_ds';
+				}
+				tooManySharesButton.attr('disabled', true);
+				tooManySharesText.html('Updating your choice...');
+				suExtensionApi.message.postMessage(suExtensionApi.overlay.opener, 'directShare_stopshare', {
+					action: action
+				});
+				event.preventDefault();
+			});
+			suExtensionApi.message.addListener(function(messageID, message) {
+				if (messageID == 'directShare_stopshareResult') {
+					stopPending = false;
+					var allow = true;
+					if (message.result == "success") {
+						if (message.action == 'allow_ds') allow = false;
+					} else 
+						if (message.action == 'remove_ds') allow = false;
+
+					if (allow) {
+						tooManySharesButton.attr('value', 'Allow their shares');
+						tooManySharesText.html('Allow shares from this user again ?');
+					} else {
+						tooManySharesButton.attr('value', 'Stop their shares');
+						tooManySharesText.html('Too many shares from this user ?');
+					}
+					tooManySharesButton.attr('disabled', false);
+				}
+			});
+		}
+
+		$('#replyCancel').click(function() {
+			$('#replyNow').hide();
+			$('#replyText').val('');
+			suExtensionApi.litebar.setHeight('80px');
+		});
+		$('#replyForm').unbind().submit(function() {
+			suExtensionApi.message.postMessage(suExtensionApi.overlay.opener, 'directShare_reply', $('#replyText').val());
+			$('#replyNow').hide();
+			$('#replyText').val('');
+			suExtensionApi.litebar.setHeight('32px');
+			return false;
+		});
+		$('#closePanel').click(function() {
+			suExtensionApi.message.postMessage(suExtensionApi.overlay.opener, 'directShare_close', true);
+			return false;
+		});
+	}
+}
+
+function onReadyToUseExtensionApi() {
+	suExtensionApi.message.addListener(function(messageID, message) {
+		if (messageID == 'litebarOverlayContents') {
+			if (message.display == 'tooltip') {
+				displayTooltip(message.data);
+			}
+			else if (message.display == 'panel') {
+				displayPanel(message.data);
+			}
+			else if (message.display == 'close') {
+				displayCloseButton(message.data);
+			}
+		}
+	});
+	suExtensionApi.message.postMessage(suExtensionApi.overlay.opener, 'readyToReceiveOverlayContents', { amReady: true});
+}
+
+var buttonAction = function(action) {
+	suExtensionApi.message.postMessage(suExtensionApi.overlay.opener, action, true);
+	return false;
+}
+
+// Wait for the extension API to be available and ready
+if((typeof(suExtensionApi) == "undefined") || !suExtensionApi.isReady()) {
+	window.addEventListener("suScriptReadyExtensionApi", function() {
+			onReadyToUseExtensionApi();
+		}, false);
+}
+else {
+		onReadyToUseExtensionApi();
+}
+
+</script>
+
+
+
+<script src="chrome-extension://kcahibnffhnnjcedflmchmokndkjnhpg/extconnect_webpage.js"></script><div style="display: none; " id="__extconnect__message">%7B%22type%22%3A%22EXTAPIPOSTMESSAGE%22%2C%22data%22%3A%7B%22sender%22%3A%7B%22id%22%3A%227846880%22%2C%22tabId%22%3A46%7D%2C%22target%22%3A%7B%22id%22%3A%2256274536%22%7D%2C%22messageId%22%3A%22readyToReceiveOverlayContents%22%2C%22data%22%3A%7B%22amReady%22%3Atrue%7D%7D%2C%22_type%22%3A0%7D</div><script src="chrome-extension://kcahibnffhnnjcedflmchmokndkjnhpg/extensionapi.js"></script></body></html>

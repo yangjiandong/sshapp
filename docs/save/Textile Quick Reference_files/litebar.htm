@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- saved from url=(0105)http://www.stumbleupon.com/toolbar/litebar.php?device=chromebar&version=chromebar%202.9.8.1&ts=1300798167 -->
+<html style="overflow:hidden;" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:fb="http://www.facebook.com/2008/fbml"><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+	
+	<link rel="shortcut icon" href="http://cdn.stumble-upon.com/favicon.ico" type="image/x-icon">
+						<link rel="stylesheet" href="./Textile Quick Reference_files/litebar_su.css" type="text/css">
+			<link rel="stylesheet" href="./Textile Quick Reference_files/bars_su.css" type="text/css">
+						<script type="text/javascript" src="./Textile Quick Reference_files/jquery.min.js"></script>
+		<script type="text/javascript" src="./Textile Quick Reference_files/plugins_su.js"></script>
+	
+	
+	<title>StumbleUpon Chrome Client</title>
+	
+		
+<link id="drag-style" rel="stylesheet" href="chrome-extension://mfjkgbjaikamkkojmakjclmkianficch/style.css" type="text/css"></head>
+<body class="litebar" style="margin: 0; padding: 0; overflow:hidden; height: 100%;">
+	
+
+
+
+
+
+
+	<script type="text/javascript" src="./Textile Quick Reference_files/su_client_api.js"></script>
+	<script type="text/javascript" src="./Textile Quick Reference_files/su_litebar.js"></script>
+	<script type="text/javascript" src="./Textile Quick Reference_files/su_client_chromebar.js"></script>
+
+<table id="SUwebTb" class="loggedIn">
+	<tbody><tr>
+		<th class="barLeft">
+			<table border="0" cellpadding="0" cellspacing="0">
+				<tbody><tr>
+					<th id="stumble" class="btn"><a class="bgImgLeft" href="javascript:void(0);"><span></span>Stumble!</a></th>
+					<th id="numReferrals" class="btn tips" title="Stumble shares from your friends." style="display: none; "><a class="bgImgLeft" href="javascript:void(0);"><span></span></a></th>
+					<th id="like" class="btn tips" title="Thumb up the pages you like to get even more personalized recommendations."><a class="bgImgLeft" href="javascript:void(0);"><span></span>I like it!</a></th>
+					<th id="showMeMore" class="btn tips" title="Show me more pages like this one."><a class="bgImgLeft" href="javascript:void(0);"><span></span><span class="text">More!</span></a></th>
+					<th id="notLike" class="btn logStateIn tips" title="Thumb down the pages you don&#39;t like, so StumbleUpon knows not to recommend other pages like them."><a class="bgImgLeft" href="javascript:void(0);">&nbsp;<span></span>&nbsp;</a></th>
+					<th id="notLikeMore" class="btn logStateIn tips" title="Thumb down the pages you don&#39;t like, so StumbleUpon knows not to recommend other pages like them."><a class="bgImgLeft" href="javascript:void(0);">&nbsp;<span></span>&nbsp;</a></th>
+					<th id="facebook"><a class="ico tips" href="javascript:void(0);" title="Share with your friends on Facebook.">Facebook</a></th>
+					<th id="linkedin"><a class="ico tips" href="javascript:void(0);" title="Share with your contacts on LinkedIn.">LinkedIn</a></th>
+					<th id="twitter"><a class="ico tips" href="javascript:void(0);" title="Share with your followers on Twitter.">Twitter</a></th>
+					<th id="share" class="btn tips" title="Share with other Stumblers."><a class="bgImgLeft" href="javascript:void(0);"><span></span>Share</a></th>	
+					<th id="topics" class="tips default" title="Explore any of your other interests.">
+						<div class="btn">
+							<a class="bgImgRight" href="http://www.stumbleupon.com/toolbar/litebar.php?device=chromebar&version=chromebar%202.9.8.1&ts=1300798167#">All Interests</a>
+							<a href="javascript:void(0);">All Interests</a>
+						</div>
+					</th>
+					<th id="reviews" class="ico tips" title="See reviews of this site, people who like it, and more."><a class="bgImgLeft" href="javascript:void(0);">&nbsp;</a></th>
+					<th id="friends" class="ico logStateIn"><a class="bgImgLeft" href="javascript:void(0);" style="display:none;"><span></span></a></th>
+					<th id="sponsored" style="display: none; "><a href="http://www.stumbleupon.com/sponsored_page/" target="_blank">Sponsored</a></th>
+				</tr>
+			</tbody></table>
+		</th>
+		<th class="barRight" align="right">
+			<table align="right">
+				<tbody><tr>
+					<th id="login" class="logStateOut" align="right">
+						<a href="javascript:void(0);" class="tips" title="Login to help personalize your experience.">Login</a>
+					</th>
+					<th id="favorites_l" class="favorites logStateOut tips" align="right" title="Sign up to get even better stumbles.">
+						<a href="javascript:void(0);">Sign up &amp; save your favorites</a>
+					</th>
+					<th id="favorites" class="favorites logStateIn tips" align="right" title="See your favorites." style="background-image: none; background-attachment: initial; background-origin: initial; background-clip: initial; background-color: initial; background-position: initial initial; background-repeat: initial initial; ">
+						<a href="http://www.stumbleupon.com/favorites/">2 favorites</a>
+					</th>
+					<th id="goHome" align="right">
+						<a class="ico tips" href="javascript:void(0);" title="Go to the StumbleUpon website.">Home</a>
+					</th>
+					<th id="close" class="close" align="right">
+						<a class="ico tips" href="javascript:void(0);" title="See this page without the toolbar.">Close</a>
+					</th>
+						
+				</tr>
+			</tbody></table>
+		</th>
+	</tr>
+</tbody></table>
+
+<script type="text/javascript">
+var auth = '1|8738797|1299836404|e728eceb81322698ef0011db89d27ba1feec7c4e';
+var clientScriptVersion = '20110321';
+
+
+var uiStateCookie = new SUJS.Model.Cookie('uiState');
+var cachedState = uiStateCookie.read();
+$('#sponsored').hide();
+if (cachedState) {
+	cachedState = cachedState.split("|");
+	if (typeof cachedState[0] != "undefined") {
+		var handle = $('#SUwebTb');
+		if (cachedState[0] == 1) {
+			if (handle.hasClass('loggedOut')) {
+				handle.removeClass('loggedOut');
+				handle.addClass('loggedIn');
+			}
+			$('#favorites a').html(cachedState[1] + ' favorites');
+			$('#favorites').css('background', 'none');
+			if (cachedState[2]) {
+				$('#numReferrals a').html('<span></span>' + cachedState[2]);
+				if (cachedState[2] > 0)  {
+					$('#numReferrals').show();
+				}
+				else {
+					$('#numReferrals').hide();
+				}
+			}
+			else {
+				$('#numReferrals').hide();
+			}
+			if (cachedState[3]) {
+				$('#topics a').html(cachedState[3]);
+			}
+
+		}
+		else {
+			if (handle.hasClass('loggedIn')) {
+				handle.removeClass('loggedIn');
+				handle.addClass('loggedOut');
+			}
+		}
+		var initializedStateExt = true;
+	}
+}
+var chromebar = new SU_ClientChromebar();
+chromebar.init();
+
+</script>
+
+
+
+<script src="chrome-extension://kcahibnffhnnjcedflmchmokndkjnhpg/extconnect_webpage.js"></script><div style="display: none; " id="__extconnect__message">%7B%22type%22%3A%22EXTAPIPOSTMESSAGE%22%2C%22data%22%3A%7B%22sender%22%3A%7B%22id%22%3A%227846880%22%2C%22tabId%22%3A46%7D%2C%22target%22%3A%7B%22id%22%3A%2256274536%22%7D%2C%22messageId%22%3A%22readyToReceiveOverlayContents%22%2C%22data%22%3A%7B%22amReady%22%3Atrue%7D%7D%2C%22_type%22%3A0%7D</div><script src="chrome-extension://kcahibnffhnnjcedflmchmokndkjnhpg/extensionapi.js"></script></body></html>

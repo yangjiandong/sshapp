@@ -1,4 +1,4 @@
-h1(#id). 中文测试An HTML first-level heading
+h1(#toc). 中文测试An HTML first-level heading
 
 Textile syntax is really simple. You can _emphasize_ text or *emphasize it even more*.
 
@@ -18,6 +18,8 @@ Enumerations also are very easy:
 ## Another level in an enumerated list
 
 Let's have more headings:
+
+p{float:right}. "目录":#toc
 
 h2. An HTML second-level heading
 
@@ -51,3 +53,18 @@ h6. An HTML sixth-level heading
 h2. Other,..An HTML third-level heading
 
 Here is some code:
+
+|a|{color:red}. styled|cell|
+
+table{border:1px solid black}.
+|This|is|a|row|
+|This|is|a|row|
+
+a ^2^ + b ^2^ = c ^2^
+
+foo(tm)
+foo(r)
+foo(c)
+
+@h1(#toc). Hello world@
+@h2. Hello world@

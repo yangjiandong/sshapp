@@ -1,0 +1,115 @@
+*{margin:0;padding:0;}
+body{background-color:#FAFAFA;color:#ccc;font-family:Arial,Helvetica,sans-serif;font-size:12px;}
+a{color:#ccc;line-height:22px;text-decoration:none;}
+a:active,a:focus{outline:0;}
+a.ico,a.bgImgLeft,a.bgImgRight{padding:0 7px 0 5px;display:block;vertical-align:middle;background:transparent url(http://cdn.stumble-upon.com/i/toolbar/webTbSprite.png) no-repeat 0 -555px;}
+a.bgImgLeft span,a.bgImgRight span{height:20px;width:22px;vertical-align:middle;display:inline-block;background:transparent url(http://cdn.stumble-upon.com/i/toolbar/webTbSprite.png) no-repeat 0 -550px;}
+a.ico{padding:0;margin:0 1px;text-align:left;text-indent:-999em;}
+.btn a,#topics .btn{height:21px;display:block;vertical-align:middle;-moz-border-radius:3px;-webkit-border-radius:3px;border:1px solid #161717;background-position:0 -622px;background-repeat:repeat-x;}
+.btn a:hover{background-position:0 -646px;}
+.btn a.active{background-position:0 -667px;}
+.logStateIn{display:none;}
+.logStateOut{display:table-cell;}
+.loggedIn .logStateIn{display:table-cell;}
+.loggedIn .logStateOut{display:none;}
+.litebar table{border-collapse:collapse;}
+.litebar #SUwebTb{width:100%;height:32px;table-layout:fixed;background:#000 url(http://cdn.stumble-upon.com/i/toolbar/webTbSprite.png) repeat-x 0 -550px;}
+.litebar table th{height:26px;padding:0 3px;white-space:nowrap;}
+.barRight{width:25%;}
+.litebar table .barRight th{padding:0 8px;}
+#notLike{padding-right:0;}
+#notLike a{border-right:0 none;-moz-border-radius:3px 0 0 3px;-webkit-border-radius:3px 0 0 3px;}
+#notLikeMore{padding-left:0;}
+#notLikeMore a{width:17px;padding:0;border-left:1px solid #000;-moz-border-radius:0 3px 3px 0;-webkit-border-radius:0 3px 3px 0;}
+#notLikeMore span{width:11px;height:5px;background-position:50% -278px;}
+.litebar th.barLeft{padding-left:7px;text-align:left;}
+.litebar th.barRight{padding-right:7px;}
+.litebar #stumble a{color:#fff;background-position:0 -600px;}
+.litebar #stumble span{background-position:0 -473px;}
+.litebar #numReferrals a{color:#f00;background-position:0 -600px;}
+.litebar #numReferrals span{background-position:0 -880px;}
+.litebar #stumble a.active span{background-position:0 -450px;}
+.litebar #like span{background-position:0 1px;}
+.litebar #like .active span{background-position:0 -24px;}
+.litebar #numReferrals{color:#f00;display:none;}
+.litebar #notLike a{padding:0;}
+.litebar #notLike span{background-position:3px -48px;}
+.litebar #notLike .active span{background-position:4px -72px;}
+.litebar #facebook a{width:16px;background-position:0 -98px;}
+.litebar #facebook a.active{background-position:0 -123px;}
+.litebar #twitter a{width:16px;background-position:2px -148px;}
+.litebar #twitter a.active{background-position:2px -173px;}
+.litebar #linkedin a{width:16px;background-position:0 -968px;}
+.litebar #linkedin a.active{background-position:0 -938px;}
+.litebar #email a{width:16px;background-position:0 -196px;}
+.litebar #email a.active{background-position:0 -222px;}
+.litebar #share span{background-position:0 -248px;}
+.litebar #topics .btn{width:180px;padding:0 5px;text-align:left;background-position:100% -370px;background-repeat:no-repeat;}
+.litebar #topics .btn a{display:block;border:0 none;}
+.litebar #topics .btn a.bgImgRight{width:22px;padding:0;display:inline-block;text-indent:-999em;float:right;background-repeat:no-repeat;}
+.litebar #topics.default .btn a.bgImgRight{background-position:96% -267px;}
+.litebar #topics.cancel .btn a.bgImgRight{background-position:96% -370px;}
+.litebar #topics.cancel .btn a.bgImgRight:hover{background-position:96% -395px;}
+.litebar #reviews a{padding-left:20px;background-position:0 -299px;}
+.litebar #friends span{width:19px;background-position:0 -322px;}
+.litebar #friends span.nonfriend{background-position:0 -848px;}
+.litebar .favorites{padding-left:4px;background:transparent url("http://cdn.stumble-upon.com/i/toolbar/webTbSprite.png") no-repeat 0 -503px;}
+.litebar #goHome a{height:22px;width:16px;background-position:0 -424px;}
+.litebar .close a{height:22px;width:16px;background-position:0 -371px;}
+.litebar .close a:hover{background-position:0 -396px;}
+body.litebar_topics{color:#ccc;background-color:#4D4D4D;}
+body.litebar_topics #wrapperLitebarTopics{height:285px;}
+#wrapperLitebarTopics #categories{height:30px;padding:0 30px;background-color:#676767;}
+#wrapperLitebarTopics #categories a{height:30px;padding:0 15px;line-height:28px;display:block;font-size:14px;font-weight:bold;}
+#wrapperLitebarTopics #categories a:hover,#wrapperLitebarTopics #categories .active a{color:#efefef;background-color:#4D4D4D;}
+#wrapperLitebarTopics .topicSection{float:left;}
+#wrapperLitebarTopics #categories li{float:left;}
+#wrapperLitebarTopics ul{list-style:none;list-style-position:outside;}
+#wrapperLitebarTopics #topicsList{height:245px;padding:5px 7px;overflow:auto;}
+#wrapperLitebarTopics #topicsList td{vertical-align:top;}
+#wrapperLitebarTopics #topicsList a{height:20px;width:175px;padding:2px 5px 2px 10px;line-height:20px;display:block;}
+#wrapperLitebarTopics #topicsList .subtitle{height:20px;padding:2px 5px 2px 10px;line-height:20px;font-size:13px;font-weight:bold;}
+#wrapperLitebarTopics #topicsList a.edit{background-position:7px -907px;}
+#wrapperLitebarTopics #topicsList a.channel,#wrapperLitebarTopics #topicsList a.edit,#wrapperLitebarTopics #topicsList a.videoChannel{width:155px;padding-left:30px;background-image:url(http://cdn.stumble-upon.com/i/toolbar/webTbSprite.png);background-repeat:no-repeat;}
+#wrapperLitebarTopics #topicsList #keywordFieldset{display:none;padding:0 5px 5px;margin:10px 0;position:relative;-moz-box-shadow:0 0 3px #000 inset;border:1px solid #fff;background:#fff;width:160px;}
+#keywordFieldset span{margin:0;padding:0;position:absolute;top:-15px;right:10px;font-size:11px;color:#999;}
+#keywordFieldset label{left:-999em;position:absolute;}
+#keywordFieldset #keyword{width:140px;color:#999;font-size:12px;border:0 none;}
+#keywordFieldset #stumbleByKeywordSubmit{position:relative;top:5px;}
+input.userInput{color:#232323!important;}
+#wrapperLitebarTopics #topicsList #channelAll{background-position:7px -695px;}
+#wrapperLitebarTopics #topicsList #channelFollowing{background-position:7px -756px;}
+#wrapperLitebarTopics #topicsList #channelPhotos{background-position:7px -787px;}
+#wrapperLitebarTopics #topicsList #channelVideo{background-position:7px -817px;}
+#wrapperLitebarTopics #topicsList #channelNews{background-position:7px -726px;}
+#wrapperLitebarTopics #topicsList #channelVideoFriendsFavorites{background-position:7px -756px;}
+#wrapperLitebarTopics #topicsList a:hover{background-color:#676767;}
+#wrapperLitebarTopics #topicsList a.videoChannel{background-image:url(http://cdn.stumble-upon.com/i/toolbar/spriteVideoChans.png);background-position:-50px 0;}
+#wrapperLitebarTopics #topicsList a.collegehumor{background-position:7px 5px;}
+#wrapperLitebarTopics #topicsList a.dailymotion{background-position:7px -20px;}
+#wrapperLitebarTopics #topicsList a.funnyordie{background-position:7px -45px;}
+#wrapperLitebarTopics #topicsList a.google{background-position:7px -70px;}
+#wrapperLitebarTopics #topicsList a.metacafe{background-position:7px -95px;}
+#wrapperLitebarTopics #topicsList a.myspace{background-position:7px -120px;}
+#wrapperLitebarTopics #topicsList a.vimeo{background-position:7px -145px;}
+#wrapperLitebarTopics #topicsList a.youtube{background-position:7px -170px;}
+#wrapperLitebarTopics #topicsList a.ted{background-position:7px -195px;}
+#wrapperLitebarTopics #topicsList a.hulu{background-position:7px -218px;}
+#menuOptionList li a{padding:2px 0 2px 8px;display:block;}
+#menuOptionList li.first a{padding-top:4px;}
+#menuOptionList #flag_block_website a{padding-left:25px;}
+#menuOptionList li a:hover{background-color:#676767;}
+#menuOptionList li a span{visibility:hidden;}
+#menuOptionList li.checked a{font-weight:bold;}
+#menuOptionList li.checked a span{visibility:visible;}
+#showMeMore{display:none;width:50px;font-size:10px;font-weight:normal;}
+#showMeMore a{position:relative;}
+#showMeMore a span{background-image:url(http://cdn.stumble-upon.com/i/toolbar/webTbSprite.png);background-position:50% -278px;position:absolute;left:14px;top:15px;}
+#showMeMore a .text{width:100%;height:14px;top:3px;left:0;line-height:12px;text-transform:lowercase;text-align:center;background-image:none;}
+#menuTitle{padding-left:10px;background-color:#676767;font-weight:bold;line-height:28px;font-size:13px;}
+.col{float:left;overflow:hidden;}
+.autoshareTitle{color:#E7E7E8;margin:5px 5px 5px 0;}
+.smallText{font-size:12px;}
+#showFacebookButton p{line-height:20px;font-size:13px;margin:5px;color:#E7E7E8;}
+#noThanks{margin-left:30px;font-size:12px;}
+.leftIndent{margin-left:90px;}
