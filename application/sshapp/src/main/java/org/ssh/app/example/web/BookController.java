@@ -36,6 +36,7 @@ import org.ssh.app.example.service.BookService;
 import org.ssh.app.example.service.CategoryService;
 import org.ssh.app.example.service.PdfGenerator;
 import org.ssh.app.util.JsonViewUtil;
+import org.ssh.app.util.annotation.RequiredRoles;
 import org.ssh.app.util.leona.JsonUtils;
 import org.ssh.app.util.leona.JsonUtils.Bean;
 
@@ -151,6 +152,7 @@ public class BookController {
 
     //去掉不需要生成json人内容
     @RequestMapping(value = "/getBooks33", method = RequestMethod.GET)
+    @RequiredRoles({"admin","user"})
     public void showBooks33(HttpServletRequest request,
         HttpServletResponse response) throws Exception {
         //PdfGenerator manager = (PdfGenerator) SpringContextHolder.getBean("pdfGenerator");

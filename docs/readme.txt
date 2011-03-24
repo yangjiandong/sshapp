@@ -1,6 +1,14 @@
 springside3
 ------------
 
+2011.03.23
+----------
+
+1. annotation
+http://www.infoq.com/cn/articles/cf-java-annotation
+org.ssh.app.util.annotation.RequiredRoles
+BookController.showBooks33
+
 2011.03.22
 ----------
 
