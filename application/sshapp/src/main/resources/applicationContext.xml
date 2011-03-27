@@ -68,9 +68,7 @@
         <prop key="hibernate.cglib.use_reflection_optimizer">true</prop>
 
         <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
-        <prop key="hibernate.cache.provider_class">${hibernate.cache_provider_class}</prop>
-        <prop key="hibernate.cache.use_query_cache">${hibernate.cache_use_query_cache}</prop>
-        <prop key="hibernate.cache.provider_configuration_file_resource_path">${hibernate.ehcache_config_file}</prop>
+        <prop key="hibernate.cache.use_query_cache">false</prop>
         <prop key="hibernate.jdbc.batch_size">${hibernate.jdbc.batch_size}</prop>
       </props>
     </property>

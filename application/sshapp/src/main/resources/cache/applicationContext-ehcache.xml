@@ -8,22 +8,23 @@
 
   <bean id="ehcacheManager"
     class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-    <property name="configLocation" value="classpath:/ehcache-hibernate-config.xml" />
+    <property name="configLocation" value="classpath:cache/ehcache.xml" />
   </bean>
 
-  <!-- method cache -->
-  <bean id="methodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+  <!-- 配置即时缓存 Start-->
+  <bean id="instantCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
     <property name="cacheManager">
       <ref local="ehcacheManager" />
     </property>
     <property name="cacheName">
-      <value>org.ssh.app.cache.METHOD_CACHE</value>
+      <value>instantCache</value>
     </property>
   </bean>
+  <!-- 配置即时缓存 End-->
 
   <bean id="methodCacheInterceptor" class="org.ssh.app.cache.MethodCacheInterceptor">
     <property name="cache">
-      <ref local="methodCache" />
+      <ref local="instantCache" />
     </property>
   </bean>
 
@@ -39,6 +40,15 @@
     </property>
   </bean>
 
+  <!-- find/create cache拦截器 excludeMethods 过滤的方法-->
+  <!--
+  <bean id="methodCacheInterceptor" class="org.ssh.app.cache.MethodCacheInterceptor">
+    <property name="excludeMethods">
+      <value>deleteConfig,findConfig</value>
+    </property>
+  </bean>
+  -->
+
   <bean id="myBean" class="org.springframework.aop.framework.ProxyFactoryBean">
     <property name="target">
       <bean class="org.ssh.app.example.service.BookService" />
@@ -50,5 +60,25 @@
     </property>
   </bean>
   <!-- method cache -->
+
+  <!-- 配置固定缓存 Start-->
+  <bean id="fixCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+    <property name="cacheManager">
+      <ref local="ehcacheManager" />
+    </property>
+    <property name="cacheName">
+      <value>fixCache</value>
+    </property>
+  </bean>
+
+  <!-- 配置接口缓存 Start-->
+  <bean id="methodCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+    <property name="cacheManager">
+      <ref local="ehcacheManager" />
+    </property>
+    <property name="cacheName">
+      <value>methodCache</value>
+    </property>
+  </bean>
 
 </beans>

@@ -1,6 +1,28 @@
 springside3
 ------------
 
+2011.03.26
+----------
+
+1. 重新整理ehcache 资料
+
+   关闭hibernate 缓存
+
+   ssh.txt
+   1、手工配置spring 方法缓存
+   resources/cache/applicationContext-ehcache.xml
+   --需手工指定bean及方法
+   2、增加CacheUtil
+   手工处理ehcache
+
+   以后代码不全,暂时采用原有代码
+   http://agun.javaeye.com/blog/741519
+
+   --使用
+   a. 直接使用CacheUtil.getCache
+   b. 匹配方法
+   c. InstantEhCacheManager,FixEhCacheManager,MethodEhCachedManger与 CacheUtil.getCache 类似
+
 2011.03.23
 ----------
 

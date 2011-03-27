@@ -33,7 +33,13 @@ public class BookService {
     //采用了方法缓存
     @Transactional(readOnly = true)
     public List<Book> getBooksOnMethodCache(){
-        return bookDao.getAll();
+        //return bookDao.getAll();
+        StringBuffer bf = new StringBuffer();
+        bf.append("select oid,isbn,title,published ");
+        bf.append(" from  t_Book ");
+
+        SQLQuery query = this.bookDao.getSession().createSQLQuery(bf.toString());
+        return query.list();
     }
 
     //采用表缓存
@@ -44,7 +50,16 @@ public class BookService {
 
     @Transactional(readOnly = true)
     public List<Book> getBooks3(){
-        return bookDao.getAll();
+        //return bookDao.getAll();
+        // 2011.03.27
+        // 注意,book中加入Contact属性,采用默认findAll,会产生
+        // org.hibernate.LazyInitializationException: could not initialize proxy - no Session
+        StringBuffer bf = new StringBuffer();
+        bf.append("select oid,isbn,title,published ");
+        bf.append(" from  t_Book ");
+
+        SQLQuery query = this.bookDao.getSession().createSQLQuery(bf.toString());
+        return query.list();
     }
 
     @Transactional(readOnly = true)
