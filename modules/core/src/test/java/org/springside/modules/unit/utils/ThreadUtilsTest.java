@@ -22,135 +22,137 @@ import org.springside.modules.utils.ThreadUtils.CustomizableThreadFactory;
 
 public class ThreadUtilsTest {
 
-	@Test
-	public void customizableThreadFactory() {
-		Runnable runnable = new Runnable() {
-			@Override
-			public void run() {
-			}
-		};
-		CustomizableThreadFactory factory = new CustomizableThreadFactory("foo");
+    @Test
+    public void customizableThreadFactory() {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+            }
+        };
+        CustomizableThreadFactory factory = new CustomizableThreadFactory("foo");
 
-		Thread thread = factory.newThread(runnable);
-		assertEquals("foo-1", thread.getName());
+        Thread thread = factory.newThread(runnable);
+        assertEquals("foo-1", thread.getName());
 
-		Thread thread2 = factory.newThread(runnable);
-		assertEquals("foo-2", thread2.getName());
-	}
+        Thread thread2 = factory.newThread(runnable);
+        assertEquals("foo-2", thread2.getName());
+    }
 
-	@Test
-	public void gracefulShutdown() throws InterruptedException {
+    @Test
+    public void gracefulShutdown() throws InterruptedException {
 
-		Logger logger = LoggerFactory.getLogger("test");
-		MockLog4jAppender appender = new MockLog4jAppender();
-		appender.addToLogger("test");
+        Logger logger = LoggerFactory.getLogger("test");
+        MockLog4jAppender appender = new MockLog4jAppender();
+        appender.addToLogger("test");
 
-		//time enough to shutdown
-		ExecutorService pool = Executors.newSingleThreadExecutor();
-		Runnable task = new Task(logger, 500, 0);
-		pool.execute(task);
-		ThreadUtils.gracefulShutdown(pool, 1000, 1000, TimeUnit.MILLISECONDS);
-		assertTrue(pool.isTerminated());
-		assertNull(appender.getFirstLog());
+        //time enough to shutdown
+        ExecutorService pool = Executors.newSingleThreadExecutor();
+        Runnable task = new Task(logger, 500, 0);
+        pool.execute(task);
+        ThreadUtils.gracefulShutdown(pool, 1000, 1000, TimeUnit.MILLISECONDS);
+        assertTrue(pool.isTerminated());
+        assertNull(appender.getFirstLog());
 
-		//time not enough to shutdown,call shutdownNow
-		appender.clearLogs();
-		pool = Executors.newSingleThreadExecutor();
-		task = new Task(logger, 1000, 0);
-		pool.execute(task);
-		ThreadUtils.gracefulShutdown(pool, 500, 1000, TimeUnit.MILLISECONDS);
-		assertTrue(pool.isTerminated());
-		assertEquals("InterruptedException", appender.getFirstLog().getMessage());
+        //time not enough to shutdown,call shutdownNow
+        appender.clearLogs();
+        pool = Executors.newSingleThreadExecutor();
+        task = new Task(logger, 1000, 0);
+        pool.execute(task);
+        ThreadUtils.gracefulShutdown(pool, 500, 1000, TimeUnit.MILLISECONDS);
+        assertTrue(pool.isTerminated());
+        assertEquals("InterruptedException", appender.getFirstLog().getMessage());
 
-		//self thread interrupt while calling gracefulShutdown
-		appender.clearLogs();
+        //self thread interrupt while calling gracefulShutdown
+        appender.clearLogs();
 
-		final ExecutorService self = Executors.newSingleThreadExecutor();
-		task = new Task(logger, 100000, 0);
-		self.execute(task);
+        final ExecutorService self = Executors.newSingleThreadExecutor();
+        task = new Task(logger, 100000, 0);
+        self.execute(task);
 
-		final CountDownLatch lock = new CountDownLatch(1);
-		Thread thread = new Thread(new Runnable() {
+        final CountDownLatch lock = new CountDownLatch(1);
+        Thread thread = new Thread(new Runnable() {
 
-			@Override
-			public void run() {
-				lock.countDown();
-				ThreadUtils.gracefulShutdown(self, 200000, 200000, TimeUnit.MILLISECONDS);
-			}
-		});
-		thread.start();
-		lock.await();
-		thread.interrupt();
-		ThreadUtils.sleep(500);
-		assertEquals("InterruptedException", appender.getFirstLog().getMessage());
-	}
+            @Override
+            public void run() {
+                lock.countDown();
+                ThreadUtils.gracefulShutdown(self, 200000, 200000, TimeUnit.MILLISECONDS);
+            }
+        });
+        thread.start();
+        lock.await();
+        thread.interrupt();
+        ThreadUtils.sleep(500);
+        assertEquals("InterruptedException", appender.getFirstLog().getMessage());
+    }
 
-	@Test
-	public void normalShutdown() throws InterruptedException {
+    @Test
+    public void normalShutdown() throws InterruptedException {
 
-		Logger logger = LoggerFactory.getLogger("test");
-		MockLog4jAppender appender = new MockLog4jAppender();
-		appender.addToLogger("test");
+        Logger logger = LoggerFactory.getLogger("test");
+        MockLog4jAppender appender = new MockLog4jAppender();
+        appender.addToLogger("test");
 
-		//time not enough to shutdown,write error log.
-		appender.clearLogs();
-		ExecutorService pool = Executors.newSingleThreadExecutor();
-		Runnable task = new Task(logger, 1000, 0);
-		pool.execute(task);
-		ThreadUtils.normalShutdown(pool, 500, TimeUnit.MILLISECONDS);
-		assertTrue(pool.isTerminated());
-		assertEquals("InterruptedException", appender.getFirstLog().getMessage());
+        //time not enough to shutdown,write error log.
+        appender.clearLogs();
+        ExecutorService pool = Executors.newSingleThreadExecutor();
+        Runnable task = new Task(logger, 1000, 0);
+        pool.execute(task);
+        ThreadUtils.normalShutdown(pool, 500, TimeUnit.MILLISECONDS);
+        assertTrue(pool.isTerminated());
+        assertEquals("InterruptedException", appender.getFirstLog().getMessage());
 
-		//self thread interrupt while calling shutdown
-		appender.clearLogs();
-		final ExecutorService selfpool = Executors.newSingleThreadExecutor();
-		task = new Task(logger, 100000, 1000);
-		selfpool.execute(task);
+        //self thread interrupt while calling shutdown
+        appender.clearLogs();
+        final ExecutorService selfpool = Executors.newSingleThreadExecutor();
+        task = new Task(logger, 100000, 1000);
+        selfpool.execute(task);
 
-		final CountDownLatch lock = new CountDownLatch(1);
-		Thread thread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				lock.countDown();
-				ThreadUtils.normalShutdown(selfpool, 200000, TimeUnit.MILLISECONDS);
-			}
-		});
-		thread.start();
-		lock.await();
-		thread.interrupt();
+        final CountDownLatch lock = new CountDownLatch(1);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                lock.countDown();
+                ThreadUtils.normalShutdown(selfpool, 200000, TimeUnit.MILLISECONDS);
+            }
+        });
+        thread.start();
+        lock.await();
+        thread.interrupt();
 
-		ThreadUtils.sleep(1000);
+        ThreadUtils.sleep(1000);
 
-		assertEquals("InterruptedException", appender.getFirstLog().getMessage());
-	}
+        //System.out.println(appender.getFirstLog().getMessage());
+        // TODO
+        assertEquals("InterruptedException", appender.getFirstLog().getMessage());
+    }
 
-	static class Task implements Runnable {
-		private Logger logger;
+    static class Task implements Runnable {
+        private Logger logger;
 
-		private int runTime = 0;
+        private int runTime = 0;
 
-		private int sleepTime;
+        private int sleepTime;
 
-		Task(Logger logger, int sleepTime, int runTime) {
-			this.logger = logger;
-			this.sleepTime = sleepTime;
-			this.runTime = runTime;
-		}
+        Task(Logger logger, int sleepTime, int runTime) {
+            this.logger = logger;
+            this.sleepTime = sleepTime;
+            this.runTime = runTime;
+        }
 
-		@Override
-		public void run() {
-			System.out.println("start task");
-			if (runTime > 0) {
-				long start = System.currentTimeMillis();
-				while (System.currentTimeMillis() - start < runTime) {
-				}
-			}
+        @Override
+        public void run() {
+            System.out.println("start task");
+            if (runTime > 0) {
+                long start = System.currentTimeMillis();
+                while (System.currentTimeMillis() - start < runTime) {
+                }
+            }
 
-			try {
-				Thread.sleep(sleepTime);
-			} catch (InterruptedException e) {
-				logger.warn("InterruptedException");
-			}
-		}
-	}
+            try {
+                Thread.sleep(sleepTime);
+            } catch (InterruptedException e) {
+                logger.warn("InterruptedException");
+            }
+        }
+    }
 }

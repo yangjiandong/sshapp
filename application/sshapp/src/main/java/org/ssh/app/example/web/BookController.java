@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.ssh.app.cache.CacheUtil;
+import org.ssh.app.example.entity.Blog;
 import org.ssh.app.example.entity.Book;
 import org.ssh.app.example.entity.Category;
 import org.ssh.app.example.service.BookService;
@@ -84,6 +85,48 @@ public class BookController {
         long start = System.currentTimeMillis();
 
         List<Book> books = bookService.getBooks2();
+        logger.info(" table cache 执行共计:"
+            + (System.currentTimeMillis() - start) + " ms");
+
+        return JsonViewUtil.getModelMap(books);
+    }
+
+    @RequestMapping(value = "/getBooks333", method = RequestMethod.GET)
+    public ModelAndView showBooks333qq(HttpServletRequest request,
+        HttpServletResponse response) throws Exception {
+        logger.info("table cache list...");
+
+        long start = System.currentTimeMillis();
+
+        List<Book> books = bookService.getBooks2();
+        logger.info(" table cache 执行共计:"
+            + (System.currentTimeMillis() - start) + " ms");
+
+        return JsonViewUtil.getModelMap(books);
+    }
+
+    @RequestMapping(value = "/getExamples", method = RequestMethod.GET)
+    public ModelAndView showExamples(HttpServletRequest request,
+        HttpServletResponse response) throws Exception {
+        logger.info("table cache list...");
+
+        long start = System.currentTimeMillis();
+
+        List<Blog> books = bookService.getExamples();
+        logger.info(" table cache 执行共计:"
+            + (System.currentTimeMillis() - start) + " ms");
+
+        return JsonViewUtil.getModelMap(books);
+    }
+
+    @RequestMapping(value = "/getExamples2", method = RequestMethod.GET)
+    public ModelAndView showExamples2(HttpServletRequest request,
+        HttpServletResponse response) throws Exception {
+        logger.info("table cache list...");
+
+        long start = System.currentTimeMillis();
+
+        List<Object> books = bookService.getExamples2();
         logger.info(" table cache 执行共计:"
             + (System.currentTimeMillis() - start) + " ms");
 

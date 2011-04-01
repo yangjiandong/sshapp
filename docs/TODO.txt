@@ -26,11 +26,19 @@ ok 采用spring3.03 + 自定义 resource 不采用urlrewrite ，可直接用rest
    参考http://sw1982.javaeye.com/blog/705298
    http://macrochen.javaeye.com/blog/689220
 
-6. 缓存
+ok 6. 缓存
 
+   关闭hibernate 缓存，采用ehcache，多台机器共享时考虑memcached
+   
    -- 两个策略,
    -- 一是采用memcached,可用系统安装memcache 或 jmemcache
    -- 二是直接用Ehcache,org.springframework.cache.ehcache.EhCacheFactoryBean 
 
+7. 暂时关闭spring-core 测试 ThreadUtilsTest.normalShutdown
+
+   assertEquals("InterruptedException", appender.getFirstLog().getMessage());
+
+   在重新导出环境下测试通不过。
+ 
 
    --END

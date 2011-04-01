@@ -1,6 +1,19 @@
 springside3
 ------------
 
+2011.03.30
+----------
+
+1. 暂时关闭spring-core 测试 ThreadUtilsTest.normalShutdown
+
+   assertEquals("InterruptedException", appender.getFirstLog().getMessage());
+
+   在重新导出环境下测试通不过。
+
+2. 自定义表测试
+
+   BookController.showExamples2 --> BookService.getExamples2
+
 2011.03.26
 ----------
 
@@ -15,7 +28,7 @@ springside3
    2、增加CacheUtil
    手工处理ehcache
 
-   以后代码不全,暂时采用原有代码
+   以下代码不全,暂时采用原有代码
    http://agun.javaeye.com/blog/741519
 
    --使用
@@ -173,6 +186,7 @@ mvn install
         </configuration>
       </plugin>
 
+   --在不新增方法、不导入新类的情况下，该调试方法比较好用
 
 
 2011.03.12

@@ -2,6 +2,7 @@ package org.ssh.app.example.dao;
 
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
+import org.hibernate.SQLQuery;
 
 import org.hibernate.criterion.Restrictions;
 
@@ -26,10 +27,15 @@ public class BookDao extends HibernateDao<Book, String> {
     }
 
     public List<Book> getAll2() {
-        Criteria criteria = getSession().createCriteria(entityClass);
+        //Criteria criteria = getSession().createCriteria(entityClass);
         //criteria.setCacheable(true);
+        StringBuffer bf = new StringBuffer();
+        bf.append("select oid,isbn,title,published ");
+        bf.append(" from  t_Book ");
 
-        return criteria.list();
+        SQLQuery query = getSession().createSQLQuery(bf.toString());
+
+        return query.list();
     }
 
     //参考 hibernate3.5.4_reference.pdf

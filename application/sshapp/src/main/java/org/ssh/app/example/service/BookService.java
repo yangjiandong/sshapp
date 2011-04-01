@@ -12,10 +12,11 @@ import org.springside.modules.orm.Page;
 import org.springside.modules.orm.PropertyFilter;
 import org.ssh.app.example.dao.BookDao;
 import org.ssh.app.example.dao.ContactDao;
+import org.ssh.app.example.entity.Blog;
 import org.ssh.app.example.entity.Book;
 import org.ssh.app.example.entity.Contact;
 
-
+@SuppressWarnings("unchecked")
 @Component
 //@Service("accountManager")
 //默认将类中的所有函数纳入事务管理.
@@ -42,7 +43,33 @@ public class BookService {
         return query.list();
     }
 
+    //测试开发环境下增加了其他类是否要重启？
+    //还是需要重启
+    public List<Blog> getExamples(){
+        //return bookDao.getAll();
+        StringBuffer bf = new StringBuffer();
+        bf.append("select name from t_blogs ");
+
+        SQLQuery query = this.bookDao.getSession().createSQLQuery(bf.toString());
+        return query.list();
+    }
+
+    //测试开发环境下增加了其他类是否要重启？
+    //采用jetty-debug自动重启
+    public List<Object> getExamples2(){
+        //return bookDao.getAll();
+        StringBuffer bf = new StringBuffer();
+        // create table t_examles(id int,name varchar(20),code varchar(20))
+        // insert into t_examles values(1,'test','code')
+        // insert into t_examles values(1,'测试中午','编号')
+        bf.append("SELECT * FROM t_examles ");
+
+        SQLQuery query = this.bookDao.getSession().createSQLQuery(bf.toString());
+        return query.list();
+    }
+
     //采用表缓存
+    //2011.03.28,已关闭hibernate 缓存
     @Transactional(readOnly = true)
     public List<Book> getBooks2(){
         return bookDao.getAll2();
