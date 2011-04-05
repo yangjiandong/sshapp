@@ -16,6 +16,11 @@ springside3
    resources/js/modules
    resources/data
 
+2. jRebel
+
+   -Xms768m -Xmx768m -XX:PermSize=128m -XX:MaxPermSize=256m
+   -Drebel.log=true -noverify -javaagent:c:\jrebel.jar
+
 2011.03.30
 ----------
 
