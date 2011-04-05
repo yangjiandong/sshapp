@@ -70,7 +70,7 @@ public class BookController {
 
         long start = System.currentTimeMillis();
 
-        List<Book> books = bookService.getBooksOnMethodCache();
+        List<Category> books = bookService.getOther();
         logger.info(" method cache 执行共计:"
             + (System.currentTimeMillis() - start) + " ms");
 

@@ -21,6 +21,10 @@ springside3
    -Xms768m -Xmx768m -XX:PermSize=128m -XX:MaxPermSize=256m
    -Drebel.log=true -noverify -javaagent:c:\jrebel.jar
 
+   -Drebel.log=true -noverify -javaagent:c:\jrebel.jar -Xmx512M -Xms512M -XX:MaxPermSize=1024m
+
+   测试 jrebel 3.5 在本项目中应用,有效.
+
 2011.03.30
 ----------
 

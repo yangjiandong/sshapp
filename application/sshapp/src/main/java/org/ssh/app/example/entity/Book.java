@@ -19,6 +19,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 @Entity
 @Table(name = "t_book")
 public class Book {
+    final String tableName = "t_book";
 
     private Long oid;
     private String isbn;
@@ -40,7 +41,8 @@ public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "Id_Generator")
-    @TableGenerator(name = "Id_Generator", table = "ID_GENERATOR", pkColumnName = "GEN_NAME", valueColumnName = "GEN_VAL", pkColumnValue = "t_book", initialValue = 1, allocationSize = 1)
+    @TableGenerator(name = "Id_Generator", table = "ID_GENERATOR", pkColumnName = "GEN_NAME", valueColumnName = "GEN_VAL",
+            pkColumnValue = tableName, initialValue = 1, allocationSize = 1)
     public Long getOid() {
         return oid;
     }

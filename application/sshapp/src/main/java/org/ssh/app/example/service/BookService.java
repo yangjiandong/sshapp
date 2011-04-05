@@ -14,6 +14,7 @@ import org.ssh.app.example.dao.BookDao;
 import org.ssh.app.example.dao.ContactDao;
 import org.ssh.app.example.entity.Blog;
 import org.ssh.app.example.entity.Book;
+import org.ssh.app.example.entity.Category;
 import org.ssh.app.example.entity.Contact;
 
 @SuppressWarnings("unchecked")
@@ -38,6 +39,16 @@ public class BookService {
         StringBuffer bf = new StringBuffer();
         bf.append("select oid,isbn,title,published ");
         bf.append(" from  t_Book ");
+
+        SQLQuery query = this.bookDao.getSession().createSQLQuery(bf.toString());
+        return query.list();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Category> getOther(){
+        //return bookDao.getAll();
+        StringBuffer bf = new StringBuffer();
+        bf.append("SELECT * FROM CATEGORY  ");
 
         SQLQuery query = this.bookDao.getSession().createSQLQuery(bf.toString());
         return query.list();
