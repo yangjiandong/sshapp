@@ -86,7 +86,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="<c:url value='/resources/js/app/DcLogin.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/resources/js/app/DcMenuTree.js'/>"></script>
 <script type="text/javascript">document.getElementById('app-loading-msg').innerHTML = '初始化...';</script>
+<!--
 <script type="text/javascript" src="<c:url value='/resources/js/main.js' />"></script>
-
+ -->
+<div id="header"><img alt="logo" src="resources/img/log-line.gif" /></div>
+<div id="footer"><p>版权信息</p></div>
+<link rel="stylesheet" type="text/css" href="<c:url value="/resources/css/app.css"/>" />
+<script type="text/javascript" src="<c:url value='/resources/js/opoa.main.js' />"></script>
 </body>
 </html>

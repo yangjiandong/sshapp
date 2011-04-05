@@ -1,0 +1,12 @@
+﻿{total:50, rows:[
+	{Name:'赵一',Sex:true,Phone:'12345678',Email:'abc@abc.com'},
+	{Name:'钱二',Sex:false,Phone:'12345678',Email:'abc@abc.com'},
+	{Name:'孙三',Sex:true,Phone:'12345678',Email:'abc@abc.com'},
+	{Name:'李四',Sex:true,Phone:'12345678',Email:'abc@abc.com'},
+	{Name:'周五',Sex:false,Phone:'12345678',Email:'abc@abc.com'},
+	{Name:'郑六',Sex:true,Phone:'12345678',Email:'abc@abc.com'},
+	{Name:'王七',Sex:true,Phone:'12345678',Email:'abc@abc.com'},
+	{Name:'冯八',Sex:false,Phone:'12345678',Email:'abc@abc.com'},
+	{Name:'陈九',Sex:true,Phone:'12345678',Email:'abc@abc.com'},
+	{Name:'褚十',Sex:true,Phone:'12345678',Email:'abc@abc.com'}
+]}

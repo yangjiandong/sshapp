@@ -1,5 +1,6 @@
 package org.ssh.app.example.web;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -207,6 +208,24 @@ public class BookController {
             new String[] {"hibernateLazyInitializer", "handler", "checked"},
             "yyyy.MM.dd");
 
+        //{"info":[{"edition":10,"isbn":"comto ok","oid":10,"pages":200,"published":"AM","title":"goto American"},{"edition":10,"isbn":"omoo","oid":11,"pages":2000,"published":"AM","title":"计划生育"},{"edition":910,"isbn":"comtosadfad ok","oid":12,"pages":5300,"published":"AM","title":"同要有 面goto American"}],"msg":"已经登陆","success":true}
+    }
+
+    @RequestMapping(value = "/getTree", method = RequestMethod.GET)
+    public void getOpoaTree(HttpServletRequest request,
+        HttpServletResponse response) throws Exception {
+
+        StringBuffer sb = new StringBuffer();
+
+        sb.append("[");
+        sb.append("{id:\'grid\',text:\'数据表格\',leaf:true},");
+        sb.append("{id:\'form\',text:\'表单提交\',leaf:true},");
+        sb.append("{id:\'html\',text:\'静态页面\',leaf:true}");
+        sb.append("]");
+
+        response.setContentType("text/json; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        out.write(sb.toString());
         //{"info":[{"edition":10,"isbn":"comto ok","oid":10,"pages":200,"published":"AM","title":"goto American"},{"edition":10,"isbn":"omoo","oid":11,"pages":2000,"published":"AM","title":"计划生育"},{"edition":910,"isbn":"comtosadfad ok","oid":12,"pages":5300,"published":"AM","title":"同要有 面goto American"}],"msg":"已经登陆","success":true}
     }
 }

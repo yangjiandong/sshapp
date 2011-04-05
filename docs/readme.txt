@@ -1,6 +1,21 @@
 springside3
 ------------
 
+2011.04.05
+----------
+
+1. 单页面测试(opoa)
+
+   view/index.jsp
+<!--
+<script type="text/javascript" src="<c:url value='/resources/js/main.js' />"></script>
+ -->
+<script type="text/javascript" src="<c:url value='/resources/js/opoa.main.js' />"></script>
+
+   resources/js/opoa.main.js
+   resources/js/modules
+   resources/data
+
 2011.03.30
 ----------
 
