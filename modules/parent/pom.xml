@@ -878,7 +878,7 @@
       </dependency>
 
       <dependency>
-        <groupId>com.google.code</groupId>
+        <groupId>com.google.code.kaptcha</groupId>
         <artifactId>kaptcha</artifactId>
         <version>${kaptcha.version}</version>
       </dependency>
