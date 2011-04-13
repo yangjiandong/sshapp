@@ -25,6 +25,14 @@ springside3
 
    测试 jrebel 3.5 在本项目中应用,有效.
 
+   mvn jetty
+   配置环境变量
+   set REBEL_HOME=d:\jrebel
+   set MAVEN_OPTS=-noverify -javaagent:%REBEL_HOME%\jrebel.jar -Xmx1024m -XX:MaxPermSize=256m
+   call mvn -o jetty:run -Dmaven.test.skip=true
+   配置jetty不自动扫描代码变化
+　 jetty-mavn-plugin的 plugin > configuration > scanIntervalSeconds 设置为0
+
 2011.03.30
 ----------
 
