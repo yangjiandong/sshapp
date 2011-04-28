@@ -1,6 +1,11 @@
 springside3
 ------------
 
+2011.04.28
+----------
+
+1. update core hibernateDao,page,propertyFilter
+
 2011.04.05
 ----------
 

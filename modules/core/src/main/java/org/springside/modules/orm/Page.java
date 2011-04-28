@@ -12,6 +12,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.springside.modules.orm.grid.GridColumnMeta;
 
 import com.google.common.collect.Lists;
 
@@ -47,31 +48,9 @@ public class Page<T> {
     private String orderDir = "";
 
     private boolean isExport = false;
-    public boolean isExport() {
-        return isExport;
-    }
-
-    public void setExport(boolean isExport) {
-        this.isExport = isExport;
-    }
-
-    public String getExpFormat() {
-        return expFormat;
-    }
-
-    public void setExpFormat(String expFormat) {
-        this.expFormat = expFormat;
-    }
 
     private String expFormat = "xls";
     private String[] fieldList;
-    public String[] getFieldList() {
-        return fieldList;
-    }
-
-    public void setFieldList(String[] fieldList) {
-        this.fieldList = fieldList;
-    }
 
     private HttpServletRequest req;
 
@@ -83,6 +62,7 @@ public class Page<T> {
 
     //-- 构造函数 --//
     public Page() {
+        super();
     }
 
     public Page(int pageSize) {
@@ -165,20 +145,31 @@ public class Page<T> {
     }
 
     /**
-     * 获得每页的记录数量,默认为1.
+     * 获得当前页的第一条记录序号，从0开始,默认为0.
+     */
+    public int getStart() {
+        return start;
+    }
+
+    public void setStart(int start) {
+        this.start = start;
+    }
+
+    /**
+     * 获得每页的记录数量,默认为20.
      */
     public int getPageSize() {
         return pageSize;
     }
 
     /**
-     * 设置每页的记录数量,低于1时自动调整为1.
+     * 设置每页的记录数量,低于1时自动调整为20.
      */
     public void setPageSize(final int pageSize) {
         this.pageSize = pageSize;
 
         if (pageSize < 1) {
-            this.pageSize = 1;
+            this.pageSize = 20;
         }
     }
 
@@ -349,5 +340,84 @@ public class Page<T> {
         } else {
             return pageNo;
         }
+    }
+
+    public boolean isExport() {
+        return isExport;
+    }
+
+    public void setExport(boolean isExport) {
+        this.isExport = isExport;
+    }
+
+    public String[] getFieldList() {
+        return fieldList;
+    }
+
+    public void setFieldList(String[] fieldList) {
+        this.fieldList = fieldList;
+    }
+
+    public HttpServletRequest getReq() {
+        return req;
+    }
+
+    public void setReq(HttpServletRequest req) {
+        this.req = req;
+    }
+
+    /**
+     * 获取导出格式
+     */
+    public String getExpFormat() {
+        return expFormat;
+    }
+
+    /**
+     * 设置导出格式
+     */
+    public void setExpFormat(String expFormat) {
+        this.expFormat = expFormat;
+    }
+
+    /**
+     * 获取当前列表显示的字段
+     */
+    public String[] getNameList(GridColumnMeta[] meta) {
+        String sort = req.getParameter(GRID_PARAM_ORDERBY);
+        if (StringUtils.isNotEmpty(sort))
+            this.orderBy = meta[Integer.parseInt(sort)].getName();
+
+        String[] flds = new String[fieldList.length];
+        for (int i = 0; i < flds.length; i++) {
+            flds[i] = meta[Integer.parseInt(fieldList[i])].getName();
+        }
+        return flds;
+    }
+
+    /**
+     * 获取当前列表显示的列标题
+     */
+    public String[] getHeaderList(GridColumnMeta[] meta) {
+        String sort = req.getParameter(GRID_PARAM_ORDERBY);
+        if (StringUtils.isNotEmpty(sort))
+            this.orderBy = meta[Integer.parseInt(sort)].getHeader();
+
+        String[] flds = new String[fieldList.length];
+        for (int i = 0; i < flds.length; i++) {
+            flds[i] = meta[Integer.parseInt(fieldList[i])].getHeader();
+        }
+        return flds;
+    }
+
+    /**
+     * 设置不分页
+     *
+     * @param all
+     *            真表示不分页
+     */
+    public void queryAll(boolean all) {
+        if (all)
+            this.pageSize = Integer.MAX_VALUE;
     }
 }
