@@ -32,7 +32,7 @@ public class DigestUtils {
      */
     public static String sha1ToHex(String input) {
         byte[] digestResult = digest(input, SHA1);
-        return EncodeUtils.hexEncode(digestResult);
+        return org.springside.modules.utils.encode.EncodeUtils.hexEncode(digestResult);
     }
 
     /**

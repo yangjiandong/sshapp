@@ -45,7 +45,7 @@ public class PropertyFilter {
      * IN：限定集合范围. <br>
      */
     public enum MatchType {
-        START_LIKE, END_LIKE, LIKE, EQ, NE, GT, GE, LT, LE, ISNULL, ISNOTNULL, IN;
+        STARTLIKE, ENDLIKE, LIKE, EQ, NE, GT, GE, LT, LE, ISNULL, ISNOTNULL, IN;
     }
 
     /** 属性数据类型. */

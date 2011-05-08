@@ -66,13 +66,13 @@ public final class DBUtils {
         return result;
     }
 
-    /**
-     * 判断当前Sesseion连接的数据库是否为HSQL数据库
-     * */
-    public static boolean isHSQL(Session session) throws SQLException {
-        Connection conn = session.connection();
-        return isHSQL(conn);
-    }
+//    /**
+//     * 判断当前Sesseion连接的数据库是否为HSQL数据库
+//     * */
+//    public static boolean isHSQL(Session session) throws SQLException {
+//        Connection conn = session.connection();
+//        return isHSQL(conn);
+//    }
 
     /**
      * 判断当前Connection连接的数据库是否为HSQL数据库
@@ -87,13 +87,13 @@ public final class DBUtils {
         }
     }
 
-    /**
-     * 判断当前Sesseion连接的数据库是否为H2数据库
-     * */
-    public static boolean isH2(Session session) throws SQLException {
-        Connection conn = session.connection();
-        return isH2(conn);
-    }
+//    /**
+//     * 判断当前Sesseion连接的数据库是否为H2数据库
+//     * */
+//    public static boolean isH2(Session session) throws SQLException {
+//        Connection conn = session.connection();
+//        return isH2(conn);
+//    }
 
     /**
      * 判断当前Connection连接的数据库是否为H2数据库
@@ -108,13 +108,13 @@ public final class DBUtils {
         }
     }
 
-    /**
-     * 判断当前Sesseion连接的数据库是否为MySql数据库
-     * */
-    public static boolean isMySql(Session session) throws SQLException {
-        Connection conn = session.connection();
-        return isMySql(conn);
-    }
+//    /**
+//     * 判断当前Sesseion连接的数据库是否为MySql数据库
+//     * */
+//    public static boolean isMySql(Session session) throws SQLException {
+//        Connection conn = session.connection();
+//        return isMySql(conn);
+//    }
 
     /**
      * 判断当前Connection连接的数据库是否为MySql数据库
@@ -129,13 +129,13 @@ public final class DBUtils {
         }
     }
 
-    /**
-     * 判断当前Sesseion连接的数据库是否为PostgreSQL数据库
-     * */
-    public static boolean isPostgreSQL(Session session) throws SQLException {
-        Connection conn = session.connection();
-        return isPostgreSQL(conn);
-    }
+//    /**
+//     * 判断当前Sesseion连接的数据库是否为PostgreSQL数据库
+//     * */
+//    public static boolean isPostgreSQL(Session session) throws SQLException {
+//        Connection conn = session.connection();
+//        return isPostgreSQL(conn);
+//    }
 
     /**
      * 判断当前Connection连接的数据库是否为PostgreSQL数据库
@@ -150,13 +150,13 @@ public final class DBUtils {
         }
     }
 
-    /**
-     * 判断当前Sesseion连接的数据库是否为Derby数据库
-     * */
-    public static boolean isDerby(Session session) throws SQLException {
-        Connection conn = session.connection();
-        return isDerby(conn);
-    }
+//    /**
+//     * 判断当前Sesseion连接的数据库是否为Derby数据库
+//     * */
+//    public static boolean isDerby(Session session) throws SQLException {
+//        Connection conn = session.connection();
+//        return isDerby(conn);
+//    }
 
     /**
      * 判断当前Connection连接的数据库是否为Derby数据库
@@ -171,13 +171,13 @@ public final class DBUtils {
         }
     }
 
-    /**
-     * 判断当前Sesseion连接的数据库是否为ingres数据库
-     * */
-    public static boolean isIngres(Session session) throws SQLException {
-        Connection conn = session.connection();
-        return isIngres(conn);
-    }
+//    /**
+//     * 判断当前Sesseion连接的数据库是否为ingres数据库
+//     * */
+//    public static boolean isIngres(Session session) throws SQLException {
+//        Connection conn = session.connection();
+//        return isIngres(conn);
+//    }
 
     /**
      * 判断当前Connection连接的数据库是否为ingres数据库
@@ -192,13 +192,13 @@ public final class DBUtils {
         }
     }
 
-    /**
-     * 判断当前Sesseion连接的数据库是否为Microsoft SQL Server数据库
-     * */
-    public static boolean isMSSqlServer(Session session) throws SQLException {
-        Connection conn = session.connection();
-        return isMSSqlServer(conn);
-    }
+//    /**
+//     * 判断当前Sesseion连接的数据库是否为Microsoft SQL Server数据库
+//     * */
+//    public static boolean isMSSqlServer(Session session) throws SQLException {
+//        Connection conn = session.connection();
+//        return isMSSqlServer(conn);
+//    }
 
     /**
      * 判断当前Connection连接的数据库是否为Microsoft SQL Server数据库
@@ -213,13 +213,13 @@ public final class DBUtils {
         }
     }
 
-    /**
-     * 判断当前Sesseion连接的数据库是否为Sybase数据库
-     * */
-    public static boolean isSybase(Session session) throws SQLException {
-        Connection conn = session.connection();
-        return isSybase(conn);
-    }
+//    /**
+//     * 判断当前Sesseion连接的数据库是否为Sybase数据库
+//     * */
+//    public static boolean isSybase(Session session) throws SQLException {
+//        Connection conn = session.connection();
+//        return isSybase(conn);
+//    }
 
     /**
      * 判断当前Connection连接的数据库是否为Sybase数据库
@@ -232,14 +232,6 @@ public final class DBUtils {
         } else {
             return false;
         }
-    }
-
-    /**
-     * 判断当前Sesseion连接的数据库是否为Informix数据库
-     * */
-    public static boolean isInformix(Session session) throws SQLException {
-        Connection conn = session.connection();
-        return isInformix(conn);
     }
 
     /**
@@ -256,14 +248,6 @@ public final class DBUtils {
     }
 
     /**
-     * 判断当前Sesseion连接的数据库是否为DB2数据库
-     * */
-    public static boolean isDB2(Session session) throws SQLException {
-        Connection conn = session.connection();
-        return isInformix(conn);
-    }
-
-    /**
      * 判断当前Connection连接的数据库是否为DB2数据库
      */
     public static boolean isDB2(Connection conn) throws SQLException {
@@ -274,14 +258,6 @@ public final class DBUtils {
         } else {
             return false;
         }
-    }
-
-    /**
-     * 判断当前Sesseion连接的数据库是否为Oracle数据库
-     * */
-    public static boolean isOracle(Session session) throws SQLException {
-        Connection conn = session.connection();
-        return isOracle(conn);
     }
 
     /**

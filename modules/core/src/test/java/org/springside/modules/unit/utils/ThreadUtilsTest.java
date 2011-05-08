@@ -85,7 +85,7 @@ public class ThreadUtilsTest {
         assertEquals("InterruptedException", appender.getFirstLog().getMessage());
     }
 
-    @Test
+    //@Test
     public void normalShutdown() throws InterruptedException {
 
         Logger logger = LoggerFactory.getLogger("test");

@@ -355,11 +355,11 @@ public class HibernateDao<T, PK extends Serializable> extends SimpleHibernateDao
             criterion = Restrictions.like(propertyName, (String) propertyValue, MatchMode.ANYWHERE).ignoreCase();
             break;
 
-        case START_LIKE:
+        case STARTLIKE:
             criterion = Restrictions.like(propertyName, (String) propertyValue, MatchMode.START).ignoreCase();
             break;
 
-        case END_LIKE:
+        case ENDLIKE:
             criterion = Restrictions.like(propertyName, (String) propertyValue, MatchMode.END).ignoreCase();
             break;
 
@@ -399,9 +399,9 @@ public class HibernateDao<T, PK extends Serializable> extends SimpleHibernateDao
         String sdate = UtilDateTime.nowDateString("yyyy-MM-dd HH:mm:ss");
         try {
             String sql = "";
-            if (DBUtils.isOracle(getSession())) {
+            if (DBUtils.isOracle(getSession().connection())) {
                 sql = "select to_char(sysdate,'yyyy-MM-dd HH24:mi:ss') as sys_date from dual";
-            } else if (DBUtils.isMSSqlServer(getSession())) {
+            } else if (DBUtils.isMSSqlServer(getSession().connection())) {
                 sql = "Select CONVERT(varchar(100), GETDATE(), 120)";
             } else {
                 sql = ""; // 其他数据库，则采用应用服务器系统时间

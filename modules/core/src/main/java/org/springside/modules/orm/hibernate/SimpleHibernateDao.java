@@ -91,9 +91,6 @@ public class SimpleHibernateDao<T, PK extends Serializable> {
         return sessionFactory.getCurrentSession();
     }
 
-    /**
-     * 保存新增或修改的对象.
-     */
     public void save(final T entity) {
         Assert.notNull(entity, "entity不能为空");
         getSession().saveOrUpdate(entity);
