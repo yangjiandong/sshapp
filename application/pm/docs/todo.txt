@@ -1,0 +1,30 @@
+1. ocx 页面访问
+
+ok 2. 权限控制,
+
+   spring security
+
+ok   or 拦截器
+
+ok 3. 缓存,
+
+   暂时采用ehcache
+
+4. 分布式
+
+5. 登录机制,
+
+   同一用户不能同时多次登录,只能等这个用户从上次登录中退出(或非正常退出后等会话时间过期)
+
+   同一用户能在同一ip多次登录
+
+6. log to db table
+
+7. 不采用model对应直接转换json格式
+
+8. docbook
+
+   zdoc
+   http://code.google.com/p/nutz/wiki/zdoc_overview
+
+   --END

@@ -1,0 +1,60 @@
+网上资料
+=========
+
+   1. spring security
+
+   http://blog.csdn.net/quzishen/archive/2010/09/17/5891647.aspx
+
+   13 种过滤器
+   http://www.360doc.com/content/10/0422/11/15643_24320208.shtml
+
+   2. 缓存
+
+   google : spring security memcache
+
+   3. db log
+
+   http://www.blogjava.net/wphmoon/archive/2011/02/13/344206.html
+
+   4. 关注 http://code.google.com/p/simpleframework/
+
+   组件式开发,放弃
+
+   5. @JsonIgnore
+
+   http://wiki.fasterxml.com/JacksonFAQ
+   JacksonFAQ
+
+   6. Apache Tika - a content analysis toolkit
+
+  <dependency>
+    <groupId>org.apache.tika</groupId>
+    <artifactId>tika-core</artifactId>
+    <version>0.9</version>
+  </dependency>
+  <dependency>
+    <groupId>org.apache.tika</groupId>
+    <artifactId>tika-parsers</artifactId>
+    <version>0.9</version>
+  </dependency>
+
+# Check if an Internet resource contains a specific keyword
+curl http://.../document.doc \
+  | java -jar tika-app-0.9.jar --text \
+  | grep -q keyword
+
+
+   7. docbook mvn plugin
+
+   参考 netty 项目
+   mvn org.jboss.maven.plugins:maven-jdocbook-plugin:2.2.0:resources org.jboss.maven.plugins:maven-jdocbook-plugin:2.2.0:generate
+   or
+   mvn jdocbook:resources jdocbook:generate
+
+   中文问题,关注
+   http://blog.chinaunix.net/space.php?uid=191839&do=blog&id=85833
+
+   国内另一个doc工具:nutzdoc
+
+
+   --END

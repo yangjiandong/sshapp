@@ -1,0 +1,43 @@
+开发环境下后台数据生成步骤
+==========================
+
+   1. hibernate.hbm2ddl.auto=update
+
+   2. curl http://localhost:8080/sshapp/common/init
+
+   3. 手工维护t_users,t_roles,t_user_role 外键关系
+
+      ? 是否必要
+
+   4. 所需表
+
+   create table T_LOGS (
+      thread_name varchar(255),
+      logger_name varchar(255),
+      log_time timestamp,
+      level varchar(20),
+      message varchar(255)
+    );
+
+   other/tables_sqlServer.sql
+
+   5. 示例存储过程
+
+   --oracle
+   create or replace procedure sp_get_all_user(cdate IN VARCHAR2,
+      P_CURSOR OUT SYS_REFCURSOR) is
+begin
+  OPEN P_CURSOR FOR
+  select * from t_users;
+end sp_get_all_user;
+
+   --mssql
+-- =============================================
+-- exec [sp_get_all_user] '2011.01.02'
+-- =============================================
+ALTER PROCEDURE [dbo].[sp_get_all_user]
+  @cdate char(10) AS
+
+select * from t_users
+
+   --END

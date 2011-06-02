@@ -1,0 +1,71 @@
+ok 1. entry 无主键,Id的设置
+
+   主键是必须有的，要么是单字段的id，要么是组合的composite-id
+   如t_hzk,还是增加字段Id
+
+ok 2. A Foreign key refering org.ssh.pm.common.entity.User from org.ssh.pm.common.entity.Role has the wrong number of column. should be 2
+   ..
+   or
+   Repeated column in mapping for entity: org.ssh.pm.common.entity.User column: id (should be mapped with insert="false" update="false")
+   ..
+
+   --
+   drop table t_hzk
+   drop table t_users
+   drop table t_roles
+   drop table t_user_role
+
+   --
+   取消IdEntity中所有标注(原有实现改用UIdEntity)
+   @Id标注全部由子类定义
+
+ok 3. 2011.04.14
+
+   HzService.initData ,没采用主键值判断,循环插入时
+
+                try{
+                    //有可能重复汉字
+                    this.hzDao.save(re);
+                }catch(Exception se){
+                    logger.error("有汉字重复:" + star[1] + "," + star[2] + "," + star[3]);
+                    //this.hzDao.getSession().evict(re);
+                    continue;
+                }
+
+   采用h2,可以通过,
+   采用mssql,虽然触发了异常,但最后还是报
+   Caused by: java.sql.BatchUpdateException: 违反了 PRIMARY KEY 约束 'PK__t_hzk__1920BF5C'。不能在对象 'dbo.t_hzk' 中插入重复键。
+  at net.sourceforge.jtds.jdbc.JtdsStatement.executeBatch(JtdsStatement.java:944)
+  at org.apache.commons.dbcp.DelegatingStatement.executeBatch(DelegatingStatement.java:297)
+  at org.apache.commons.dbcp.DelegatingStatement.executeBatch(DelegatingStatement.java:297)
+  at org.hibernate.jdbc.BatchingBatcher.doExecuteBatch(BatchingBatcher.java:70)
+  at org.hibernate.jdbc.BatchingBatcher.addToBatch(BatchingBatcher.java:56)
+  at org.hibernate.persister.entity.AbstractEntityPersister.insert(AbstractEntityPersister.java:2418)
+  ... 59 more
+
+   --解决方法,加主键Id
+
+4. db log 后台没保存
+
+   DEBUG: org.ssh.pm.log.appender.JdbcLogWriter - "队列dblog的持久化文件D:\apache-tomcat-6.0.18\temp\queue\dblog不存在" ()
+
+ok 5. SimpleJdbcCall oracle 下返回记录集只能用"P_CURSOR"
+
+   理解错误,应该是: oracle下需与后台存储过程中定义的cursor名一致
+
+create or replace procedure sp_get_all_user(cdate IN VARCHAR2,
+      P_CURSOR OUT SYS_REFCURSOR) is
+begin
+  OPEN P_CURSOR FOR
+  select * from t_users;
+end sp_get_all_user;
+
+6. hibernate 动态数据源
+
+http://blog.csdn.net/mingxunzh/archive/2009/10/28/4739864.aspx
+
+   总是返回 defaultTargetDataSource 指定数据源
+
+http://topic.csdn.net/u/20110318/18/e353ea2e-8f4f-4914-9677-0b452369db7c.html
+
+   --END
