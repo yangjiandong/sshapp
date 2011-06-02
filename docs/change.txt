@@ -1,6 +1,30 @@
 变更历史
 ========
 
+
+2011.05.07
+----------
+
+   1. GridMetaUtil 改为自动扩展继承表
+
+2011.05.05
+----------
+
+   1. GridMetaUtil 扩展继承表
+
+   2. 取消DBUtils中根据Session 判断数据库方法,有可能引起数据库连接泄露
+
+
+2011.05.04
+----------
+
+   1. core 模块
+
+   PropertyFilter 中 START_LIKE, END_LIKE 改为 STARTLIKE, ENDLIKE
+
+   因为在 filterName=START_LIKES_NAME_OR_LOGIN_NAME时截取的matchTypeCode，propertyTypeCode就不准确了
+
+
 2011.02.09
 ----------
 

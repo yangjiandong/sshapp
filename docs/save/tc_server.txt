@@ -1,0 +1,22 @@
+Spring tc server
+================
+
+http://downloads.vmware.com/  vfabric-tc-server-developer-2.5.0.RELEASE.tar.gz
+
+安装使用方法：
+
+(1)解压到指定目录
+
+(2)创建一个带insight分析的实例，在CMD下运行：tcruntime-instance.bat create myserver -t insight (其中myserver是任意取的名字）
+
+(3)按需要修改端口之类的参数，参数文件为   解压根目录\myserver\conf\catalina.properties
+
+(4) 部署你的应用至\myserver\weapps 目录下
+
+(5)安装myserver  解压根目录\tcruntime-ctl.bat myserver install
+
+(6)启动myserver  解压根目录\tcruntime-ctl.bat myserver start
+
+(7) 进行请求
+
+(8)查看请求耗时：http://localhost:端口/insight/traces

@@ -1,0 +1,20 @@
+node.js
+=======
+
+2011.06.02
+----------
+
+   1. 一个支持Windows并且配套齐全的NodeJs发行版
+
+   http://node-js.prcn.co.cc/
+
+   下载最新版后直接解压到cygwin安装的根目录，就可以使用了，当然这跟在linux下使用npm还是有一定区别的，在Linux上是直接使用npm命令方可，比如我要安装express框架，可以这样：
+   在Linux上：
+   npm install -g express
+   而在Windows上则是：
+   cd /bin
+   node npm install -g express
+   只需要在前面加上node命令方可，这样安装完成后会自动在/home/userdir/.npm目录下生成您刚刚安装的nodejs开发库，其中userdir是你用户的主目录。
+
+
+   --END
