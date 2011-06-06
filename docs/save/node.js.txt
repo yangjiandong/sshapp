@@ -56,4 +56,7 @@ express默认使用jade view engine，所以在安装jade
 
    参考: https://github.com/joyent/node/wiki/Using-Eclipse-as-Node-Applications-Debugger
 
+   cmd: node --debug-brk dbgtest.js
+   eclipse-debug port 5858
+
    --END
