@@ -17,4 +17,23 @@ node.js
    只需要在前面加上node命令方可，这样安装完成后会自动在/home/userdir/.npm目录下生成您刚刚安装的nodejs开发库，其中userdir是你用户的主目录。
 
 
+   2. eclipse plugin
+   http://cnodejs.org/blog/?p=911
+   plugin download:
+   http://chromedevtools.googlecode.com/svn/update/dev/
+   
+   选择“Chromium JavaScript Remote Debugger”
+   
+   要启用node的调试端口，在执行node脚本的时候需要添加 --debug 参数：
+   node --debug[=port] NodeApp.js
+   or
+   node --debug-brk[=port] NodeApp.js
+   其中port为开启的调试端口，默认为5858.
+   debug和 debug-brk的区别在于，
+   debug执行脚本的时候会直接运行该脚本，而–debug-brk执行脚本的时候，并不会马上执行，而是等待调试器的连接，然后按调试器的指令来执行。
+   
+   eclipse debug config里面去添加一个新的V8 VM的调试配置
+   
+    
+    
    --END
