@@ -1,6 +1,38 @@
 node.js
 =======
 
+2011.06.03
+----------
+
+   1. 全新安装 cygwin 1.7 + nodejs 0.48
+
+   https://github.com/joyent/node/wiki/Building-node.js-on-Cygwin-%28Windows%29
+
+   Using setup.exe from Cygwin (1), install the following packages required to compile node.js:
+
+    devel → gcc4-g++ [Builds v0.4.2 and earlier use gcc-g++]
+    devel → git
+    devel → make
+    devel → openssl
+    libs → openssl-devel
+    devel → pkg-config
+    devel → zlib-devel
+    python → python
+
+   download nodejs.tar
+   $ ./configure
+   $ make
+   $ make install
+
+   2. npmjs
+
+   curl http://npmjs.org/install.sh | sh
+
+   安装express
+#npm install express
+express默认使用jade view engine，所以在安装jade
+#npm install jade
+
 2011.06.02
 ----------
 
@@ -16,6 +48,16 @@ node.js
    node npm install -g express
    只需要在前面加上node命令方可，这样安装完成后会自动在/home/userdir/.npm目录下生成您刚刚安装的nodejs开发库，其中userdir是你用户的主目录。
 
+   2. eclipse plugin
+
+   nodejs - http://chromedevtools.googlecode.com/svn/update/dev/
+
+   select: Chromium JavaScript Remote Debugger
+
+   参考: https://github.com/joyent/node/wiki/Using-Eclipse-as-Node-Applications-Debugger
+
+   cmd: node --debug-brk dbgtest.js
+   eclipse-debug port 5858
 
    2. eclipse plugin
    http://cnodejs.org/blog/?p=911
