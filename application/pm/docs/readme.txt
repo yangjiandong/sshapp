@@ -23,7 +23,7 @@ Personnel_Management System
 
    1. Tomcat的gzip压缩功能
 
- <Connector port="8080" protocol="HTTP/1.1"
+   <Connector port="8080" protocol="HTTP/1.1"
                connectionTimeout="20000"
                redirectPort="8443"
          compression="on"

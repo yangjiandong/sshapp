@@ -31,7 +31,7 @@ import com.google.common.collect.Lists;
  *
  */
 @Entity
-@Table(name = "T_USERS")
+@Table(name = "register")
 public class User extends AuditableEntity {
     @ViewField(header = "登录名")
     private String loginName;
