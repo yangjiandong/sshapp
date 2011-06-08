@@ -1,6 +1,23 @@
 Personnel_Management System
 ============================
 
+2011.06.08
+----------
+
+   1. AppUtil.encryptBasedDes
+
+   避免采用 java自带
+
+   import sun.misc.BASE64Encoder;
+   encryptedData = new BASE64Encoder().encode(cipher.doFinal(data.getBytes()));
+
+   mvn compile 在 64位下通不过
+
+   用 Apache commons 代替
+   import org.apache.commons.codec.binary.Base64;
+   encryptedData = new Base64().encodeToString(cipher.doFinal(data.getBytes()));
+
+
 2011.05.15
 ----------
 

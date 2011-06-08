@@ -34,11 +34,12 @@ import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springside.modules.utils.spring.SpringContextHolder;
 
-import sun.misc.BASE64Encoder;
+//import sun.misc.BASE64Encoder;
 
 public class AppUtil {
 
@@ -881,7 +882,6 @@ public class AppUtil {
         return interval;
     }
 
-
     /**
      * 判断对象是否Empty(null或元素为0)<br>
      * 实用于对如下对象做判断:String Collection及其子类 Map及其子类
@@ -1089,7 +1089,9 @@ public class AppUtil {
             Cipher cipher = Cipher.getInstance("DES");
             cipher.init(Cipher.ENCRYPT_MODE, key, sr);
             // 加密，并把字节数组编码成字符串
-            encryptedData = new BASE64Encoder().encode(cipher.doFinal(data.getBytes()));
+            // import sun.misc.BASE64Encoder;
+            // encryptedData = new BASE64Encoder().encode(cipher.doFinal(data.getBytes()));
+            encryptedData = new Base64().encodeToString(cipher.doFinal(data.getBytes()));
         } catch (Exception e) {
             log.error("加密错误，错误信息：", e);
             throw new RuntimeException("加密错误，错误信息：", e);
