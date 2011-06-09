@@ -368,4 +368,22 @@ public class AccountManager {
         return map;
     }
 
+    @Transactional(readOnly = true)
+    public String getDataTime(){
+        return this.userDao.getDatabaseTime();
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, Object> getUserByJdbc(Long id) {
+        Map<String, Object> resultMap = userJdbcDao.queryMap(id);
+        return resultMap;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Map<String, Object>> getUserListByJdbc(){
+        List<Map<String, Object>> resultList = userJdbcDao.queryMapList();
+        return resultList;
+
+    }
+
 }

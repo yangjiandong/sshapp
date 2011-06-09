@@ -1,6 +1,12 @@
 Personnel_Management System
 ============================
 
+2011.06.09
+----------
+
+   1. spring jdbc 直接输出json
+   CommonController.getUserByJdcb,getUserListByJdcb
+
 2011.06.08
 ----------
 

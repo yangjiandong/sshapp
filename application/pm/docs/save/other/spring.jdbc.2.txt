@@ -1,0 +1,685 @@
+Spring的JDBCTemplate
+
+当hql等查询方式不能满足性能或灵活性的要求，必须使用SQL时，大家有三种选择：
+
+第一、使用Hibernate 的sql 查询函数，将查询结果对象转为Entity对象。
+
+第二、使用Hibernate Session的getConnection 获得JDBC Connection，然后进行纯JDBC API操作；
+
+第三、选择把Spring的JDBCTemplate作为一种很不错的JDBC Utils来使用。
+
+     JDBCTemplate的使用很简单，只要在ApplicationContext文件里定义一个jdbcTemplate节点，
+     POJO获得注入后可以直接执行操作，不需要继承什么基类，详见JDBCTemplate参考文档。
+
+     AplicationContext定义：
+
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+实际使用：
+
+SqlRowSet rs = jdbcTemplate.queryForRowSet(sql, params);
+
+Tips1： jdbcTemplate有很多的ORM化回调操作将返回结果转为对象列表，但很多时候还是需要返回ResultSet，
+Spring有提供一个类似ResultSet的 Spring SqlRowSet对象。
+
+
+
+Tips2：.注意jdbcTemplate尽量只执行查询操作，莫要进行更新，否则很容易破坏Hibernate的二级缓存体系。
+
+Chapter 11. 使用JDBC进行数据访问
+11.1. 简介
+
+Spring JDBC抽象框架所带来的价值将在以下几个方面得以体现：
+（注：使用了Spring JDBC抽象框架之后，应用开发人员只需要完成斜体字部分的编码工作。）
+
+    指定数据库连接参数
+
+    打开数据库连接
+
+    声明SQL语句
+
+    预编译并执行SQL语句
+
+    遍历查询结果（如果需要的话）
+
+    处理每一次遍历操作
+
+    处理抛出的任何异常
+
+    处理事务
+
+    关闭数据库连接
+
+Spring将替我们完成所有单调乏味的JDBC底层细节处理工作。
+11.1.1. Spring JDBC包结构
+
+Spring JDBC抽象框架由四个包构成：core、 dataSource、object以及support。
+
+org.springframework.jdbc.core包由JdbcTemplate类以及相关的回调接口（callback interface）和类组成。
+
+org.springframework.jdbc.datasource包由一些用来简化DataSource访问的工具类，以及各种DataSource接口的简单实现
+(主要用于单元测试以及在J2EE容器之外使用JDBC)组成。工具类提供了一些静态方法，
+诸如通过JNDI获取数据连接以及在必要的情况下关闭这些连接。它支持绑定线程的连接，比如被用于DataSourceTransactionManager的连接。
+
+接下来，org.springframework.jdbc.object包由封装了查询、更新以及存储过程的类组成，这些类的对象都是线程安全并且可重复使用的。
+它们类似于JDO，与JDO的不同之处在于查询结果与数据库是“断开连接”的。它们是在org.springframework.jdbc.core包的基础上对JDBC更高层次的抽象。
+
+最后，org.springframework.jdbc.support包提供了一些SQLException的转换类以及相关的工具类。
+
+在JDBC处理过程中抛出的异常将被转换成org.springframework.dao包中定义的异常。
+因此使用Spring JDBC进行开发将不需要处理JDBC或者特定的RDBMS才会抛出的异常。
+所有的异常都是unchecked exception，这样我们就可以对传递到调用者的异常进行有选择的捕获。
+11.2. 利用JDBC核心类实现JDBC的基本操作和错误处理
+11.2.1. JdbcTemplate类
+
+JdbcTemplate是core包的核心类。它替我们完成了资源的创建以及释放工作，从而简化了我们对JDBC的使用。
+它还可以帮助我们避免一些常见的错误，比如忘记关闭数据库连接。
+JdbcTemplate将完成JDBC核心处理流程，比如SQL语句的创建、执行，而把SQL语句的生成以及查询结果的提取工作留给我们的应用代码。
+它可以完成SQL查询、更新以及调用存储过程，可以对ResultSet进行遍历并加以提取。
+它还可以捕获JDBC异常并将其转换成org.springframework.dao包中定义的，通用的，信息更丰富的异常。
+
+使用JdbcTemplate进行编码只需要根据明确定义的一组契约来实现回调接口。
+PreparedStatementCreator回调接口通过给定的Connection创建一个PreparedStatement，包含SQL和任何相关的参数。
+CallableStatementCreateor实现同样的处理，只不过它创建的是CallableStatement。
+RowCallbackHandler接口则从数据集的每一行中提取值。
+
+我们可以在一个service实现类中通过传递一个DataSource引用来完成JdbcTemplate的实例化，
+也可以在application context中配置一个JdbcTemplate bean，来供service使用。
+需要注意的是DataSource在application context总是配制成一个bean，
+第一种情况下，DataSource bean将传递给service，
+第二种情况下DataSource bean传递给JdbcTemplate bean。
+因为JdbcTemplate使用回调接口和SQLExceptionTranslator接口作为参数，所以一般情况下没有必要通过继承JdbcTemplate来定义其子类。
+
+JdbcTemplate中使用的所有SQL将会以“DEBUG”级别记入日志
+（一般情况下日志的category是JdbcTemplate相应的全限定类名，不过如果需要对JdbcTemplate进行定制的话，可能是它的子类名）。
+11.2.2. NamedParameterJdbcTemplate类
+
+NamedParameterJdbcTemplate类增加了在SQL语句中使用命名参数的支持。在此之前，在传统的SQL语句中，参数都是用'?'占位符来表示的。
+NamedParameterJdbcTemplate类内部封装了一个普通的JdbcTemplate，并作为其代理来完成大部分工作。
+下面的内容主要针对NamedParameterJdbcTemplate与JdbcTemplate的不同之处来加以说明，即如何在SQL语句中使用命名参数。
+
+通过下面的例子我们可以更好地了解NamedParameterJdbcTemplate的使用模式（在后面我们还有更好的使用方式）。
+
+// some JDBC-backed DAO class...
+public int countOfActorsByFirstName(String firstName) {
+String sql = "select count(0) from T_ACTOR where first_name = :first_name";
+NamedParameterJdbcTemplate template = new NamedParameterJdbcTemplate(this.getDataSource());
+SqlParameterSource namedParameters = new MapSqlParameterSource("first_name", firstName);
+return template.queryForInt(sql, namedParameters);
+}
+
+在上面例子中，sql变量使用了命名参数占位符“first_name”，与其对应的值存在namedParameters变量中（类型为MapSqlParameterSource）。
+
+如果你喜欢的话，也可以使用基于Map风格的名值对将命名参数传递给NamedParameterJdbcTemplate
+（NamedParameterJdbcTemplate实现了NamedParameterJdbcOperations接口，剩下的工作将由调用该接口的相应方法来完成，这里我们就不再赘述）：
+
+// some JDBC-backed DAO class...
+public int countOfActorsByFirstName(String firstName) {
+String sql = "select count(0) from T_ACTOR where first_name = :first_name";
+NamedParameterJdbcTemplate template = new NamedParameterJdbcTemplate(this.getDataSource());
+Map namedParameters = new HashMap();
+namedParameters.put("first_name", firstName);
+return template.queryForInt(sql, namedParameters);
+}
+
+另外一个值得一提的特性是与NamedParameterJdbcTemplate位于同一个包中的SqlParameterSource接口。
+在前面的代码片断中我们已经看到了该接口的实现（即MapSqlParameterSource类），
+SqlParameterSource可以用来作为NamedParameterJdbcTemplate命名参数的来源。
+MapSqlParameterSource类是一个非常简单的实现，它仅仅是一个java.util.Map适配器，当然其用法也就不言自明了
+（如果还有不明了的，可以在Spring的JIRA系统中要求提供更多的相关资料）。
+
+SqlParameterSource接口的另一个实现－－BeanPropertySqlParameterSource为我们提供了更有趣的功能。
+该类包装一个类似JavaBean的对象，所需要的命名参数值将由包装对象提供，下面我们使用一个例子来更清楚地说明它的用法。
+
+// some JavaBean-like class...
+public class Actor {
+private Long id;
+private String firstName;
+private String lastName;
+public String getFirstName() {
+return this.firstName;
+}
+public String getLastName() {
+return this.lastName;
+}
+public Long getId() {
+return this.id;
+}
+// setters omitted...
+}
+
+// some JDBC-backed DAO class...
+public int countOfActors(Actor exampleActor) {
+// notice how the named parameters match the properties of the above 'Actor' class
+String sql = "select count(0) from T_ACTOR where first_name = :firstName and last_name = :lastName";
+NamedParameterJdbcTemplate template = new NamedParameterJdbcTemplate(this.getDataSource());
+SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(exampleActor);
+return template.queryForInt(sql, namedParameters);
+}
+
+大家必须牢记一点：NamedParameterJdbcTemplate类内部包装了一个标准的JdbcTemplate类。
+如果你需要访问其内部的JdbcTemplate实例（比如访问JdbcTemplate的一些方法）那么你需要使用getJdbcOperations()方法返回的JdbcOperations接口。
+（JdbcTemplate实现了JdbcOperations接口）。
+
+NamedParameterJdbcTemplate类是线程安全的，该类的最佳使用方式不是每次操作的时候实例化一个新的NamedParameterJdbcTemplate，
+而是针对每个DataSource只配置一个NamedParameterJdbcTemplate实例（比如在Spring IoC容器中使用Spring IoC来进行配置），
+然后在那些使用该类的DAO中共享该实例。
+11.2.3. SimpleJdbcTemplate类
+[Note]  Note
+
+请注意该类所提供的功能仅适用于Java 5 (Tiger)。
+
+SimpleJdbcTemplate类是JdbcTemplate类的一个包装器（wrapper），它利用了Java 5的一些语言特性，比如Varargs和Autoboxing。
+对那些用惯了Java 5的程序员，这些新的语言特性还是很好用的。
+
+SimpleJdbcTemplate 类利用Java 5的语法特性带来的好处可以通过一个例子来说明。
+在下面的代码片断中我们首先使用标准的JdbcTemplate进行数据访问，接下来使用SimpleJdbcTemplate做同样的事情。
+
+// classic JdbcTemplate-style...
+public Actor findActor(long id) {
+String sql = "select id, first_name, last_name from T_ACTOR where id = ?";
+RowMapper mapper = new RowMapper() {
+public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
+Actor actor = new Actor();
+actor.setId(rs.getLong(Long.valueOf(rs.getLong("id"))));
+actor.setFirstName(rs.getString("first_name"));
+actor.setLastName(rs.getString("last_name"));
+return actor;
+}
+};
+// normally this would be dependency injected of course...
+JdbcTemplate jdbcTemplate = new JdbcTemplate(this.getDataSource());
+// notice the cast, and the wrapping up of the 'id' argument
+// in an array, and the boxing of the 'id' argument as a reference type
+return (Actor) jdbcTemplate.queryForObject(sql, mapper, new Object[] {Long.valueOf(id)});
+}
+
+下面是同一方法的另一种实现，惟一不同之处是我们使用了SimpleJdbcTemplate，这样代码显得更加清晰。
+
+// SimpleJdbcTemplate-style...
+public Actor findActor(long id) {
+String sql = "select id, first_name, last_name from T_ACTOR where id = ?";
+ParameterizedRowMapper<Actor> mapper = new ParameterizedRowMapper<Actor>() {
+// notice the return type with respect to Java 5 covariant return types
+public Actor mapRow(ResultSet rs, int rowNum) throws SQLException {
+Actor actor = new Actor();
+actor.setId(rs.getLong("id"));
+actor.setFirstName(rs.getString("first_name"));
+actor.setLastName(rs.getString("last_name"));
+return actor;
+}
+};
+// again, normally this would be dependency injected of course...
+SimpleJdbcTemplate simpleJdbcTemplate = new SimpleJdbcTemplate(this.getDataSource());
+return simpleJdbcTemplate.queryForObject(sql, mapper, id);
+}
+
+11.2.4. DataSource接口
+
+为了从数据库中取得数据，我们首先需要获取一个数据库连接。
+Spring通过DataSource对象来完成这个工作。
+DataSource是JDBC规范的一部分， 它被视为一个通用的数据库连接工厂。
+通过使用DataSource， Container或Framework可以将连接池以及事务管理的细节从应用代码中分离出来。
+ 作为一个开发人员，在开发和测试产品的过程中，你可能需要知道连接数据库的细节。
+ 但在产品实施时，你不需要知道这些细节。通常数据库管理员会帮你设置好数据源。
+
+在使用Spring JDBC时，你既可以通过JNDI获得数据源，也可以自行配置数据源（ 使用Spring提供的DataSource实现类）。
+使用后者可以更方便的脱离Web容器来进行单元测试。 这里我们将使用DriverManagerDataSource，不过DataSource有多种实现， 后面我们会讲到。
+使用DriverManagerDataSource和你以前获取一个JDBC连接 的做法没什么两样。
+你首先必须指定JDBC驱动程序的全限定名，这样DriverManager 才能加载JDBC驱动类，接着你必须提供一个url
+（因JDBC驱动而异，为了保证设置正确请参考相关JDBC驱动的文档），
+最后你必须提供一个用户连接数据库的用户名和密码。下面我们将通过一个例子来说明如何配置一个 DriverManagerDataSource：
+
+DriverManagerDataSource dataSource = new DriverManagerDataSource();
+dataSource.setDriverClassName("org.hsqldb.jdbcDriver");
+dataSource.setUrl("jdbc:hsqldb:hsql://localhost:");
+dataSource.setUsername("sa");
+dataSource.setPassword("");
+
+11.2.5. SQLExceptionTranslator接口
+
+SQLExceptionTranslator是一个接口，如果你需要在 SQLException和org.springframework.dao.DataAccessException之间作转换，那么必须实现该接口。
+
+转换器类的实现可以采用一般通用的做法(比如使用JDBC的SQLState code)，如果为了使转换更准确，也可以进行定制（比如使用Oracle的error code）。
+
+SQLErrorCodeSQLExceptionTranslator是SQLExceptionTranslator的默认实现。 该实现使用指定数据库厂商的error code，比采用SQLState更精确。
+转换过程基于一个JavaBean（类型为SQLErrorCodes）中的error code。
+这个JavaBean由SQLErrorCodesFactory工厂类创建，其中的内容来自于 "sql-error-codes.xml"配置文件。
+该文件中的数据库厂商代码基于Database MetaData信息中的 DatabaseProductName，从而配合当前数据库的使用。
+
+
+SQLErrorCodeSQLExceptionTranslator使用以下的匹配规则：
+
+    首先检查是否存在完成定制转换的子类实现。
+    通常SQLErrorCodeSQLExceptionTranslator 这个类可以作为一个具体类使用，不需要进行定制，那么这个规则将不适用。
+
+    接着将SQLException的error code与错误代码集中的error code进行匹配。 默认情况下错误代码集将从SQLErrorCodesFactory取得。
+    错误代码集来自classpath下的sql-error-codes.xml文件， 它们将与数据库metadata信息中的database name进行映射。
+
+    如果仍然无法匹配，最后将调用fallbackTranslator属性的translate方法，SQLStateSQLExceptionTranslator类实例是默认的fallbackTranslator。
+
+SQLErrorCodeSQLExceptionTranslator可以采用下面的方式进行扩展：
+
+public class MySQLErrorCodesTranslator extends SQLErrorCodeSQLExceptionTranslator {
+protected DataAccessException customTranslate(String task, String sql, SQLException sqlex) {
+if (sqlex.getErrorCode() == -12345) {
+return new DeadlockLoserDataAccessException(task, sqlex);
+}
+return null;
+}
+}
+
+在上面的这个例子中，error code为'-12345'的SQLException 将采用该转换器进行转换，而其他的error code将由默认的转换器进行转换。
+为了使用该转换器，必须将其作为参数传递给JdbcTemplate类 的setExceptionTranslator方法，并在需要使用这个转换器器的数据 存取操作中使用该JdbcTemplate。
+ 下面的例子演示了如何使用该定制转换器：
+
+// create a JdbcTemplate and set data source
+JdbcTemplate jt = new JdbcTemplate();
+jt.setDataSource(dataSource);
+// create a custom translator and set the DataSource for the default translation lookup
+MySQLErrorCodesTransalator tr = new MySQLErrorCodesTransalator();
+tr.setDataSource(dataSource);
+jt.setExceptionTranslator(tr);
+// use the JdbcTemplate for this SqlUpdate
+SqlUpdate su = new SqlUpdate();
+su.setJdbcTemplate(jt);
+su.setSql("update orders set shipping_charge = shipping_charge * 1.05");
+su.compile();
+su.update();
+
+在上面的定制转换器中，我们给它注入了一个数据源，因为我们仍然需要 使用默认的转换器从sql-error-codes.xml中获取错误代码集。
+11.2.6. 执行SQL语句
+
+我们仅需要非常少的代码就可以达到执行SQL语句的目的，一旦获得一个 DataSource和一个JdbcTemplate，
+我们就可以使用JdbcTemplate提供的丰富功能实现我们的操作。 下面的例子使用了极少的代码完成创建一张表的工作。
+
+import javax.sql.DataSource;
+import org.springframework.jdbc.core.JdbcTemplate;
+public class ExecuteAStatement {
+private JdbcTemplate jt;
+private DataSource dataSource;
+public void doExecute() {
+jt = new JdbcTemplate(dataSource);
+jt.execute("create table mytable (id integer, name varchar(100))");
+}
+public void setDataSource(DataSource dataSource) {
+this.dataSource = dataSource;
+}
+}
+
+11.2.7. 执行查询
+
+除了execute方法之外，JdbcTemplate还提供了大量的查询方法。 在这些查询方法中，有很大一部分是用来查询单值的。
+比如返回一个汇总（count）结果 或者从返回行结果中取得指定列的值。
+这时我们可以使用queryForInt(..)、 queryForLong(..)或者queryForObject(..)方法。
+queryForObject方法用来将返回的JDBC类型对象转换成指定的Java对象，如果类型转换失败将抛出 InvalidDataAccessApiUsageException异常。
+下面的例子演示了两个查询的用法，一个返回int值，另一个返回 String。
+
+import javax.sql.DataSource;
+import org.springframework.jdbc.core.JdbcTemplate;
+public class RunAQuery {
+private JdbcTemplate jt;
+private DataSource dataSource;
+public int getCount() {
+jt = new JdbcTemplate(dataSource);
+int count = jt.queryForInt("select count(*) from mytable");
+return count;
+}
+public String getName() {
+jt = new JdbcTemplate(dataSource);
+String name = (String) jt.queryForObject("select name from mytable", String.class);
+return name;
+}
+public void setDataSource(DataSource dataSource) {
+this.dataSource = dataSource;
+}
+}
+
+除了返回单值的查询方法，JdbcTemplate还提供了一组返回List结果 的方法。List中的每一项对应查询返回结果中的一行。
+其中最简单的是queryForList方法， 该方法将返回一个List，该List中的每一条 记录是一个Map对象，对应应数据库中某一行；
+而该Map 中的每一项对应该数据库行中的某一列值。下面的代码片断接着上面的例子演示了如何用该方法返回表中 所有记录：
+
+public List getList() {
+jt = new JdbcTemplate(dataSource);
+List rows = jt.queryForList("select * from mytable");
+return rows;
+}
+
+返回的结果集类似下面这种形式：
+
+[{name=Bob, id=1}, {name=Mary, id=2}]
+
+11.2.8. 更新数据库
+
+JdbcTemplate还提供了一些更新数据库的方法。 在下面的例子中，我们根据给定的主键值对指定的列进行更新。
+例子中的SQL语句中使用了“?”占位符来接受参数（这种做法在更新和查询SQL语句中很常见）。
+传递的参数值位于一个对象数组中（基本类型需要被包装成其对应的对象类型）。
+
+import javax.sql.DataSource;
+import org.springframework.jdbc.core.JdbcTemplate;
+public class ExecuteAnUpdate {
+private JdbcTemplate jt;
+private DataSource dataSource;
+public void setName(int id, String name) {
+jt = new JdbcTemplate(dataSource);
+jt.update("update mytable set name = ? where id = ?", new Object[] {name, new Integer(id)});
+}
+public void setDataSource(DataSource dataSource) {
+this.dataSource = dataSource;
+}
+}
+
+11.3. 控制数据库连接
+11.3.1. DataSourceUtils类
+
+DataSourceUtils作为一个帮助类提供易用且强大的数据库访问能力， 我们可以使用该类提供的静态方法从JNDI获取数据库连接以及在必要的时候关闭之。
+它提供支持线程绑定的数据库连接（比如使用DataSourceTransactionManager 的时候，将把数据库连接绑定到当前的线程上）。
+
+注：getDataSourceFromJndi(..)方法主要用于那些没有使用bean factory 或者application context的场合。
+如果使用application context，那么最好是在 JndiObjectFactoryBean中配置bean或者直接使用 JdbcTemplate实例。
+JndiObjectFactoryBean 能够通过JNDI获取DataSource并将 DataSource作为引用参数传递给其他bean。
+这样，在不同的DataSource之间切换只需要修改配置文件即可， 甚至我们可以用一个非JNDI的DataSource来替换 FactoryBean定义！
+11.3.2. SmartDataSource接口
+
+SmartDataSource是DataSource 接口的一个扩展，用来提供数据库连接。使用该接口的类在指定的操作之后可以检查是否需要关闭连接。
+ 该接口在某些情况下非常有用，比如有些情况需要重用数据库连接。
+11.3.3. AbstractDataSource类
+
+AbstractDataSource是一个实现了DataSource 接口的abstract基类。它实现了DataSource接口的 一些无关痛痒的方法，
+如果你需要实现自己的DataSource，那么继承 该类是个好主意。
+11.3.4. SingleConnectionDataSource类
+
+SingleConnectionDataSource是SmartDataSource接口 的一个实现，其内部包装了一个单连接。
+该连接在使用之后将不会关闭，很显然它不能在多线程 的环境下使用。
+
+当客户端代码调用close方法的时候，如果它总是假设数据库连接来自连接池（就像使用持久化工具时一样）， 你应该将suppressClose设置为true。
+这样，通过该类获取的将是代理连接（禁止关闭）而不是原有的物理连接。
+需要注意的是，我们不能把使用该类获取的数据库连接造型（cast）为Oracle Connection之类的本地数据库连接。
+
+SingleConnectionDataSource主要在测试的时候使用。 它使得测试代码很容易脱离应用服务器而在一个简单的JNDI环境下运行。
+与DriverManagerDataSource不同的是，它始终只会使用同一个数据库连接， 从而避免每次建立物理连接的开销。
+11.3.5. DriverManagerDataSource类
+
+DriverManagerDataSource类实现了 SmartDataSource接口。
+在applicationContext.xml中可以使用 bean properties来设置JDBC Driver属性，该类每次返回的都是一个新的连接。
+
+该类主要在测试以及脱离J2EE容器的独立环境中使用。它既可以用来在application context中作为一个 DataSource bean，也可以在简单的JNDI环境下使用。
+由于Connection.close()仅仅只是简单的关闭数据库连接，因此任何能够获取 DataSource的持久化代码都能很好的工作。
+不过使用JavaBean风格的连接池 （比如commons-dbcp）也并非难事。即使是在测试环境下，使用连接池也是一种比使用 DriverManagerDataSource更好的做法。
+11.3.6. TransactionAwareDataSourceProxy类
+
+TransactionAwareDataSourceProxy作为目标DataSource的一个代理， 在对目标DataSource包装的同时，还增加了Spring的事务管理能力，
+在这一点上，这个类的功能非常像J2EE服务器所提供的事务化的JNDI DataSource。
+[Note]  Note
+
+该类几乎很少被用到，除非现有代码在被调用的时候需要一个标准的 JDBC DataSource接口实现作为参数。
+这种情况下，这个类可以使现有代码参与Spring的事务管理。
+通常最好的做法是使用更高层的抽象 来对数据源进行管理，比如JdbcTemplate和DataSourceUtils等等。
+
+如果需要更详细的资料，请参考TransactionAwareDataSourceProxy JavaDoc 。
+11.3.7. DataSourceTransactionManager类
+
+DataSourceTransactionManager类是 PlatformTransactionManager接口的一个实现，用于处理单JDBC数据源。
+它将从指定DataSource取得的JDBC连接绑定到当前线程，因此它也支持了每个数据源对应到一个线程。
+
+我们推荐在应用代码中使用DataSourceUtils.getConnection(DataSource)来获取 JDBC连接，而不是使用J2EE标准的DataSource.getConnection。
+因为前者将抛出 unchecked的org.springframework.dao异常，而不是checked的 SQLException异常。
+Spring Framework中所有的类（比如 JdbcTemplate）都采用这种做法。
+如果不需要和这个 DataSourceTransactionManager类一起使用，DataSourceUtils 提供的功能跟一般的数据库连接策略没有什么两样，因此它可以在任何场景下使用。
+
+DataSourceTransactionManager类支持定制隔离级别，以及对SQL语句查询超时的设定。
+为了支持后者，应用代码必须使用JdbcTemplate或者在每次创建SQL语句时调用 DataSourceUtils.applyTransactionTimeout方法。
+
+在使用单个数据源的情形下，你可以用DataSourceTransactionManager来替代JtaTransactionManager， 因为DataSourceTransactionManager不需要容器支持JTA。
+如果你使用DataSourceUtils.getConnection(DataSource)来获取 JDBC连接，二者之间的切换只需要更改一些配置。
+最后需要注意的一点就是JtaTransactionManager不支持隔离级别的定制！
+11.4. 用Java对象来表达JDBC操作
+
+org.springframework.jdbc.object包下的类允许用户以更加 面向对象的方式去访问数据库。
+比如说，用户可以执行查询并返回一个list， 该list作为一个结果集将把从数据库中取出的列数据映射到业务对象的属性上。
+用户也可以执行存储过程，以及运行更新、删除以及插入SQL语句。
+[Note]  Note
+
+在许多Spring开发人员中间存在有一种观点，那就是下面将要提到的各种RDBMS操作类 （StoredProcedure类除外） 通常也可以直接使用JdbcTemplate相关的方法来替换。
+相对于把一个查询操作封装成一个类而言，直接调用JdbcTemplate方法将更简单 而且更容易理解。
+
+必须说明的一点就是，这仅仅只是一种观点而已， 如果你认为你可以从直接使用RDBMS操作类中获取一些额外的好处， 你不妨根据自己的需要和喜好进行不同的选择。
+11.4.1. SqlQuery类
+
+SqlQuery是一个可重用、线程安全的类，它封装了一个SQL查询。 其子类必须实现newResultReader()方法，该方法用来在遍历 ResultSet的时候能使用一个类来保存结果。
+我们很少需要直接使用SqlQuery，因为其子类 MappingSqlQuery作为一个更加易用的实现能够将结果集中的行映射为Java对象。
+SqlQuery还有另外两个扩展分别是 MappingSqlQueryWithParameters和UpdatableSqlQuery。
+11.4.2. MappingSqlQuery类
+
+MappingSqlQuery是一个可重用的查询抽象类，其具体类必须实现 mapRow(ResultSet, int)抽象方法来将结果集中的每一行转换成Java对象。
+
+在SqlQuery的各种实现中， MappingSqlQuery是最常用也是最容易使用的一个。
+
+下面这个例子演示了一个定制查询，它将从客户表中取得的数据映射到一个 Customer类实例。
+
+private class CustomerMappingQuery extends MappingSqlQuery {
+public CustomerMappingQuery(DataSource ds) {
+super(ds, "SELECT id, name FROM customer WHERE id = ?");
+super.declareParameter(new SqlParameter("id", Types.INTEGER));
+compile();
+}
+public Object mapRow(ResultSet rs, int rowNumber) throws SQLException {
+Customer cust = new Customer();
+cust.setId((Integer) rs.getObject("id"));
+cust.setName(rs.getString("name"));
+return cust;
+}
+}
+
+在上面的例子中，我们为用户查询提供了一个构造函数并为构造函数传递了一个 DataSource参数。
+在构造函数里面我们把 DataSource和一个用来返回查询结果的SQL语句作为参数 调用父类的构造函数。
+SQL语句将被用于生成一个PreparedStatement对象， 因此它可以包含占位符来传递参数。
+而每一个SQL语句的参数必须通过调用 declareParameter方法来进行声明，该方法需要一个 SqlParameter（封装了一个字段名字和一个 java.sql.Types中定义的JDBC类型）对象作为参数。
+所有参数定义完之后，我们调用compile()方法来对SQL语句进行预编译。
+
+下面让我们看看该定制查询初始化并执行的代码：
+
+public Customer getCustomer(Integer id) {
+CustomerMappingQuery custQry = new CustomerMappingQuery(dataSource);
+Object[] parms = new Object[1];
+parms[0] = id;
+List customers = custQry.execute(parms);
+if (customers.size() > 0) {
+return (Customer) customers.get(0);
+}
+else {
+return null;
+}
+}
+
+在上面的例子中，getCustomer方法通过传递惟一参数id来返回一个客户对象。
+该方法内部在创建CustomerMappingQuery实例之后， 我们创建了一个对象数组用来包含要传递的查询参数。
+这里我们只有唯一的一个 Integer参数。
+执行CustomerMappingQuery的 execute方法之后，我们得到了一个List，该List中包含一个 Customer对象，如果有对象满足查询条件的话。
+11.4.3. SqlUpdate类
+
+SqlUpdate类封装了一个可重复使用的SQL更新操作。 跟所有RdbmsOperation类一样，SqlUpdate可以在SQL中定义参数。
+
+该类提供了一系列update()方法，就像SqlQuery提供的一系列execute()方法一样。
+
+SqlUpdate是一个具体的类。通过在SQL语句中定义参数，这个类可以支持 不同的更新方法，我们一般不需要通过继承来实现定制。
+
+import java.sql.Types;
+import javax.sql.DataSource;
+import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.object.SqlUpdate;
+public class UpdateCreditRating extends SqlUpdate {
+public UpdateCreditRating(DataSource ds) {
+setDataSource(ds);
+setSql("update customer set credit_rating = ? where id = ?");
+declareParameter(new SqlParameter(Types.NUMERIC));
+declareParameter(new SqlParameter(Types.NUMERIC));
+compile();
+}
+/**
+* @param id for the Customer to be updated
+* @param rating the new value for credit rating
+* @return number of rows updated
+*/
+public int run(int id, int rating) {
+Object[] params =
+new Object[] {
+new Integer(rating),
+new Integer(id)};
+return update(params);
+}
+}
+
+11.4.4. StoredProcedure类
+
+StoredProcedure类是一个抽象基类，它是对RDBMS存储过程的一种抽象。 该类提供了多种execute(..)方法，不过这些方法的访问类型都是protected的。
+
+从父类继承的sql属性用来指定RDBMS存储过程的名字。
+尽管该类提供了许多必须在JDBC3.0下使用的功能，但是我们更关注的是JDBC 3.0中引入的命名参数特性。
+
+下面的程序演示了如何调用Oracle中的sysdate()函数。
+这里我们创建了一个继承StoredProcedure的子类，虽然它没有输入参数， 但是我必须通过使用SqlOutParameter来声明一个日期类型的输出参数。
+execute()方法将返回一个map，map中的每个entry是一个用参数名作key， 以输出参数为value的名值对。
+
+import java.sql.Types;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import javax.sql.DataSource;
+import org.springframework.jdbc.core.SqlOutParameter;
+import org.springframework.jdbc.datasource.*;
+import org.springframework.jdbc.object.StoredProcedure;
+public class TestStoredProcedure {
+public static void main(String[] args)  {
+TestStoredProcedure t = new TestStoredProcedure();
+t.test();
+System.out.println("Done!");
+}
+void test() {
+DriverManagerDataSource ds = new DriverManagerDataSource();
+ds.setDriverClassName("oracle.jdbc.OracleDriver");
+ds.setUrl("jdbc:oracle:thin:@localhost:1521:mydb");
+ds.setUsername("scott");
+ds.setPassword("tiger");
+MyStoredProcedure sproc = new MyStoredProcedure(ds);
+Map results = sproc.execute();
+printMap(results);
+}
+private class MyStoredProcedure extends StoredProcedure {
+private static final String SQL = "sysdate";
+public MyStoredProcedure(DataSource ds) {
+setDataSource(ds);
+setFunction(true);
+setSql(SQL);
+declareParameter(new SqlOutParameter("date", Types.DATE));
+compile();
+}
+public Map execute() {
+// the 'sysdate' sproc has no input parameters, so an empty Map is supplied...
+return execute(new HashMap());
+}
+}
+private static void printMap(Map results) {
+for (Iterator it = results.entrySet().iterator(); it.hasNext(); ) {
+System.out.println(it.next());
+}
+}
+}
+
+下面是StoredProcedure的另一个例子，它使用了两个Oracle游标类型的输出参数。
+
+import oracle.jdbc.driver.OracleTypes;
+import org.springframework.jdbc.core.SqlOutParameter;
+import org.springframework.jdbc.object.StoredProcedure;
+import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
+public class TitlesAndGenresStoredProcedure extends StoredProcedure {
+private static final String SPROC_NAME = "AllTitlesAndGenres";
+public TitlesAndGenresStoredProcedure(DataSource dataSource) {
+super(dataSource, SPROC_NAME);
+declareParameter(new SqlOutParameter("titles", OracleTypes.CURSOR, new TitleMapper()));
+declareParameter(new SqlOutParameter("genres", OracleTypes.CURSOR, new GenreMapper()));
+compile();
+}
+public Map execute() {
+// again, this sproc has no input parameters, so an empty Map is supplied...
+return super.execute(new HashMap());
+}
+}
+
+值得注意的是TitlesAndGenresStoredProcedure构造函数中 declareParameter(..)的SqlOutParameter参数， 该参数使用了RowMapper接口的实现。
+这是一种非常方便而强大的重用方式。 下面我们来看一下RowMapper的两个具体实现。
+
+首先是TitleMapper类，它简单的把ResultSet中的每一行映射为一个Title Domain Object。
+
+import com.foo.sprocs.domain.Title;
+import org.springframework.jdbc.core.RowMapper;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+public final class TitleMapper implements RowMapper {
+public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
+Title title = new Title();
+title.setId(rs.getLong("id"));
+title.setName(rs.getString("name"));
+return title;
+}
+}
+
+另一个是GenreMapper类，也是非常简单的将ResultSet中的每一行映射为一个Genre Domain Object。
+
+import org.springframework.jdbc.core.RowMapper;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import com.foo.domain.Genre;
+public final class GenreMapper implements RowMapper {
+public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
+return new Genre(rs.getString("name"));
+}
+}
+
+如果你需要给存储过程传输入参数（这些输入参数是在RDBMS存储过程中定义好了的），
+则需要提供一个指定类型的execute(..)方法， 该方法将调用基类的protected execute(Map parameters)方法。 例如：
+
+import oracle.jdbc.driver.OracleTypes;
+import org.springframework.jdbc.core.SqlOutParameter;
+import org.springframework.jdbc.object.StoredProcedure;
+import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
+public class TitlesAfterDateStoredProcedure extends StoredProcedure {
+private static final String SPROC_NAME = "TitlesAfterDate";
+private static final String CUTOFF_DATE_PARAM = "cutoffDate";
+public TitlesAfterDateStoredProcedure(DataSource dataSource) {
+super(dataSource, SPROC_NAME);
+declaraParameter(new SqlParameter(CUTOFF_DATE_PARAM, Types.DATE);
+declareParameter(new SqlOutParameter("titles", OracleTypes.CURSOR, new TitleMapper()));
+compile();
+}
+public Map execute(Date cutoffDate) {
+Map inputs = new HashMap();
+inputs.put(CUTOFF_DATE_PARAM, cutoffDate);
+return super.execute(inputs);
+}
+}
+
+11.4.5. SqlFunction类
+
+SqlFunction RDBMS操作类封装了一个SQL“函数”包装器（wrapper）， 该包装器适用于查询并返回一个单行结果集。
+默认返回的是一个int值， 不过我们可以采用类似JdbcTemplate中的queryForXxx 做法自己实现来返回其它类型。
+SqlFunction优势在于我们不必创建 JdbcTemplate，这些它都在内部替我们做了。
+
+该类的主要用途是调用SQL函数来返回一个单值的结果集，比如类似“select user()”、 “select sysdate from dual”的查询。
+如果需要调用更复杂的存储函数， 可以使用StoredProcedure或SqlCall。
+
+SqlFunction是一个具体类，通常我们不需要它的子类。 其用法是创建该类的实例，然后声明SQL语句以及参数就可以调用相关的run方法去多次执行函数。
+下面的例子用来返回指定表的记录行数：
+
+public int countRows() {
+SqlFunction sf = new SqlFunction(dataSource, "select count(*) from mytable");
+sf.compile();
+return sf.run();
+}
+

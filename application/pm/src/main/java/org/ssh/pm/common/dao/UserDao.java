@@ -9,6 +9,7 @@ import org.hibernate.FetchMode;
 import org.hibernate.Query;
 import org.springframework.stereotype.Component;
 import org.springside.modules.orm.hibernate.HibernateDao;
+import org.springside.modules.utils.UtilDateTime;
 import org.ssh.pm.common.entity.User;
 
 /**
@@ -61,5 +62,12 @@ public class UserDao extends HibernateDao<User, String> {
      */
     public void initUser(User user) {
         initProxyObject(user.getRoleList());
+    }
+
+    public String getDatabaseTime(){
+        List l = find("select current_timestamp() from User where loginName = ?", "admin");
+        java.util.Date d = (java.util.Date)l.get(0);
+
+        return UtilDateTime.toDateString(d, "yyyy.MM.dd HH:mm:ss");
     }
 }

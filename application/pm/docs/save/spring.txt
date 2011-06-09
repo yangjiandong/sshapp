@@ -67,6 +67,11 @@ spring -- 知识库
 
    other/proguard.txt
 
+   7. spring jdbc
+
+   http://www.blogjava.net/176142998/archive/2009/02/03/221507.html
+   other/spring.jdbc.2.txt
+
    --END
 
 

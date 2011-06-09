@@ -236,4 +236,33 @@ public class CommonController {
         Map<String, Object> map = accountManager.logout(request);
         JsonViewUtil.buildCustomJSONDataResponse(response, map);
     }
+
+    @RequestMapping("/datatime")
+    public @ResponseBody
+    Map<String, Object> getDatabaseTime(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        String time = this.accountManager.getDataTime();
+        map.put("datatime", time);
+
+        return map;
+    }
+
+    //jdbc 直接输出json
+    @RequestMapping("/getUserByJdbc")
+    public @ResponseBody
+    Map<String, Object> getUserByJdcb(HttpServletRequest request, HttpServletResponse response) {
+        Map<String, Object> resultMap = this.accountManager.getUserByJdbc(2L);
+        return resultMap;
+    }
+
+    @RequestMapping("/getUserListByJdbc")
+    public @ResponseBody
+    Map<String, Object> getUserListByJdcb(HttpServletRequest request, HttpServletResponse response) {
+        List<Map<String, Object>> resultList = accountManager.getUserListByJdbc();
+
+        Map<String, Object> re2 = new HashMap<String, Object>();
+        re2.put("all", resultList.size());
+        re2.put("records", resultList);
+        return re2;
+    }
 }
