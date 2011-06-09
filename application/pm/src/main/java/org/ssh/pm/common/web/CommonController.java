@@ -155,7 +155,7 @@ public class CommonController {
 
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Object> dsmap = new HashMap<String, Object>();
-        map.put("sysDataSource", dsmap);
+        map.put("DataSource", dsmap);
         try{
             BasicDataSource basicDataSource = (BasicDataSource) ds;
             dsmap.put("最大连接数" , basicDataSource.getMaxActive());

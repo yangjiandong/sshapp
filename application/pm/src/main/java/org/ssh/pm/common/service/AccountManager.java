@@ -229,10 +229,8 @@ public class AccountManager {
         //u.setId("1");
         u.setName("管理员");
         u.setLoginName("admin");
-        u.setPassword("123");
+        u.setPassword("12345");
         u.setNote("admin@gmail.com");
-        u.setCreateBy("初始化");
-
         //add role
         u.setRoleList(rs);
 
@@ -255,7 +253,7 @@ public class AccountManager {
     @Transactional(readOnly = true)
     public List<User> getAllUserBySp() {
         List<User> list = userJdbcDao.queryBySp("2011.01.01");
-        //logger.info("get {} user sucessful.", list.size());
+        logger.info("get {} user sucessful.", list.size());
         return list;
     }
 

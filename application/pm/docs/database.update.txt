@@ -4,6 +4,21 @@
 2011.06.08
 -----------
 
+   1. 用戶角色表
+
+CREATE TABLE t_usr_grp(
+    [usr_id] [numeric](19, 0) NOT NULL,
+    [grp_id] [numeric](19, 0) NOT NULL
+)
+go
+
+insert into t_usr_grp
+(usr_id,grp_id)values(1,1)
+go
+
+2011.06.08
+-----------
+
    1. 附加数据库后更改兼容级别
 
    EXEC sp_dbcmptlevel 'appdata', '90';

@@ -1,5 +1,6 @@
 package org.ssh.pm.common.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -21,7 +22,6 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.springside.modules.orm.grid.ViewField;
 import org.springside.modules.utils.reflection.ConvertUtils;
-import org.ssh.pm.orm.hibernate.AuditableEntity;
 
 import com.google.common.collect.Lists;
 
@@ -31,7 +31,13 @@ import com.google.common.collect.Lists;
  */
 @Entity
 @Table(name = "register")
-public class User extends AuditableEntity {
+public class User implements Serializable{
+
+    private static final long serialVersionUID = -5486157827319182878L;
+
+    @ViewField
+    private Long id;
+
     @ViewField(header = "登录名")
     private String loginName;
     @ViewField
@@ -60,7 +66,6 @@ public class User extends AuditableEntity {
         return id;
     }
 
-    @Override
     public void setId(Long id) {
         this.id = id;
     }
@@ -86,7 +91,7 @@ public class User extends AuditableEntity {
     //多对多定义
     @ManyToMany
     //中间表定义,表名采用默认命名规则
-    @JoinTable(name = "T_USER_ROLE", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = { @JoinColumn(name = "ROLE_ID") })
+    @JoinTable(name = "t_usr_grp", joinColumns = { @JoinColumn(name = "usr_id") }, inverseJoinColumns = { @JoinColumn(name = "grp_id") })
     //Fecth策略定义
     @Fetch(FetchMode.SUBSELECT)
     //集合按id排序

@@ -1,71 +1,29 @@
-#jdbc settings
-#jdbc.driver=org.h2.Driver
-#jdbc.driver=com.mysql.jdbc.Driver
-#server
-#jdbc.url=jdbc:h2:tcp://localhost/~/sshappdatas
-#jdbc.url=jdbc:mysql://localhost/sshapp
-#embedded
-#jdbc.url=jdbc:h2:sshappdatas
-#jdbc.username=sa
-#jdbc.password=
-#hibernate.dialect=org.ssh.app.orm.hibernate.H2ExtDialect
-
 jdbc.driver=net.sourceforge.jtds.jdbc.Driver
-jdbc.url=jdbc:jtds:sqlserver://192.168.1.148:1433/sshapp
+jdbc.url=jdbc:jtds:sqlserver://localhost:1433/appdata
 jdbc.username=sa
 jdbc.password=123
 hibernate.dialect=org.hibernate.dialect.SQLServerDialect
 
 quartz.jdbc.driver=net.sourceforge.jtds.jdbc.Driver
-quartz.jdbc.url=jdbc:jtds:sqlserver://192.168.1.148:1433/sshapp
+quartz.jdbc.url=jdbc:jtds:sqlserver://localhost:1433/appdata
 quartz.jdbc.username=sa
 quartz.jdbc.password=123
 
 import.jdbc.driver=net.sourceforge.jtds.jdbc.Driver
-import.jdbc.url=jdbc:jtds:sqlserver://192.168.1.148:1433/sshapp
+import.jdbc.url=jdbc:jtds:sqlserver://localhost:1433/appdata
 import.jdbc.username=sa
 import.jdbc.password=123
 
-#hibernate settings
-#hibernate.dialect=org.hibernate.dialect.H2Dialect
-#hibernate.dialect=org.hibernate.dialect.MySQLDialect
-
-#h2
-#jdbc.driver=org.h2.Driver
-#jdbc.url=jdbc:h2:tcp://localhost/~/sshappdatas
-#embedded
-#jdbc.url=jdbc:h2:sshappdatas
-#jdbc.username=sa
-#jdbc.password=
-#hibernate.dialect=org.ssh.app.orm.hibernate.H2ExtDialect
-
-#quartz.jdbc.driver=org.h2.Driver
-#quartz.jdbc.url=jdbc:h2:tcp://localhost/~/sshappdatas
-#quartz.jdbc.username=sa
-#quartz.jdbc.password=
-
-#jdbc.driver=net.sourceforge.jtds.jdbc.Driver
-#jdbc.url=jdbc:jtds:sqlserver://192.168.1.148:1433/sshapp
-#jdbc.username=sa
-#jdbc.password=123
-#hibernate.dialect=org.hibernate.dialect.SQLServerDialect
-
-#jdbc.driver=com.mysql.jdbc.Driver
-#jdbc.url=jdbc:mysql://localhost/sshapp
-#hibernate.dialect=org.hibernate.dialect.MySQLDialect
-
-#hibernate settings
-#hibernate.dialect=org.hibernate.dialect.H2Dialect
 hibernate.show_sql=true
 hibernate.format_sql=true
-#Hibernate\u4e2d\u7f13\u5b58\u7684\u7edf\u8ba1\u7b56\u7565,\u5f00\u53d1\u73af\u5883\u4e2d\u4e3atrue
+#Hibernate中缓存的统计策略,开发环境中为true
 hibernate.generate_statistics=true
 #none
-#validate:\u52a0\u8f7dhibernate\u65f6\uff0c\u9a8c\u8bc1\u521b\u5efa\u6570\u636e\u5e93\u8868\u7ed3\u6784
-#create:\u6bcf\u6b21\u52a0\u8f7dhibernate\uff0c\u91cd\u65b0\u521b\u5efa\u6570\u636e\u5e93\u8868\u7ed3\u6784\uff0c\u8fd9\u5c31\u662f\u5bfc\u81f4\u6570\u636e\u5e93\u8868\u6570\u636e\u4e22\u5931\u7684\u539f\u56e0\u3002
-#create-drop:\u52a0\u8f7dhibernate\u65f6\u521b\u5efa\uff0c\u9000\u51fa\u662f\u5220\u9664\u8868\u7ed3\u6784
-#update:\u52a0\u8f7dhibernate\u81ea\u52a8\u66f4\u65b0\u6570\u636e\u5e93\u7ed3\u6784
-hibernate.hbm2ddl.auto=update
+#validate:加载hibernate时，验证创建数据库表结构
+#create:每次加载hibernate，重新创建数据库表结构，这就是导致数据库表数据丢失的原因。
+#create-drop:加载hibernate时创建，退出是删除表结构
+#update:加载hibernate自动更新数据库结构
+hibernate.hbm2ddl.auto=none
 hibernate.cache_provider_class=org.hibernate.cache.EhCacheProvider
 hibernate.cache_use_query_cache=false
 hibernate.ehcache_config_file=ehcache-hibernate-config.xml
@@ -84,8 +42,8 @@ server.addr=localhost
 jmx.rmi_port=18080
 
 #activemq settings
-#\u914d\u7f6e\u5d4c\u5165\u5f0f\u7684 activemq broker
-#persistent=true,\u6d88\u606f\u7684\u5b58\u50a8\u673a\u5236, \u670d\u52a1\u5668\u91cd\u542f\u4e5f\u4e0d\u4f1a\u4e22\u5931\u6d88\u606f
+#配置嵌入式的 activemq broker
+#persistent=true,消息的存储机制, 服务器重启也不会丢失消息
 jms.broker_url=vm://showcase?broker.persistent=false
 #localhost broker
 #jms.broker_url=tcp://localhost:61616
@@ -96,7 +54,7 @@ jms.broker_url=vm://showcase?broker.persistent=false
 jms.clicentId=durableTopicListenerDemo
 
 #springsecurity settings
-#\u914d\u5408\u5f00\u53d1\u4e2d\u8bbe\u7f6e\u4e3a\u81ea\u52a8\u767b\u5f55
+#配合开发中设置为自动登录
 security.autologin.enabled=false
 
 # zapcat port

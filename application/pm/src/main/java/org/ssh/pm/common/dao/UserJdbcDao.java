@@ -24,7 +24,6 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.core.simple.ParameterizedBeanPropertyRowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceUtils;
@@ -41,6 +40,7 @@ import org.ssh.pm.common.entity.User;
 
 import com.google.common.collect.Maps;
 
+
 /**
  * User对象的Jdbc Dao, 演示Spring JdbcTemplate的使用.
  *
@@ -48,48 +48,33 @@ import com.google.common.collect.Maps;
  */
 @Component
 public class UserJdbcDao {
-
     private static final String QUERY_USER_BY_ID = "select id, name, login_name from T_USERS where id=?";
     private static final String QUERY_USER_BY_IDS = "select id, name, login_name from T_USERS where id in(:ids)";
     private static final String QUERY_USER = "select id, name, login_name from SS_USER order by id";
     private static final String QUERY_USER_BY_LOGINNAME = "select id,name,login_name from T_USERS where login_name=:login_name";
     private static final String INSERT_USER = "insert into T_USERS(id, login_name, name) values(:id, :loginName, :name)";
-
     private static Logger logger = LoggerFactory.getLogger(UserJdbcDao.class);
-
     private SimpleJdbcTemplate simpleJdbcTemplate;
-
     private JdbcTemplate jdbcTemplate;
-
     private NamedParameterJdbcTemplate njdbcTemplate;
-
     private TransactionTemplate transactionTemplate;
-
     private String searchUserSql;
-
     private UserMapper userMapper = new UserMapper();
 
-    private class UserMapper implements RowMapper<User> {
-        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-            User user = new User();
-            user.setId(rs.getLong("id"));
-            user.setName(rs.getString("name"));
-            user.setLoginName(rs.getString("login_name"));
-            return user;
-        }
-    }
-
     //@Resource
-     @Autowired
-    public void setDataSource(@Qualifier("dataSource") DataSource dataSource) {
+    @Autowired
+    public void setDataSource(@Qualifier("dataSource")
+    DataSource dataSource) {
         simpleJdbcTemplate = new SimpleJdbcTemplate(dataSource);
         jdbcTemplate = new JdbcTemplate(dataSource);
         njdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
     //@Resource
-     @Autowired
-    public void setDefaultTransactionManager(@Qualifier("defaultTransactionManager") PlatformTransactionManager defaultTransactionManager) {
+    @Autowired
+    public void setDefaultTransactionManager(
+        @Qualifier("defaultTransactionManager")
+    PlatformTransactionManager defaultTransactionManager) {
         transactionTemplate = new TransactionTemplate(defaultTransactionManager);
     }
 
@@ -101,7 +86,8 @@ public class UserJdbcDao {
      * 查询单个对象.
      */
     public User queryObject(String id) {
-        return simpleJdbcTemplate.queryForObject(QUERY_USER_BY_ID, userMapper, id);
+        return simpleJdbcTemplate.queryForObject(QUERY_USER_BY_ID, userMapper,
+            id);
     }
 
     /**
@@ -132,7 +118,8 @@ public class UserJdbcDao {
         Map<String, Object> map = Maps.newHashMap();
         map.put("login_name", loginName);
 
-        return simpleJdbcTemplate.queryForObject(QUERY_USER_BY_LOGINNAME, userMapper, map);
+        return simpleJdbcTemplate.queryForObject(QUERY_USER_BY_LOGINNAME,
+            userMapper, map);
     }
 
     /**
@@ -171,9 +158,11 @@ public class UserJdbcDao {
     /**
      * 使用freemarker创建动态SQL.
      */
-    public List<User> searchUserByFreemarkerSqlTemplate(Map<String, ?> conditions) {
+    public List<User> searchUserByFreemarkerSqlTemplate(
+        Map<String, ?> conditions) {
         String sql = VelocityUtils.render(searchUserSql, conditions);
         logger.info(sql);
+
         return simpleJdbcTemplate.query(sql, userMapper, conditions);
     }
 
@@ -182,14 +171,14 @@ public class UserJdbcDao {
      * 无返回值的情形.
      */
     public void createUserInTransaction(User user) {
-
         final BeanPropertySqlParameterSource source = new BeanPropertySqlParameterSource(user);
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-            @Override
-            public void doInTransactionWithoutResult(TransactionStatus status) {
-                simpleJdbcTemplate.update(INSERT_USER, source);
-            }
-        });
+                @Override
+                public void doInTransactionWithoutResult(
+                    TransactionStatus status) {
+                    simpleJdbcTemplate.update(INSERT_USER, source);
+                }
+            });
     }
 
     /**
@@ -197,36 +186,45 @@ public class UserJdbcDao {
      * 有返回值的情形,并捕获异常进行处理不再抛出的情形.
      */
     public boolean createUserInTransaction2(User user) {
-
         final BeanPropertySqlParameterSource source = new BeanPropertySqlParameterSource(user);
+
         return transactionTemplate.execute(new TransactionCallback<Boolean>() {
-            public Boolean doInTransaction(TransactionStatus status) {
-                try {
-                    simpleJdbcTemplate.update(INSERT_USER, source);
-                    return true;
-                } catch (Exception e) {
-                    logger.error(e.getMessage(), e);
-                    status.setRollbackOnly();
-                    return false;
+                public Boolean doInTransaction(TransactionStatus status) {
+                    try {
+                        simpleJdbcTemplate.update(INSERT_USER, source);
+
+                        return true;
+                    } catch (Exception e) {
+                        logger.error(e.getMessage(), e);
+                        status.setRollbackOnly();
+
+                        return false;
+                    }
                 }
-            }
-        });
+            });
     }
 
     public SimpleJdbcCall createSimpleJdbcCall() {
-            return new SimpleJdbcCall(this.jdbcTemplate);
+        return new SimpleJdbcCall(this.jdbcTemplate);
     }
 
     //
+    //alter PROCEDURE sp_get_all_user
+    //@cdate varchar(10)
+    //AS
+    //select usr_id as id, usr_name as name,usr_logname as loginName from register
     public List<User> queryBySp(String p) {
         SimpleJdbcCall jdbcCall = createSimpleJdbcCall();
         jdbcCall.getJdbcTemplate().setResultsMapCaseInsensitive(true);
-        jdbcCall.withProcedureName("sp_get_all_user").returningResultSet("P_CURSOR", BeanPropertyRowMapper.newInstance(User.class));
-         SqlParameterSource in = new MapSqlParameterSource().addValue("cdate", p);
-         Map out = jdbcCall.execute(in);
+        jdbcCall.withProcedureName("sp_get_all_user")
+                .returningResultSet("P_CURSOR",
+            BeanPropertyRowMapper.newInstance(User.class));
 
-         // oracle 下只能用这个名称需与后台定义的cursor名一致
-         return (List) out.get("P_CURSOR");
+        SqlParameterSource in = new MapSqlParameterSource().addValue("cdate", p);
+        Map out = jdbcCall.execute(in);
+
+        // oracle 下只能用这个名称需与后台定义的cursor名一致
+        return (List) out.get("P_CURSOR");
     }
 
     /**
@@ -236,9 +234,12 @@ public class UserJdbcDao {
         String sdate = UtilDateTime.nowDateString("yyyy-MM-dd HH:mm:ss");
         DataSource dataSource = jdbcTemplate.getDataSource();
         Connection con = null;
+
         try {
             con = DataSourceUtils.getConnection(jdbcTemplate.getDataSource());
+
             String sql = "";
+
             //2011.05.02
             //连接泄露
             //(DBUtils.isOracle(jdbcTemplate2.getDataSource().getConnection()))
@@ -252,19 +253,21 @@ public class UserJdbcDao {
             }
 
             if (StringUtils.isNotEmpty(sql)) {
-                Object result = this.jdbcTemplate.queryForObject(sql, null, String.class);
+                Object result = this.jdbcTemplate.queryForObject(sql, null,
+                        String.class);
+
                 if (result != null) {
                     sdate = result.toString();
                 }
             }
 
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat formatter = new SimpleDateFormat(
+                    "yyyy-MM-dd HH:mm:ss");
             Date date = formatter.parse(sdate);
             sdate = new SimpleDateFormat(format).format(date);
-
         } catch (Exception se) {
             logger.error("getNowString:", se);
-        } finally{
+        } finally {
             //安全释放
             DataSourceUtils.releaseConnection(con, dataSource);
         }
@@ -280,82 +283,96 @@ public class UserJdbcDao {
     }
 
     //spring jdbc
-    public void createUser(User u){
+    public void createUser(User u) {
         String sql = "INSERT INTO t_users(loginName, userName) values(?,?)";
 
-        Object[] paramValues = {u.getLoginName(),u.getUserName()};
+        Object[] paramValues = { u.getLoginName(), u.getUserName() };
         this.jdbcTemplate.update(sql, paramValues);
     }
 
-    public void delUser(User u){
+    public void delUser(User u) {
         String sql = "delete from  t_users where loginName=?";
 
-        Object[] paramValues = {u.getLoginName()};
+        Object[] paramValues = { u.getLoginName() };
         this.jdbcTemplate.update(sql, paramValues);
     }
 
-    public List<User> finaAll(){
+    public List<User> finaAll() {
         String sql = "SELECT * FROM T_users";
+
         return this.jdbcTemplate.query(sql, new UserMapper());
     }
 
-    public User findByLoginName(String loginName){
+    public User findByLoginName(String loginName) {
         String sql = "SELECT * FROM T_UESRS WHERE loginName = ?";
-        Object[] paramValues = {loginName};
-        return (User)this.jdbcTemplate.queryForObject(sql, paramValues, new UserMapper());
+        Object[] paramValues = { loginName };
+
+        return (User) this.jdbcTemplate.queryForObject(sql, paramValues,
+            new UserMapper());
     }
 
     // NamedParameterJdbcTemplate
     public void create(User acc) {
-        String sql = "INSERT INTO account(loginname,password,email,"
-                + "cellphone,registed_time) "
-                + "VALUES(:loginname,:password,:email,:cellphone, NOW())";
+        String sql = "INSERT INTO account(loginname,password,email," +
+            "cellphone,registed_time) " +
+            "VALUES(:loginname,:password,:email,:cellphone, NOW())";
+
         //使用一个Bean对象的属性值作为命名参数的值
-        SqlParameterSource namedParameters =
-                new BeanPropertySqlParameterSource(acc);
+        SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(acc);
 
-        this.njdbcTemplate.update(sql,namedParameters);
+        this.njdbcTemplate.update(sql, namedParameters);
     }
-
 
     public void delete(User acc) {
         String sql = "DELETE FROM account WHERE id=:id";
+
         //使用指定的值来代替命名参数
-        SqlParameterSource namedParameters =
-                new MapSqlParameterSource("id", acc.getId());
+        SqlParameterSource namedParameters = new MapSqlParameterSource("id",
+                acc.getId());
 
         this.njdbcTemplate.update(sql, namedParameters);
     }
 
     public void update(User acc) {
-        String sql = "UPDATE account SET loginname=:loginname,"
-                + "password=:password,email=:email,"
-                + "cellphone=:cellphone WHERE id=:id";
+        String sql = "UPDATE account SET loginname=:loginname," +
+            "password=:password,email=:email," +
+            "cellphone=:cellphone WHERE id=:id";
+
         //使用Map对象中的键/值对来代替多个命名参数的实际值
         Map<String, Object> namedParameters = new HashMap<String, Object>();
         namedParameters.put("loginname", acc.getLoginName());
         namedParameters.put("password", acc.getPassword());
         namedParameters.put("id", acc.getId());
 
-        this.njdbcTemplate.update(sql,namedParameters);
+        this.njdbcTemplate.update(sql, namedParameters);
     }
 
     @SuppressWarnings("unchecked")
     public List<User> findAll() {
         String sql = "SELECT * FROM account";
+
         //通过getJdbcOperations()来访问只有在JdbcTemplate中拥有的功能
-        return this.njdbcTemplate
-                   .getJdbcOperations()
-                   .query(sql, new UserMapper());
+        return this.njdbcTemplate.getJdbcOperations()
+                                 .query(sql, new UserMapper());
     }
 
     public User findById(Long id) {
         String sql = "SELECT * FROM account WHERE id=?";
+
         //使用指定的值来代替命名参数
-        SqlParameterSource namedParameters =
-                new MapSqlParameterSource("id", id);
-        return (User)njdbcTemplate
-                    .query(sql, namedParameters, new UserMapper());
+        SqlParameterSource namedParameters = new MapSqlParameterSource("id", id);
+
+        return (User) njdbcTemplate.query(sql, namedParameters, new UserMapper());
     }
 
+    private class UserMapper implements RowMapper<User> {
+        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+            User user = new User();
+            user.setId(rs.getLong("id"));
+            user.setName(rs.getString("name"));
+            user.setLoginName(rs.getString("login_name"));
+
+            return user;
+        }
+    }
 }
