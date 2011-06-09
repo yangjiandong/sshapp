@@ -14,7 +14,6 @@ import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -39,21 +38,24 @@ public class User extends AuditableEntity {
     private String password;
     @ViewField(header = "用户名")
     private String name;
-    @ViewField(header = "邮箱")
-    private String email;
-    @ViewField(header = "status")
-    private String status;
     @ViewField
-    private Integer version;
+    private String usrid1;
+    @ViewField
+    private String usrid2;
+    @ViewField
+    private String note;
+    @ViewField
+    private Integer manid;
+    @ViewField
+    private String stationid;
 
     //有序的关联对象集合
     private List<Role> roleList = Lists.newArrayList();
 
-    //private List<PartDB> partDBList = Lists.newArrayList();
-
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "Id_Generator")
-    @TableGenerator(name = "Id_Generator", table = "ID_GENERATOR", pkColumnName = "GEN_NAME", valueColumnName = "GEN_VAL", pkColumnValue = "T_USERS", initialValue = 1, allocationSize = 1)
+    @TableGenerator(name = "Id_Generator", table = "sysid", pkColumnName = "sysid_name", valueColumnName = "next_id", pkColumnValue = "REGISTER", initialValue = 1, allocationSize = 1)
+    @Column(name = "usr_id")
     public Long getId() {
         return id;
     }
@@ -63,17 +65,7 @@ public class User extends AuditableEntity {
         this.id = id;
     }
 
-    //Hibernate自动维护的Version字段
-    @Version
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    @Column(nullable = false, unique = true, length = 20)
+    @Column(name = "usr_logname", nullable = false, unique = true, length = 10)
     public String getLoginName() {
         return loginName;
     }
@@ -82,31 +74,13 @@ public class User extends AuditableEntity {
         this.loginName = loginName;
     }
 
-    @Column(length = 50)
+    @Column(nullable = false, name = "usr_name", length = 10)
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Column(length = 50)
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    @Column(length = 10)
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     //多对多定义
@@ -134,31 +108,32 @@ public class User extends AuditableEntity {
         return ConvertUtils.convertElementPropertyToString(roleList, "name", ", ");
     }
 
-//    //多对多定义
-//    @ManyToMany
-//    //中间表定义,表名采用默认命名规则
-//    @JoinTable(name = "T_USER_DB", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = { @JoinColumn(name = "DBCODE") })
-//    //Fecth策略定义
-//    @Fetch(FetchMode.SUBSELECT)
-//    public List<PartDB> getPartDBList() {
-//        return partDBList;
-//    }
-//
-//    public void setPartDBList(List<PartDB> partDBList) {
-//        this.partDBList = partDBList;
-//    }
-//
-//    @Transient
-//    @JsonIgnore
-//    public String getDBNames() {
-//        return ConvertUtils.convertElementPropertyToString(partDBList, "dbname", ", ");
-//    }
+    //    //多对多定义
+    //    @ManyToMany
+    //    //中间表定义,表名采用默认命名规则
+    //    @JoinTable(name = "T_USER_DB", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = { @JoinColumn(name = "DBCODE") })
+    //    //Fecth策略定义
+    //    @Fetch(FetchMode.SUBSELECT)
+    //    public List<PartDB> getPartDBList() {
+    //        return partDBList;
+    //    }
+    //
+    //    public void setPartDBList(List<PartDB> partDBList) {
+    //        this.partDBList = partDBList;
+    //    }
+    //
+    //    @Transient
+    //    @JsonIgnore
+    //    public String getDBNames() {
+    //        return ConvertUtils.convertElementPropertyToString(partDBList, "dbname", ", ");
+    //    }
 
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
 
+    @Column(name = "usr_password", nullable = false, length = 10)
     public String getPassword() {
         return password;
     }
@@ -175,5 +150,50 @@ public class User extends AuditableEntity {
     @Transient
     public boolean isTransient() {
         return this.id == null;
+    }
+
+    @Column(name = "usr_id1", length = 10)
+    public String getUsrid1() {
+        return usrid1;
+    }
+
+    public void setUsrid1(String usrid1) {
+        this.usrid1 = usrid1;
+    }
+
+    @Column(name = "usr_id2", length = 10)
+    public String getUsrid2() {
+        return usrid2;
+    }
+
+    public void setUsrid2(String usrid2) {
+        this.usrid2 = usrid2;
+    }
+
+    @Column(name = "note", length = 40)
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    @Column(name = "man_id")
+    public Integer getManid() {
+        return manid;
+    }
+
+    public void setManid(Integer manid) {
+        this.manid = manid;
+    }
+
+    @Column(name = "station_id", length = 10)
+    public String getStationid() {
+        return stationid;
+    }
+
+    public void setStationid(String stationid) {
+        this.stationid = stationid;
     }
 }

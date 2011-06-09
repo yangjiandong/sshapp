@@ -40,7 +40,8 @@ public class AdvancedNotifyMessageProducer {
 
                 MapMessage message = session.createMapMessage();
                 message.setString("userName", user.getName());
-                message.setString("email", user.getEmail());
+                //message.setString("email", user.getEmail());
+                message.setString("email", "user@gmail.com");
 
                 message.setStringProperty("objectType", "user");
 

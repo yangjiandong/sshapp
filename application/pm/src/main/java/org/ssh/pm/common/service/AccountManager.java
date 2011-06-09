@@ -230,9 +230,9 @@ public class AccountManager {
         u.setName("管理员");
         u.setLoginName("admin");
         u.setPassword("123");
-        u.setEmail("admin@gmail.com");
+        u.setNote("admin@gmail.com");
         u.setCreateBy("初始化");
-        u.setStatus("enabled");
+
         //add role
         u.setRoleList(rs);
 
@@ -303,8 +303,7 @@ public class AccountManager {
      * 检查当前用户信息的合法性
      */
     @Transactional(readOnly = true)
-    public Map<String, Object> checkUserLegality(HttpServletRequest request)
-            throws ServiceException {
+    public Map<String, Object> checkUserLegality(HttpServletRequest request) throws ServiceException {
         HttpSession session = request.getSession(true);
         session.removeAttribute("userSession");
 
@@ -321,30 +320,25 @@ public class AccountManager {
 
         if (user != null) {
             if (encoder.encodePassword(password, null).equals(user.getPassword())) {
-                if (!user.getStatus().equals("disabled")) {
-
-                  UserSession userSession = new UserSession(user);
-                  userSession.setClientIp(clientIp);
-                  //
-                  userSession.setModuleId(1L);
-                  session.setAttribute("userSession", userSession);
-                } else {
-                    checked = false;
-                    message = "用户被禁用";
-                }
+                UserSession userSession = new UserSession(user);
+                userSession.setClientIp(clientIp);
+                //
+                userSession.setModuleId(1L);
+                session.setAttribute("userSession", userSession);
             } else {
                 checked = false;
                 message = "密码错误";
             }
             userName = user.getName();
-            if (userName.equals("")) userName = user.getLoginName();
+            if (userName.equals(""))
+                userName = user.getLoginName();
         } else {
             checked = false;
             message = "用户名错误";
         }
         map.put("success", checked);
         map.put("message", message);
-        map.put("userName",userName );
+        map.put("userName", userName);
         return map;
     }
 

@@ -1119,7 +1119,8 @@ public class AppUtil {
             Cipher cipher = Cipher.getInstance("DES");
             cipher.init(Cipher.DECRYPT_MODE, key, sr);
             // 把字符串解码为字节数组，并解密
-            decryptedData = new String(cipher.doFinal(new sun.misc.BASE64Decoder().decodeBuffer(cryptData)));
+            // decryptedData = new String(cipher.doFinal(new sun.misc.BASE64Decoder().decodeBuffer(cryptData)));
+            decryptedData = new String(cipher.doFinal(new Base64().decode(cryptData)));
         } catch (Exception e) {
             log.error("解密错误，错误信息：", e);
             throw new RuntimeException("解密错误，错误信息：", e);

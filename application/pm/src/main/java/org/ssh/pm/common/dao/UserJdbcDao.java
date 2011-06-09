@@ -335,7 +335,6 @@ public class UserJdbcDao {
         Map<String, Object> namedParameters = new HashMap<String, Object>();
         namedParameters.put("loginname", acc.getLoginName());
         namedParameters.put("password", acc.getPassword());
-        namedParameters.put("email", acc.getEmail());
         namedParameters.put("id", acc.getId());
 
         this.njdbcTemplate.update(sql,namedParameters);

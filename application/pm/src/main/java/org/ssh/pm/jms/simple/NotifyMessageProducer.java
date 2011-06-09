@@ -36,7 +36,8 @@ public class NotifyMessageProducer {
     private void sendMessage(User user, Destination destination) {
         Map map = new HashMap();
         map.put("userName", user.getName());
-        map.put("email", user.getEmail());
+        //map.put("email", user.getEmail());
+        map.put("email", "user@gmail.com");
 
         jmsTemplate.convertAndSend(destination, map);
     }
