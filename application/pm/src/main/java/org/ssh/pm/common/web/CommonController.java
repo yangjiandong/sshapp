@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springside.modules.utils.JsonViewUtil;
 import org.springside.modules.utils.spring.SpringContextHolder;
+import org.ssh.pm.common.dao.JdbcPage;
 import org.ssh.pm.common.entity.User;
 import org.ssh.pm.common.service.AccountManager;
 import org.ssh.pm.common.service.CategoryService;
@@ -263,6 +264,18 @@ public class CommonController {
         Map<String, Object> re2 = new HashMap<String, Object>();
         re2.put("all", resultList.size());
         re2.put("records", resultList);
+        return re2;
+    }
+
+    @RequestMapping("/getUserListByJdbcPage")
+    public @ResponseBody
+    Map<String, Object> getUserListByJdcbPage(HttpServletRequest request, HttpServletResponse response) {
+        JdbcPage<User> resultList = accountManager.getUserListByJdbcPage(3,10);
+
+        List<User>alls = resultList.getPageItems();
+        Map<String, Object> re2 = new HashMap<String, Object>();
+        re2.put("all", alls.size());
+        re2.put("records", alls);
         return re2;
     }
 }

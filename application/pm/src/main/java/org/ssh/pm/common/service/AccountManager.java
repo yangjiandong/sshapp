@@ -21,6 +21,7 @@ import org.springside.modules.security.springsecurity.SpringSecurityUtils;
 import org.springside.modules.utils.ServiceException;
 import org.springside.modules.utils.encode.JsonBinder;
 import org.ssh.pm.cache.MemcachedObjectType;
+import org.ssh.pm.common.dao.JdbcPage;
 import org.ssh.pm.common.dao.RoleDao;
 import org.ssh.pm.common.dao.UserDao;
 import org.ssh.pm.common.dao.UserJdbcDao;
@@ -386,4 +387,15 @@ public class AccountManager {
 
     }
 
+    @Transactional(readOnly = true)
+    public JdbcPage<User> getUserListByJdbcPage(final int pageNo, final int pageSize) {
+        try {
+            JdbcPage<User> resultList = userJdbcDao.getUsersByJdbcpage(pageNo, pageSize, 1L);
+            return resultList;
+        } catch (Exception e) {
+            // TODO: handle exception
+            return null;
+        }
+
+    }
 }

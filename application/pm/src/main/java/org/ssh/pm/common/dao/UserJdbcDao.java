@@ -61,6 +61,17 @@ public class UserJdbcDao {
     private String searchUserSql;
     private UserMapper userMapper = new UserMapper();
 
+    private class UserMapper implements RowMapper<User> {
+        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+            User user = new User();
+            user.setId(rs.getLong("id"));
+            user.setName(rs.getString("name"));
+            user.setLoginName(rs.getString("login_name"));
+
+            return user;
+        }
+    }
+
     //@Resource
     @Autowired
     public void setDataSource(@Qualifier("dataSource")
@@ -365,14 +376,39 @@ public class UserJdbcDao {
         return (User) njdbcTemplate.query(sql, namedParameters, new UserMapper());
     }
 
-    private class UserMapper implements RowMapper<User> {
-        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-            User user = new User();
-            user.setId(rs.getLong("id"));
-            user.setName(rs.getString("name"));
-            user.setLoginName(rs.getString("login_name"));
 
-            return user;
-        }
+    //spring jdbc example
+    public void updateUser(User u){
+        //jdbcTemplate.execute("CREATE TABLE USER (user_id integer, name varchar(100))");
+        simpleJdbcTemplate.update("UPDATE t_users SET name = ? WHERE user_id = ?", new Object[] {u.getName(), u.getId()});
+        //simpleJdbcTemplate.update("INSERT INTO t_users VALUES(?, ?, ?, ?)", new Object[] {user.getId(), user.getName(), user.getSex(), user.getAge()});
+        //int count = jdbcTemplate.queryForInt("SELECT COUNT(*) FROM USER");
+        //String name = (String) jdbcTemplate.queryForObject("SELECT name FROM USER WHERE user_id = ?", new Object[] {id}, java.lang.String.class);
+        //List rows = jdbcTemplate.queryForList("SELECT * FROM USER");
+    }
+
+    public List<User> getUsers(Long userId) throws SQLException {
+        return jdbcTemplate.query(
+                "SELECT id, name,loginName FROM t_users WHERE id = ? ",
+                userMapper,
+                userId
+        );
+    }
+
+    // http://www.codefutures.com/tutorials/spring-pagination/
+    //page
+    public JdbcPage<User> getUsersByJdbcpage(final int pageNo, final int pageSize, Long userId) throws SQLException {
+        JdbcPaginationHelper<User> ph = new JdbcPaginationHelper<User>();
+        return ph.fetchPage(
+                jdbcTemplate,
+                "SELECT count(*) FROM t_users ",
+                "SELECT id, name,loginName FROM t_users",
+                //new Object[]{userId},
+                null,
+                pageNo,
+                pageSize,
+                userMapper
+        );
+
     }
 }

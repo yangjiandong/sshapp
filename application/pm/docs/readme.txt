@@ -7,6 +7,9 @@ Personnel_Management System
    1. spring jdbc 直接输出json
    CommonController.getUserByJdcb,getUserListByJdcb
 
+   2.  spring page
+   CommonController.getUserListByJdcbPage
+
 2011.06.08
 ----------
 
