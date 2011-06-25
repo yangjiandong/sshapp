@@ -163,4 +163,26 @@ public class Child2 extends Parent {
    
    other/h_sql.txt
    
+   10. batch
+   ------------------------------------------------------------
+   http://docs.jboss.org/hibernate/core/3.3/reference/en/html/batch.html
+   
+   -- 项目中采用后，没看出什么batch效果，所花时间与一个个提交改进不大
+   
+Session session = sessionFactory.openSession();
+Transaction tx = session.beginTransaction();
+   
+for ( int i=0; i<100000; i++ ) {
+    Customer customer = new Customer(.....);
+    session.save(customer);
+    if ( i % 20 == 0 ) { //20, same as the JDBC batch size
+        //flush a batch of inserts and release memory:
+        session.flush();
+        session.clear();
+    }
+}
+   
+tx.commit();
+session.close();
+   
    --END
