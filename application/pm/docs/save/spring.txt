@@ -72,6 +72,24 @@ spring -- 知识库
    http://www.blogjava.net/176142998/archive/2009/02/03/221507.html
    other/spring.jdbc.2.txt
 
+   8. tx 事务
+   
+   采用了spring tx ,所有需提交到后台表的操作必须加
+   @Transactional
+   
+   不然直级用 TransactionCallbackWithoutResult
+   
+   CommonService:
+
+    @Transactional
+    public void insertDemo(){
+      commonJdbcDao.insertDemo();
+    }
+  
+    public void insertDemoInTransaction(){
+      commonJdbcDao.insertDemoInTransaction();
+    }
+   
    --END
 
 

@@ -138,7 +138,7 @@ public class User implements Serializable{
         return ToStringBuilder.reflectionToString(this);
     }
 
-    @Column(name = "usr_password", nullable = false, length = 10)
+    @Column(name = "usr_password", nullable = false, length = 100)
     public String getPassword() {
         return password;
     }

@@ -6,17 +6,23 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springside.modules.utils.UtilDateTime;
 import org.springside.modules.utils.spring.SpringContextHolder;
+import org.ssh.pm.common.dao.CommonJdbcDao;
 import org.ssh.pm.common.web.UserSession;
 import org.ssh.pm.utils.SysConfigData;
 
 @Component
 public class CommonService {
 
+	@Autowired
+	CommonJdbcDao commonJdbcDao;
+	
     public Map<String, String> getApplicationInfos() {
         SysConfigData manager = (SysConfigData) SpringContextHolder.getBean("sysConfigData");
 
@@ -35,5 +41,14 @@ public class CommonService {
         alls.put("user_name", (u == null) ? "" : u.getAccount().getUserName());
 
         return alls;
+    }
+    
+	@Transactional
+    public void insertDemo(){
+    	commonJdbcDao.insertDemo();
+    }
+	
+	public void insertDemoInTransaction(){
+    	commonJdbcDao.insertDemoInTransaction();
     }
 }

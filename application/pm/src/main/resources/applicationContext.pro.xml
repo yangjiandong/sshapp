@@ -128,6 +128,11 @@
     <property name="dataSource" ref="quartzDataSource" />
   </bean>
 
+  <!-- jdbc事务管理器, Jdbc单数据源事务 -->
+  <bean id="jdbcTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource" />
+  </bean>
+    
   <!-- 使用annotation定义事务 -->
   <tx:annotation-driven transaction-manager="defaultTransactionManager" proxy-target-class="true" />
 

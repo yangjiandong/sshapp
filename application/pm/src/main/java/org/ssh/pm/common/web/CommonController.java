@@ -29,6 +29,7 @@ import org.ssh.pm.common.dao.JdbcPage;
 import org.ssh.pm.common.entity.User;
 import org.ssh.pm.common.service.AccountManager;
 import org.ssh.pm.common.service.CategoryService;
+import org.ssh.pm.common.service.CommonService;
 import org.ssh.pm.common.service.HzService;
 import org.ssh.pm.common.service.ResourcesService;
 import org.ssh.pm.log.LogAction;
@@ -50,7 +51,21 @@ public class CommonController {
     private CategoryService categoryService;
     @Autowired
     private ResourcesService resourcesService;
-
+    @Autowired
+    private CommonService commonService;
+    
+    @RequestMapping("/demo")
+    public void insertDemo(HttpServletRequest request,
+        HttpServletResponse response) throws Exception {
+    	commonService.insertDemo();
+    }
+    
+    @RequestMapping("/demo2")
+    public void insertDemoInTransaction(HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+        	commonService.insertDemoInTransaction();
+        }
+    
     @RequestMapping("/init")
     public void initData(HttpServletRequest request,
         HttpServletResponse response) throws Exception {

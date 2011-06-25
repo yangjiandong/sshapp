@@ -27,7 +27,7 @@ public class Category extends AuditableEntity implements Serializable,
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "Id_Generator")
-    @TableGenerator(name = "Id_Generator", table = "ID_GENERATOR", pkColumnName = "GEN_NAME", valueColumnName = "GEN_VAL", pkColumnValue = "T_CATEGORYS", initialValue = 100, allocationSize = 1)
+    @TableGenerator(name = "Id_Generator", table = "sysid", pkColumnName = "sysid_name", valueColumnName = "next_id", pkColumnValue = "T_CATEGORYS", initialValue = 1, allocationSize = 1)
     public Long getId() {
         return id;
     }
