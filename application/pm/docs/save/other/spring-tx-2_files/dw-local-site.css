@@ -1,0 +1,72 @@
+/* dW Top level pages local site unique coding */
+
+/* social tagging class files for Japan */
+
+p.ibm-ind-link a,
+ul.ibm-link-list a {
+display:block;
+margin:0px;
+padding:5px 5px 5px 21px;
+}
+.ibm-container-body.ibm-two-column p.ibm-ind-link {clear:both;}
+li.dwjp-newsing-link,p.ibm-ind-link a.dwjp-newsing-link,ul.ibm-link-list a.dwjp-newsing-link {
+background:url(//dw1.s81c.com/developerworks/jp/i/icon_newsing.gif) no-repeat 2px 4px;
+}
+li.dwjp-hateb-link,p.ibm-ind-link a.dwjp-hateb-link,ul.ibm-link-list a.dwjp-hateb-link {
+background:url(//dw1.s81c.com/developerworks/jp/i/icon_hateb.gif) no-repeat 2px 4px;
+}
+li.dwjp-lvclip-link,p.ibm-ind-link a.dwjp-lvclip-link,ul.ibm-link-list a.dwjp-lvclip-link {
+background:url(//dw1.s81c.com/developerworks/jp/i/icon_lvclip.gif) no-repeat 2px 4px;
+}
+li.dwjp-delicious-link,p.ibm-ind-link a.dwjp-delicious-link,ul.ibm-link-list a.dwjp-delicious-link {
+background:url(//dw1.s81c.com/developerworks/jp/i/icon_delicious.gif) no-repeat 2px 4px;
+}
+li.dwjp-buzz-link,p.ibm-ind-link a.dwjp-buzz-link,ul.ibm-link-list a.dwjp-buzz-link {
+background:url(//dw1.s81c.com/developerworks/jp/i/icon_buzzurl.gif) no-repeat 2px 4px;
+}
+li.dwjp-choix-link,p.ibm-ind-link a.dwjp-choix-link,ul.ibm-link-list a.dwjp-choix-link {
+background:url(//dw1.s81c.com/developerworks/jp/i/icon_choix.gif) no-repeat 2px 4px;
+}
+li.dwjp-fc2-link,p.ibm-ind-link a.dwjp-fc2-link,ul.ibm-link-list a.dwjp-fc2-link {
+background:url(//dw1.s81c.com/developerworks/jp/i/icon_fc2.gif) no-repeat 2px 4px;
+}
+li.dwjp-mm-link,p.ibm-ind-link a.dwjp-mm-link,ul.ibm-link-list a.dwjp-mm-link {
+background:url(//dw1.s81c.com/developerworks/jp/i/icon_mm.gif) no-repeat 2px 4px;
+}
+li.dwjp-niftyclip-link,p.ibm-ind-link a.dwjp-niftyclip-link,ul.ibm-link-list a.dwjp-niftyclip-link {
+background:url(//dw1.s81c.com/developerworks/jp/i/icon_niftyclip.gif) no-repeat 2px 4px;
+}
+li.dwjp-ybm16-link,p.ibm-ind-link a.dwjp-ybm16-link,ul.ibm-link-list a.dwjp-ybm16-link {
+background:url(//dw1.s81c.com/developerworks/jp/i/icon_ybm16.gif) no-repeat 2px 4px;
+}
+li.dwjp-cz-link,p.ibm-ind-link a.dwjp-cz-link,ul.ibm-link-list a.dwjp-cz-link {
+background:url(//dw1.s81c.com/developerworks/jp/i/icon_cz.gif) no-repeat 2px 4px;
+}
+li.dwru-bobrdobr-link,p.ibm-ind-link a.dwru-bobrdobr-link,ul.ibm-link-list a.dwru-bobrdobr-link {
+background:url(//dw1.s81c.com/developerworks/ru/i/bobrdobr.gif) no-repeat 2px 4px;
+}
+li.dwru-memori-link,p.ibm-ind-link a.dwru-memori-link,ul.ibm-link-list a.dwru-memori-link {
+background:url(//dw1.s81c.com/developerworks/ru/i/memori.gif) no-repeat 2px 4px;
+}
+li.dwkr-delicious-link,p.ibm-ind-link a.dwkr-delicious-link,ul.ibm-link-list a.dwkr-delicious-link {
+background:url(//dw1.s81c.com/developerworks/kr/i/icon_delicious.gif) no-repeat 2px 4px;
+}
+li.dwkr-margin-link,p.ibm-ind-link a.dwkr-margin-link,ul.ibm-link-list a.dwkr-margin-link {
+background:url(//dw1.s81c.com/developerworks/kr/i/index.gif) no-repeat 2px 4px;
+}
+li.dwkr-naver-link,p.ibm-ind-link a.dwkr-naver-link,ul.ibm-link-list a.dwkr-naver-link {
+background:url(//dw1.s81c.com/developerworks/kr/i/naver.gif) no-repeat 2px 4px;
+}
+li.dwkr-eolin-link,p.ibm-ind-link a.dwkr-eolin-link,ul.ibm-link-list a.dwkr-eolin-link {
+background:url(//dw1.s81c.com/developerworks/kr/i/eolin.gif) no-repeat 2px 4px;
+}
+
+div.ibm-hideable.dw-show-hide-spacer p {font-size:1.0em !important;}
+
+/* Submit content template: unordered list font fix for China only*/
+#ibm-content-main ul.dw-submit-list{
+font-size: 0.76em;
+}
+
+
+

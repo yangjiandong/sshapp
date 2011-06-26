@@ -43,7 +43,8 @@ public class CommonService {
         return alls;
     }
     
-	@Transactional
+	//@Transactional
+    //配合 <property name="defaultAutoCommit" value="false" />
     public void insertDemo(){
     	commonJdbcDao.insertDemo();
     }

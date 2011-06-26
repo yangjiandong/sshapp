@@ -1,0 +1,5452 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Spring 事务管理高级应用难点剖析: 第 1 部分</title>
+<meta http-equiv="PICS-Label" content="(PICS-1.1 &quot;http://www.icra.org/ratingsv02.html&quot; l gen true r (cz 1 lz 1 nz 1 oz 1 vz 1) &quot;http://www.rsac.org/ratingsv01.html&quot; l gen true r (n 0 s 0 v 0 l 0) &quot;http://www.classify.org/safesurf/&quot; l gen true r (SS~~000 1))">
+<link rel="schema.DC" href="http://purl.org/DC/elements/1.0/">
+<link rel="SHORTCUT ICON" href="http://www.ibm.com/favicon.ico">
+  <meta name="Owner" content="dw@cn.ibm.com">
+  <meta name="DC.Language" scheme="rfc1766" content="zh-CN">
+  <meta name="IBM.Country" content="CN">
+<meta name="Security" content="Public">
+<meta name="IBM.SpecialPurpose" content="SP001">
+<meta name="IBM.PageAttributes" content="sid=1003,1004">
+<meta name="Source" content="v16 Template Generator">
+<meta name="Robots" content="index,follow">
+<meta name="Abstract" content="Spring 的事务管理是被使用得最多的功能之一，虽然 Spring 事务管理已经帮助程序员将要做的事情减到了最小。但在实际开发中，如果使用不当，依然会造成数据连接泄漏等问题。本系列以实际应用中所碰到的各种复杂的场景为着眼点，对这些应用的难点进行深度的剖析。">
+<meta name="Description" content="Spring 的事务管理是被使用得最多的功能之一，虽然 Spring 事务管理已经帮助程序员将要做的事情减到了最小。但在实际开发中，如果使用不当，依然会造成数据连接泄漏等问题。本系列以实际应用中所碰到的各种复杂的场景为着眼点，对这些应用的难点进行深度的剖析。">
+<meta name="Keywords" content="Spring, 事务管理，高级应用，连接泄漏, tttjca, tttosca">
+<meta name="DC.Date" scheme="iso8601" content="2010-03-19">
+<meta name="DC.Type" scheme="IBM_ContentClassTaxonomy" content="CT316">
+<meta name="DC.Subject" scheme="IBM_SubjectTaxonomy" content="TT300">
+<meta scheme="IBM_WTMCategory" name="IBM.WTMCategory" content="SOFDCJVACN">
+<meta name="DC.Rights" content="© Copyright&nbsp;IBM Corporation&nbsp;2010">
+<meta name="IBM.Effective" scheme="W3CDTF" content="2010-03-19">
+<meta name="title" content="Spring 事务管理高级应用难点剖析: 第 1 部分">
+
+<!-- HEADER_SCRIPTS_AND_CSS_INCLUDE -->
+<link href="spring-tx-1_files/all.css" media="all" rel="stylesheet" title="www" type="text/css">
+<link href="spring-tx-1_files/screen.css" media="screen,projection" rel="stylesheet" title="www" type="text/css">
+<link href="spring-tx-1_files/screen-uas.css" media="screen,projection" rel="stylesheet" title="www" type="text/css">
+<link href="spring-tx-1_files/screen-fonts.css" media="screen,projection" rel="stylesheet" title="www" type="text/css">
+<link href="spring-tx-1_files/handheld.css" media="handheld" rel="stylesheet" title="www" type="text/css">
+<link href="spring-tx-1_files/print.css" media="print" rel="stylesheet" title="www" type="text/css">
+<link href="spring-tx-1_files/overlay.css" media="screen,projection" rel="stylesheet" title="www" type="text/css">
+<!-- dW-specific CSS -->
+<link href="spring-tx-1_files/dw-screen.css" media="screen,projection" rel="stylesheet" title="www" type="text/css">
+<link href="spring-tx-1_files/dw-local-site.css" media="screen,projection" rel="stylesheet" title="www" type="text/css">
+<link href="spring-tx-1_files/jquery.css" media="screen,projection" rel="stylesheet" title="www" type="text/css">
+<link href="spring-tx-1_files/dw-mf0311.css" rel="stylesheet" title="www" type="text/css">
+<script src="spring-tx-1_files/ibmcommon.js" type="text/javascript">//</script><link title="IBM Search" href="http://www.ibm.com/search/opensearch/description.xml" type="application/opensearchdescription+xml" rel="search">
+<script src="spring-tx-1_files/dynamicnav.js" type="text/javascript">//</script>
+<!-- dW functional JS -->
+<script language="JavaScript" src="spring-tx-1_files/urltactic.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+  // <![CDATA[
+
+ dwr = {};
+  dwr.clickhere = '点击评分';
+  dwr.stars = '星';
+  dwr.star = '星'; 
+  dwr.avgRatingOf = '平均分';
+  dwr.youRated = '您的评分是';
+  dwr.avgRating = '平均分';
+  dwr.basedOnVote = '共 {1} 个评分'; // {1} to be substitue by code
+  dwr.basedOnVotes = '共 {1} 个评分';
+  dwr.leftParen = '（'; 
+  dwr.rightParen = ' ）'; 
+  dwr.space = ' '; 
+  dwr.yourRating = '您的评分';
+
+// ]]>
+</script>
+
+
+<script language="JavaScript" src="spring-tx-1_files/artrating.js" type="text/javascript"></script>
+<style type="text/css">
+  .metavalue {
+  display: none;
+  }
+</style>
+<!-- Rating_END --><!-- RESERVED_HEADER_INCLUDE -->
+<script language="javascript" src="spring-tx-1_files/ajax1.js" type="text/javascript"></script>
+<script language="javascript" src="spring-tx-1_files/search_counter-maverick.js" type="text/javascript"></script>
+<script language="javascript" src="spring-tx-1_files/request_referer_capture-maverick.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">
+ <!--
+ setDefaultQuery('dwchina');
+ //-->
+</script>
+<script language="JavaScript" type="text/javascript">
+ <!--
+ function openNewWindow(url,tar,arg){window.open(url,tar,arg);}
+ //-->
+</script>
+  <!-- Include file support -->
+  <script language="JavaScript" type="text/javascript">
+    (function($) {
+    jQuery.extend({
+    getInc: function(u,d){
+    if(u==null)return;
+    jQuery.ajax({
+    type: "GET",
+    url: u,
+    dataType: "text",
+    success: function(t) {
+    jQuery(d).html(t);
+    ibmCommon.initShowHide(jQuery(d).children()[0]);	
+    },
+    async: true
+    });
+    }
+    });
+    })(jQuery);
+  </script>
+<script charset="UTF-8" src="spring-tx-1_files/flash-detect.js" type="text/javascript" id="flashdetect"></script><script charset="UTF-8" src="spring-tx-1_files/cnzh-utf8.js" type="text/javascript" id="mhMenu"></script><script charset="UTF-8" src="spring-tx-1_files/Controller" type="text/javascript" id="wiBundle"></script></head>
+
+<body id="ibm-com">
+<div id="ibm-top" class="ibm-landing-page">
+
+<!-- MASTHEAD_BEGIN -->
+<!-- MASTHEAD_BEGIN -->
+<div class="ibm-access"><a href="#ibm-content">跳转到主要内容</a></div> 
+<div id="ibm-masthead-dw">
+  
+    <!-- TOP ROW -->    
+    <div id="dw-masthead-top-row">
+		<ul id="ibm-unav-home-dw">
+			<li id="ibm-logo">
+				<a href="http://www.ibm.com/cn/zh/"><img src="spring-tx-1_files/ibm-smlogo.gif" alt="IBM®" height="16" width="44"></a>
+			</li>
+		</ul>
+        <ul id="ibm-mast-options-dw" class="cn">
+        	<li id="dw-mast-top-0"> 	
+				<a class="" href="http://www.ibm.com/developerworks/dwwi/DWAuthRouter?m=loginpage&amp;lang=zh&amp;d=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Fjava%2Fj-lo-spring-ts1%2Findex.html" title="">登录 (或注册)</a>
+			</li>
+        	<li id="dw-mast-top-1" class="dw-mast-top-1-cn">
+		    	<a href="#SELECTLANG">中文</a><img class="dw-preload" src="spring-tx-1_files/arrow-down-active.gif" alt="" height="7" width="8">
+			</li>
+        	<li id="dw-mast-top-2" class="dw-mf-hide">
+				<a href="#">[userid]<img src="spring-tx-1_files/photo.gif" alt="PHOTO" class="dw-mast-profimg" height="20" width="20"></a>
+			</li>
+		</ul>
+	</div>
+    
+    <!-- TOP ROW SLIDER -->
+    <div id="ibm-my-menu-dw">    
+          <div class="ibm-ribbon-pane-dw">
+            <div class="ibm-ribbon-section-dw">
+                <!-- Sign-in -->
+                <div class="dw-mast-columns">
+					<div class="dw-mast-col-1-1">
+						<div class="dw-mast-close">
+							<ul>
+								<li><a href="#">关闭 [x]</a></li>
+							</ul>
+						</div>
+						
+						<div id="dw-mast-sso">
+							<div id="dw-mast-sso-reg">
+								<p class="dw-mast-sso-reg-cn">如果您还没有注册到 IBM 注册系统，我们为给您带来的不便表示道歉，并请您马上注册。 							
+									<a href="#" onclick="(function () {window.location='/developerworks/dwwi/DWAuthRouter?m=reg&amp;lang=zh&amp;d='+encodeURIComponent(location.href);})();">现在注册</a>。</p>
+							</div>
+							<div id="signin_error_mf" class="no-display"></div>
+							<div id="dw-mast-sso-form">
+								<form id="sForm_mf" action="" method="post" name="sForm_name_mf" onsubmit="return false;">
+									<div id="dw-mast-sso-id" class="dw-mast-sso-id-cn">
+										<label for="ibmid_mf">IBM ID：</label>
+										<input class="" id="ibmid_mf" name="ibmid_name_mf" maxlength="100" onkeypress="handleEP(event,this.form,'mf');" type="text">
+									</div>
+									<div id="dw-mast-sso-pw" class="dw-mast-sso-pw-cn">
+										<label for="pw_mf">密码：</label>
+										<input class="" id="pw_mf" value="" name="pw_name_mf" maxlength="100" onkeypress="handleEP(event,this.form,'mf');" type="password">
+									</div>
+									<div id="dw-mast-sso-target" class="dw-mast-sso-target-cn">
+										<label for="AfterSignIn_mf">登录之后：</label>
+										<select id="AfterSignIn_mf" name="AfterSignIn_name_mf">
+											<option value="" selected="selected">留在当前页面</option>
+											<option value="/developerworks/mydeveloperworks/profiles/html/myProfileView.do?lang=zh">My developerWorks 概要信息</option>
+											<option value="/developerworks/mydeveloperworks/homepage/?lang=zh">My developerWorks 首页</option>
+										</select>
+									</div>
+									<div id="dw-mast-sso-terms">
+										<p class="dw-mf-perm-box">
+											<input id="perm_mf" name="perm_name_mf" type="checkbox"><label for="perm_mf"> 保持登录。</label>
+										</p>
+										<p class="dw-mast-sso-terms-cn">单击提交则表示您同意developerWorks 的条款和条件。 <a href="http://www.ibm.com/developerworks/mydeveloperworks/terms?lang=zh">查看条款和条件</a>.</p>
+									</div>
+									<div>
+										<input class="dw-mf-submit-btn-cn" name="ibm_submit_name_mf" value="提交" onclick="signin('mf');return false;" type="submit">
+									</div>
+								</form>
+							</div>
+							<div id="dw-mast-sso-update">
+								<ul>
+									<li><a class="ibm-forward-link" href="http://www.ibm.com/developerworks/dwwi/jsp/WSHelp.jsp?lang=zh_CN">忘记 IBM ID？</a></li>
+								</ul>
+								<ul class="dw-mf-pwupdate-cn">
+									<li><a class="ibm-forward-link" href="#" onclick="(function () {window.location='https://www.ibm.com/account/profile?page=forgot&amp;lang=zh_CN&amp;appname=ibm&amp;required=null&amp;d='+encodeURIComponent(getAuthUrl())+'%3Fm%3Dloginpage%26lang%3Dzh_CN%26d%3D'+encodeURIComponent(location.href);})();">忘记密码？</a></li>
+									<li><a class="ibm-forward-link" href="#" onclick="(function () {window.location='https://www.ibm.com/account/profile?page=chpw&amp;lang=zh_CN&amp;appname=ibm&amp;required=null&amp;d='+encodeURIComponent(location.href);})();">更改您的密码</a></li>
+								</ul>
+							</div>
+							<div id="dw-mast-sso-text">
+								<p>当您初次登录到 developerWorks 时，将会为您创建一份概要信息，概要信息中包括您的姓名和您在注册 developerWorks 时选择的昵称。您的姓名（除非选择隐藏）和昵称将和您在 developerWorks 发布的内容显示在一起。</p>
+								<p class="dw-mf-secure-cn">所有提交的信息确保安全。</p>
+							</div>
+						</div>
+						
+						<div id="dw-mast-dname" class="dw-mf-hide">
+							<p>当您初次登录到 developerWorks 时，将会为您创建一份概要信息，您需要指定一个昵称。您的昵称将和您在 developerWorks 发布的内容显示在一起。</p><p><strong>昵称长度在 3 至 31 个字符之间</strong>。 您的昵称在 developerWorks 社区中必须是唯一的，并且出于隐私保护的原因，不能是您的电子邮件地址。</p>
+							<div id="signin_dname_error_mf" class="no-display"></div>
+							<div id="dw-mast-dname-form">
+								<form id="dForm_mf" action="" method="post" name="dForm_name_mf" onsubmit="return false;">
+									<div id="dw-mast-dname-mf">
+										<label for="dname_mf">昵称：</label>
+										<input id="dname_mf" name="dname_name_mf" maxlength="31" size="25" onkeypress="handleEP(event,this.form,'mf');" type="text">
+									</div>
+									<div id="dw-mast-dname-terms">
+										<p class="dw-mast-dname-terms-cn">单击<strong>提交</strong>则表示您同意developerWorks 的条款和条件。 <a href="http://www.ibm.com/developerworks/mydeveloperworks/terms?lang=zh">查看条款和条件</a>.</p>
+									</div>
+									<div>
+										<input class="dw-mf-submit-btn-cn" name="dname_submit_name_mf" value="提交" onclick="signin('mf');return false;" type="submit">
+									</div>
+								</form>								
+							</div>
+							<div id="dw-mast-dname-secure">
+								<p class="dw-mf-secure-cn">所有提交的信息确保安全。</p>
+							</div>
+						</div>
+						
+						<div id="dw-mast-auth" class="dw-mf-hide">
+							<div>
+								<h2>My developerWorks：</h2>
+								<ul>
+									<li><a id="dw-mast-top-0-0" href="http://www.ibm.com/developerworks/mydeveloperworks/profiles/html/myProfileView.do?lang=zh">我的概要信息</a></li>
+									<li><a href="http://www.ibm.com/developerworks/mydeveloperworks/homepage?lang=zh">我的首页</a></li>
+									<li><a href="http://www.ibm.com/developerworks/mydeveloperworks/groups/service/html/mycommunities?lang=zh">我的群组</a></li>
+								</ul>     
+							</div>
+							<div id="dw-mast-notify" class="dw-mf-hide">
+								<h2>我的通知：</h2>
+								<ul>
+									<li><a id="new_notify" href="http://www.ibm.com/developerworks/mydeveloperworks/homepage?lang=zh">{[num_notify] 个新通知}([num_notify] 个新通知)</a></li>
+									<li><a id="new_invite" href="http://www.ibm.com/developerworks/mydeveloperworks/profiles/html/wc.do?action=in&amp;requireAuth=true&amp;widgetId=friends&amp;lang=[lang]">{[num_invite] 个网络请求}([num_invite] 个网络请求)</a></li>  
+								</ul>
+							</div>
+							<div class="dw-mast-more">
+								<ul class="ibm-link-list">
+									<li><a class="dw-more-link" href="#" onclick="signOut(); return false;"><strong>退出</strong></a></li>
+								</ul>
+							</div>
+						</div>
+						
+					</div>
+                	
+                </div>
+                  <!-- Site selector --> 
+				<div class="dw-mast-columns">
+					<div class="dw-mast-col-2-1">
+						<h2>选择语言：</h2>
+						<ul>
+							<li><a id="dw-mast-top-1-0" href="http://www.ibm.com/developerworks/">English</a></li>
+							<li><a href="http://www.ibm.com/developerworks/cn/">中文</a></li>
+							<li><a href="http://www.ibm.com/developerworks/jp/">日本語</a></li>
+							<li><a href="http://www.ibm.com/developerworks/kr/">한국어</a></li>
+						</ul>
+					</div>
+					<div class="dw-mast-col-2-2">
+						<ul>
+							<li><a href="http://www.ibm.com/developerworks/ru/">Русский</a></li>
+							<li><a href="http://www.ibm.com/developerworks/br/">Português (Brasil)</a></li>
+							<li><a href="http://www.ibm.com/developerworks/ssa/">Español</a></li>
+							<li><a href="http://www.ibm.com/developerworks/vn/">Việt</a></li>
+						</ul>
+					</div>
+					<div class="dw-mast-close">
+						<ul>
+							<li><a href="#">关闭 [x]</a></li>
+						</ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM ROW -->
+    <div id="ibm-universal-nav-dw">
+        <ul id="ibm-unav-links-dw">
+            <li id="ibm-unav-home-dwlogo">
+				<a href="http://www.ibm.com/developerWorks/cn/"><img src="spring-tx-1_files/dw-wordmark.gif" alt="developerWorks®" height="32" width="218"></a>
+            </li>
+        </ul>
+ 
+        <ul id="ibm-menu-links-dw" class="ibm-menu-links-dw-cn">
+
+        	<li id="dw-mast-nav-0"><a href="http://www.ibm.com/developerworks/cn/topics">技术主题</a></li>
+        	<li id="dw-mast-nav-1"><a href="http://www.ibm.com/developerworks/cn/downloads/">软件下载</a></li>
+        	<li id="dw-mast-nav-2"><a href="https://www.ibm.com/developerworks/community/?lang=zh">社区</a></li>
+        	<li id="dw-mast-nav-3"><a href="https://www.ibm.com/developerworks/community/groups/service/html/communityview?communityUuid=6d7f9e5d-5f89-4767-a006-a81b8d186370&amp;lang=zh">技术讲座</a></li>
+     </ul>
+			<form id="ibm-search-form" action="//www.ibm.com/search/csass/search/" method="get" name="form1">
+				<input name="sn" value="dw" type="hidden">
+				<input name="lang" value="zh" type="hidden">
+				<input name="cc" value="CN" type="hidden">
+				<input name="en" value="utf" type="hidden">
+				<input name="hpp" value="20" type="hidden">
+				<input name="dws" value="cndw" type="hidden">
+			    <input name="lo" value="zh" type="hidden">
+				<p>
+				<label for="q"><img alt="查询:" src="spring-tx-1_files/c_002.gif" height="1" width="1"></label>
+				<input value="搜索 developerWorks" name="q" maxlength="100" id="q" type="text">
+					<input id="ibm-search" class="ibm-btn-search ibm-btn-search-cn" name="Search" value="搜索" type="submit">
+				</p>
+			</form>
+    </div>
+    
+    <!-- BOTTOM ROW SLIDER -->
+    <div id="ibm-common-menu-dw">
+     
+        <div class="ibm-ribbon-pane-dw">
+            <div class="ibm-ribbon-section-dw">
+				<!-- Technical topics category -->
+                <div class="dw-mast-columns">
+					<div class="dw-mast-col-3-1">
+						<h2>IBM 产品：</h2>
+						<ul>
+							<li><a id="dw-mast-nav-0-0" href="http://www.ibm.com/developerworks/cn/aix/">AIX and UNIX</a></li>
+							<li><a href="http://www.ibm.com/developerworks/cn/data/">Information Management</a></li>
+							<li><a href="http://www.ibm.com/developerworks/cn/lotus/">Lotus</a></li>
+							<li><a href="http://www.ibm.com/developerworks/cn/rational/">Rational</a></li>
+						<!--	<li><a href="">Tivoli</a></li>  -->
+							<li><a href="http://www.ibm.com/developerworks/cn/websphere/">WebSphere</a></li>     
+						</ul>     
+                    </div>
+					<div class="dw-mast-col-3-2">
+						<h2>技术：</h2>
+						<ul>
+							<li><a href="http://www.ibm.com/developerworks/cn/java/">Java technology</a></li>
+							<li><a href="http://www.ibm.com/developerworks/cn/linux/">Linux</a></li>
+							<li><a href="http://www.ibm.com/developerworks/cn/opensource/">Open source</a></li>
+							<li><a href="http://www.ibm.com/developerworks/cn/webservices/">SOA and web services</a></li>
+							<li><a href="http://www.ibm.com/developerworks/cn/web/">Web development</a></li>  
+							<li><a href="http://www.ibm.com/developerworks/cn/xml/">XML</a></li>     
+						</ul>
+                    </div>
+					<div class="dw-mast-col-3-3">
+						<h2>解决方案：</h2>
+						<ul>
+							<li><a href="http://www.ibm.com/developerworks/cn/cloud/">Cloud computing</a></li>
+						<!--	<li><a href="">Industries</a></li> -->
+						</ul>
+					    <br>
+						<ul>
+							<li><a href="http://www.ibm.com/developerworks/cn/library/">文档库</a></li>
+							<li><a href="http://www.ibm.com/developerworks/cn/rss/">订阅源</a></li>
+							<li><a href="http://www.ibm.com/vrm/newsletter/10104?S_TACT=105AGX52&amp;S_CMP=dwcntop">在线浏览每周时事通讯</a></li>
+						</ul>        
+                    </div>
+                    <div class="dw-mast-more">
+						<ul class="ibm-link-list">
+							<li><a class="dw-more-link" href="http://www.ibm.com/developerworks/cn/topics/"><strong>技术主题详情</strong></a></li>
+						</ul>
+                    </div>
+                    <div class="dw-mast-close">
+						<ul>
+							<li><a href="#">关闭 [x]</a></li>
+						</ul>
+                    </div>
+				</div>
+				<!-- Evaluation software category -->
+                <div class="dw-mast-columns">
+					<div class="dw-mast-col-1-1">
+					<h2>查找软件：</h2>
+						<ul>
+							<li><a id="dw-mast-nav-1-0" href="http://www.ibm.com/developerworks/cn/downloads/product.html">IBM 产品</a></li>
+							<li><a href="http://www.ibm.com/developerworks/cn/downloads/evalmethod.html">评估方式（下载，在线试用，Beta 版，云）</a></li>
+							<li><a href="http://www.ibm.com/developerworks/cn/downloads/industry.html">行业</a></li>
+						</ul>           
+                    </div>
+                    <div class="dw-mast-more">
+						<ul class="ibm-link-list">
+							<li><a class="dw-more-link" href="http://www.ibm.com/developerworks/cn/downloads/"><strong>软件评估详情</strong></a></li>
+						</ul>
+                    </div>
+                    <div class="dw-mast-close">
+						<ul>
+							<li><a href="#">关闭 [x]</a></li>
+						</ul>
+                    </div>
+				</div> 
+				<!-- Community category -->
+                <div class="dw-mast-columns">
+					<div class="dw-mast-col-2-1">
+						<ul>
+							<li><a id="dw-mast-nav-2-0" href="https://www.ibm.com/developerworks/community/homepage/?lang=zh">我的首页</a></li>
+							<li><a href="https://www.ibm.com/developerworks/community/profiles/home.do?lang=zh">概要信息</a></li>
+							<li><a href="https://www.ibm.com/developerworks/community/groups/service/html/allcommunities?lang=zh">群组</a></li>
+							<li><a href="https://www.ibm.com/developerworks/mydeveloperworks/blogs/?lang=zh">博客</a></li>
+							<li><a href="https://www.ibm.com/developerworks/community/bookmarks/html?lang=zh">书签</a></li>  
+						</ul>     
+                    </div>
+					<div class="dw-mast-col-2-2">
+						<ul>
+						<!--	<li><a href="">Forums</a></li> -->
+							<li><a href="https://www.ibm.com/developerworks/mydeveloperworks/wikis/home?lang=zh">Wiki</a></li>
+							<li><a href="https://www.ibm.com/developerworks/community/files/app?lang=zh">文件</a></li>
+							<li><a href="https://www.ibm.com/developerworks/community/activities/service/html/mainpage?lang=zh#dashboard,myactivities">活动</a></li>
+						<!--	<li><a href="">Podcasts</a></li> -->    
+						</ul>
+                    </div>
+                    <div class="dw-mast-more">
+						<ul class="ibm-link-list">
+							<li><a class="dw-more-link" href="https://www.ibm.com/developerworks/community/groups/service/html/communityview?communityUuid=3302cc3b-074e-44da-90b1-5055f1dc0d9c&amp;lang=zh"><strong>社区详情</strong></a></li>
+						</ul>
+                    </div>
+                    <div class="dw-mast-close">
+						<ul>
+							<li><a href="#">关闭 [x]</a></li>
+						</ul>
+                    </div>
+				</div>
+				<!-- Events category -->
+                <div class="dw-mast-columns">
+					<div class="dw-mast-col-1-1">
+						<ul>
+							<li><a id="dw-mast-nav-3-0" href="https://www.ibm.com/developerworks/community/groups/service/html/communityview?communityUuid=6d7f9e5d-5f89-4767-a006-a81b8d186370&amp;lang=zh">技术讲座</a></li>
+							<li><a href="http://www.ibm.com/developerworks/cn/swi/">多媒体课堂</a></li>
+							<li><a href="http://www.ibm.com/developerworks/find/webcasts/">网络广播（英文）</a></li>
+							<li><a href="http://www.ibm.com/developerworks/find/events/">查找活动（技术讲座，网络广播，会议等）（英文）</a></li> 
+						</ul>            
+                    </div>
+                    <div class="dw-mast-more">
+						<ul class="ibm-link-list">
+							<li><a class="dw-more-link" href="https://www.ibm.com/developerworks/community/groups/service/html/communityview?communityUuid=6d7f9e5d-5f89-4767-a006-a81b8d186370&amp;lang=zh"><strong>活动详情</strong></a></li>
+						</ul>
+                    </div>
+                    <div class="dw-mast-close">
+						<ul>
+							<li><a href="#">关闭 [x]</a></li>
+						</ul>
+                    </div>
+				</div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<div id="fdiv" class="ibm-access"><embed type="application/x-shockwave-flash" src="spring-tx-1_files/connect.swf" id="sflash" name="sflash" quality="high" menu="false" wmode="window" movie="https://www.ibm.com/developerworks/js/dw-mf/connect.swf" swliveconnect="true" allowscriptaccess="always" height="1" width="1"></div>
+<!-- MASTHEAD_END --><!-- MASTHEAD_END -->
+
+<div id="ibm-pcon">
+
+<!-- CONTENT_BEGIN -->
+<div id="ibm-content">
+
+<!-- Navigation_Trail_BEGIN -->
+<!-- &nbsp; -->
+      <div id="ibm-content-head"><ul id="ibm-navigation-trail"><li class="ibm-first"><a href="http://www.ibm.com/developerworks/cn/">developerWorks 中国</a></li><li><a href="http://www.ibm.com/developerworks/cn/java/">Java technology</a></li><li><a href="http://www.ibm.com/developerworks/cn/views/java/libraryview.jsp">文档库</a></li></ul></div>
+<!-- Navigation_Trail_END -->
+
+<!-- dW_Summary Area_START -->
+<div id="dw-summary-article">
+
+<div class="dw-content-head">
+<h1>Spring 事务管理高级应用难点剖析: 第 1 部分</h1><p>
+</p></div>
+
+<div class="ibm-container-body ibm-two-column">
+
+<div class="ibm-column ibm-first">
+<div class="author"><a class="dwauthor" rel="#authortip1" href="#author1">陈 雄华</a>, 系统架构师</div><div style="display: none;" id="authortip1" class="dwauthor-onload-state ibm-no-print">陈
+雄华，2002 年毕业于厦门大学计算机与信息工程学院，获硕士学位。拥有 10 多年的 Java 
+开发、设计、架构的经验。技术研发之余，常将经验所得行诸于文字，作者是国内多个著名技术网站的专栏作者，在各大技术网站、报刊杂志发表过数十篇技术文
+章，广受读者好评。于 2005 年出版《精通 JBuilder 2005》，于 2007 年出版《精通 Spring 2.x -- 
+企业应用开发详解》。</div>
+<p></p>
+  <p><strong>简介：</strong>&nbsp;Spring 的事务管理是被使用得最多的功能之一，虽然 Spring 
+事务管理已经帮助程序员将要做的事情减到了最小。但在实际开发中，如果使用不当，依然会造成数据连接泄漏等问题。本系列以实际应用中所碰到的各种复杂的场
+景为着眼点，对这些应用的难点进行深度的剖析。</p>
+<p class="ibm-no-print"><a href="http://www.ibm.com/developerworks/cn/views/java/libraryview.jsp?search_by=Spring+%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8%E9%9A%BE%E7%82%B9%E5%89%96%E6%9E%90">查看本系列更多内容</a></p>
+  <!-- <p class="ibm-no-print"><div id="dw-tag-this" class="ibm-no-print"></div><div id="interestShow" class="ibm-no-print"></div></p> -->
+<div id="dw-tag-content" class="ibm-no-print"><p><b>本文的标签:</b>&nbsp; <a href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=java-spring')">java-spring</a>, <a href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=spring')">spring</a>, <a href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E4%25BA%258B%25E5%258A%25A1')">事务</a>, <a href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E4%25BA%258B%25E5%258A%25A1%25E7%25AE%25A1%25E7%2590%2586%25E9%25AB%2598%25E7%25BA%25A7%25E5%25BA%2594%25E7%2594%25A8%25E9%259A%25BE%25E7%2582%25B9%25E5%2589%2596%25E6%259E%2590')">事务管理高级应用难点剖析</a></p></div><div id="dw-moretags-access" class="ibm-access"></div>
+<p class="ibm-no-print"></p><div id="dw-tag-this" class="ibm-no-print"><a class="ibm-external-link" onclick="jQuery.launchTagThisWindow(); return false;" href="#">标记本文！</a></div><div id="interestShow" class="ibm-no-print"></div><p></p>
+</div>
+
+<div class="ibm-column ibm-second">
+
+<p class="leading"><b>发布日期：</b>&nbsp;2010 年 3 月 19 日
+  
+<br><b>级别：</b>&nbsp;中级
+    
+
+<br><strong>访问情况</strong>&nbsp;4471 次浏览
+  <br><strong>建议：</strong>&nbsp;<span id="nCmts">1&nbsp;(<a href="#icomments">查看或添加评论</a>)</span>
+<!-- Rating_Area_Begin -->
+<!-- Ensure that div id is based on input id and ends with -widget -->	
+<input id="art-rating" name="ratinga" value="4" type="hidden"></p><div id="art-rating-widget"><a href="javascript:void(0);"><img alt="1 star" title="点击评分 1 星" src="spring-tx-1_files/avg-star-on.gif" height="20" width="20"></a><a href="javascript:void(0);"><img alt="2 stars" title="点击评分 2 星" src="spring-tx-1_files/avg-star-on.gif" height="20" width="20"></a><a href="javascript:void(0);"><img alt="3 stars" title="点击评分 3 星" src="spring-tx-1_files/avg-star-on.gif" height="20" width="20"></a><a href="javascript:void(0);"><img alt="4 stars" title="点击评分 4 星" src="spring-tx-1_files/avg-star-on.gif" height="20" width="20"></a><a href="javascript:void(0);"><img alt="5 stars" title="点击评分 5 星" src="spring-tx-1_files/star-off.gif" height="20" width="20"></a><span id="rateTxt">  平均分 （共 57 个评分 ）</span></div>
+<script language="JavaScript" type="text/javascript">
+// <![CDATA[
+ //  widget div id and article id as args
+   window.artRating.init('art-rating-widget');
+// ]]>
+</script>
+<!-- Rating_Area_End -->
+<p></p>
+</div>
+
+</div>
+</div>
+<!-- dW_Summary_Area_END -->
+
+<!-- CONTENT_BODY -->
+<div id="ibm-content-body">
+
+<!-- MAIN_COLUMN_BEGIN -->
+<div id="ibm-content-main">
+
+<!-- Related_Searches_Area_And_Overlays_Begin -->
+
+<!-- MAIN_COLUMN_CONTAINER_BEGIN -->
+<div class="ibm-container">
+
+<!-- MAIN_COLUMN_CONTENT_BEGIN -->
+<p><a name="major1"><span class="atitle">概述</span></a></p>
+			<p>Spring 最成功，最吸引人的地方莫过于轻量级的声明式事务管理，仅此一点，它就宣告了重量级 EJB 容器的覆灭。Spring 
+声明式事务管理将开发者从繁复的事务管理代码中解脱出来，专注于业务逻辑的开发上，这是一件可以被拿来顶礼膜拜的事情。但是，世界并未从此消停，开发人员
+需要面对的是层出不穷的应用场景，这些场景往往逾越了普通 Spring 技术书籍的理想界定。因此，随着应用开发的深入，在使用经过 Spring 
+层层封装的声明式事务时，开发人员越来越觉得自己坠入了迷雾，陷入了沼泽，体会不到外界所宣称的那种畅快淋漓。本系列文章的目标旨在整理并剖析实际应用中
+种种让我们迷茫的场景，让阳光照进云遮雾障的山头。</p>
+			<div class="ibm-alternate-rule"><hr></div><p class="ibm-ind-link ibm-back-to-top"><a href="#ibm-pcon" class="ibm-anchor-up-link">回页首</a></p><p><a name="major2"><span class="atitle">DAO 和事务管理的牵绊</span></a></p>
+			<p>很少有使用 Spring 但不使用 Spring 事务管理器的应用，因此常常有人会问：是否用了 Spring，就一定要用 Spring 事务管理器，否则就无法进行数据的持久化操作呢？事务管理器和 DAO 是什么关系呢？</p>
+			<p>也许是 DAO 
+和事务管理如影随行的缘故吧，这个看似简单的问题实实在在地存在着，从初学者心中涌出，萦绕在开发老手的脑际。答案当然是否定的！我们都知道：事务管理是
+保证数据操作的事务性（即原子性、一致性、隔离性、持久性，也即所谓的 ACID），脱离了事务性，DAO 照样可以顺利地进行数据的操作。</p>
+			<p>下面，我们来看一段使用 Spring JDBC 进行数据访问的代码：</p>
+			<br><a name="listing1"><b>清单 1. UserJdbcWithoutTransManagerService.java</b></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">				
+package user.withouttm;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.apache.commons.dbcp.BasicDataSource;
+
+@Service("service1")
+public class UserJdbcWithoutTransManagerService {
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    public void addScore(String userName,int toAdd){
+        String sql = "UPDATE t_user u SET u.score = u.score + ? WHERE user_name =?";
+        jdbcTemplate.update(sql,toAdd,userName);
+    }
+
+    public static void main(String[] args) {
+        ApplicationContext ctx = 
+        new ClassPathXmlApplicationContext("user/withouttm/jdbcWithoutTransManager.xml");
+        UserJdbcWithoutTransManagerService service = 
+            (UserJdbcWithoutTransManagerService)ctx.getBean("service1");
+        JdbcTemplate jdbcTemplate = (JdbcTemplate)ctx.getBean("jdbcTemplate");
+        BasicDataSource basicDataSource = (BasicDataSource)jdbcTemplate.getDataSource();
+
+        //①.检查数据源autoCommit的设置
+        System.out.println("autoCommit:"+ basicDataSource.getDefaultAutoCommit());
+
+        //②.插入一条记录，初始分数为10
+        jdbcTemplate.execute(
+        "INSERT INTO t_user(user_name,password,score) VALUES('tom','123456',10)");
+
+        //③.调用工作在无事务环境下的服务类方法,将分数添加20分
+        service.addScore("tom",20);
+
+         //④.查看此时用户的分数
+        int score = jdbcTemplate.queryForInt(
+        "SELECT score FROM t_user WHERE user_name ='tom'");
+        System.out.println("score:"+score);
+        jdbcTemplate.execute("DELETE FROM t_user WHERE user_name='tom'");
+    }
+}
+</pre></td></tr></tbody></table><br>
+			<p>jdbcWithoutTransManager.xml 的配置文件如下所示：</p>
+			<br><a name="listing2"><b>清单 2. jdbcWithoutTransManager.xml</b></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">				
+&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	       http://www.springframework.org/schema/context 
+	       http://www.springframework.org/schema/context/spring-context-3.0.xsd"&gt;
+    &lt;context:component-scan base-package="user.withouttm"/&gt;
+
+    &lt;!-- 数据源默认将autoCommit设置为true --&gt;
+    &lt;bean id="dataSource"
+        class="org.apache.commons.dbcp.BasicDataSource"
+        destroy-method="close"
+        p:driverClassName="oracle.jdbc.driver.OracleDriver"
+        p:url="jdbc:oracle:thin:@localhost:1521:orcl"
+        p:username="test"
+        p:password="test"/&gt;
+
+    &lt;bean id="jdbcTemplate"
+        class="org.springframework.jdbc.core.JdbcTemplate"
+        p:dataSource-ref="dataSource"/&gt;
+&lt;/beans&gt;
+</pre></td></tr></tbody></table><br>
+			<p>运行 UserJdbcWithoutTransManagerService，在控制台上打出如下的结果：</p>
+			<table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">defaultAutoCommit:true 
+score:30 
+</pre></td></tr></tbody></table><br>
+			<p>在 jdbcWithoutTransManager.xml 
+中，没有配置任何事务管理器，但是数据已经成功持久化到数据库中。在默认情况下，dataSource 数据源的 autoCommit 被设置为 
+true ―― 这也意谓着所有通过 JdbcTemplate 执行的语句马上提交，没有事务。如果将 dataSource 的 
+defaultAutoCommit 设置为 false，再次运行 
+UserJdbcWithoutTransManagerService，将抛出错误，原因是新增及更改数据的操作都没有提交到数据库，所以 ④ 
+处的语句因无法从数据库中查询到匹配的记录而引发异常。</p>
+			<p>对于强调读速度的应用，数据库本身可能就不支持事务，如使用 MyISAM 引擎的 MySQL 数据库。这时，无须在 Spring 应用中配置事务管理器，因为即使配置了，也是没有实际用处的。</p>
+			<p>不过，对于 Hibernate 来说，情况就有点复杂了。因为 Hibernate 的事务管理拥有其自身的意义，它和 
+Hibernate 一级缓存有密切的关系：当我们调用 Session 的 save、update 等方法时，Hibernate 
+并不直接向数据库发送 SQL 语句，而是在提交事务（commit）或 flush 一级缓存时才真正向数据库发送 
+SQL。所以，即使底层数据库不支持事务，Hibernate 的事务管理也是有一定好处的，不会对数据操作的效率造成负面影响。所以，如果是使用 
+Hibernate 数据访问技术，没有理由不配置 HibernateTransactionManager 事务管理器。</p>
+			<p>但是，不使用 Hibernate 事务管理器，在 Spring 中，Hibernate 照样也可以工作，来看下面的例子：</p>
+			<br><a name="listing3"><b>清单 3.UserHibernateWithoutTransManagerService.java</b></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">				
+package user.withouttm;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.orm.hibernate3.HibernateTemplate;
+import org.apache.commons.dbcp.BasicDataSource;
+import user.User;
+
+@Service("service2")
+public class UserHibernateWithoutTransManagerService {
+    @Autowired
+    private HibernateTemplate hibernateTemplate;
+
+    public void addScore(String userName,int toAdd){
+        User user = (User)hibernateTemplate.get(User.class,userName);
+        user.setScore(user.getScore()+toAdd);
+        hibernateTemplate.update(user);
+    }
+
+    public static void main(String[] args) {
+        //参考UserJdbcWithoutTransManagerService相应代码
+        …
+    }
+}
+</pre></td></tr></tbody></table><br>
+			<p>此时，采用 hiberWithoutTransManager.xml 的配置文件，其配置内容如下：</p>
+			<br><a name="listing4"><b>清单 4.hiberWithoutTransManager.xml</b></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">				
+&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd"&gt;
+   
+&lt;!--省略掉包扫描，数据源，JdbcTemplate配置部分，参见jdbcWithoutTransManager.xml --&gt;
+    …
+
+    &lt;bean id="sessionFactory"
+        class=
+            "org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean"
+            p:dataSource-ref="dataSource"&gt;
+        &lt;property name="annotatedClasses"&gt;
+            &lt;list&gt;
+                &lt;value&gt;user.User&lt;/value&gt;
+            &lt;/list&gt;
+        &lt;/property&gt;
+        &lt;property name="hibernateProperties"&gt;
+            &lt;props&gt;
+                &lt;prop key="hibernate.dialect"&gt;
+                    org.hibernate.dialect.Oracle10gDialect
+                &lt;/prop&gt;
+                &lt;prop key="hibernate.show_sql"&gt;true&lt;/prop&gt;
+            &lt;/props&gt;
+        &lt;/property&gt;
+    &lt;/bean&gt;
+
+    &lt;bean id="hibernateTemplate"
+          class="org.springframework.orm.hibernate3.HibernateTemplate"
+          p:sessionFactory-ref="sessionFactory"/&gt;
+&lt;/beans&gt;
+</pre></td></tr></tbody></table><br>
+			<p>运行 UserHibernateWithoutTransManagerService，程序正确执行，并得到类似于 
+UserJdbcWithoutTransManagerService 的执行结果，这说明 Hibernate 在 Spring 
+中，在没有事务管理器的情况下，依然可以正常地进行数据的访问。</p>
+			<div class="ibm-alternate-rule"><hr></div><p class="ibm-ind-link ibm-back-to-top"><a href="#ibm-pcon" class="ibm-anchor-up-link">回页首</a></p><p><a name="major3"><span class="atitle">应用分层的迷惑</span></a></p>
+			<p>Web、Service 及 DAO 三层划分就像西方国家的立法、行政、司法三权分立一样被奉为金科玉律，甚至有开发人员认为如果要使用 
+Spring 
+的事务管理就一定先要进行三层的划分。这个看似荒唐的论调在开发人员中颇有市场。更有甚者，认为每层必须先定义一个接口，然后再定义一个实现类。其结果
+是：一个很简单的功能，也至少需要 3 个接口，3 个类，再加上视图层的 JSP 和 JS 等，打牌都可以转上两桌了，这种误解贻害不浅。</p>
+			<p>对将“面向接口编程”奉为圭臬，认为放之四海而皆准的论调，笔者深不以为然。是的，“面向接口编程”是 Martin Fowler，Rod
+ Johnson 
+这些大师提倡的行事原则。如果拿这条原则去开发架构，开发产品，怎么强调都不为过。但是，对于我们一般的开发人员来说，做的最多的是普通工程项目，往往最
+多的只是一些对数据库增、删、查、改的功能。此时，“面向接口编程”除了带来更多的类文件外，看不到更多其它的好处。</p>
+			<p>Spring 框架提供的所有附加的好处（AOP、注解增强、注解 MVC 等）唯一的前提就是让 POJO 的类变成一个受 Spring
+ 容器管理的 Bean，除此以外没有其它任何的要求。下面的实例用一个 POJO 完成所有的功能，既是 Controller，又是 
+Service，还是 DAO：</p>
+			<br><a name="listing5"><b>清单 5. MixLayerUserService.java</b></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">				
+package user.mixlayer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+//①.将POJO类通过注解变成Spring MVC的Controller
+@Controller
+public class MixLayerUserService {
+
+    //②.自动注入JdbcTemplate
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    
+    //③.通过Spring MVC注解映URL请求
+    @RequestMapping("/logon.do")    
+    public String logon(String userName,String password){
+        if(isRightUser(userName,password)){
+            String sql = "UPDATE t_user u SET u.score = u.score + ? WHERE user_name =?";
+            jdbcTemplate.update(sql,20,userName);
+            return "success";
+        }else{
+            return "fail";
+        }
+    }
+    private boolean isRightUser(String userName,String password){
+        //do sth...
+        return true;
+    }
+}
+</pre></td></tr></tbody></table><br>
+			<p>通过 @Controller 注解将 MixLayerUserService 变成 Web 层的 Controller，同时也是 
+Service 层的服务类。此外，由于直接使用 JdbcTemplate 访问数据，所以 MixLayerUserService 还是一个 
+DAO。来看一下对应的 Spring 配置文件：</p>
+			<br><a name="listing6"><b>清单 6.applicationContext.xml</b></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">				
+&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:p="http://www.springframework.org/schema/p" 
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+	http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
+	http://www.springframework.org/schema/tx 
+    http://www.springframework.org/schema/tx/spring-tx-3.0.xsd"&gt;
+    &lt;!--扫描Web类包，通过注释生成Bean--&gt;
+    &lt;context:component-scan base-package="user.mixlayer"/&gt;
+    &lt;!--①.启动Spring MVC的注解功能，完成请求和注解POJO的映射--&gt;
+    &lt;bean class="org.springframework.web.servlet.mvc.annotation
+	    .AnnotationMethodHandlerAdapter"/&gt;
+
+    &lt;!--模型视图名称的解析，即在模型视图名称添加前后缀 --&gt;
+    &lt;bean class="org.springframework.web.servlet.view
+	    .InternalResourceViewResolver"
+         p:prefix="/WEB-INF/jsp/" p:suffix=".jsp"/&gt;
+
+    &lt;!--普通数据源　--&gt;
+    &lt;bean id="dataSource"
+        class="org.apache.commons.dbcp.BasicDataSource"
+        destroy-method="close"
+        p:driverClassName="oracle.jdbc.driver.OracleDriver"
+        p:url="jdbc:oracle:thin:@localhost:1521:orcl"
+        p:username="test"
+        p:password="test"/&gt;
+
+    &lt;bean id="jdbcTemplate"
+          class="org.springframework.jdbc.core.JdbcTemplate"
+          p:dataSource-ref="dataSource"/&gt;
+
+    &lt;!--事务管理器 --&gt;
+    &lt;bean id="jdbcManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+        p:dataSource-ref="dataSource"/&gt;
+    
+    &lt;!--②使用aop和tx命名空间语法为MixLayerUserService所有公用方法添加事务增强 --&gt;
+    &lt;aop:config proxy-target-class="true"&gt;
+        &lt;aop:pointcut id="serviceJdbcMethod"
+            expression="execution(public * user.mixlayer.MixLayerUserService.*(..))"/&gt;
+        &lt;aop:advisor pointcut-ref="serviceJdbcMethod" 
+            advice-ref="jdbcAdvice" order="0"/&gt;
+    &lt;/aop:config&gt;
+    &lt;tx:advice id="jdbcAdvice" transaction-manager="jdbcManager"&gt;
+        &lt;tx:attributes&gt;
+            &lt;tx:method name="*"/&gt;
+        &lt;/tx:attributes&gt;
+    &lt;/tx:advice&gt;
+&lt;/beans&gt;
+</pre></td></tr></tbody></table><br>
+			<p>在 ① 处，我们定义配置了 AnnotationMethodHandlerAdapter，以便启用 Spring MVC 
+的注解驱动功能。而②和③处通过 Spring 的 aop 及 tx 命名空间，以及 Aspject 的切点表达式语法进行事务增强的定义，对 
+MixLayerUserService 的所有公有方法进行事务增强。要使程序能够运行起来还必须进行 web.xml 的相关配置：</p>
+			<br><a name="listing7"><b>清单 7.web.xml</b></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">				
+&lt;?xml version="1.0" encoding="GB2312"?&gt;
+&lt;web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+    http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"&gt;
+    &lt;context-param&gt;
+        &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+        &lt;param-value&gt;classpath*:user/mixlayer/applicationContext.xml&lt;/param-value&gt;
+    &lt;/context-param&gt;
+    &lt;context-param&gt;
+        &lt;param-name&gt;log4jConfigLocation&lt;/param-name&gt;
+        &lt;param-value&gt;/WEB-INF/classes/log4j.properties&lt;/param-value&gt;
+    &lt;/context-param&gt;
+
+    &lt;listener&gt;
+        &lt;listener-class&gt;
+            org.springframework.web.util.Log4jConfigListener
+        &lt;/listener-class&gt;
+    &lt;/listener&gt;
+    &lt;listener&gt;
+        &lt;listener-class&gt;
+            org.springframework.web.context.ContextLoaderListener
+        &lt;/listener-class&gt;
+    &lt;/listener&gt;
+
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;user&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;
+            org.springframework.web.servlet.DispatcherServlet
+        &lt;/servlet-class&gt;
+        &lt;!--①通过contextConfigLocation参数指定Spring配置文件的位置 --&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;
+            &lt;param-value&gt;classpath:user/mixlayer/applicationContext.xml&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+    &lt;/servlet&gt;
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;user&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*.do&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+</pre></td></tr></tbody></table><br>
+			<p>这个配置文件很简单，唯一需要注意的是 DispatcherServlet 的配置。默认情况下 Spring MVC 根据 
+Servlet 的名字查找 WEB-INF 下的 &lt;servletName&gt;-servlet.xml 作为 Spring MVC 
+的配置文件，在此，我们通过 contextConfigLocation 参数显式指定 Spring MVC 配置文件的确切位置。</p>
+			<p>将 org.springframework.jdbc 及 org.springframework.transaction 
+的日志级别设置为 DEBUG，启动项目，并访问 http://localhost:8088/logon.do?userName=tom 
+应用，MixLayerUserService#logon 方法将作出响应，查看后台输出日志：</p>
+			<br><a name="listing8"><b>清单 8 执行日志</b></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">				
+13:24:22,625 DEBUG (AbstractPlatformTransactionManager.java:365) - 
+    Creating new transaction with name 
+	[user.mixlayer.MixLayerUserService.logon]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+13:24:22,906 DEBUG (DataSourceTransactionManager.java:205) - 
+    Acquired Connection [org.apache.commons.dbcp.PoolableConnection@6e1cbf] 
+	for JDBC transaction
+13:24:22,921 DEBUG (DataSourceTransactionManager.java:222) - 
+    Switching JDBC Connection 
+	[org.apache.commons.dbcp.PoolableConnection@6e1cbf] to manual commit
+13:24:22,921 DEBUG (JdbcTemplate.java:785) - 
+    Executing prepared SQL update
+13:24:22,921 DEBUG (JdbcTemplate.java:569) - 
+    Executing prepared SQL statement 
+	[UPDATE t_user u SET u.score = u.score + ? WHERE user_name =?]
+13:24:23,140 DEBUG (JdbcTemplate.java:794) - 
+    SQL update affected 0 rows
+13:24:23,140 DEBUG (AbstractPlatformTransactionManager.java:752) - 
+    Initiating transaction commit
+13:24:23,140 DEBUG (DataSourceTransactionManager.java:265) - 
+    Committing JDBC transaction on Connection 
+	[org.apache.commons.dbcp.PoolableConnection@6e1cbf]
+13:24:23,140 DEBUG (DataSourceTransactionManager.java:323) - 
+    Releasing JDBC Connection [org.apache.commons.dbcp.PoolableConnection@6e1cbf] 
+	after transaction
+13:24:23,156 DEBUG (DataSourceUtils.java:312) - 
+    Returning JDBC Connection to DataSource
+</pre></td></tr></tbody></table><br>
+			<p>日志中粗体部分说明了 MixLayerUserService#logon 方法已经正确运行在事务上下文中。</p>
+			<p>  Spring 框架本身不应该是复杂化代码的理由，使用 Spring 的开发者应该是无拘无束的：从实际应用出发，去除掉那些所谓原则性的接口，去除掉强制分层的束缚，简单才是硬道理。</p>
+			<div class="ibm-alternate-rule"><hr></div><p class="ibm-ind-link ibm-back-to-top"><a href="#ibm-pcon" class="ibm-anchor-up-link">回页首</a></p><p><a name="major4"><span class="atitle">事务方法嵌套调用的迷茫</span></a></p>
+			<p>Spring 事务一个被讹传很广说法是：一个事务方法不应该调用另一个事务方法，否则将产生两个事务。结果造成开发人员在设计事务方法时束手束脚，生怕一不小心就踩到地雷。</p>
+			<p>其实这种是不认识 Spring 事务传播机制而造成的误解，Spring 对事务控制的支持统一在 TransactionDefinition 类中描述，该类有以下几个重要的接口方法：</p>
+			<ul>
+				<li>int getPropagationBehavior()：事务的传播行为</li>
+				<li>int getIsolationLevel()：事务的隔离级别</li>
+				<li>int getTimeout()：事务的过期时间</li>
+				<li>boolean isReadOnly()：事务的读写特性。</li>
+			</ul>
+			<p>很明显，除了事务的传播行为外，事务的其它特性 Spring 是借助底层资源的功能来完成的，Spring 
+无非只充当个代理的角色。但是事务的传播行为却是 Spring 凭借自身的框架提供的功能，是 Spring 
+提供给开发者最珍贵的礼物，讹传的说法玷污了 Spring 事务框架最美丽的光环。</p>
+			<p>所谓事务传播行为就是多个事务方法相互调用时，事务如何在这些方法间传播。Spring 支持 7 种事务传播行为：</p>
+			<ul>
+				<li>PROPAGATION_REQUIRED 	如果当前没有事务，就新建一个事务，如果已经存在一个事务中，加入到这个事务中。这是最常见的选择。</li>
+				<li>PROPAGATION_SUPPORTS 	支持当前事务，如果当前没有事务，就以非事务方式执行。</li>
+				<li>PROPAGATION_MANDATORY 	使用当前的事务，如果当前没有事务，就抛出异常。</li>
+				<li>PROPAGATION_REQUIRES_NEW 	新建事务，如果当前存在事务，把当前事务挂起。</li>
+				<li>PROPAGATION_NOT_SUPPORTED 	以非事务方式执行操作，如果当前存在事务，就把当前事务挂起。</li>
+				<li>PROPAGATION_NEVER 	以非事务方式执行，如果当前存在事务，则抛出异常。</li>
+				<li>PROPAGATION_NESTED 	如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与 PROPAGATION_REQUIRED 类似的操作。</li>
+			</ul>
+			<p>Spring 默认的事务传播行为是 PROPAGATION_REQUIRED，它适合于绝大多数的情况。假设 
+ServiveX#methodX() 都工作在事务环境下（即都被 Spring 
+事务增强了），假设程序中存在如下的调用
+链：Service1#method1()-&gt;Service2#method2()-&gt;Service3#method3()，那么这 3
+ 个服务类的 3 个方法通过 Spring 的事务传播机制都工作在同一个事务中。</p>
+			<p>下面，我们来看一下实例，UserService#logon() 方法内部调用了 
+UserService#updateLastLogonTime() 和 ScoreService#addScore() 方法，这两个类都继承于 
+BaseService。它们之间的类结构说明如下：</p>
+			
+				<br><a name="fig1"><b>图 1. UserService 和 ScoreService</b></a><br>
+				<img alt="图 1. UserService 和 ScoreService" src="spring-tx-1_files/image001.jpg" height="170" width="488">
+			<br>
+			<p>具体的代码如下所示：</p>
+			<br><a name="listing9"><b>清单 9 UserService.java</b></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">				
+@Service("userService")
+public class UserService extends BaseService {
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private ScoreService scoreService;
+
+    public void logon(String userName) {
+        updateLastLogonTime(userName);
+        scoreService.addScore(userName, 20);
+    }
+
+    public void updateLastLogonTime(String userName) {
+        String sql = "UPDATE t_user u SET u.last_logon_time = ? WHERE user_name =?";
+        jdbcTemplate.update(sql, System.currentTimeMillis(), userName);
+    }
+}
+</pre></td></tr></tbody></table><br>
+			<p>UserService 中注入了 ScoreService 的 Bean，ScoreService 的代码如下所示：</p>
+			<br><a name="listing10"><b>清单 10 ScoreService.java</b></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">				
+@Service("scoreUserService")
+public class ScoreService extends BaseService{
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    public void addScore(String userName, int toAdd) {
+        String sql = "UPDATE t_user u SET u.score = u.score + ? WHERE user_name =?";
+        jdbcTemplate.update(sql, toAdd, userName);
+    }
+}
+</pre></td></tr></tbody></table><br>
+			<p>通过 Spring 的事务配置为 ScoreService 及 UserService 中所有公有方法都添加事务增强，让这些方法都工作于事务环境下。下面是关键的配置代码：</p>
+			<br><a name="listing11"><b>清单 11 事务增强配置</b></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">				
+&lt;!-- 添加Spring事务增强 --&gt;
+&lt;aop:config proxy-target-class="true"&gt;
+    &lt;aop:pointcut id="serviceJdbcMethod"
+        &lt;!-- 所有继承于BaseService类的子孙类的public方法都进行事务增强--&gt;
+        expression="within(user.nestcall.BaseService+)"/&gt;
+    &lt;aop:advisor pointcut-ref="serviceJdbcMethod" 
+        advice-ref="jdbcAdvice" order="0"/&gt;
+&lt;/aop:config&gt;
+&lt;tx:advice id="jdbcAdvice" transaction-manager="jdbcManager"&gt;
+    &lt;tx:attributes&gt;
+        &lt;tx:method name="*"/&gt;
+    &lt;/tx:attributes&gt;
+&lt;/tx:advice&gt;
+</pre></td></tr></tbody></table><br>
+			<p>将日志级别设置为 DEBUG，启动 Spring 容器并执行 UserService#logon() 的方法，仔细观察如下的输出日志：</p>
+			<br><a name="listing12"><b>清单 12 执行日志</b></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">				
+16:25:04,765 DEBUG (AbstractPlatformTransactionManager.java:365) - 
+    Creating new transaction with name [user.nestcall.UserService.logon]: 
+	PROPAGATION_REQUIRED,ISOLATION_DEFAULT  ①为UserService#logon方法启动一个事务
+
+16:25:04,765 DEBUG (DataSourceTransactionManager.java:205) - 
+    Acquired Connection [org.apache.commons.dbcp.PoolableConnection@32bd65] 
+	for JDBC transaction
+
+logon method...
+
+updateLastLogonTime... ②直接执行updateLastLogonTime方法
+
+16:25:04,781 DEBUG (JdbcTemplate.java:785) - Executing prepared SQL update
+
+16:25:04,781 DEBUG (JdbcTemplate.java:569) - Executing prepared SQL statement 
+    [UPDATE t_user u SET u.last_logon_time = ? WHERE user_name =?]
+
+16:25:04,828 DEBUG (JdbcTemplate.java:794) - SQL update affected 0 rows
+
+16:25:04,828 DEBUG (AbstractPlatformTransactionManager.java:470) - Participating 
+    in existing transaction   ③ScoreService#addScore方法加入到UserService#logon的事务中
+
+addScore...
+
+16:25:04,828 DEBUG (JdbcTemplate.java:785) - Executing prepared SQL update
+
+16:25:04,828 DEBUG (JdbcTemplate.java:569) - Executing prepared SQL statement 
+    [UPDATE t_user u SET u.score = u.score + ? WHERE user_name =?]
+
+16:25:04,828 DEBUG (JdbcTemplate.java:794) - SQL update affected 0 rows
+
+16:25:04,828 DEBUG (AbstractPlatformTransactionManager.java:752) - 
+    Initiating transaction commit
+
+④提交事务
+
+16:25:04,828 DEBUG (DataSourceTransactionManager.java:265) - Committing JDBC transaction
+    on Connection [org.apache.commons.dbcp.PoolableConnection@32bd65]
+
+16:25:04,828 DEBUG (DataSourceTransactionManager.java:323) - Releasing JDBC Connection 
+    [org.apache.commons.dbcp.PoolableConnection@32bd65] after transaction
+
+16:25:04,828 DEBUG (DataSourceUtils.java:312) - Returning JDBC Connection to DataSource
+</pre></td></tr></tbody></table><br>
+			<p>从上面的输入日志中，可以清楚地看到 Spring 为 UserService#logon() 方法启动了一个新的事务，而 
+UserSerive#updateLastLogonTime() 和 UserService#logon() 
+是在相同的类中，没有观察到有事务传播行为的发生，其代码块好像“直接合并”到 UserService#logon() 中。接着，当执行到 
+ScoreService#addScore() 方法时，我们就观察到了发生了事务传播的行为：Participating in existing 
+transaction，这说明 ScoreService#addScore() 添加到 UserService#logon() 
+的事务上下文中，两者共享同一个事务。所以最终的结果是 UserService 的 logon(), updateLastLogonTime() 
+以及 ScoreService 的 addScore 都工作于同一事务中。</p>
+			<div class="ibm-alternate-rule"><hr></div><p class="ibm-ind-link ibm-back-to-top"><a href="#ibm-pcon" class="ibm-anchor-up-link">回页首</a></p><p><a name="major5"><span class="atitle">多线程的困惑</span></a></p>
+			<p>由于 Spring 的事务管理器是通过线程相关的 ThreadLocal 来保存数据访问基础设施，再结合 IOC 和 AOP 实现高级声明式事务的功能，所以 Spring 的事务天然地和线程有着千丝万缕的联系。</p>
+			<p>我们知道 Web 容器本身就是多线程的，Web 容器为一个 Http 请求创建一个独立的线程，所以由此请求所牵涉到的 Spring 
+容器中的 Bean 也是运行于多线程的环境下。在绝大多数情况下，Spring 的 Bean 都是单实例的（singleton），单实例 Bean
+ 的最大的好处是线程无关性，不存在多线程并发访问的问题，也即是线程安全的。</p>
+			<p>一个类能够以单实例的方式运行的前提是“无状态”：即一个类不能拥有状态化的成员变量。我们知道，在传统的编程中，DAO 必须执有一个 
+Connection，而 Connection 即是状态化的对象。所以传统的 DAO 不能做成单实例的，每次要用时都必须 new 
+一个新的实例。传统的 Service 由于将有状态的 DAO 作为成员变量，所以传统的 Service 本身也是有状态的。</p>
+			<p>但是在 Spring 中，DAO 和 Service 都以单实例的方式存在。Spring 是通过 ThreadLocal 
+将有状态的变量（如 Connection 等）本地线程化，达到另一个层面上的“线程无关”，从而实现线程安全。Spring 
+不遗余力地将状态化的对象无状态化，就是要达到单实例化 Bean 的目的。</p>
+			<p>由于 Spring 已经通过 ThreadLocal 的设施将 Bean 无状态化，所以 Spring 中单实例 Bean 
+对线程安全问题拥有了一种天生的免疫能力。不但单实例的 Service 可以成功运行于多线程环境中，Service 
+本身还可以自由地启动独立线程以执行其它的 Service。下面，通过一个实例对此进行描述：</p>
+			<br><a name="listing13"><b>清单 13 UserService.java 在事务方法中启动独立线程运行另一个事务方法</b></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">				
+@Service("userService")
+public class UserService extends BaseService {
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private ScoreService scoreService;
+    //① 在logon方法体中启动一个独立的线程，在该独立的线程中执行ScoreService#addScore()方法
+    public void logon(String userName) {
+        System.out.println("logon method...");
+        updateLastLogonTime(userName);
+        Thread myThread = new MyThread(this.scoreService,userName,20);
+        myThread.start();
+    }
+
+    public void updateLastLogonTime(String userName) {
+        System.out.println("updateLastLogonTime...");
+        String sql = "UPDATE t_user u SET u.last_logon_time = ? WHERE user_name =?";
+        jdbcTemplate.update(sql, System.currentTimeMillis(), userName);
+    }
+    //② 封装ScoreService#addScore()的线程
+    private class MyThread extends Thread{
+        private ScoreService scoreService;
+        private String userName;
+        private int toAdd;
+        private MyThread(ScoreService scoreService,String userName,int toAdd) {
+            this.scoreService = scoreService;
+            this.userName = userName;
+            this.toAdd = toAdd;
+        }
+        public void run() {
+            scoreService.addScore(userName,toAdd);
+        }
+    }
+}
+</pre></td></tr></tbody></table><br>
+			<p>  将日志级别设置为 DEBUG，执行 UserService#logon() 方法，观察以下输出的日志：</p>
+			<br><a name="listing14"><b>清单 14 执行日志</b></a><br><table border="0" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td class="code-outline"><pre class="displaycode">				
+[main] (AbstractPlatformTransactionManager.java:365) - Creating new transaction with name
+    [user.multithread.UserService.logon]: PROPAGATION_REQUIRED,ISOLATION_DEFAULT ①
+
+[main] (DataSourceTransactionManager.java:205) - Acquired Connection 
+    [org.apache.commons.dbcp.PoolableConnection@1353249] for JDBC transaction
+
+logon method...
+
+updateLastLogonTime...
+
+[main] (JdbcTemplate.java:785) - Executing prepared SQL update
+
+[main] (JdbcTemplate.java:569) - Executing prepared SQL statement 
+    [UPDATE t_user u SET u.last_logon_time = ? WHERE user_name =?]
+
+[main] (JdbcTemplate.java:794) - SQL update affected 0 rows
+
+[main] (AbstractPlatformTransactionManager.java:752) - Initiating transaction commit
+
+[Thread-2](AbstractPlatformTransactionManager.java:365) - 
+    Creating new transaction with name [user.multithread.ScoreService.addScore]: 
+	PROPAGATION_REQUIRED,ISOLATION_DEFAULT ②
+
+[main] (DataSourceTransactionManager.java:265) - Committing JDBC transaction
+    on Connection [org.apache.commons.dbcp.PoolableConnection@1353249] ③
+
+[main] (DataSourceTransactionManager.java:323) - Releasing JDBC Connection 
+    [org.apache.commons.dbcp.PoolableConnection@1353249] after transaction
+
+[main] (DataSourceUtils.java:312) - Returning JDBC Connection to DataSource
+
+[Thread-2] (DataSourceTransactionManager.java:205) - Acquired Connection 
+    [org.apache.commons.dbcp.PoolableConnection@10dc656] for JDBC transaction
+
+addScore...
+
+[main] (JdbcTemplate.java:416) - Executing SQL statement 
+    [DELETE FROM t_user WHERE user_name='tom']
+
+[main] (DataSourceUtils.java:112) - Fetching JDBC Connection from DataSource
+
+[Thread-2] (JdbcTemplate.java:785) - Executing prepared SQL update
+
+[Thread-2] (JdbcTemplate.java:569) - Executing prepared SQL statement 
+    [UPDATE t_user u SET u.score = u.score + ? WHERE user_name =?]
+
+[main] (DataSourceUtils.java:312) - Returning JDBC Connection to DataSource
+
+[Thread-2] (JdbcTemplate.java:794) - SQL update affected 0 rows
+
+[Thread-2] (AbstractPlatformTransactionManager.java:752) - Initiating transaction commit
+
+[Thread-2] (DataSourceTransactionManager.java:265) - Committing JDBC transaction 
+    on Connection [org.apache.commons.dbcp.PoolableConnection@10dc656] ④
+
+[Thread-2] (DataSourceTransactionManager.java:323) - Releasing JDBC Connection 
+    [org.apache.commons.dbcp.PoolableConnection@10dc656] after transaction
+</pre></td></tr></tbody></table><br>
+			<p>  在 ① 处，在主线程（main）执行的 UserService#logon() 方法的事务启动，在 ③ 
+处，其对应的事务提交，而在子线程（Thread-2）执行的 ScoreService#addScore() 方法的事务在 ② 处启动，在 ④ 
+处对应的事务提交。</p>
+			<p>  所以，我们可以得出这样的结论：在 <strong>相同线程中</strong>进行相互嵌套调用的事务方法工作于相同的事务中。如果这些相互嵌套调用的方法工作在不同的线程中，不同线程下的事务方法工作在独立的事务中。</p>
+			<div class="ibm-alternate-rule"><hr></div><p class="ibm-ind-link ibm-back-to-top"><a href="#ibm-pcon" class="ibm-anchor-up-link">回页首</a></p><p><a name="major6"><span class="atitle">小结</span></a></p>
+			<p>Spring 声明式事务是 Spring 最核心，最常用的功能。由于 Spring 通过 IOC 和 AOP 的功能非常透明地实现了声明式事务的功能，一般的开发者基本上无须了解 Spring 声明式事务的内部细节，仅需要懂得如何配置就可以了。</p>
+			<p>但是在实际应用开发过程中，Spring 
+的这种透明的高阶封装在带来便利的同时，也给我们带来了迷惑。就像通过流言传播的消息，最终听众已经不清楚事情的真相了，而这对于应用开发来说是很危险
+的。本系列文章通过剖析实际应用中给开发者造成迷惑的各种难点，通过分析 Spring 事务管理的内部运作机制将真相还原出来。</p>
+			<p>在本文中，我们通过剖析了解到以下的真相：</p>
+			<ul>
+				<li>在没有事务管理的情况下，DAO 照样可以顺利进行数据操作；</li>
+				<li>将应用分成 Web，Service 及 DAO 层只是一种参考的开发模式，并非是事务管理工作的前提条件；</li>
+				<li>Spring 通过事务传播机制可以很好地应对事务方法嵌套调用的情况，开发者无须为了事务管理而刻意改变服务方法的设计；</li>
+				<li>由于单实例的对象不存在线程安全问题，所以进行事务管理增强的 Bean 可以很好地工作在多线程环境下。</li>
+			</ul>
+			<p>在 <a href="http://www.ibm.com/developerworks/cn/java/j-lo-spring-ts2/">下一篇</a> 文章中，笔者将继续分析 Spring 事务管理的以下难点：</p>
+			<ul>
+				<li>混合使用多种数据访问技术（如 Spring JDBC + Hibernate）的事务管理问题；</li>
+				<li>进行 Spring AOP 增强的 Bean 存在哪些特殊的情况。</li>
+			</ul>
+		<!-- CMA ID: 475636 --> <!-- Site ID: 10 --> <!-- XSLT stylesheet used to transform this file:  dw-article-6.0-beta.xsl -->
+<br>
+<p><a name="resources"><span class="atitle">参考资料 </span></a></p><p><b>学习</b></p><ul><li>
+				查看 <a href="http://www.ibm.com/developerworks/cn/views/java/libraryview.jsp?search_by=Spring+%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8%E9%9A%BE%E7%82%B9%E5%89%96%E6%9E%90"><em>本系列</em></a> 文章的 <a href="http://www.ibm.com/developerworks/cn/java/j-lo-spring-ts2/">第 2 部分</a> 和 <a href="http://www.ibm.com/developerworks/cn/java/j-lo-spring-ts3/">第 3 部分</a>。
+			<br><br></li><li>
+				参考 <a href="http://www.springframework.org/">Spring 2.5 技术参考手册</a>，您可以了解更多需要强调的内容。
+			<br><br></li><li>“<a href="http://www.ibm.com/developerworks/cn/edu/os-dw-os-cn-spring-trans.html">教程：全面分析 Spring 的编程式事务管理及声明式事务管理</a>”（developerWorks，2009 年 1 月）：本教程从基础知识开始，详细分析了 Spring 事务管理的使用方法，为读者理清思路。<br><br></li><li>“<a href="http://www.ibm.com/developerworks/cn/java/j-jtp0305.html">Java 理论与实践: 理解 JTS —— 事务简介</a>”（developerWorks，2007 年 2 月）：讲述了一些基础知识，包括什么是事务，以及事务对于构建可靠 的分布式应用程序来说至关重要的原因。<br><br></li><li>“<a href="http://www.ibm.com/developerworks/cn/java/j-ts1.html">事务策略: 了解事务陷阱</a>”（developerWorks，2009 年 3 月）：该系列文章通过使用 Spring Framework 和企业 EJB 3.0 规范中的代码示例解释了这些极其常见的错误。<br><br></li><li>“<a href="http://www.ibm.com/developerworks/cn/java/wa-spring1/">Spring 系列: Spring 框架简介</a>”（developerWorks，2005 年 8 月）：开始学习如何用 Spring 技术构建轻量级的、强壮的 J2EE 应用程序。<br><br></li><li>“<a href="http://www.ibm.com/developerworks/cn/java/j-lo-spring25-ioc/">使用 Spring 2.5 注释驱动的 IoC 功能</a>”（developerWorks，2008 年 2 月）：本文通过实例详细讲述了 Spring 2.5 基于注释 IoC 功能的使用。<br><br></li><li>“<a href="http://www.ibm.com/developerworks/cn/java/j-lo-spring25-mvc/">使用 Spring 2.5 基于注解驱动的 Spring MVC</a>”（developerWorks，2008 年 3 月）：本文将介绍 Spring 2.5 新增的 Sping MVC 注解功能，讲述如何使用注解配置替换传统的基于 XML 的 Spring MVC 配置。<br><br></li><li>
+				<a href="http://www.ibm.com/developerworks/apps/SendTo?bookstore=safari">技术书店</a>：浏览关于这些和其他技术主题的图书。<br><br></li><li>
+				<a href="http://www.ibm.com/developerworks/cn/java/">developerWorks Java 技术专区</a>：数百篇关于 Java 编程各个方面的文章。<br><br></li></ul><p><b>讨论</b></p><ul><li>加入 <a href="http://www.ibm.com/developerworks/mydeveloperworks" onmouseover="linkQueryAppend(this)">developerWorks 社区</a>。<br><br></li><li>查看 <a href="http://www.ibm.com/developerworks/blogs/" onmouseover="linkQueryAppend(this)">developerWorks 博客</a>的最新信息。<br><br></li></ul>
+<p><a name="author"><span class="atitle">关于作者</span></a></p><div class="ibm-container ibm-portrait-module ibm-alternate-two"><div class="ibm-container-body"><p><a name="author1"> </a>陈
+雄华，2002 年毕业于厦门大学计算机与信息工程学院，获硕士学位。拥有 10 多年的 Java 
+开发、设计、架构的经验。技术研发之余，常将经验所得行诸于文字，作者是国内多个著名技术网站的专栏作者，在各大技术网站、报刊杂志发表过数十篇技术文
+章，广受读者好评。于 2005 年出版《精通 JBuilder 2005》，于 2007 年出版《精通 Spring 2.x -- 
+企业应用开发详解》。</p></div></div>
+<!-- MAIN_COLUMN_CONTENT_END -->
+
+  <!-- INLINE_COMMENTS_START -->
+  <p class="ibm-no-print"><span class="atitle"><a name="icomments">建议</a></span></p>
+  <div id="dw-icomments-container" class="ibm-no-print">
+    <div class="ibm-alternate-rule"><hr></div>
+    <div class="ibm-alternate-rule"><hr></div>
+    <!-- Comment_Script -->
+    
+    <a id="comments" href="http://www.ibm.com/developerworks/cn/java/j-lo-spring-ts1/comments"></a>
+    <script language="JavaScript" type="text/javascript">
+      // <![CDATA[
+dwc = {};
+dwc.cmts = '条评论';
+dwc.signIn = '登录';
+dwc.addCmts = '添加评论';
+dwc.addCmt = '添加评论';
+dwc.viewOrAddCmts = '查看或添加评论';
+dwc.reportInapprCont = '举报不良信息';
+dwc.reportInapprContLink = 'http://www.ibm.com/developerworks/forums/forum.jspa?forumID=1834';
+dwc.postingCmt = '正在发布评论……';
+dwc.noCmt = '快来添加第一条评论';
+dwc.netwkErr = '在检索评论时出错，请稍后刷新。';
+dwc.addACmt = '添加评论';
+dwc.instructCmt = '标有星号（<span class="ibm-required">*</span>）的是必填项目。';
+dwc.cmt = '评论：';
+dwc.btnPost = '发布';
+dwc.btnPostAnon = '匿名发布';
+dwc.btnClrCmt = '清除评论';
+dwc.btnCancel = '取消';
+dwc.showRecent = '显示最新的 {1} 条评论'; // {1} is the count to be substituted
+dwc.showNext = '显示后 {1} 条评论'; // {1} is the count to be substituted
+dwc.showAllCmts = '显示所有评论';
+dwc.enterCmt = '请输入评论内容。';
+dwc.loginErr = '暂时无法验证您的登录状态，请稍后再试。';
+dwc.postErr = '暂时无法发布您的评论，请稍后再试。';
+dwc.postBy = '由 <strong>{1}</strong>  于 {2} '; // {1} is the author to be substituted; {2} is the date
+dwc.siteId = 10;
+dwc.lang = 'zh_CN';
+// ]]>
+    </script>
+    <script language="JavaScript" src="spring-tx-1_files/insertcomment.js" type="text/javascript">//</script>
+    <div id="threadShow"><div id="cmtTog" style=""><p><span id="numCmts">1</span>&nbsp;条评论 <span class="dw-bar">|</span> <a href="http://www.ibm.com/developerworks/dwwi/DWAuthRouter?m=loginpage&amp;lang=zh_CN&amp;d=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Fjava%2Fj-lo-spring-ts1%2Findex.html%23icomments" style="display: none;" class="loginLk">登录</a><a id="addCmtLk" class="dw-icomment-link">添加评论</a><a class="dw-icomment-report" href="http://www.ibm.com/developerworks/forums/forum.jspa?forumID=1834">举报不良信息</a></p><div class="ibm-alternate-rule"><hr></div><div style="display: none;" id="commentForm"><div class="ibm-container"><h2>添加评论</h2><div class="ibm-container-body"><p>标有星号（<span class="ibm-required">*</span>）的是必填项目。</p><span id="infoCmt"></span><div class="ibm-rule"><hr></div><form method="post" action="" class="ibm-column-form" enctype="multipart/form-data" focus="name" name="form"><p><label for="newCmt">评论：<span class="ibm-required">*</span></label><br><textarea name="newCmt" id="newCmt" cols="120" rows="4"></textarea></p><div class="ibm-alternate-rule"><hr></div><p class="ibm-buttons-row"><input value="发布" name="postCmt" class="ibm-btn-arrow-sec" id="postCmt" type="button"><span class="ibm-sep">&nbsp;</span><input value="清除评论" name="clearCmt" class="ibm-btn-cancel-sec" id="clearCmt" type="button"><span class="ibm-sep">&nbsp;</span><input value="取消" name="cancelCmt" class="ibm-btn-cancel-sec" id="cancelCmt" type="button"></p></form></div></div></div><div id="cmtSect"><div class="comment"><div class="dw-icomment-container"><table class="dw-icomment-body" cellpadding="0" cellspacing="0" width="100%"><tbody><tr><td><p>写的很深入！</p></td></tr><tr><td><p class="ibm-item-note-alternate">由 <strong><a href="http://www.ibm.com/developerworks/forums/profile.jspa?userID=353831">zuozhengfeng1983</a></strong>  于 18 01 2011 </p></td></tr></tbody></table></div></div></div><div id="paging"><p><a style="display: none;" id="lastCmts" class="dw-icomment-link">显示最新的 5 条评论</a><span style="display: none;" id="cmtDivider"> <span class="dw-bar">|</span> </span><a style="display: none;" id="nextCmts" class="dw-icomment-link">显示后 5 条评论</a><span style="display: none;" id="cmtDivider2"> <span class="dw-bar">|</span> </span><a style="display: none;" id="viewAllCmts" class="dw-icomment-link">显示所有评论</a></p></div><p><a href="http://www.ibm.com/developerworks/dwwi/DWAuthRouter?m=loginpage&amp;lang=zh_CN&amp;d=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Fjava%2Fj-lo-spring-ts1%2Findex.html%23icomments" style="display: none;" class="loginLk">登录</a><a id="addCmtLk2" href="#icomments">添加评论</a></p><div class="ibm-alternate-rule"><hr></div><div class="ibm-alternate-rule"><hr></div></div></div>
+    <script language="JavaScript" type="text/javascript">
+      // <![CDATA[
+jQuery('threadShow').insertComment('95%',5,'nCmts','icomments');
+// ]]>
+    </script>
+  </div>
+  <!-- INLINE_COMMENTS_END -->
+  
+
+  <p class="ibm-ind-link ibm-back-to-top"><a class="ibm-anchor-up-link" href="#ibm-pcon">回页首</a></p>
+
+<!-- Overlays -->
+<!-- lk - pull in overlays from ww when required on cn -->
+  </div>
+<!-- MAIN_COLUMN_CONTAINER_END -->
+
+<!-- Rating_Meta_BEGIN -->
+<!--Rating_Meta_BEGIN--><div class="metavalue">static.content.url=http://www.ibm.com/developerworks/js/artrating/</div><div class="metavalue">SITE_ID=10</div><div class="metavalue">Zone=Java technology, Open source</div><div class="metavalue">ArticleID=475636</div><div class="metavalue">ArticleTitle=Spring 事务管理高级应用难点剖析: 第 1 部分</div><div class="metavalue">publish-date=03192010</div><div class="metavalue">author1-email=quickselect_cnnew1@yahoo.com.cn</div><div class="metavalue">author1-email-cc=</div><script language="javascript" type="text/javascript">document.write('<div class="metavalue">url='+location.href.replace(/</g, '%3C')+'</div>');</script><div class="metavalue">url=http://www.ibm.com/developerworks/cn/java/j-lo-spring-ts1/index.html</div><!--Rating_Meta_END-->
+<!-- Rating_Meta_END -->
+
+</div>
+<!-- MAIN_COLUMN_END-->
+
+<!-- RIGHT_COLUMN_BEGIN -->
+<div id="ibm-content-sidebar">
+
+<!-- RIGHT_COLUMN_CONTENT_BEGIN --> 
+<div class="ibm-container"><h2>内容</h2><div class="ibm-container-body"><img alt="" src="spring-tx-1_files/c.gif" height="1" width="1"><ul class="ibm-bullet-list"><li><a class="ibm-feature-link" href="#major1">概述</a></li><li><a class="ibm-feature-link" href="#major2">DAO 和事务管理的牵绊</a></li><li><a class="ibm-feature-link" href="#major3">应用分层的迷惑</a></li><li><a class="ibm-feature-link" href="#major4">事务方法嵌套调用的迷茫</a></li><li><a class="ibm-feature-link" href="#major5">多线程的困惑</a></li><li><a class="ibm-feature-link" href="#major6">小结</a></li><li><a class="ibm-feature-link" href="#resources">参考资料 </a></li><li><a class="ibm-feature-link" href="#author">关于作者</a></li><li><a class="ibm-feature-link" href="#icomments">建议</a></li></ul></div></div>
+
+ 
+
+<!-- Tagging_Start -->
+<div id="dw-tag-cloud-container" class="ibm-container"><h2>标签</h2>
+<div id="dw-tag-help"><a class="dwauthor" rel="#tagtip" id="dwtagtip"><img alt="Help" src="spring-tx-1_files/help_icon.gif" align="top" height="16" width="16"></a></div>
+<div style="display: none;" id="tagtip" class="dwauthor-onload-state ibm-no-print">使用 <strong>搜索</strong> 文本框在 My developerWorks 中查找包含该标签的所有内容。<p>使用 <strong>滑动条</strong> 调节标签的数量。</p><p><strong>热门标签</strong> 显示了特定专区最受欢迎的标签（例如 Java technology，Linux，WebSphere）。</p><p><strong>我的标签</strong> 显示了特定专区您标记的标签（例如 Java technology，Linux，WebSphere）。</p></div>
+<div class="ibm-access">使用搜索文本框在 My developerWorks 中查找包含该标签的所有内容。<em>热门标签</em> 显示了特定专区最受欢迎的标签（例如 Java technology，Linux，WebSphere）。<em>我的标签</em> 显示了特定专区您标记的标签（例如 Java technology，Linux，WebSphere）。</div>
+<div class="ibm-container-body">
+<div class="dw-tag-search"><form action="//www.ibm.com/developerworks/mydeveloperworks/bookmarks/html" method="get" id="actualtagform" onsubmit="popupform(this, 'join')">
+<p><label for="tagfield"><strong>搜索所有标签</strong></label>
+<input name="lang" value="zh" type="hidden">
+<input id="tagfield" name="tag" maxlength="20" size="17" type="text">&nbsp;<input src="spring-tx-1_files/short-btn.gif" class="ibm-btn-view" alt="submit search" title="提交搜索" value="Search" type="image"></p></form></div>
+<div class="ibm-rule"><hr></div>
+<div id="dw-tag-select">
+<div id="dw-tag-select-popular"><p><strong>热门文章标签</strong>&nbsp;|&nbsp;<br><a id="a-my" href="javascript:;">我的文章标签</a><a href="#dw-tag-access" class="ibm-access">跳转到标签列表</a></p></div>
+<div id="dw-tag-select-my" class="dw-hidetag"><p><a id="a-popular" href="javascript:;">热门文章标签</a>&nbsp;|&nbsp;<br><strong>我的文章标签</strong></p><a href="#dw-tag-access" class="ibm-access">跳转到标签列表</a></div><div id="dw-tag-access" class="ibm-access"><h2>热门标签</h2><ul>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f1-41">
+					
+					<a title="_unassigned 26" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=_unassigned&amp;lang=zh')">
+					
+						
+						
+							_unassigned	
+						
+					
+					<span class="ibm-access">(26)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f2-20">
+					
+					<a title="1 10" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=1&amp;lang=zh')">
+					
+						
+						
+							1	
+						
+					
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f3-17">
+					
+					<a title="2 9" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=2&amp;lang=zh')">
+					
+						
+						
+							2	
+						
+					
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f4-1">
+					
+					<a title="3.0 4" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=3.0&amp;lang=zh')">
+					
+						
+						
+							3.0	
+						
+					
+					<span class="ibm-access">(4)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f5-5">
+					
+					<a title="5 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=5&amp;lang=zh')">
+					
+						
+						
+							5	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f6-30">
+					
+					<a title="ajax 16" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=ajax&amp;lang=zh')">
+					
+						
+						
+							ajax	
+						
+					
+					<span class="ibm-access">(16)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f7-27">
+					
+					<a title="ant 14" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=ant&amp;lang=zh')">
+					
+						
+						
+							ant	
+						
+					
+					<span class="ibm-access">(14)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f8-40">
+					
+					<a title="apache 25" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=apache&amp;lang=zh')">
+					
+						
+						
+							apache	
+						
+					
+					<span class="ibm-access">(25)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f9-52">
+					
+					<a title="api 41" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=api&amp;lang=zh')">
+					
+						
+						
+							api	
+						
+					
+					<span class="ibm-access">(41)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+								
+							
+							
+						
+				<li class="f10-80">
+					
+					<a title="best_practices 132" class="lotusF4 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=best_practices&amp;lang=zh')">
+					
+						
+							best_practic...	
+						
+						
+					
+					<span class="ibm-access">(132)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f11-1">
+					
+					<a title="cloud-computing-paas 4" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=cloud-computing-paas&amp;lang=zh')">
+					
+						
+							cloud-computin...	
+						
+						
+					
+					<span class="ibm-access">(4)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f12-22">
+					
+					<a title="eclipse 11" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=eclipse&amp;lang=zh')">
+					
+						
+						
+							eclipse	
+						
+					
+					<span class="ibm-access">(11)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f13-5">
+					
+					<a title="ejb_(enterprise_javabeans)_technology 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=ejb_%2528enterprise_javabeans%2529_technology&amp;lang=zh')">
+					
+						
+							ejb_(enterpris...	
+						
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f14-22">
+					
+					<a title="generic 11" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=generic&amp;lang=zh')">
+					
+						
+						
+							generic	
+						
+					
+					<span class="ibm-access">(11)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f15-17">
+					
+					<a title="hadoop 9" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=hadoop&amp;lang=zh')">
+					
+						
+						
+							hadoop	
+						
+					
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f16-5">
+					
+					<a title="html 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=html&amp;lang=zh')">
+					
+						
+						
+							html	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f17-15">
+					
+					<a title="ibatis 8" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=ibatis&amp;lang=zh')">
+					
+						
+						
+							ibatis	
+						
+					
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f18-17">
+					
+					<a title="j2ee 9" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=j2ee&amp;lang=zh')">
+					
+						
+						
+							j2ee	
+						
+					
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f19-25">
+					
+					<a title="j2ee_(java_2_enterprise_edition) 13" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=j2ee_%2528java_2_enterprise_edition%2529&amp;lang=zh')">
+					
+						
+							j2ee_(java_2_...	
+						
+						
+					
+					<span class="ibm-access">(13)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f20-49">
+					
+					<a title="j2se_(java_2_standard_edition) 36" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=j2se_%2528java_2_standard_edition%2529&amp;lang=zh')">
+					
+						
+							j2se_(java_2_...	
+						
+						
+					
+					<span class="ibm-access">(36)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+							
+								
+							
+						
+				<li class="f21-88">
+					
+					<a title="java 186" class="lotusF5 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=java&amp;lang=zh')">
+					
+						
+						
+							java	
+						
+					
+					<span class="ibm-access">(186)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+								
+							
+							
+						
+				<li class="f22-69">
+					
+					<a title="java_技术 84" class="lotusF4 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=java_%25E6%258A%2580%25E6%259C%25AF&amp;lang=zh')">
+					
+						
+						
+							java_技术	
+						
+					
+					<span class="ibm-access">(84)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f23-15">
+					
+					<a title="java_入门 8" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=java_%25E5%2585%25A5%25E9%2597%25A8&amp;lang=zh')">
+					
+						
+						
+							java_入门	
+						
+					
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f24-15">
+					
+					<a title="java-spring 8" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=java-spring&amp;lang=zh')">
+					
+						
+						
+							java-spring	
+						
+					
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f25-17">
+					
+					<a title="javascript 9" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=javascript&amp;lang=zh')">
+					
+						
+						
+							javascript	
+						
+					
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f26-5">
+					
+					<a title="jmx 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jmx&amp;lang=zh')">
+					
+						
+						
+							jmx	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f27-15">
+					
+					<a title="jsf 8" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jsf&amp;lang=zh')">
+					
+						
+						
+							jsf	
+						
+					
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f28-12">
+					
+					<a title="jsf_(javaserver_faces) 7" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jsf_%2528javaserver_faces%2529&amp;lang=zh')">
+					
+						
+							jsf_(javaserve...	
+						
+						
+					
+					<span class="ibm-access">(7)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f29-9">
+					
+					<a title="jsp 6" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jsp&amp;lang=zh')">
+					
+						
+						
+							jsp	
+						
+					
+					<span class="ibm-access">(6)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f30-12">
+					
+					<a title="jsp_(javaserver_pages)_technology 7" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jsp_%2528javaserver_pages%2529_technology&amp;lang=zh')">
+					
+						
+							jsp_(javaserve...	
+						
+						
+					
+					<span class="ibm-access">(7)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f31-12">
+					
+					<a title="jstl 7" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jstl&amp;lang=zh')">
+					
+						
+						
+							jstl	
+						
+					
+					<span class="ibm-access">(7)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f32-20">
+					
+					<a title="jvm_(java_virtual_machine) 10" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jvm_%2528java_virtual_machine%2529&amp;lang=zh')">
+					
+						
+							jvm_(java_virt...	
+						
+						
+					
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f33-15">
+					
+					<a title="mapreduce 8" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=mapreduce&amp;lang=zh')">
+					
+						
+						
+							mapreduce	
+						
+					
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f34-5">
+					
+					<a title="maven 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=maven&amp;lang=zh')">
+					
+						
+						
+							maven	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f35-5">
+					
+					<a title="mvc 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=mvc&amp;lang=zh')">
+					
+						
+						
+							mvc	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f36-9">
+					
+					<a title="nio 6" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=nio&amp;lang=zh')">
+					
+						
+						
+							nio	
+						
+					
+					<span class="ibm-access">(6)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f37-5">
+					
+					<a title="rest 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=rest&amp;lang=zh')">
+					
+						
+						
+							rest	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f38-5">
+					
+					<a title="scala 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=scala&amp;lang=zh')">
+					
+						
+						
+							scala	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f39-9">
+					
+					<a title="selenium 6" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=selenium&amp;lang=zh')">
+					
+						
+						
+							selenium	
+						
+					
+					<span class="ibm-access">(6)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f40-56">
+					
+					<a title="servlet 48" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=servlet&amp;lang=zh')">
+					
+						
+						
+							servlet	
+						
+					
+					<span class="ibm-access">(48)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+								
+							
+							
+						
+				<li class="f41-61">
+					
+					<a title="spring 61" class="lotusF4 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=spring&amp;lang=zh')">
+					
+						
+						
+							spring	
+						
+					
+					<span class="ibm-access">(61)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f42-17">
+					
+					<a title="struts 9" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=struts&amp;lang=zh')">
+					
+						
+						
+							struts	
+						
+					
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f43-5">
+					
+					<a title="test 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=test&amp;lang=zh')">
+					
+						
+						
+							test	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f44-47">
+					
+					<a title="tomcat 33" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=tomcat&amp;lang=zh')">
+					
+						
+						
+							tomcat	
+						
+					
+					<span class="ibm-access">(33)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f45-5">
+					
+					<a title="uml 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=uml&amp;lang=zh')">
+					
+						
+						
+							uml	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f46-5">
+					
+					<a title="volatile 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=volatile&amp;lang=zh')">
+					
+						
+						
+							volatile	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f47-34">
+					
+					<a title="web 19" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web&amp;lang=zh')">
+					
+						
+						
+							web	
+						
+					
+					<span class="ibm-access">(19)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f48-30">
+					
+					<a title="web_服务 16" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web_%25E6%259C%258D%25E5%258A%25A1&amp;lang=zh')">
+					
+						
+						
+							web_服务	
+						
+					
+					<span class="ibm-access">(16)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f49-12">
+					
+					<a title="web_应用 7" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web_%25E5%25BA%2594%25E7%2594%25A8&amp;lang=zh')">
+					
+						
+						
+							web_应用	
+						
+					
+					<span class="ibm-access">(7)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f50-25">
+					
+					<a title="xml 13" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=xml&amp;lang=zh')">
+					
+						
+						
+							xml	
+						
+					
+					<span class="ibm-access">(13)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f51-27">
+					
+					<a title="安全 14" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E5%25AE%2589%25E5%2585%25A8&amp;lang=zh')">
+					
+						
+						
+							安全	
+						
+					
+					<span class="ibm-access">(14)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f52-29">
+					
+					<a title="编码 15" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E7%25BC%2596%25E7%25A0%2581&amp;lang=zh')">
+					
+						
+						
+							编码	
+						
+					
+					<span class="ibm-access">(15)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f53-12">
+					
+					<a title="标准 7" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E6%25A0%2587%25E5%2587%2586&amp;lang=zh')">
+					
+						
+						
+							标准	
+						
+					
+					<span class="ibm-access">(7)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f54-12">
+					
+					<a title="部分 7" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E9%2583%25A8%25E5%2588%2586&amp;lang=zh')">
+					
+						
+						
+							部分	
+						
+					
+					<span class="ibm-access">(7)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f55-15">
+					
+					<a title="部分: 8" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E9%2583%25A8%25E5%2588%2586%253A&amp;lang=zh')">
+					
+						
+						
+							部分:	
+						
+					
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f56-24">
+					
+					<a title="持久性 12" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E6%258C%2581%25E4%25B9%2585%25E6%2580%25A7&amp;lang=zh')">
+					
+						
+						
+							持久性	
+						
+					
+					<span class="ibm-access">(12)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f57-20">
+					
+					<a title="调试 10" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E8%25B0%2583%25E8%25AF%2595&amp;lang=zh')">
+					
+						
+						
+							调试	
+						
+					
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f58-33">
+					
+					<a title="多线程 18" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E5%25A4%259A%25E7%25BA%25BF%25E7%25A8%258B&amp;lang=zh')">
+					
+						
+						
+							多线程	
+						
+					
+					<span class="ibm-access">(18)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f59-12">
+					
+					<a title="工作原理解析 7" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E5%25B7%25A5%25E4%25BD%259C%25E5%258E%259F%25E7%2590%2586%25E8%25A7%25A3%25E6%259E%2590&amp;lang=zh')">
+					
+						
+						
+							工作原理解析	
+						
+					
+					<span class="ibm-access">(7)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f60-12">
+					
+					<a title="架构模式 7" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E6%259E%25B6%25E6%259E%2584%25E6%25A8%25A1%25E5%25BC%258F&amp;lang=zh')">
+					
+						
+						
+							架构模式	
+						
+					
+					<span class="ibm-access">(7)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+								
+							
+							
+						
+				<li class="f61-66">
+					
+					<a title="开放源码 73" class="lotusF4 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E5%25BC%2580%25E6%2594%25BE%25E6%25BA%2590%25E7%25A0%2581&amp;lang=zh')">
+					
+						
+						
+							开放源码	
+						
+					
+					<span class="ibm-access">(73)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f62-15">
+					
+					<a title="理论与实践: 8" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E7%2590%2586%25E8%25AE%25BA%25E4%25B8%258E%25E5%25AE%259E%25E8%25B7%25B5%253A&amp;lang=zh')">
+					
+						
+						
+							理论与实践:	
+						
+					
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f63-22">
+					
+					<a title="模式 11" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E6%25A8%25A1%25E5%25BC%258F&amp;lang=zh')">
+					
+						
+						
+							模式	
+						
+					
+					<span class="ibm-access">(11)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f64-34">
+					
+					<a title="配置 19" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E9%2585%258D%25E7%25BD%25AE&amp;lang=zh')">
+					
+						
+						
+							配置	
+						
+					
+					<span class="ibm-access">(19)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f65-40">
+					
+					<a title="设计模式 25" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E8%25AE%25BE%25E8%25AE%25A1%25E6%25A8%25A1%25E5%25BC%258F&amp;lang=zh')">
+					
+						
+						
+							设计模式	
+						
+					
+					<span class="ibm-access">(25)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f66-5">
+					
+					<a title="实现 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E5%25AE%259E%25E7%258E%25B0&amp;lang=zh')">
+					
+						
+						
+							实现	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f67-20">
+					
+					<a title="数据访问 10" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E6%2595%25B0%25E6%258D%25AE%25E8%25AE%25BF%25E9%2597%25AE&amp;lang=zh')">
+					
+						
+						
+							数据访问	
+						
+					
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f68-33">
+					
+					<a title="数据库和数据管理 18" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E6%2595%25B0%25E6%258D%25AE%25E5%25BA%2593%25E5%2592%258C%25E6%2595%25B0%25E6%258D%25AE%25E7%25AE%25A1%25E7%2590%2586&amp;lang=zh')">
+					
+						
+						
+							数据库和数据管理	
+						
+					
+					<span class="ibm-access">(18)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f69-25">
+					
+					<a title="算法 13" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E7%25AE%2597%25E6%25B3%2595&amp;lang=zh')">
+					
+						
+						
+							算法	
+						
+					
+					<span class="ibm-access">(13)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f70-9">
+					
+					<a title="体系架构 6" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E4%25BD%2593%25E7%25B3%25BB%25E6%259E%25B6%25E6%259E%2584&amp;lang=zh')">
+					
+						
+						
+							体系架构	
+						
+					
+					<span class="ibm-access">(6)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f71-22">
+					
+					<a title="无线技术 11" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E6%2597%25A0%25E7%25BA%25BF%25E6%258A%2580%25E6%259C%25AF&amp;lang=zh')">
+					
+						
+						
+							无线技术	
+						
+					
+					<span class="ibm-access">(11)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f72-9">
+					
+					<a title="系统架构与设计模式 6" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E7%25B3%25BB%25E7%25BB%259F%25E6%259E%25B6%25E6%259E%2584%25E4%25B8%258E%25E8%25AE%25BE%25E8%25AE%25A1%25E6%25A8%25A1%25E5%25BC%258F&amp;lang=zh')">
+					
+						
+						
+							系统架构与设计模式	
+						
+					
+					<span class="ibm-access">(6)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f73-12">
+					
+					<a title="线程 7" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E7%25BA%25BF%25E7%25A8%258B&amp;lang=zh')">
+					
+						
+						
+							线程	
+						
+					
+					<span class="ibm-access">(7)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f74-27">
+					
+					<a title="性能 14" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E6%2580%25A7%25E8%2583%25BD&amp;lang=zh')">
+					
+						
+						
+							性能	
+						
+					
+					<span class="ibm-access">(14)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f75-17">
+					
+					<a title="序列化 9" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E5%25BA%258F%25E5%2588%2597%25E5%258C%2596&amp;lang=zh')">
+					
+						
+						
+							序列化	
+						
+					
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f76-5">
+					
+					<a title="序列化的高级认识 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E5%25BA%258F%25E5%2588%2597%25E5%258C%2596%25E7%259A%2584%25E9%25AB%2598%25E7%25BA%25A7%25E8%25AE%25A4%25E8%25AF%2586&amp;lang=zh')">
+					
+						
+						
+							序列化的高级认识	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f77-15">
+					
+					<a title="应用架构 8" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E5%25BA%2594%25E7%2594%25A8%25E6%259E%25B6%25E6%259E%2584&amp;lang=zh')">
+					
+						
+						
+							应用架构	
+						
+					
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+							
+								
+							
+						
+				<li class="f78-100">
+					
+					<a title="应用开发 310" class="lotusF5 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E5%25BA%2594%25E7%2594%25A8%25E5%25BC%2580%25E5%258F%2591&amp;lang=zh')">
+					
+						
+						
+							应用开发	
+						
+					
+					<span class="ibm-access">(310)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f79-5">
+					
+					<a title="用户界面 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E7%2594%25A8%25E6%2588%25B7%25E7%2595%258C%25E9%259D%25A2&amp;lang=zh')">
+					
+						
+						
+							用户界面	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f80-5">
+					
+					<a title="组件 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E7%25BB%2584%25E4%25BB%25B6&amp;lang=zh')">
+					
+						
+						
+							组件	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+			</ul><p>热门标签结束</p><h2>我的标签</h2><div id="dw-tag-access-my" class="ibm-access"><center>要访问我的标签，请<a href="http://www.ibm.com/developerworks/dwwi/DWAuthRouter?m=auth&amp;lang=zh&amp;d=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Fjava%2Fj-lo-spring-ts1%2Findex.html">登录</a><p>查看热门标签</p></center><br></div><p>我的标签结束</p></div>
+<div id="dw-tag-cloud">
+	<div id="dogearTagCloud">
+		<div class="ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all" id="content-slider"><a style="left: 0%;" class="ui-slider-handle ui-state-default ui-corner-all" href="#"></a></div>
+		
+			
+						
+						
+						
+						
+			
+				<div id="ui-slider-scale"><p><span class="content-slider-more">更多</span><span class="content-slider-less">更少</span></p></div>
+						
+									
+			
+		
+	    <div id="cloud-container">
+			<ul>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f1-41">
+					
+					<a title="_unassigned 26" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=_unassigned&amp;lang=zh')">
+					
+						
+						
+							_unassigned	
+						
+					
+					<span class="ibm-access">(26)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f2-20">
+					
+					<a title="1 10" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=1&amp;lang=zh')">
+					
+						
+						
+							1	
+						
+					
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f3-17">
+					
+					<a title="2 9" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=2&amp;lang=zh')">
+					
+						
+						
+							2	
+						
+					
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f4-1">
+					
+					<a title="3.0 4" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=3.0&amp;lang=zh')">
+					
+						
+						
+							3.0	
+						
+					
+					<span class="ibm-access">(4)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f5-5">
+					
+					<a title="5 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=5&amp;lang=zh')">
+					
+						
+						
+							5	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f6-30">
+					
+					<a title="ajax 16" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=ajax&amp;lang=zh')">
+					
+						
+						
+							ajax	
+						
+					
+					<span class="ibm-access">(16)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f7-27">
+					
+					<a title="ant 14" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=ant&amp;lang=zh')">
+					
+						
+						
+							ant	
+						
+					
+					<span class="ibm-access">(14)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f8-40">
+					
+					<a title="apache 25" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=apache&amp;lang=zh')">
+					
+						
+						
+							apache	
+						
+					
+					<span class="ibm-access">(25)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f9-52">
+					
+					<a title="api 41" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=api&amp;lang=zh')">
+					
+						
+						
+							api	
+						
+					
+					<span class="ibm-access">(41)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+								
+							
+							
+						
+				<li class="f10-80">
+					
+					<a title="best_practices 132" class="lotusF4 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=best_practices&amp;lang=zh')">
+					
+						
+							best_practic...	
+						
+						
+					
+					<span class="ibm-access">(132)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f11-1">
+					
+					<a title="cloud-computing-paas 4" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=cloud-computing-paas&amp;lang=zh')">
+					
+						
+							cloud-computin...	
+						
+						
+					
+					<span class="ibm-access">(4)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f12-22">
+					
+					<a title="eclipse 11" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=eclipse&amp;lang=zh')">
+					
+						
+						
+							eclipse	
+						
+					
+					<span class="ibm-access">(11)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f13-5">
+					
+					<a title="ejb_(enterprise_javabeans)_technology 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=ejb_%2528enterprise_javabeans%2529_technology&amp;lang=zh')">
+					
+						
+							ejb_(enterpris...	
+						
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f14-22">
+					
+					<a title="generic 11" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=generic&amp;lang=zh')">
+					
+						
+						
+							generic	
+						
+					
+					<span class="ibm-access">(11)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f15-17">
+					
+					<a title="hadoop 9" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=hadoop&amp;lang=zh')">
+					
+						
+						
+							hadoop	
+						
+					
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f16-5">
+					
+					<a title="html 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=html&amp;lang=zh')">
+					
+						
+						
+							html	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f17-15">
+					
+					<a title="ibatis 8" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=ibatis&amp;lang=zh')">
+					
+						
+						
+							ibatis	
+						
+					
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f18-17">
+					
+					<a title="j2ee 9" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=j2ee&amp;lang=zh')">
+					
+						
+						
+							j2ee	
+						
+					
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f19-25">
+					
+					<a title="j2ee_(java_2_enterprise_edition) 13" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=j2ee_%2528java_2_enterprise_edition%2529&amp;lang=zh')">
+					
+						
+							j2ee_(java_2_...	
+						
+						
+					
+					<span class="ibm-access">(13)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f20-49">
+					
+					<a title="j2se_(java_2_standard_edition) 36" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=j2se_%2528java_2_standard_edition%2529&amp;lang=zh')">
+					
+						
+							j2se_(java_2_...	
+						
+						
+					
+					<span class="ibm-access">(36)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+							
+								
+							
+						
+				<li class="f21-88">
+					
+					<a title="java 186" class="lotusF5 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=java&amp;lang=zh')">
+					
+						
+						
+							java	
+						
+					
+					<span class="ibm-access">(186)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+								
+							
+							
+						
+				<li class="f22-69">
+					
+					<a title="java_技术 84" class="lotusF4 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=java_%25E6%258A%2580%25E6%259C%25AF&amp;lang=zh')">
+					
+						
+						
+							java_技术	
+						
+					
+					<span class="ibm-access">(84)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f23-15">
+					
+					<a title="java_入门 8" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=java_%25E5%2585%25A5%25E9%2597%25A8&amp;lang=zh')">
+					
+						
+						
+							java_入门	
+						
+					
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f24-15">
+					
+					<a title="java-spring 8" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=java-spring&amp;lang=zh')">
+					
+						
+						
+							java-spring	
+						
+					
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f25-17">
+					
+					<a title="javascript 9" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=javascript&amp;lang=zh')">
+					
+						
+						
+							javascript	
+						
+					
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f26-5">
+					
+					<a title="jmx 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jmx&amp;lang=zh')">
+					
+						
+						
+							jmx	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f27-15">
+					
+					<a title="jsf 8" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jsf&amp;lang=zh')">
+					
+						
+						
+							jsf	
+						
+					
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f28-12">
+					
+					<a title="jsf_(javaserver_faces) 7" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jsf_%2528javaserver_faces%2529&amp;lang=zh')">
+					
+						
+							jsf_(javaserve...	
+						
+						
+					
+					<span class="ibm-access">(7)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f29-9">
+					
+					<a title="jsp 6" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jsp&amp;lang=zh')">
+					
+						
+						
+							jsp	
+						
+					
+					<span class="ibm-access">(6)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f30-12">
+					
+					<a title="jsp_(javaserver_pages)_technology 7" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jsp_%2528javaserver_pages%2529_technology&amp;lang=zh')">
+					
+						
+							jsp_(javaserve...	
+						
+						
+					
+					<span class="ibm-access">(7)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f31-12">
+					
+					<a title="jstl 7" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jstl&amp;lang=zh')">
+					
+						
+						
+							jstl	
+						
+					
+					<span class="ibm-access">(7)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f32-20">
+					
+					<a title="jvm_(java_virtual_machine) 10" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=jvm_%2528java_virtual_machine%2529&amp;lang=zh')">
+					
+						
+							jvm_(java_virt...	
+						
+						
+					
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f33-15">
+					
+					<a title="mapreduce 8" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=mapreduce&amp;lang=zh')">
+					
+						
+						
+							mapreduce	
+						
+					
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f34-5">
+					
+					<a title="maven 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=maven&amp;lang=zh')">
+					
+						
+						
+							maven	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f35-5">
+					
+					<a title="mvc 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=mvc&amp;lang=zh')">
+					
+						
+						
+							mvc	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f36-9">
+					
+					<a title="nio 6" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=nio&amp;lang=zh')">
+					
+						
+						
+							nio	
+						
+					
+					<span class="ibm-access">(6)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f37-5">
+					
+					<a title="rest 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=rest&amp;lang=zh')">
+					
+						
+						
+							rest	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f38-5">
+					
+					<a title="scala 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=scala&amp;lang=zh')">
+					
+						
+						
+							scala	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f39-9">
+					
+					<a title="selenium 6" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=selenium&amp;lang=zh')">
+					
+						
+						
+							selenium	
+						
+					
+					<span class="ibm-access">(6)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f40-56">
+					
+					<a title="servlet 48" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=servlet&amp;lang=zh')">
+					
+						
+						
+							servlet	
+						
+					
+					<span class="ibm-access">(48)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+								
+							
+							
+						
+				<li class="f41-61">
+					
+					<a title="spring 61" class="lotusF4 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=spring&amp;lang=zh')">
+					
+						
+						
+							spring	
+						
+					
+					<span class="ibm-access">(61)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f42-17">
+					
+					<a title="struts 9" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=struts&amp;lang=zh')">
+					
+						
+						
+							struts	
+						
+					
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f43-5">
+					
+					<a title="test 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=test&amp;lang=zh')">
+					
+						
+						
+							test	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+								
+							
+							
+							
+						
+				<li class="f44-47">
+					
+					<a title="tomcat 33" class="lotusF3 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=tomcat&amp;lang=zh')">
+					
+						
+						
+							tomcat	
+						
+					
+					<span class="ibm-access">(33)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f45-5">
+					
+					<a title="uml 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=uml&amp;lang=zh')">
+					
+						
+						
+							uml	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f46-5">
+					
+					<a title="volatile 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=volatile&amp;lang=zh')">
+					
+						
+						
+							volatile	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f47-34">
+					
+					<a title="web 19" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web&amp;lang=zh')">
+					
+						
+						
+							web	
+						
+					
+					<span class="ibm-access">(19)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f48-30">
+					
+					<a title="web_服务 16" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web_%25E6%259C%258D%25E5%258A%25A1&amp;lang=zh')">
+					
+						
+						
+							web_服务	
+						
+					
+					<span class="ibm-access">(16)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f49-12">
+					
+					<a title="web_应用 7" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=web_%25E5%25BA%2594%25E7%2594%25A8&amp;lang=zh')">
+					
+						
+						
+							web_应用	
+						
+					
+					<span class="ibm-access">(7)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f50-25">
+					
+					<a title="xml 13" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=xml&amp;lang=zh')">
+					
+						
+						
+							xml	
+						
+					
+					<span class="ibm-access">(13)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f51-27">
+					
+					<a title="安全 14" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E5%25AE%2589%25E5%2585%25A8&amp;lang=zh')">
+					
+						
+						
+							安全	
+						
+					
+					<span class="ibm-access">(14)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f52-29">
+					
+					<a title="编码 15" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E7%25BC%2596%25E7%25A0%2581&amp;lang=zh')">
+					
+						
+						
+							编码	
+						
+					
+					<span class="ibm-access">(15)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f53-12">
+					
+					<a title="标准 7" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E6%25A0%2587%25E5%2587%2586&amp;lang=zh')">
+					
+						
+						
+							标准	
+						
+					
+					<span class="ibm-access">(7)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f54-12">
+					
+					<a title="部分 7" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E9%2583%25A8%25E5%2588%2586&amp;lang=zh')">
+					
+						
+						
+							部分	
+						
+					
+					<span class="ibm-access">(7)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f55-15">
+					
+					<a title="部分: 8" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E9%2583%25A8%25E5%2588%2586%253A&amp;lang=zh')">
+					
+						
+						
+							部分:	
+						
+					
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f56-24">
+					
+					<a title="持久性 12" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E6%258C%2581%25E4%25B9%2585%25E6%2580%25A7&amp;lang=zh')">
+					
+						
+						
+							持久性	
+						
+					
+					<span class="ibm-access">(12)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f57-20">
+					
+					<a title="调试 10" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E8%25B0%2583%25E8%25AF%2595&amp;lang=zh')">
+					
+						
+						
+							调试	
+						
+					
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f58-33">
+					
+					<a title="多线程 18" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E5%25A4%259A%25E7%25BA%25BF%25E7%25A8%258B&amp;lang=zh')">
+					
+						
+						
+							多线程	
+						
+					
+					<span class="ibm-access">(18)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f59-12">
+					
+					<a title="工作原理解析 7" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E5%25B7%25A5%25E4%25BD%259C%25E5%258E%259F%25E7%2590%2586%25E8%25A7%25A3%25E6%259E%2590&amp;lang=zh')">
+					
+						
+						
+							工作原理解析	
+						
+					
+					<span class="ibm-access">(7)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f60-12">
+					
+					<a title="架构模式 7" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E6%259E%25B6%25E6%259E%2584%25E6%25A8%25A1%25E5%25BC%258F&amp;lang=zh')">
+					
+						
+						
+							架构模式	
+						
+					
+					<span class="ibm-access">(7)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+								
+							
+							
+						
+				<li class="f61-66">
+					
+					<a title="开放源码 73" class="lotusF4 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E5%25BC%2580%25E6%2594%25BE%25E6%25BA%2590%25E7%25A0%2581&amp;lang=zh')">
+					
+						
+						
+							开放源码	
+						
+					
+					<span class="ibm-access">(73)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f62-15">
+					
+					<a title="理论与实践: 8" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E7%2590%2586%25E8%25AE%25BA%25E4%25B8%258E%25E5%25AE%259E%25E8%25B7%25B5%253A&amp;lang=zh')">
+					
+						
+						
+							理论与实践:	
+						
+					
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f63-22">
+					
+					<a title="模式 11" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E6%25A8%25A1%25E5%25BC%258F&amp;lang=zh')">
+					
+						
+						
+							模式	
+						
+					
+					<span class="ibm-access">(11)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f64-34">
+					
+					<a title="配置 19" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E9%2585%258D%25E7%25BD%25AE&amp;lang=zh')">
+					
+						
+						
+							配置	
+						
+					
+					<span class="ibm-access">(19)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f65-40">
+					
+					<a title="设计模式 25" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E8%25AE%25BE%25E8%25AE%25A1%25E6%25A8%25A1%25E5%25BC%258F&amp;lang=zh')">
+					
+						
+						
+							设计模式	
+						
+					
+					<span class="ibm-access">(25)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f66-5">
+					
+					<a title="实现 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E5%25AE%259E%25E7%258E%25B0&amp;lang=zh')">
+					
+						
+						
+							实现	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f67-20">
+					
+					<a title="数据访问 10" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E6%2595%25B0%25E6%258D%25AE%25E8%25AE%25BF%25E9%2597%25AE&amp;lang=zh')">
+					
+						
+						
+							数据访问	
+						
+					
+					<span class="ibm-access">(10)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f68-33">
+					
+					<a title="数据库和数据管理 18" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E6%2595%25B0%25E6%258D%25AE%25E5%25BA%2593%25E5%2592%258C%25E6%2595%25B0%25E6%258D%25AE%25E7%25AE%25A1%25E7%2590%2586&amp;lang=zh')">
+					
+						
+						
+							数据库和数据管理	
+						
+					
+					<span class="ibm-access">(18)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f69-25">
+					
+					<a title="算法 13" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E7%25AE%2597%25E6%25B3%2595&amp;lang=zh')">
+					
+						
+						
+							算法	
+						
+					
+					<span class="ibm-access">(13)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f70-9">
+					
+					<a title="体系架构 6" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E4%25BD%2593%25E7%25B3%25BB%25E6%259E%25B6%25E6%259E%2584&amp;lang=zh')">
+					
+						
+						
+							体系架构	
+						
+					
+					<span class="ibm-access">(6)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f71-22">
+					
+					<a title="无线技术 11" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E6%2597%25A0%25E7%25BA%25BF%25E6%258A%2580%25E6%259C%25AF&amp;lang=zh')">
+					
+						
+						
+							无线技术	
+						
+					
+					<span class="ibm-access">(11)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f72-9">
+					
+					<a title="系统架构与设计模式 6" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E7%25B3%25BB%25E7%25BB%259F%25E6%259E%25B6%25E6%259E%2584%25E4%25B8%258E%25E8%25AE%25BE%25E8%25AE%25A1%25E6%25A8%25A1%25E5%25BC%258F&amp;lang=zh')">
+					
+						
+						
+							系统架构与设计模式	
+						
+					
+					<span class="ibm-access">(6)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f73-12">
+					
+					<a title="线程 7" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E7%25BA%25BF%25E7%25A8%258B&amp;lang=zh')">
+					
+						
+						
+							线程	
+						
+					
+					<span class="ibm-access">(7)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+								
+							
+							
+							
+							
+						
+				<li class="f74-27">
+					
+					<a title="性能 14" class="lotusF2 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E6%2580%25A7%25E8%2583%25BD&amp;lang=zh')">
+					
+						
+						
+							性能	
+						
+					
+					<span class="ibm-access">(14)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f75-17">
+					
+					<a title="序列化 9" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E5%25BA%258F%25E5%2588%2597%25E5%258C%2596&amp;lang=zh')">
+					
+						
+						
+							序列化	
+						
+					
+					<span class="ibm-access">(9)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f76-5">
+					
+					<a title="序列化的高级认识 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E5%25BA%258F%25E5%2588%2597%25E5%258C%2596%25E7%259A%2584%25E9%25AB%2598%25E7%25BA%25A7%25E8%25AE%25A4%25E8%25AF%2586&amp;lang=zh')">
+					
+						
+						
+							序列化的高级认识	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f77-15">
+					
+					<a title="应用架构 8" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E5%25BA%2594%25E7%2594%25A8%25E6%259E%25B6%25E6%259E%2584&amp;lang=zh')">
+					
+						
+						
+							应用架构	
+						
+					
+					<span class="ibm-access">(8)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+							
+							
+							
+							
+								
+							
+						
+				<li class="f78-100">
+					
+					<a title="应用开发 310" class="lotusF5 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E5%25BA%2594%25E7%2594%25A8%25E5%25BC%2580%25E5%258F%2591&amp;lang=zh')">
+					
+						
+						
+							应用开发	
+						
+					
+					<span class="ibm-access">(310)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f79-5">
+					
+					<a title="用户界面 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E7%2594%25A8%25E6%2588%25B7%25E7%2595%258C%25E9%259D%25A2&amp;lang=zh')">
+					
+						
+						
+							用户界面	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+						
+							
+								
+							
+							
+							
+							
+							
+						
+				<li class="f80-5">
+					
+					<a title="组件 5" class="lotusF1 my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=%25E7%25BB%2584%25E4%25BB%25B6&amp;lang=zh')">
+					
+						
+						
+							组件	
+						
+					
+					<span class="ibm-access">(5)</span>					
+					</a>&nbsp;
+				</li>
+					
+			</ul>
+		</div>
+		
+			
+						
+						
+						
+						
+			
+				<div class="ibm-rule"><hr></div><p>查看方式<strong>云</strong>&nbsp;| <a id="alist" class="lotusAction" href="javascript:;">列表</a></p>
+						
+			
+			
+		
+		</div> 
+
+		
+			
+			<div class="lotusChunk dw-hidetag" id="dogearTagList">
+			<div id="list-container">
+				<ul class="lotusList lotusEditable lotusTags lotusMeta">
+				
+					
+						
+			
+
+			
+				<li>				
+					<a title="_unassigned 26" class="lotusLeft my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=_unassigned&amp;lang=zh')">
+						
+							
+							
+								_unassigned	
+							
+						
+					</a>
+					26
+				</li>
+				
+			
+					
+						
+			
+
+			
+				<li>				
+					<a title="1 10" class="lotusLeft my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=1&amp;lang=zh')">
+						
+							
+							
+								1	
+							
+						
+					</a>
+					10
+				</li>
+				
+			
+					
+						
+			
+
+			
+				<li>				
+					<a title="2 9" class="lotusLeft my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=2&amp;lang=zh')">
+						
+							
+							
+								2	
+							
+						
+					</a>
+					9
+				</li>
+				
+			
+					
+						
+			
+
+			
+				<li>				
+					<a title="3.0 4" class="lotusLeft my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=3.0&amp;lang=zh')">
+						
+							
+							
+								3.0	
+							
+						
+					</a>
+					4
+				</li>
+				
+			
+					
+						
+			
+
+			
+				<li>				
+					<a title="5 5" class="lotusLeft my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=5&amp;lang=zh')">
+						
+							
+							
+								5	
+							
+						
+					</a>
+					5
+				</li>
+				
+			
+					
+						
+			
+
+			
+				<li>				
+					<a title="ajax 16" class="lotusLeft my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=ajax&amp;lang=zh')">
+						
+							
+							
+								ajax	
+							
+						
+					</a>
+					16
+				</li>
+				
+			
+					
+						
+			
+
+			
+				<li>				
+					<a title="ant 14" class="lotusLeft my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=ant&amp;lang=zh')">
+						
+							
+							
+								ant	
+							
+						
+					</a>
+					14
+				</li>
+				
+			
+					
+						
+			
+
+			
+				<li>				
+					<a title="apache 25" class="lotusLeft my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=apache&amp;lang=zh')">
+						
+							
+							
+								apache	
+							
+						
+					</a>
+					25
+				</li>
+				
+			
+					
+						
+			
+
+			
+				<li>				
+					<a title="api 41" class="lotusLeft my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=api&amp;lang=zh')">
+						
+							
+							
+								api	
+							
+						
+					</a>
+					41
+				</li>
+				
+			
+					
+						
+			
+
+			
+				<li>				
+					<a title="best_practices 132" class="lotusLeft my" href="javascript:launchTagWindow('/developerworks/mydeveloperworks/bookmarks/html?tag=best_practices&amp;lang=zh')">
+						
+							
+							
+								best_practices	
+							
+						
+					</a>
+					132
+				</li>
+				
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+					
+			
+				
+			</ul>
+			</div>
+			
+				
+							
+							
+							
+							
+				
+					<div class="ibm-rule"><hr></div><p>查看方式<a id="acloud" class="lotusAction" href="javascript:;">云</a>&nbsp;| <strong>列表</strong></p>
+							
+								
+				
+			
+			</div></div>  
+</div>   
+</div>
+</div>
+<!-- Tagging_End -->
+
+<!-- Dig_Deeper -->
+
+<!-- High_Visibility_Offer -->
+
+<!-- Special_Offers -->
+
+<!-- RIGHT_COLUMN_CONTENT_END -->
+
+</div>
+<!-- RIGHT_COLUMN_END -->
+
+<!-- CONTENT_BODY_END -->
+</div>
+
+</div>
+<!-- CONTENT_END -->
+
+ <!-- END_IBM-PCON -->
+</div>
+
+<!-- FOOTER_BEGIN -->
+<div id="ibm-footer">
+<!-- IBM footer container; disabled -->
+</div>
+
+<div id="ibm-page-tools-dw">
+	<div id="dw-footer-top-row">
+		<ul id="dw-foot-options">
+			<li id="dw-print"><a class="ibm-print-link" href="#">打印此页面</a></li>
+		</ul>
+		<ul id="ibm-foot-options-dw">
+			<li id="dw-foot-0" class="dw-foot-0-cn"><a href="#">分享此页面</a></li>
+			<li id="dw-foot-1" class="dw-foot-1-cn"><a href="#">关注 developerWorks</a></li>
+		</ul>
+	</div>       
+
+
+
+	<!-- TOP ROW SLIDER -->
+    <div id="dw-page-tools-menu">    
+
+        <div class="ibm-ribbon-pane-dw">
+            <div class="ibm-ribbon-section-dw">
+				<!-- Share this page -->			
+                <div class="dw-footer-columns">
+                    <div class="dw-footer-col-3-1">
+                        <h2>分享此页面：</h2>                       
+						<ul class="ibm-link-list">
+							<li><a id="dw-foot-0-0" class="ibm-facebook-link" href="http://www.facebook.com/sharer.php?u=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Fjava%2Fj-lo-spring-ts1%2Findex.html&amp;t=Spring%20%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8%E9%9A%BE%E7%82%B9%E5%89%96%E6%9E%90%3A%20%E7%AC%AC%201%20%E9%83%A8%E5%88%86">Facebook</a></li>
+							<li><a class="ibm-linkedin-link" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Fjava%2Fj-lo-spring-ts1%2Findex.html&amp;title=Spring%20%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8%E9%9A%BE%E7%82%B9%E5%89%96%E6%9E%90%3A%20%E7%AC%AC%201%20%E9%83%A8%E5%88%86">LinkedIn</a></li>
+							<li><a class="ibm-twitter-link" href="http://twitter.com/home?status=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Fjava%2Fj-lo-spring-ts1%2Findex.html%20-%20Spring%20%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8%E9%9A%BE%E7%82%B9%E5%89%96%E6%9E%90%3A%20%E7%AC%AC%201%20%E9%83%A8%E5%88%86">Twitter</a></li>
+						</ul>
+                    </div>
+                    <div class="dw-footer-col-3-2">
+						<ul class="ibm-link-list">
+							<li><a class="ibm-delicious-link" href="http://delicious.com/post?url=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Fjava%2Fj-lo-spring-ts1%2Findex.html&amp;title=Spring%20%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8%E9%9A%BE%E7%82%B9%E5%89%96%E6%9E%90%3A%20%E7%AC%AC%201%20%E9%83%A8%E5%88%86">Delicious</a></li>
+							<li><a class="ibm-digg-link" href="http://digg.com/submit?phase=2&amp;url=http%3A%2F%2Fwww.ibm.com%2Fdeveloperworks%2Fcn%2Fjava%2Fj-lo-spring-ts1%2Findex.html&amp;title=Spring%20%E4%BA%8B%E5%8A%A1%E7%AE%A1%E7%90%86%E9%AB%98%E7%BA%A7%E5%BA%94%E7%94%A8%E9%9A%BE%E7%82%B9%E5%89%96%E6%9E%90%3A%20%E7%AC%AC%201%20%E9%83%A8%E5%88%86">Digg</a></li>
+						<!--	<li><a class="ibm-stumbleupon" href="#">StumbleUpon</a></li> -->
+						</ul>
+                    </div>
+                    <div class="dw-footer-col-3-3">
+						<ul class="ibm-link-list">
+							<li><a class="ibm-email-link" href="#">发送此页面</a></li>
+						</ul>
+                    </div>
+                    <div class="dw-footer-close">
+						<ul>
+							<li><a href="#">关闭 [x]</a></li>
+						</ul>
+                    </div>
+                </div>
+                <!-- Follow developerWorks -->
+                <div class="dw-footer-columns">
+                    <div class="dw-footer-col-1-1">
+                        <h2>关注 developerWorks：</h2>
+						<ul class="ibm-link-list">
+
+							<li><a id="dw-foot-1-0" class="ibm-twitter-link" href="http://www.twitter.com/dwchina">Twitter</a></li>
+						</ul>
+                    </div>
+                    <div class="dw-footer-close">
+						<ul>
+							<li><a href="#">关闭 [x]</a></li>
+						</ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <a class="ibm-ribbon-next">Next</a> -->
+    </div>
+</div>
+
+<div id="ibm-footer-module-dw">
+	<div class="dw-footer-columns">
+		<div class="dw-footer-col-6-1"> 
+			<h2><a href="http://www.ibm.com/developerworks/cn/topics/">技术主题</a></h2>
+				<ul>
+					<li><a href="http://www.ibm.com/developerworks/cn/aix/">AIX and UNIX</a></li>
+					<li class="dw-footer-newline"><a href="http://www.ibm.com/developerworks/cn/data/">Information<br> Management</a></li>
+							<li><a href="http://www.ibm.com/developerworks/cn/lotus/">Lotus</a></li>
+							<li><a href="http://www.ibm.com/developerworks/cn/rational/">Rational</a></li>
+						<!--	<li><a href="">Tivoli</a></li>  -->
+							<li><a href="http://www.ibm.com/developerworks/cn/websphere/">WebSphere</a></li>     
+						</ul>      
+			<ul>
+				<li class="dw-footer-newgroup"><a href="http://www.ibm.com/developerworks/cn/cloud/">Cloud computing</a></li>
+				<!-- <li><a href="REPLACE.HTML">Industries</a></li> -->
+			</ul>
+		</div>
+		<div class="dw-footer-col-6-2">
+			<ul>
+							<li><a href="http://www.ibm.com/developerworks/cn/java/">Java technology</a></li>
+							<li><a href="http://www.ibm.com/developerworks/cn/linux/">Linux</a></li>
+							<li><a href="http://www.ibm.com/developerworks/cn/opensource/">Open source</a></li>
+							<li><a href="http://www.ibm.com/developerworks/cn/webservices/">SOA and web services</a></li>
+							<li><a href="http://www.ibm.com/developerworks/cn/web/">Web development</a></li>  
+							<li><a href="http://www.ibm.com/developerworks/cn/xml/">XML</a></li>     
+					</ul>
+			<h2><a href="http://www.ibm.com/developerworks/cn/topics/">更多...</a></h2>
+		</div>
+		<div class="dw-footer-col-6-3">
+			<h2 class="dw-footer-headonly">查找软件</h2>
+			<ul>
+				<li><a href="http://www.ibm.com/developerworks/cn/downloads/product.html">IBM 产品</a></li>
+				<li><a href="http://www.ibm.com/developerworks/cn/downloads/evalmethod.html">评估方式（下载，在线试用，Beta 版，云）</a></li>
+				<li><a href="http://www.ibm.com/developerworks/cn/downloads/industry.html">行业</a></li>
+			</ul>     
+			<h2 class="dw-footer-newgroup"><a href="http://www.ibm.com/developerworks/cn/offers/techbriefings/">技术讲座</a></h2>
+		<!--	<ul>
+				<li><a href="REPLACE.HTML">Briefings</a></li>
+				<li><a href="REPLACE.HTML">Webcasts</a></li>
+				<li><a href="REPLACE.HTML">Find technical events</a></li>
+			</ul> -->
+		</div>
+		<div class="dw-footer-col-6-4">
+			<h2><a href="https://www.ibm.com/developerworks/community/?lang=zh">社区</a></h2>
+			<ul>
+				<!-- <li><a href="REPLACE.HTML">Forums</a></li> -->
+				<li><a href="https://www.ibm.com/developerworks/community/groups/service/html/allcommunities?lang=zh">群组</a></li>
+				<li><a href="https://www.ibm.com/developerworks/community/blogs/?lang=zh">博客</a></li>
+				<li><a href="https://www.ibm.com/developerworks/mydeveloperworks/wikis/home?lang=zh">Wiki</a></li>
+				<li><a href="https://www.ibm.com/developerworks/community/files/app?lang=zh">文件</a></li>
+				<li><a href="https://www.ibm.com/developerworks/community/terms?lang=zh">使用条款与条件</a></li>
+				<li><a href="https://www.ibm.com/developerworks/community/report?lang=zh">报告滥用</a></li>
+			</ul>
+			<h2><a href="https://www.ibm.com/developerworks/community/?lang=zh">更多...</a></h2>
+		</div>
+		<div class="dw-footer-col-6-5">
+			<h2 class="dw-footer-headonly">关于 developerWorks</h2>
+			<ul>
+				<li><a href="https://www.ibm.com/developerworks/secure/feedback.jsp?domain=dwchina">反馈意见</a></li>
+			<!--	<li><a href="REPLACE.HTML">Contacts</a></li> -->
+				<li><a href="https://www.ibm.com/developerworks/secure/myideas2.jsp?domain=dwchina&amp;start=true">在线投稿</a></li>
+			    <li><a href="http://www.ibm.com/developerworks/cn/author/">投稿指南</a></li>
+			    <li><a href="http://www.ibm.com/developerworks/cn/sitemap/">网站导航</a></li>
+			    <li><a href="https://www.ibm.com/developerworks/secure/reprintreq.jsp?domain=dwchina">
+请求转载内容</a></li>
+			</ul>
+			<h2 class="dw-footer-headonly dw-footer-newgroup">相关资源</h2>
+			<ul>
+				<li><a href="http://www.ibm.com/partnerworld/isv/">ISV 资源 (英语)</a></li>
+				<li><a href="http://www-900.ibm.com/cn/ai/">IBM 教育学院教育培养计划</a></li>
+			</ul>
+		</div>
+		<div class="dw-footer-col-6-6">
+			<h2><a href="http://www.ibm.com/cn/">IBM</a></h2>
+			<ul>
+				<li><a href="http://www.ibm.com/solutions/cn/zh/">解决方案</a></li>
+				<li><a href="http://www-01.ibm.com/software/cn/">软件</a></li>
+				<!-- <li><a href="REPLACE.HTML">Software services</a></li> -->
+				<li><a href="http://www.ibm.com/support/cn/zh/">支持门户</a></li>
+				<li><a href="http://www.ibm.com/support/documentation/cn/zh/">产品文档</a></li>
+				<li><a href="http://www.ibm.com/redbooks">红皮书 (英语)</a></li>
+				<li><a href="http://www.ibm.com/privacy/cn/zh/">隐私条约</a></li>
+				<li><a href="http://www.ibm.com/ibm/accessibility/cn/">浏览辅助</a></li>
+			</ul>
+		</div>
+	</div>
+	<!-- Language selector no-script -->
+	<noscript>
+		<div id="dw-footer-selectlang">
+			<h2><a name="SELECTLANG">选择语言：</a></h2>
+			<ul>
+				<li><a href="http://www.ibm.com/developerworks/">English</a></li>
+				<li><a href="http://www.ibm.com/developerworks/cn/">中文</a></li>
+				<li><a href="http://www.ibm.com/developerworks/jp/">日本語</a></li>
+				<li><a href="http://www.ibm.com/developerworks/kr/">한국어</a></li>
+				<li><a href="http://www.ibm.com/developerworks/ru/">Русский</a></li>
+				<li><a href="http://www.ibm.com/developerworks/br/">Português (Brasil)</a></li>
+				<li><a href="http://www.ibm.com/developerworks/ssa/">Español</a></li>
+				<li><a href="http://www.ibm.com/developerworks/vn/">Việt</a></li>
+			</ul>
+		</div>
+	</noscript>
+</div> <!-- FOOTER_END -->
+
+ <!-- END_IBM-TOP -->
+<div id="ibm-overlay-top"></div></div>
+ 
+ <!-- SCRIPTS_INCLUDE_BEGIN -->
+<!-- JQuery start -->
+<script type="text/javascript" language="JavaScript" src="spring-tx-1_files/jquery.js"></script>
+<script type="text/javascript" language="JavaScript" src="spring-tx-1_files/jquery_003.js"></script>
+<script type="text/javascript" language="JavaScript" src="spring-tx-1_files/ui.js"></script>
+<script type="text/javascript" language="JavaScript" src="spring-tx-1_files/ui_002.js"></script>
+
+<!-- xM Masthead/Footer -->
+<script src="spring-tx-1_files/jquery_004.js" type="text/javascript">//</script>
+<script src="spring-tx-1_files/jquery_002.js" type="text/javascript">//</script>
+<script src="spring-tx-1_files/dw_v16.js" type="text/javascript">//</script>
+<script src="spring-tx-1_files/flash-detect_002.js" type="text/javascript">//</script>
+<script src="spring-tx-1_files/dwsi.js" type="text/javascript">//</script>
+<script type="text/javascript" language="JavaScript" src="spring-tx-1_files/dwjquerytags.js"></script>
+<script type="text/javascript" language="JavaScript">
+	jQuery.noConflict();     
+	// Put all your code in your document ready area
+	jQuery(document).ready(function(jQuery) {
+	// Do jQuery stuff using jQuery 
+	jQuery('a.dwauthor').cluetip({
+	local: true,
+	showTitle: false,
+	positionBy: 'bottomTop',
+	sticky: true,	
+	mouseOutClose: true,
+	closeText: '<img src="//dw1.s81c.com/developerworks/js/jquery/cluetip98/i/x.gif" alt="Close" />',
+	arrows: false,
+	dropShadow: true,
+	cluetipClass: 'dwbasic'
+	});   	
+	//tagging
+	login="false";
+	userid="";
+	whichTags = "init";
+	pCont = "";
+	mCont = "";
+	signInMCont = "";
+	accessCont = "";
+	pValue = 0;
+	mValue = 0;
+	
+	rBHash = null;
+	rBHash = new Object();
+	rBHash['viperLang'] = 'zh';
+	rBHash['urlLang'] = 'cn';
+	rBHash['tagThisWinTitle'] = '添加标签';
+	rBHash['pTags1'] = '热门标签';		
+	rBHash['pTags2'] = '热门标签结束';
+	rBHash['mTags1'] = '我的标签';
+	rBHash['mTags2'] = '我的标签结束';
+	rBHash['alt1'] = '正在加载内容';
+	rBHash['noATags'] = '没有活动的标签';
+	rBHash['signIn1'] = '请';
+	rBHash['signIn2'] = '登录';
+	rBHash['signIn3'] = '以访问';
+	rBHash['signIn4'] = '我的标签';
+	rBHash['signIn5'] = '要访问我的标签，请';
+	rBHash['signIn6'] = '登录';
+	rBHash['signIn7'] = '查看热门标签';
+	rBHash['dnameSuffix'] = '';
+
+	zoneHash = new Object();
+	zoneHash['aix'] = 'AIX and UNIX';
+	zoneHash['data'] = 'Information Management';
+	zoneHash['lotus'] = 'Lotus';
+	zoneHash['rational'] = 'Rational';
+	//zoneHash['tivoli'] = 'Tivoli zone';
+	zoneHash['websphere'] = 'WebSphere';
+	zoneHash['architecture'] = 'Technical library';
+	//zoneHash['autonomic'] = 'Technical library';
+	zoneHash['java'] = 'Java technology';
+	zoneHash['cloud'] = 'Cloud computing';
+	//zoneHash['industry'] = 'Technical library';
+	zoneHash['library'] = '文档库';
+	zoneHash['linux'] = 'Linux';
+	zoneHash['opensource'] = 'Open source';
+	//zoneHash['power'] = 'Technical library';
+	zoneHash['webservices'] = 'SOA and web services';
+	zoneHash['web'] = 'Web development';
+	zoneHash['xml'] = 'XML';
+	//zoneHash['wireless'] = 'Technical library';
+	jQuery.checkRB();
+	jQuery.getPopularTags("/developerworks/dwtags/dwjquerytabtags?lang=" + rBHash['viperLang'] + "&base=" + jQuery.getNormalizedZoneUrl(location.href));
+	jQuery.getUserTags();
+	if(jQuery.isTutorial(location.href) == "true") {
+	jQuery.getTagsForContent("/developerworks/tagging/UseCaseServlet?lang=" + rBHash['viperLang'] + "&format=maverick&cType=tutorials&use_case=geturltags&action=gettags&url=" + jQuery.normalizeUrl(location.href));
+	}
+	else {
+	jQuery.getTagsForContent("/developerworks/tagging/UseCaseServlet?lang=" + rBHash['viperLang'] + "&format=maverick&cType=articles&use_case=geturltags&action=gettags&url=" + jQuery.normalizeUrl(location.href));
+	
+	}
+	// si
+	initSI();
+	});
+</script>
+<!-- JQuery end -->
+<!-- Overlay js -->
+<script language="JavaScript" src="spring-tx-1_files/overlay.js" type="text/javascript"></script><!-- BEGIN: Use this section to set page specific variables for the Unica Page Tag -->
+<script language="JavaScript">var NTPT_PGEXTRA="ibmSkillLevel=3&ibmAdoptPhase=651&ibmRole=710";</script>
+<!--END --><!-- SCRIPTS_INCLUDE_END -->
+
+<div id="ibm-metrics">
+<script src="spring-tx-1_files/stats.js" type="text/javascript">//</script>
+</div>
+
+
+
+<div style="position: absolute; z-index: 95; display: none;" id="cluetip-waitimage"></div><div style="z-index: 96; display: none; position: absolute;" id="cluetip"><div style="z-index: 95; opacity: 0.1; top: 1px; left: 1px; position: absolute; background-color: rgb(0, 0, 0);"></div><div style="z-index: 94; opacity: 0.1; top: 2px; left: 2px; position: absolute; background-color: rgb(0, 0, 0);"></div><div style="z-index: 93; opacity: 0.1; top: 3px; left: 3px; position: absolute; background-color: rgb(0, 0, 0);"></div><div style="z-index: 92; opacity: 0.1; top: 4px; left: 4px; position: absolute; background-color: rgb(0, 0, 0);"></div><div style="z-index: 91; opacity: 0.1; top: 5px; left: 5px; position: absolute; background-color: rgb(0, 0, 0);"></div><div style="z-index: 90; opacity: 0.1; top: 6px; left: 6px; position: absolute; background-color: rgb(0, 0, 0);"></div><div style="position: relative; z-index: 97;" id="cluetip-outer"><h3 id="cluetip-title"></h3><div id="cluetip-inner"></div></div><div id="cluetip-extra"></div><div style="z-index: 97;" id="cluetip-arrows" class="cluetip-arrows"></div></div></body></html>

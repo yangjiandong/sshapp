@@ -90,6 +90,16 @@ spring -- 知识库
       commonJdbcDao.insertDemoInTransaction();
     }
    
+   other/spring-txt-1.html
+   
+   jdbc 提交与 
+   @Transactional
+   配合 <property name="defaultAutoCommit" value="false" />
+   有关
+   
+   <property name="defaultAutoCommit" value="true" /> 可直级提交，不再需要事务
+   
+   
    --END
 
 
