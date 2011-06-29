@@ -99,4 +99,27 @@ ExtJs 中 xtype 与组件类的对应表
 --------------------------------
 http://liss.javaeye.com/blog/653163
 
+image
+--------------------------------
+image.js
+
+or
+
+xtype : 'box',
+    autoEl : {
+      tag : 'div',
+      html : '<div class="app-msg"><img src="img/magic-wand.png" class="app-img" />Log in to The Magic Forum</div>'
+    }
+
+<style type="text/css">
+.app-img {
+  vertical-align: middle;
+  margin: 0px 20px 10px 0px;
+}
+
+.app-msg {
+  font-size: large;
+}
+</style>
+
    --END

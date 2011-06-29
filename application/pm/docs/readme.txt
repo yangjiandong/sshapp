@@ -1,6 +1,13 @@
 Personnel_Management System
 ============================
 
+2011.06.28
+----------
+
+   1. jsp证件照实现代码
+   http://peihexian.iteye.com/blog/1108181
+   save/ImageCapOnWeb20110622.rar
+
 2011.06.09
 ----------
 
