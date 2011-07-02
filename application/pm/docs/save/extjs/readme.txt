@@ -122,4 +122,16 @@ xtype : 'box',
 }
 </style>
 
+combo search style
+------------------
+combo 分页样式
+
+combo-template-paging.html
+
+form 一个不错的布局
+-------------------
+
+load.html
+
+
    --END

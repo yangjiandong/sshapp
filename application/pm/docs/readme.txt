@@ -1,6 +1,21 @@
 Personnel_Management System
 ============================
 
+2011.07.02
+----------
+
+   1. jdbc getMetaData
+
+   java.sql.ResultSet.getMetaData() 得到结果集的结构信息，比如字段数、字段名等。
+   java.sql.ResultSet.getMetaData().getTableName(1)) 就可以返回表名
+   java.sql.ResultSet.getMetaData().getColumnCount() 得到数据集的列数
+
+   save/JdbcGetMetadata.java
+
+   2. utils/JDBCUtil.java
+   测试getMetaData
+   main
+
 2011.06.28
 ----------
 

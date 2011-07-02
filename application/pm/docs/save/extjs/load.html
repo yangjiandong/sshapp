@@ -1,0 +1,223 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:mso="urn:schemas-microsoft-com:office:office"
+xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+<head>
+    <title></title>
+    <link rel="stylesheet" type="text/css"
+  href="../../../resources/css/ext-all.css" />
+<link rel="stylesheet" type="text/css" href="app.css" />
+
+<script type="text/javascript" src="../../../adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="../../../ext-all-debug.js"></script>
+<script type="text/javascript" src="../../../ext-lang-zh_CN.js"></script>
+    <style type="text/css">
+        .img-contact
+        {
+            vertical-align: middle;
+            margin: 0px 0px 0px 0px;
+            width:75px;
+            height:100px;
+        }
+        .x-fieldset
+        {
+            border-style: solid none none none;
+            border-width: 1px;
+            border-color: #B5B8C8;
+            padding: 10px;
+            margin-bottom: 10px;
+            margin-right: 20px;
+            display: block;
+        }
+    </style>
+
+    <script type="text/javascript">
+
+        // Loading form data from the server.
+
+        Ext.BLANK_IMAGE_URL = 'img/s.gif';
+        // Required if showing validation messages
+        Ext.QuickTips.init();
+
+var nameAndCompany = { columnWidth: .5,
+    layout: 'form',
+    bodyStyle:'padding-top:1px',
+    items: [
+    { xtype: 'textfield',
+        fieldLabel: 'First Name',
+        name: 'firstName',
+        anchor: '95%'
+    }, {
+        xtype: 'textfield',
+        fieldLabel: 'Last Name',
+        name: 'lastName',
+        anchor: '95%'
+    }, {
+        xtype: 'textfield',
+        fieldLabel: 'Company',
+        name: 'company',
+        anchor: '95%'
+    }, {
+        xtype: 'textfield',
+        fieldLabel: 'Title',
+        name: 'title',
+        anchor: '95%'
+    }
+  ]
+}
+
+var picBox = {
+    columnWidth: .5,
+    bodyStyle: 'padding:0px 0px 0px 40px',
+    items: [
+    { xtype: 'box',
+        autoEl: { tag: 'div', style: 'padding-bottom:20px',
+            html: '<img id="pic" src="' + Ext.BLANK_IMAGE_URL + '" class="img-contact" />'
+        }
+    }, { xtype: 'button', text: 'Change Picture' }
+  ]
+}
+
+var internet = { columnWidth: .5,
+    layout: 'form',
+    items: [{ xtype: 'fieldset',
+        title: 'Internet',
+        autoHeight: true,
+        defaultType: 'textfield',
+        items: [{
+            fieldLabel: 'Email',
+            name: 'email',
+            vtype: 'email',
+            anchor: '95%'
+        }, {
+            fieldLabel: 'Web page',
+            name: 'webPage',
+            vtype: 'url',
+            anchor: '95%'
+        }, {
+            fieldLabel: 'IM',
+            name: 'imAddress',
+            anchor: '95%'
+    }]
+  }]
+}
+
+var phones = { columnWidth: .5,
+    layout: 'form',
+    items: [{ xtype: 'fieldset',
+        title: 'Phone Numbers',
+        autoHeight: true,
+        defaultType: 'textfield',
+        items: [{
+            fieldLabel: 'Home',
+            name: 'homePhone',
+            anchor: '95%'
+        }, {
+            fieldLabel: 'Business',
+            name: 'busPhone',
+            anchor: '95%'
+        }, {
+            fieldLabel: 'Mobile',
+            name: 'mobPhone',
+            anchor: '95%'
+        }, {
+            fieldLabel: 'Fax',
+            name: 'fax',
+            anchor: '95%'
+    }]
+  }]
+}
+
+var busAddress = { columnWidth: .5,
+    layout: 'form',
+    labelAlign: 'top',
+    defaultType: 'textarea',
+    items: [{
+        fieldLabel: 'Business',
+    labelSeparator:'',
+        name: 'bAddress',
+        anchor: '95%'
+    }, { xtype: 'radio',
+        boxLabel: 'Mailing Address',
+        hideLabel: true,
+        name: 'mailingAddress',
+      value:'bAddress',
+    id:'mailToBAddress'
+    }]
+}
+
+var homeAddress = { columnWidth: .5,
+    layout: 'form',
+    labelAlign: 'top',
+    defaultType: 'textarea',
+    items: [{
+        fieldLabel: 'Home',
+    labelSeparator:'',
+        name: 'hAddress',
+        anchor: '95%'
+    }, { xtype: 'radio',
+        boxLabel: 'Mailing Address',
+        hideLabel: true,
+        name: 'mailingAddress',
+    value:'hAddress',
+    id:'mailToHAddress'
+  }]
+}
+
+Ext.onReady(function() {
+
+    var contactForm = new Ext.FormPanel({
+        frame: true,
+        title: 'Contact Form',
+        bodyStyle: 'padding:5px',
+        width: 650,
+        items: [{
+            bodyStyle: {
+                margin: '0px 0px 15px 0px'
+            },
+            items: [{
+                layout: 'column',
+                items: [nameAndCompany, picBox]
+      }]
+            }, {
+                items: [{
+                    layout: 'column',
+                    items: [phones, internet]
+        }]
+                }, {
+                    xtype: 'fieldset',
+                    title: 'Addresses',
+                    autoHeight: true,
+                    hideBorders: true,
+                    layout: 'column',
+                    items: [busAddress, homeAddress]
+    }],
+        buttons: [{
+            text: 'Save'
+        }, {
+            text: 'Cancel'
+    }]
+    });
+
+contactForm.on({
+  actioncomplete: function(form, action){
+    if(action.type == 'load'){
+      var contact = action.result.data;
+      Ext.getCmp(contact.mailingAddress).setValue(true);
+      contactForm.setTitle(contact.firstName + ' ' + contact.lastName);
+      Ext.getDom('pic').src = contact.pic;
+    }
+  }
+});
+
+contactForm.render(document.body);
+
+contactForm.getForm().load({ url: 'contact.php', params:{id:'contact1'},waitMsg: 'Loading'});
+
+
+});
+
+    </script>
+</head>
+<body style="padding: 20px">
+</body>
+</html>

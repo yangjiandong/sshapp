@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" >
+<head>
+    <title></title>
+  <link rel="stylesheet" type="text/css"
+  href="../../../resources/css/ext-all.css" />
+<link rel="stylesheet" type="text/css" href="app.css" />
+
+<script type="text/javascript" src="../../../adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="../../../ext-all-debug.js"></script>
+<script type="text/javascript" src="../../../ext-lang-zh_CN.js"></script>
+
+<style type="text/css">
+    .movie-item {
+        font:normal 12px tahoma, arial, helvetica, sans-serif;
+        line-height:150%;
+        padding:5px 20px 5px 10px;
+        border:1px solid #fff;
+        border-bottom:1px solid #eeeeee;
+        white-space:normal;
+        color:#555;
+    }
+    .movie-item h2 {
+        display:block;
+        font:inherit;
+        font-weight:bold;
+        color:#336699;
+    }
+
+    .movie-item h2 span {
+        float: right;
+        font-weight:normal;
+        color:#555;
+        margin:0 0 5px 5px;
+        width:100px;
+        display:block;
+        clear:none;
+    }
+    .panel-icon
+    {
+        background:url(img/folder-movie.png) 0 no-repeat !important;
+    }
+</style>
+    <script type="text/javascript">
+        // Combo box with item template.
+
+        Ext.BLANK_IMAGE_URL = '../ch3/img/s.gif';
+
+        Ext.QuickTips.init();
+
+var moviesDataStore = new Ext.data.JsonStore({
+    url: 'movies.php',
+    baseParams: { cmd: 'movies' },
+    root: 'movies',
+    totalProperty: 'count',
+    id: 'film_id',
+    fields: [{ name: 'title', mapping: 'title' },
+        { name: 'description', mapping: 'description' },
+        { name: 'released', mapping: 'release_year' },
+        { name: 'rating', mapping: 'rating' },
+        { name: 'sFeatures', mapping: 'special_features' }
+    ]
+});
+
+// Custom rendering Template
+var movieTpl = new Ext.XTemplate(
+    '<tpl for="."><div class="movie-item">',
+        '<h2><span>Year: {released}<br />Rating: {rating}</span>{title}</h2>',
+        '{description}',
+    '</div></tpl>'
+);
+
+var titleSearch = {
+    xtype: 'combo',
+    fieldLabel: 'Title',
+    store: moviesDataStore,
+    displayField: 'description',
+    typeAhead: false,
+    loadingText: 'Searching...',
+    emptyText: 'Type three or more letters of the title',
+    minChars: 3,
+    anchor: '100%',
+    pageSize: 15,
+    //hideTrigger: true,
+    triggerAction: 'all',
+    tpl: movieTpl,
+    itemSelector: 'div.movie-item',
+    onSelect: function(record) {
+        this.setValue(record.data.title);
+        this.collapse();
+        Ext.getCmp('movies-form').getForm().loadRecord(record);
+    }
+}
+
+Ext.onReady(function() {
+
+    var movieBrowser = new Ext.FormPanel({
+        iconCls: 'panel-icon',
+        frame: true,
+        id: 'movies-form',
+        title: 'Movies Browser',
+        bodyStyle: 'padding:5px',
+        width: 550,
+        items: [titleSearch,
+           { xtype: 'textfield', name: 'released', anchor: '35%', fieldLabel: 'Release Year', readOnly: true },
+           { columnWidth: .5, xtype: 'textfield', name: 'rating', anchor: '35%', fieldLabel: 'Rating', readOnly: true },
+           { xtype: 'textarea', name: 'description', anchor: '100%', fieldLabel: 'Description', readOnly: true },
+           { xtype: 'textarea', name: 'sFeatures', anchor: '100%', fieldLabel: 'Special Features', readOnly: true }
+        ]
+    });
+
+    movieBrowser.render(document.body);
+
+});
+
+    </script>
+</head>
+<body style="padding: 20px">
+
+</body>
+</html>
