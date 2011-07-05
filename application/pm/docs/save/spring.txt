@@ -40,14 +40,18 @@ spring -- 知识库
    layout.ConversionPattern=...(%F:%L)..
 
    3. 数据源连接数监测
-
+   ------------------------------------------------------------
+   
    CommonController.getDatabaseInfo
    common/datasource
 
    4. java process file
+   ------------------------------------------------------------
+
    other/java.file.txt
 
    5. java thread
+   ------------------------------------------------------------
 
    --进行A时,同时进行B
    1. //A:main Thread code here
@@ -61,20 +65,22 @@ spring -- 知识库
    9. //B:main Thread code here
 
    6. maven 混淆
-
+   ------------------------------------------------------------
    proguard-maven-plugin
    http://pyx4me.com/pyx4me-maven-plugins/proguard-maven-plugin/
 
    other/proguard.txt
 
    7. spring jdbc
+   ------------------------------------------------------------
 
    http://www.blogjava.net/176142998/archive/2009/02/03/221507.html
    other/spring.jdbc.2.txt
 
    8. tx 事务
+   ------------------------------------------------------------
    
-   采用了spring tx ,所有需提交到后台表的操作必须加
+   采用了spring tx ,所有需事务处理的(提交到后台表的?)操作必须加
    @Transactional
    
    不然直级用 TransactionCallbackWithoutResult
@@ -99,7 +105,58 @@ spring -- 知识库
    
    <property name="defaultAutoCommit" value="true" /> 可直级提交，不再需要事务
    
+   --dao 手工事务
+   public class DAO extends HibernateDaoSupport{
+   public void bulkUpdate() {
+   Session session=this.getHibernateTemplate().getSessionFactory().openSession();
+   Transaction tx= session.beginTransaction();
+   tx.begin();
+   Query query= session.createQuery("Update Syction s set s.show='T' ");
+   query.executeUpdate();
+   tx.commit();
+   }
+
+   getCurrentSession()与openSession()的区别？
+   * 采用getCurrentSession()创建的session会绑定到当前线程中，而采用openSession()  创建的session则不会
+   * 采用getCurrentSession()创建的session在commit或rollback时会自动关闭，而采用openSession()创建的session必须手动关闭
+
+   --spring 手工事务
+
+   <!-- 另一个事务管理器, Jdbc单数据源事务 -->
+   <bean id="jobTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="dataSource" />
+   </bean>
+
+   --pm/hcost/dao/test/ImportDepartment
+   TransactionTemplate transactionTemplate = new TransactionTemplate(defaultTransactionManager);
+
+        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+            @Override
+            public void doInTransactionWithoutResult(TransactionStatus status) {
+                jdbcTemplate.update(INSERT_USER);
+                jdbcTemplate.update(INSERT_USER2);
+                jdbcTemplate.update(INSERT_USER);
+            }
+        });
    
+   9. 增加定时任务
+   ------------------------------------------------------------
+
+   <import resource="schedule/applicationContext-executor.xml" />
+
+   10. spring mvc json out
+   ------------------------------------------------------------
+
+   CommonController
+   public @ResponseBody Map<String, Object> getDatabaseInfo(HttpServletRequest request, HttpServletResponse response) {
+   ...
+   }
+
+   11. apache common dbutils
+   ------------------------------------------------------------
+
+   http://commons.apache.org/dbutils/examples.html
+
    --END
 
 

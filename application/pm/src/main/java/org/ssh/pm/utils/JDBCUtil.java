@@ -477,6 +477,13 @@ public class JDBCUtil {
           System.out.println(rsMetaData.getSchemaName(i));
         }
 
+        //简单信息
+        for (int i = 0; i < numberOfColumns; i++) {
+            System.out.print(rsMetaData.getColumnName(i + 1) + "  \t");
+            System.out.print(rsMetaData.getColumnDisplaySize(i + 1) + "\t");
+            System.out.println(rsMetaData.getColumnTypeName(i + 1));
+        }
+
         st.close();
         conn.close();
       }
