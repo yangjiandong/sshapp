@@ -136,4 +136,13 @@ load.html
 scroll.html -- 文件滚动效果
 --------------------
 
+this
+--------------------
+
+无论什么时候，JavaScript都会把this放到function内部。
+它是基于一种非常简单的思想：如果函数直接是某个对象的成员，那么this的值就是这个对象。
+如果函数不是某个对象的成员那么this的值便设为某种全局对象（常见有，浏览器中的window对象）。
+
+除了内建的call/apply方法，Ext还为我们提供-- 辅助方法createDelegate，可以委派this。
+
    --END
