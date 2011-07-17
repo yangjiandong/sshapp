@@ -1,6 +1,186 @@
 hibernate reference
 ====================
 
+2011.07.16
+----------
+
+1. Criteria查询 --- 结果集Distinct解决方案1 / 2
+
+相信大家都很喜欢Criteria查询，因为它对查询条件已经查询实体采用松散的组合，不像HQL那样需要拼字符串。
+但是又会比较抵触它，因为对它的不熟悉，写复杂查询可能会不顺手，一个子查询也可能会很麻烦。
+
+今天我用半天时间与大家分享Criteria查询里面弯路比较多的结果集distinct，这个在HQL里面很简单，但在Criteria查询还真是头疼，
+网上的文章也是很模糊而且讨论的比较片面，我希望通过这篇文章让大家少走弯路，多用Criteria查询，少用HQL拼字符串。呵呵。
+Criteria的结果集最常用分两种：对象List、List<Object[]>（投影查询），这两种查询结果的distinct处理的方式也是不一样的。稍后会分别讨论。
+
+本文用到模型类：
+Device.java
+====================================
+Java代码  收藏代码
+
+    @Entity  
+    @Table(name = "DEVICE")  
+    public class Device extends Maintainable {  
+      
+        private Long id;  
+      
+        private String name;  
+      
+        private NodeCabinet nodeCabinet;// 所属机柜  
+      
+        // setter getter method ...   
+    }  
+
+
+1. 基本知识：
+
+1.1 Criteria不支持distinct对象结果集吗？
+re: Criteria通过setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)方法对查询后结果进行排重，请注意，这种方式是先查询出可能重复的记录然后根据每个对象的equals方法进行排重，如果不需要分页，而且你的查询结果集很小的话，可以使用这种方式distinct结果集。
+warning:
+
+    1. 要排重的对象要实现equals方法。
+    2. 不能进行分页处理，因为是先查询后distinct，结果会不准确。
+    3. 查询处理的结果集太大的话，可能存在性能问题，相同记录会查询多次。 
+
+
+
+示例代码 1-1：
+Java代码  收藏代码
+
+    Criteria c = manager.createCriteria(Device.class);  
+    .....  
+    criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)  
+    List result = c.list();  
+
+
+
+1.2 Criteria如何进行投影查询我需要的几个字段?
+re：Criteria通过设置projectionList就可以只查询指定字段。
+warning：Criteria投影查询出来的结果集格式是这样的：List<Object[]> 前台遍历集合的时候需要使用数组下标访问数据。
+
+示例代码 1-2：
+Java代码  收藏代码
+
+    Criteria c = manager.createCriteria(Device.class);  
+    .....  
+    ProjectionList projectionList = Projections.projectionList();  
+    projectionList.add(Projections.property("id"));  
+    projectionList.add(Projections.property("name"));  
+    c.setProjection(projectionList); //生成如下SQL: select id, name from ....  
+    List result = c.list();  
+
+
+
+
+2. Criteria投影distinct查询
+
+2.1 Criteria投影distinct查询
+Criteria对投影的支持比返回对象的方式支持的好很多。以下是样例代码，与比示例1-2代码只有一行差别：
+
+示例代码 2-1：
+Java代码  收藏代码
+
+    Criteria c = manager.createCriteria(Device.class);  
+    .....  
+    ProjectionList projectionList = Projections.projectionList();  
+    projectionList.add(Projections.property("id"));  
+    projectionList.add(Projections.property("name"));  
+    c.setProjection(Projections.distinct(projectionList));  // >>>> 这里差别 生成如下SQL: select distinct id, name from ....  
+    List result = c.list();  
+
+
+
+2.2 分页情况下Criteria查询如何计算total records count
+投影情况下如何计算distinct后分页total records count?
+re：Criteria通过Projection计算count。先算count然后在投影。计算count的可以封装到单独查询方法里。
+
+示例代码：
+Java代码  收藏代码
+
+    Criteria c = manager.createCriteria(Device.class);  
+    .....  
+    criteria.setProjection(Projections.countDistinct("id")); // select count(distcint id) from ...  
+    Integer totalCount = (Integer) criteria.uniqueResult();   
+      
+    ProjectionList projectionList = Projections.projectionList();  
+    projectionList.add(Projections.property("id"));  
+    projectionList.add(Projections.property("name"));  
+    c.setProjection(Projections.distinct(projectionList));  // 生成如下SQL: select distinct id, name from ....  
+    List result = c.list();  
+    
+Criteria查询 --- 结果集Distinct解决方案2 / 2
+
+
+这篇文章是上一篇的续, 主要讲述如何使用Criteria查询distinct后的结果集.
+
+实体：
+ 
+Java代码  收藏代码
+
+    public class Authority {     
+        
+        private Long id;     
+        
+        private String name;     
+          
+        // setter getter method ...      
+    }    
+      
+      
+    public class User {     
+        
+        private Long id;     
+        
+        private String name;     
+        
+        private Set<AuthorityUserRelation> authorityUserRelation;  
+          
+        // setter getter method ...      
+    }    
+      
+    public class AuthorityUserRelation {  
+      
+        private User user;  
+      
+        private Authority authority;  
+    }  
+
+
+权限Authority实体与用户User实体是ManyToMany单向关系,所有通过查询Authority可以找到多个User对象, 但我们希望distinct结果集。下面我们通过Criteria 完成这个distinct查询。
+
+输入字符串"readOnly" 作为权限名称模糊查询条件, 匹配的用户
+
+示例代码：
+Java代码  收藏代码
+
+    Criteria c = manager.createCriteria(User.class, "user");  
+      
+    DetachedCriteria dc = DetachedCriteria  
+            .forClass(AuthorityUserRelation.class, "r")  
+            .add(Restrictions.eqProperty("user.id", "r.user.id"))  
+            .setProjection(Projections.id());  
+      
+    dc.createCriteria("r.authority", "a");  
+    dc.add(Restrictions.ilike("a.name", "readOnly"));  
+      
+    c.add(Subqueries.exists(dc));  
+      
+    List result = c.list();  
+
+
+
+distinct对象结果集的基本思想就是子查询，子查询根据输入条件查询distinct后对象id，外层内存id查询对象。
+
+warning： 外层查询需要指定alias(本例为"user") , 否则会出现throw new MappingException
+
+
+编后想: 其实有时候我们只需要模型的单独几个属性, 不需要把所有字段都拽出来，这时候可以用投影，但是投影又是基于数组的访问。不知道什么时候hibernate可以把投影查询的字段映射到模型中，没有查询出来的字段为null。这样做列表就会很轻松了：）
+
+结束了, 欢迎讨论指正。转载请保留作者笔名Heipark
+
+参考资料： http://floledermann.blogspot.com/2007/10/solving-hibernate-criterias-distinct.html 
+    
+    
 2010.09.19
 ----------
 
