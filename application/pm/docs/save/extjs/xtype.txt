@@ -1,0 +1,93 @@
+
+基本组件：
+xtype   Class   描述
+button  Ext.Button  按钮
+splitbutton   Ext.SplitButton   带下拉菜单的按钮
+cycle   Ext.CycleButton   带下拉选项菜单的按钮
+buttongroup   Ext.ButtonGroup   编组按钮(Since 3.0)
+slider  Ext.Slider  滑动条
+progress  Ext.ProgressBar   进度条
+statusbar   Ext.StatusBar   状态条，2.2加进来，3.0 又去了
+colorpalette  Ext.ColorPalette  调色板
+datepicker  Ext.DatePicker  日期选择面板
+
+容器及数据类组件
+xtype   Class   描述
+window  Ext.Window  窗口
+viewport  Ext.ViewPort  视口，即浏览器的视口，能随之伸缩
+box   Ext.BoxComponent  盒子组件，相当于一个 <div>
+component   Ext.Component   组件
+container   Ext.Container   容器
+panel   Ext.Panel   面板
+tabpanel  Ext.TabPanel  选项面板
+treepanel   Ext.tree.TreePanel  树型面板
+flash   Ext.FlashComponent  显示 Flash 的组件(Since 3.0)
+grid  Ext.grid.GridPanel  表格
+editorgrid  Ext.grid.EditorGridPanel  可编辑的表格
+propertygrid  Ext.grid.PropertyGrid   属性表格
+editor  Ext.Editor  编辑器
+dataview  Ext.DataView  数据显示视图
+listview  Ext.ListView  列表视图
+
+工具栏组件：
+xtype   Class   描述
+paging  Ext.PagingToolbar   分页工具条
+toolbar   Ext.Toolbar   工具栏
+tbbutton  Ext.Toolbar.Button  工具栏按钮
+tbfill  Ext.Toolbar.Fill  工具栏填充区
+tbitem  Ext.Toolbar.Item  工具条项目
+tbseparator   Ext.Toolbar.Separator   工具栏分隔符
+tbspacer  Ext.Toolbar.Spacer  工具栏空白
+tbsplit   Ext.Toolbar.SplitButton   工具栏分隔按钮
+tbtext  Ext.Toolbar.TextItem  工具栏文本项
+
+菜单组件：
+xtype   Class   描述
+menu  Ext.menu.Menu   菜单
+colormenu   Ext.menu.ColorMenu  颜色选择菜单
+datemenu  Ext.menu.DateMenu   日期选择菜单
+menubaseitem  BaseItem
+menucheckitem   Ext.menu.CheckItem  选项菜单项
+menuitem  Ext.menu.Item
+menuseparator   Ext.menu.Separator  菜单分隔线
+menutextitem  Ext.menu.TextItem   文本菜单项
+
+表单及表单域组件：
+xtype   Class   描述
+form  Ext.FormPanel/Ext.form.FormPanel  表单面板
+checkbox  Ext.form.Checkbox   多选框
+combo   Ext.form.ComboBox   下拉框
+datefield   Ext.form.DateField  日期选择项
+timefield   Ext.form.TimeField  时间录入项
+field   Ext.form.Field  表单字段
+fieldset  Ext.form.FieldSet   表单字段组
+hidden  Ext.form.Hidden   表单隐藏域
+htmleditor  Ext.form.HtmlEditor   HTML 编辑器
+label   Ext.form.Label  标签
+numberfield   Ext.form.NumberField  数字编辑器
+radio   Ext.form.Radio  单选按钮
+textarea  Ext.form.TextArea   多行文本框
+textfield   Ext.form.TextField  表单文本框
+trigger   Ext.form.TriggerField   触发录入项
+checkboxgroup   Ext.form.CheckboxGroup  编组的多选框(Since 2.2)
+displayfield  Ext.form.DisplayField   仅显示，不校验/不被提交的文本框
+radiogroup  Ext.form.RadioGroup   编组的单选按钮(Since 2.2)
+
+图表组件：
+xtype   Class   描述
+chart   Ext.chart.Chart   图表组件
+barchart  Ext.chart.BarChart  柱状图
+cartsianchart   Ext.chart.CartesianChart
+columnchart   Ext.chart.ColumnChart
+linechart   Ext.chart.LineChart   连线图
+piechart  Ext.chart.PieChart  扇形图
+
+数据集 Store：
+xtype   Class   描述
+arraystore  Ext.data.ArrayStore
+directstore   Ext.data.DirectStore
+groupingstore   Ext.data.GroupingStore
+jsonstore   Ext.data.JsonStore
+simplestore   Ext.data.SimpleStore
+store   Ext.data.Store
+xmlstore  Ext.data.XmlStore
