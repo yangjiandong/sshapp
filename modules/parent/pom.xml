@@ -3,10 +3,10 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.springside</groupId>
-  <artifactId>springside3-parent</artifactId>
+  <artifactId>springside-parent</artifactId>
   <packaging>pom</packaging>
-  <name>Springside3's Parent pom.xml</name>
-  <version>3.3.4</version>
+  <name>Springside's Parent pom.xml</name>
+  <version>4.0.0-SNAPSHOT</version>
   <organization>
     <name>SpringSide</name>
     <url>http://www.springside.org.cn</url>
@@ -14,24 +14,23 @@
 
   <properties>
     <!-- 主要依赖库的版本定义 -->
-    <springside.version>3.3.4</springside.version>
+    <springside.version>4.0.0-SNAPSHOT</springside.version>
     <spring.version>3.0.5.RELEASE</spring.version>
     <org.springframework.integration-version>2.0.0.M4</org.springframework.integration-version>
     <hibernate.version>3.5.5-Final</hibernate.version>
-    <hibernate-search.version>3.2.1.Final</hibernate-search.version>
     <struts2.version>2.2.1</struts2.version>
     <cxf.version>2.2.10</cxf.version>
-    <jersey.version>1.3</jersey.version>
+    <jersey.version>1.8</jersey.version>
     <spring-security.version>3.0.5.RELEASE</spring-security.version>
-    <activemq.version>5.4.0</activemq.version>
-    <jetty.version>6.1.25</jetty.version>
+    <activemq.version>5.5.0</activemq.version>
+    <jetty.version>7.4.0.v20110414</jetty.version>
     <h2.version>1.2.142</h2.version>
     <hsqldb.version>1.8.0.7</hsqldb.version>
     <mysql.version>5.1.6</mysql.version>
     <mssql.jtds.version>1.2.2</mssql.jtds.version>
     <oracle.version>10.2.0.2.0</oracle.version>
-    <quartz.version>1.8.4</quartz.version>
-    <jackson.version>1.6.0</jackson.version>
+    <quartz.version>1.8.5</quartz.version>
+    <jackson.version>1.8.2</jackson.version>
     <slf4j.version>1.6.1</slf4j.version>
     <selenium.version>2.0a5</selenium.version>
     <org.jrobin.version>1.5.9</org.jrobin.version>
@@ -101,7 +100,7 @@
     <repository>
       <id>jboss</id>
       <name>Jboss Repository</name>
-      <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+      <url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
@@ -276,12 +275,12 @@
       <!-- springside modules begin -->
       <dependency>
         <groupId>org.springside</groupId>
-        <artifactId>springside3-core</artifactId>
+        <artifactId>springside-core</artifactId>
         <version>${springside.version}</version>
       </dependency>
       <dependency>
         <groupId>org.springside</groupId>
-        <artifactId>springside3-extension</artifactId>
+        <artifactId>springside-extension</artifactId>
         <version>${springside.version}</version>
       </dependency>
       <!-- springside modules end -->
@@ -323,17 +322,17 @@
       <dependency>
         <groupId>org.aspectj</groupId>
         <artifactId>aspectjrt</artifactId>
-        <version>1.6.9</version>
+        <version>1.6.11</version>
       </dependency>
       <dependency>
         <groupId>org.aspectj</groupId>
         <artifactId>aspectjweaver</artifactId>
-        <version>1.6.9</version>
+        <version>1.6.11</version>
       </dependency>
       <dependency>
         <groupId>cglib</groupId>
         <artifactId>cglib-nodep</artifactId>
-        <version>2.2</version>
+        <version>2.2.2</version>
       </dependency>
       <!-- spring end -->
 
@@ -365,12 +364,6 @@
         <version>${hibernate.version}</version>
       </dependency>
 
-      <dependency>
-        <groupId>org.hibernate</groupId>
-        <artifactId>hibernate-search</artifactId>
-        <version>${hibernate-search.version}</version>
-      </dependency>
-
       <!-- newest version in jboss repository -->
       <dependency>
         <groupId>javassist</groupId>
@@ -396,6 +389,11 @@
         <groupId>commons-dbcp</groupId>
         <artifactId>commons-dbcp</artifactId>
         <version>1.4</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-pool</groupId>
+        <artifactId>commons-pool</artifactId>
+        <version>1.5.6</version>
       </dependency>
 
       <dependency>
@@ -490,6 +488,11 @@
       <dependency>
         <groupId>org.codehaus.jackson</groupId>
         <artifactId>jackson-jaxrs</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.jackson</groupId>
+        <artifactId>jackson-xc</artifactId>
         <version>${jackson.version}</version>
       </dependency>
 
@@ -763,13 +766,13 @@
       <dependency>
         <groupId>org.apache.poi</groupId>
         <artifactId>poi</artifactId>
-        <version>3.6</version>
+        <version>3.7</version>
       </dependency>
       <dependency>
-      <groupId>org.apache.poi</groupId>
-      <artifactId>poi-ooxml</artifactId>
-      <version>3.6</version>
-    </dependency>
+        <groupId>org.apache.poi</groupId>
+        <artifactId>poi-ooxml</artifactId>
+        <version>3.7</version>
+      </dependency>
       <!-- excel end -->
 
       <!-- utils begin -->
@@ -781,7 +784,7 @@
       <dependency>
         <groupId>commons-lang</groupId>
         <artifactId>commons-lang</artifactId>
-        <version>2.5</version>
+        <version>2.6</version>
       </dependency>
       <dependency>
         <groupId>commons-collections</groupId>
@@ -791,7 +794,7 @@
       <dependency>
         <groupId>commons-codec</groupId>
         <artifactId>commons-codec</artifactId>
-        <version>1.4</version>
+        <version>1.5</version>
       </dependency>
       <dependency>
         <groupId>commons-io</groupId>
@@ -801,7 +804,7 @@
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
-        <version>r06</version>
+        <version>r09</version>
       </dependency>
 
       <dependency>
@@ -819,13 +822,13 @@
       <dependency>
         <groupId>joda-time</groupId>
         <artifactId>joda-time</artifactId>
-        <version>1.6.1</version>
+        <version>1.6.2</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.httpcomponents</groupId>
         <artifactId>httpclient</artifactId>
-        <version>4.0.1</version>
+        <version>4.1.1</version>
       </dependency>
       <dependency>
         <groupId>commons-httpclient</groupId>
@@ -842,7 +845,7 @@
       <dependency>
         <groupId>ognl</groupId>
         <artifactId>ognl</artifactId>
-        <version>3.0</version>
+        <version>3.0.1</version>
         <exclusions>
           <!-- use javassist.javassist instead -->
           <exclusion>
@@ -855,7 +858,7 @@
       <dependency>
         <groupId>com.googlecode.aviator</groupId>
         <artifactId>aviator</artifactId>
-        <version>1.0.1</version>
+        <version>2.0</version>
       </dependency>
       <dependency>
         <groupId>net.sf.dozer</groupId>
@@ -867,7 +870,7 @@
       <dependency>
         <groupId>org.apache.velocity</groupId>
         <artifactId>velocity</artifactId>
-        <version>1.6.4</version>
+        <version>1.7</version>
       </dependency>
 
       <!-- cache (usually for orm) -->
@@ -895,7 +898,7 @@
       <dependency>
         <groupId>net.sf.dozer</groupId>
         <artifactId>dozer</artifactId>
-        <version>5.2.2</version>
+        <version>5.3.2</version>
       </dependency>
       <dependency>
         <groupId>org.apache.xmlbeans</groupId>
@@ -906,7 +909,7 @@
       <dependency>
         <groupId>asm</groupId>
         <artifactId>asm</artifactId>
-        <version>3.2</version>
+        <version>3.3.1</version>
       </dependency>
 
       <dependency>
@@ -969,16 +972,28 @@
 
       <!-- jetty -->
       <dependency>
-        <groupId>org.mortbay.jetty</groupId>
-        <artifactId>jetty</artifactId>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-webapp</artifactId>
+        <version>${jetty.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-jsp-2.1</artifactId>
         <version>${jetty.version}</version>
         <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.mortbay.jetty</groupId>
-        <artifactId>jsp-2.1-jetty</artifactId>
-        <version>${jetty.version}</version>
+        <artifactId>jsp-2.1-glassfish</artifactId>
+        <version>2.1.v20100127</version>
         <scope>test</scope>
+        <exclusions>
+          <exclusion>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>servlet-api</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <!-- selenium 2.0 -->
@@ -1029,7 +1044,7 @@
       <dependency>
         <groupId>org.perf4j</groupId>
         <artifactId>perf4j</artifactId>
-        <version>0.9.13</version>
+        <version>0.9.14</version>
       </dependency>
 
       <!-- hibernate tools -->
@@ -1071,19 +1086,19 @@
       <dependency>
         <groupId>tanukisoft</groupId>
         <artifactId>jsw</artifactId>
-        <version>3.5.3</version>
+        <version>3.5.4</version>
         <scope>provided</scope>
         <type>zip</type>
       </dependency>
       <dependency>
-        <groupId>org.mortbay.jetty</groupId>
-        <artifactId>jetty-management</artifactId>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-jmx</artifactId>
         <version>${jetty.version}</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
-        <groupId>org.mortbay.jetty</groupId>
-        <artifactId>start</artifactId>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-start</artifactId>
         <version>${jetty.version}</version>
         <scope>provided</scope>
       </dependency>
@@ -1104,6 +1119,7 @@
             <source>1.6</source>
             <target>1.6</target>
             <showWarnings>true</showWarnings>
+            <encoding>${project.build.sourceEncoding}</encoding>
           </configuration>
         </plugin>
 
@@ -1111,8 +1127,9 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.6</version>
+          <version>2.8.1</version>
           <configuration>
+            <argLine>-Xmx256M</argLine>
             <includes>
               <include>**/*Test.java</include>
             </includes>
@@ -1123,14 +1140,14 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>cobertura-maven-plugin</artifactId>
-          <version>2.4</version>
+          <version>2.5</version>
         </plugin>
 
         <!-- war插件-->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-war-plugin</artifactId>
-          <version>2.1</version>
+          <version>2.1.1</version>
           <configuration>
             <warName>${project.artifactId}-${version}</warName>
             <archive>
@@ -1146,7 +1163,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
-          <version>2.4.3</version>
+          <version>2.5</version>
           <configuration>
             <encoding>${project.build.sourceEncoding}</encoding>
           </configuration>
@@ -1207,6 +1224,7 @@
               <sourceExclude>**/.svn/</sourceExclude>
             </sourceExcludes>
             <downloadSources>true</downloadSources>
+            <downloadJavadocs>false</downloadJavadocs>
           </configuration>
         </plugin>
 
@@ -1214,7 +1232,7 @@
         <plugin>
           <groupId>org.mortbay.jetty</groupId>
           <artifactId>jetty-maven-plugin</artifactId>
-          <version>7.2.2.v20101205</version>
+          <version>${jetty.version}</version>
           <configuration>
             <webAppConfig>
               <contextPath>/sshapp</contextPath>
@@ -1251,14 +1269,14 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-dependency-plugin</artifactId>
-          <version>2.1</version>
+          <version>2.2</version>
         </plugin>
 
         <!-- ant插件 -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-antrun-plugin</artifactId>
-          <version>1.3</version>
+          <version>1.6</version>
         </plugin>
 
 
@@ -1266,7 +1284,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
-          <version>2.2-beta-5</version>
+          <version>2.2.1</version>
           <configuration>
             <archive>
               <manifestEntries>
@@ -1306,14 +1324,31 @@
           </configuration>
         </plugin>
 
-        <!-- cobertura插件 -->
+        <!-- sonar插件 -->
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>2.0-beta-2</version>
+        </plugin>
+
+        <!-- release相关插件 -->
         <!--
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>cobertura-maven-plugin</artifactId>
-            <version>2.4</version>
-          </plugin>
-          -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-release-plugin</artifactId>
+          <version>2.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-scm-plugin</artifactId>
+          <version>1.5</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>versions-maven-plugin</artifactId>
+          <version>1.2</version>
+        </plugin>
+        -->
 
         <!--jalopy 代码格式化
           <plugin>

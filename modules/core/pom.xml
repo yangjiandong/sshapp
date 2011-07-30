@@ -3,12 +3,12 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.springside</groupId>
-    <artifactId>springside3-parent</artifactId>
-    <version>3.3.4</version>
+    <artifactId>springside-parent</artifactId>
+    <version>4.0.0-SNAPSHOT</version>
   </parent>
-  <artifactId>springside3-core</artifactId>
+  <artifactId>springside-core</artifactId>
   <packaging>jar</packaging>
-  <name>Springside3's Core Module</name>
+  <name>Springside's Core Module</name>
 
   <dependencies>
     <!-- spring -->
@@ -114,6 +114,10 @@
       <artifactId>velocity</artifactId>
       <optional>true</optional>
     </dependency>
+    <dependency>
+      <groupId>com.googlecode.aviator</groupId>
+      <artifactId>aviator</artifactId>
+    </dependency>
     <!-- logging -->
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -147,8 +151,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.mortbay.jetty</groupId>
-      <artifactId>jetty</artifactId>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-webapp</artifactId>
       <scope>compile</scope>
       <optional>true</optional>
     </dependency>

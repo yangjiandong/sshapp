@@ -3,18 +3,18 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.springside</groupId>
-    <artifactId>springside3-parent</artifactId>
-    <version>3.3.4</version>
+    <artifactId>springside-parent</artifactId>
+    <version>4.0.0-SNAPSHOT</version>
   </parent>
-  <artifactId>springside3-extension</artifactId>
+  <artifactId>springside-extension</artifactId>
   <packaging>jar</packaging>
-  <name>Springside3's Extension Module</name>
+  <name>Springside's Extension Module</name>
 
   <dependencies>
     <!-- springside -->
     <dependency>
       <groupId>org.springside</groupId>
-      <artifactId>springside3-core</artifactId>
+      <artifactId>springside-core</artifactId>
     </dependency>
 
     <!-- spring -->
