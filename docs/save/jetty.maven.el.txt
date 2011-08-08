@@ -1,0 +1,216 @@
+Maven Jetty and Tomcat dependencies with JSP / JSTL errors
+Etiketter: code, java, jetty, jsp
+I use Jetty as a Maven plugin during development, but tend to run Tomcat as my deployment server. (Not sure "production" is appropiate as it's my personal server). My applications are often java MVC based utilising some form of JSP.
+
+This combination creates a slight issue with dependencies for JSP and JSTL. If you have ever seen this error when running mvn jetty:run:
+
+java.lang.ClassNotFoundException: org.apache.el.ExpressionFactoryImpl
+
+Or these errors when running in tomcat when it was okay in jetty:
+
+javax.servlet.jsp.JspApplicationContext
+.getExpressionFactory()Ljavax/el/ExpressionFactory
+
+or
+
+org.apache.jasper.JasperException: Unable to read TLD "META-INF/c.tld" from JAR file
+
+or
+
+java.lang.LinkageError: loader constraint violation: loader (instance of org/apache/catalina/loader/WebappClassLoader) previously initiated loading for a different type with name "javax/el/ExpressionFactory"
+
+Over the last few years I have perservered and solved this flat wheel in different ways. However in my recent deja-vue I now have a tidy solution. (the project where this is visable is my up4 project. github source, demo)
+
+I am utilising the jetty maven plugin, and the tomcat maven plugin to show how this works.
+
+
+<plugin>
+<groupId>org.mortbay.jetty</groupId>
+   <artifactId>jetty-maven-plugin</artifactId>
+   <version>7.0.2.v20100331</version>
+</plugin>
+<plugin>
+   <groupId>org.codehaus.mojo</groupId>
+   <artifactId>tomcat-maven-plugin</artifactId>
+</plugin>
+
+
+To utilise JSP pages and JSTL EL with e.g. Spring MVC / Struts Tiles you perhaps expect these types of maven dependencies, remembering that most containers include support for Servelet API and JSPs:
+
+
+<dependency>
+   <groupId>javax.servlet</groupId>
+   <artifactId>servlet-api</artifactId>
+   <version>2.5</version>
+   <scope>provided</scope>
+</dependency>
+<dependency>
+   <groupId>javax.servlet.jsp</groupId>
+   <artifactId>jsp-api</artifactId>
+   <version>2.1</version>
+   <scope>compile</scope>
+</dependency>
+<dependency>
+   <groupId>javax.servlet</groupId>
+   <artifactId>jstl</artifactId>
+   <version>1.2</version>
+</dependency>
+
+
+If you then try mvn clean jetty:run you may end up with a:
+
+java.lang.ClassNotFoundException: org.apache.el.ExpressionFactoryImpl
+
+A response which will solve the jetty problem is to include some jstl EL dependencies:
+
+
+<dependency>
+   <groupId>javax.servlet</groupId>
+   <artifactId>servlet-api</artifactId>
+   <version>2.5</version>
+   <scope>provided</scope>
+</dependency>
+<dependency>
+   <groupId>javax.servlet.jsp</groupId>
+   <artifactId>jsp-api</artifactId>
+   <version>2.1</version>
+   <scope>compile</scope>
+</dependency>
+<dependency>
+   <groupId>javax.servlet</groupId>
+   <artifactId>jstl</artifactId>
+   <version>1.2</version>
+</dependency>
+<dependency>
+   <groupId>org.apache.tomcat</groupId>
+   <artifactId>jasper-el</artifactId>
+   <version>6.0.26</version>
+</dependency>
+
+
+mvn jetty:run
+
+This should now work fine in Jetty (test in browser as well).
+
+Now try the application in tomcat: mvn clean tomcat:run . It will moan about unable to read some the JSTL taglibs:
+
+org.apache.jasper.JasperException: Unable to read TLD "META-INF/c.tld" from JAR file
+
+This due to the compile scope of the jsp-api dependency, changing this to provided:
+
+
+<dependency>
+   <groupId>javax.servlet</groupId>
+   <artifactId>servlet-api</artifactId>
+   <version>2.5</version>
+   <scope>provided</scope>
+</dependency>
+<dependency>
+   <groupId>javax.servlet.jsp</groupId>
+   <artifactId>jsp-api</artifactId>
+   <version>2.1</version>
+   <scope>provided</scope>
+</dependency>
+<dependency>
+   <groupId>javax.servlet</groupId>
+   <artifactId>jstl</artifactId>
+   <version>1.2</version>
+</dependency>
+<dependency>
+   <groupId>org.apache.tomcat</groupId>
+   <artifactId>jasper-el</artifactId>
+   <version>6.0.26</version>
+</dependency>
+
+
+Test first in mvn jetty:run , which should be okay.
+
+Then in mvn clean tomcat:run . It starts ok, but on the first browser test this error appears:
+
+javax.servlet.jsp.JspApplicationContext
+.getExpressionFactory()Ljavax/el/ExpressionFactory
+
+Okay, so Tomcat does not like JSTL EL dependencies as it provides them itself, so my initial respone was to have a separate profile which changed the scope of the dependency to provided for tomcat builds only. However on further reflection it turns out the spec says JSP & EL should be provided by the container. So in fact the problem lays with Jetty, and it turns out the move to eclipse.org created a licensing issue with JSP, so jetty does not include the appropiate libs. So to fix this the correct dependencies will have to be:
+
+In your plugins section:
+
+
+<plugin>
+   <groupId>org.mortbay.jetty</groupId>
+   <artifactId>jetty-maven-plugin</artifactId>
+   <version>7.0.2.v20100331</version>
+   <dependencies>
+     <dependency>
+       <groupId>org.mortbay.jetty</groupId>
+       <artifactId>jsp-2.1-glassfish</artifactId>
+       <version>9.1.1.B60.25.p2</version>
+     </dependency>
+     <dependency>
+       <groupId>org.apache.tomcat</groupId>
+       <artifactId>el-api</artifactId>
+       <version>6.0.26</version>
+     </dependency>
+     <dependency>
+       <groupId>org.apache.tomcat</groupId>
+       <artifactId>jasper-el</artifactId>
+       <version>6.0.26</version>
+     </dependency>
+   </dependencies>
+</plugin>
+
+
+And in your normal dependencies section:
+
+
+<dependency>
+   <groupId>javax.servlet</groupId>
+   <artifactId>servlet-api</artifactId>
+   <version>2.5</version>
+   <scope>provided</scope>
+</dependency>
+<dependency>
+   <groupId>javax.servlet.jsp</groupId>
+   <artifactId>jsp-api</artifactId>
+   <version>2.1</version>
+   <scope>provided</scope>
+</dependency>
+<dependency>
+   <groupId>javax.servlet</groupId>
+   <artifactId>jstl</artifactId>
+   <version>1.2</version>
+</dependency>
+<dependency>
+   <groupId>org.apache.tomcat</groupId>
+   <artifactId>el-api</artifactId>
+   <version>6.0.26</version>
+   <scope>provided</scope>
+</dependency>
+<dependency>
+   <groupId>org.apache.tomcat</groupId>
+   <artifactId>jasper-el</artifactId>
+   <version>6.0.26</version>
+   <scope>provided</scope>
+</dependency>
+
+
+mvn jetty:run & mvn tomcat:run
+
+Voila.
+
+
+Ps. If you are providing a WAR for another jetty container, you may want to create a profile section which include the provided dependencies.
+
+Ps2. If you prefer Sun's EL libs then replace the org.apache.tomcat dependencies with:
+
+<dependency>
+   <groupId>javax.el</groupId>
+   <artifactId>el-api</artifactId>
+   <version>2.2</version>
+   <scope>compile</scope>
+</dependency>
+<dependency>
+   <groupId>org.glassfish.web</groupId>
+   <artifactId>el-impl</artifactId>
+   <scope>runtime</scope>
+   <version>2.2</version>
+</dependency>

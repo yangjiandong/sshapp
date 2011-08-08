@@ -1,6 +1,15 @@
 springside3
 ------------
 
+2011.08.08
+----------
+
+   1. 解决 jetty+maven+el 问题
+   http://blog.flurdy.com/2010/07/jetty-tomcat-jsp.html
+   save/jetty.maven.el.txt
+
+   modules/parent/pom.xml
+
 2011.07.30
 ----------
 
