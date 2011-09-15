@@ -92,12 +92,6 @@ public class Page<T> {
         String start = request.getParameter(GRID_PARAM_START);
         this.start = StringUtils.isEmpty(start) ? 0 : Integer.valueOf(start);
 
-        if (this.start == 0) {
-            this.pageNo = 1;
-        } else {
-            this.pageNo = this.start / this.pageSize + 1;
-        }
-
         String limit = request.getParameter(GRID_PARAM_PAGESIZE);
         if (StringUtils.isEmpty(limit)) {
             if (this.isExport)
@@ -106,6 +100,12 @@ public class Page<T> {
                 this.pageSize = 20;
         } else {
             this.pageSize = Integer.valueOf(limit);
+        }
+
+        if (this.start == 0) {
+            this.pageNo = 1;
+        } else {
+            this.pageNo = this.start / this.pageSize + 1;
         }
 
         String orderStr = request.getParameter(GRID_PARAM_ORDERBY);
