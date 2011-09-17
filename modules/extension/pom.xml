@@ -2,19 +2,19 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.springside</groupId>
-    <artifactId>springside-parent</artifactId>
+    <groupId>org.sshapp</groupId>
+    <artifactId>sshapp-parent</artifactId>
     <version>4.0.0-SNAPSHOT</version>
   </parent>
-  <artifactId>springside-extension</artifactId>
+  <artifactId>sshapp-extension</artifactId>
   <packaging>jar</packaging>
-  <name>Springside's Extension Module</name>
+  <name>sshapp's Extension Module</name>
 
   <dependencies>
-    <!-- springside -->
+    <!-- sshapp -->
     <dependency>
-      <groupId>org.springside</groupId>
-      <artifactId>springside-core</artifactId>
+      <groupId>org.sshapp</groupId>
+      <artifactId>sshapp-core</artifactId>
     </dependency>
 
     <!-- spring -->
@@ -57,22 +57,6 @@
     <dependency>
       <groupId>com.octo.captcha</groupId>
       <artifactId>jcaptcha</artifactId>
-      <optional>true</optional>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-core</artifactId>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-config</artifactId>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.security</groupId>
-      <artifactId>spring-security-web</artifactId>
       <optional>true</optional>
     </dependency>
 
