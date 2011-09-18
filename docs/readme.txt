@@ -8,6 +8,8 @@ springside
 
 2. rename org.springside to org.sshapp
 
+3. branch bef.shiro(保持个更新前版本)
+
 2011.08.08
 ----------
 
