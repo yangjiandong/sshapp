@@ -6,7 +6,7 @@
   <artifactId>sshapp-parent</artifactId>
   <packaging>pom</packaging>
   <name>org.sshapp's Parent pom.xml</name>
-  <version>4.0.0-SNAPSHOT</version>
+  <version>4.0.0-SNAPSHOT.shiro</version>
   <organization>
     <name>org.sshapp</name>
     <url>http://www.sshapp.org.cn</url>
@@ -14,7 +14,7 @@
 
   <properties>
     <!-- 主要依赖库的版本定义 -->
-    <sshapp.version>4.0.0-SNAPSHOT</sshapp.version>
+    <sshapp.version>4.0.0-SNAPSHOT.shiro</sshapp.version>
     <spring.version>3.0.5.RELEASE</spring.version>
     <org.springframework.integration-version>2.0.0.M4</org.springframework.integration-version>
     <hibernate.version>3.5.5-Final</hibernate.version>
@@ -858,11 +858,6 @@
         <groupId>com.googlecode.aviator</groupId>
         <artifactId>aviator</artifactId>
         <version>2.0</version>
-      </dependency>
-      <dependency>
-        <groupId>net.sf.dozer</groupId>
-        <artifactId>dozer</artifactId>
-        <version>5.2.2</version>
       </dependency>
 
       <!-- template engine -->
