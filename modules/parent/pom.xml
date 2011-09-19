@@ -2,26 +2,26 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.springside</groupId>
-  <artifactId>springside-parent</artifactId>
+  <groupId>org.sshapp</groupId>
+  <artifactId>sshapp-parent</artifactId>
   <packaging>pom</packaging>
-  <name>Springside's Parent pom.xml</name>
+  <name>org.sshapp's Parent pom.xml</name>
   <version>4.0.0-SNAPSHOT</version>
   <organization>
-    <name>SpringSide</name>
-    <url>http://www.springside.org.cn</url>
+    <name>org.sshapp</name>
+    <url>http://www.sshapp.org.cn</url>
   </organization>
 
   <properties>
     <!-- 主要依赖库的版本定义 -->
-    <springside.version>4.0.0-SNAPSHOT</springside.version>
+    <sshapp.version>4.0.0-SNAPSHOT</sshapp.version>
     <spring.version>3.0.5.RELEASE</spring.version>
     <org.springframework.integration-version>2.0.0.M4</org.springframework.integration-version>
     <hibernate.version>3.5.5-Final</hibernate.version>
     <struts2.version>2.2.1</struts2.version>
     <cxf.version>2.2.10</cxf.version>
+    <shiro.version>1.1.0</shiro.version>
     <jersey.version>1.8</jersey.version>
-    <spring-security.version>3.0.5.RELEASE</spring-security.version>
     <activemq.version>5.5.0</activemq.version>
     <jetty.version>7.4.0.v20110414</jetty.version>
     <h2.version>1.2.142</h2.version>
@@ -268,18 +268,18 @@
   <!-- 预定义依赖项的version,scope与exclusions,子项目中只需定义groupId 和 artifactId 即可 -->
   <dependencyManagement>
     <dependencies>
-      <!-- springside modules begin -->
+      <!-- sshapp modules begin -->
       <dependency>
-        <groupId>org.springside</groupId>
-        <artifactId>springside-core</artifactId>
-        <version>${springside.version}</version>
+        <groupId>org.sshapp</groupId>
+        <artifactId>sshapp-core</artifactId>
+        <version>${sshapp.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.springside</groupId>
-        <artifactId>springside-extension</artifactId>
-        <version>${springside.version}</version>
+        <groupId>org.sshapp</groupId>
+        <artifactId>sshapp-extension</artifactId>
+        <version>${sshapp.version}</version>
       </dependency>
-      <!-- springside modules end -->
+      <!-- sshapp modules end -->
 
       <!-- spring begin -->
       <dependency>
@@ -590,26 +590,23 @@
       <!-- rest end -->
 
       <!-- security begin -->
+      <!-- security begin -->
       <dependency>
-        <groupId>org.springframework.security</groupId>
-        <artifactId>spring-security-core</artifactId>
-        <version>${spring-security.version}</version>
+        <groupId>org.apache.shiro</groupId>
+        <artifactId>shiro-core</artifactId>
+        <version>${shiro.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.springframework.security</groupId>
-        <artifactId>spring-security-config</artifactId>
-        <version>${spring-security.version}</version>
+        <groupId>org.apache.shiro</groupId>
+        <artifactId>shiro-spring</artifactId>
+        <version>${shiro.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.springframework.security</groupId>
-        <artifactId>spring-security-web</artifactId>
-        <version>${spring-security.version}</version>
+        <groupId>org.apache.shiro</groupId>
+        <artifactId>shiro-web</artifactId>
+        <version>${shiro.version}</version>
       </dependency>
-      <dependency>
-        <groupId>org.springframework.security</groupId>
-        <artifactId>spring-security-taglibs</artifactId>
-        <version>${spring-security.version}</version>
-      </dependency>
+      <!-- security end -->
 
       <dependency>
         <groupId>com.octo.captcha</groupId>
@@ -861,11 +858,6 @@
         <groupId>com.googlecode.aviator</groupId>
         <artifactId>aviator</artifactId>
         <version>2.0</version>
-      </dependency>
-      <dependency>
-        <groupId>net.sf.dozer</groupId>
-        <artifactId>dozer</artifactId>
-        <version>5.2.2</version>
       </dependency>
 
       <!-- template engine -->
