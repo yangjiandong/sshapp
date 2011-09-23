@@ -1,6 +1,13 @@
 springside
 ------------
 
+2011.09.23
+----------
+
+   1. add spring.integration.version 2.0.5
+
+   2. use guava, how to remove google-collection
+
 2011.09.18
 ----------
 

@@ -16,7 +16,7 @@
     <!-- 主要依赖库的版本定义 -->
     <sshapp.version>4.0.0-SNAPSHOT</sshapp.version>
     <spring.version>3.0.5.RELEASE</spring.version>
-    <org.springframework.integration-version>2.0.0.M4</org.springframework.integration-version>
+    <spring.integration.version>2.0.5.RELEASE</spring.integration.version>
     <hibernate.version>3.5.5-Final</hibernate.version>
     <struts2.version>2.2.1</struts2.version>
     <cxf.version>2.2.10</cxf.version>
@@ -329,6 +329,16 @@
         <groupId>cglib</groupId>
         <artifactId>cglib-nodep</artifactId>
         <version>2.2.2</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.integration</groupId>
+        <artifactId>spring-integration-core</artifactId>
+        <version>${spring.integration.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework.integration</groupId>
+        <artifactId>spring-integration-http</artifactId>
+        <version>${spring.integration.version}</version>
       </dependency>
       <!-- spring end -->
 
@@ -804,18 +814,18 @@
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
         <version>r09</version>
+        <exclusions>
+          <exclusion>
+            <groupId>com.google.collections</groupId>
+            <artifactId>google-collections</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <dependency>
         <groupId>net.sf.opencsv</groupId>
         <artifactId>opencsv</artifactId>
         <version>2.0</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.google.collections</groupId>
-        <artifactId>google-collections</artifactId>
-        <version>1.0</version>
       </dependency>
 
       <dependency>
