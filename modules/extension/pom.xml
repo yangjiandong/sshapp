@@ -159,6 +159,10 @@
       <groupId>jfree</groupId>
       <artifactId>eastwood</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.apache.abdera</groupId>
+      <artifactId>abdera-parser</artifactId>
+    </dependency>
 
     <!-- test -->
     <dependency>

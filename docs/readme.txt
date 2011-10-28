@@ -1,6 +1,19 @@
 springside
 ------------
 
+2011.10.27
+----------
+
+   1. add apache abdera,本想处理short url的，但没找到代码
+   
+      <dependency>
+        <groupId>org.apache.abdera</groupId>
+        <artifactId>abdera-parser</artifactId>
+        <version>1.1.2</version>
+      </dependency>
+      
+      process slug url
+      
 2011.09.23
 ----------
 
