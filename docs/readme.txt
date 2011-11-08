@@ -1,6 +1,20 @@
 springside
 ------------
 
+2011.11.08
+----------
+
+   1. tag
+   git tag -a spring3.05
+
+   --推送到remote
+   git push origin spring3.05
+
+   --或全部tag
+   git push origin --tags
+   
+   spring update to 3.05
+   
 2011.10.27
 ----------
 
