@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.sshapp</groupId>
     <artifactId>sshapp-parent</artifactId>
-    <version>4.0.0-SNAPSHOT</version>
+    <version>3.0.6</version>
   </parent>
   <artifactId>sshapp-extension</artifactId>
   <packaging>jar</packaging>
@@ -158,10 +158,6 @@
     <dependency>
       <groupId>jfree</groupId>
       <artifactId>eastwood</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.abdera</groupId>
-      <artifactId>abdera-parser</artifactId>
     </dependency>
 
     <!-- test -->
