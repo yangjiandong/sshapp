@@ -1,6 +1,6 @@
 /*
- * $HeadURL: https://springside.googlecode.com/svn/springside3/trunk/modules/core/src/test/java/org/springside/modules/unit/utils/ThreadUtilsTest.java $
- * $Id: ThreadUtilsTest.java 1213 2010-09-11 16:28:22Z calvinxiu $
+ * $HeadURL: http://springside.googlecode.com/svn/springside4/trunk/modules/core/src/test/java/org/springside/modules/unit/utils/ThreadUtilsTest.java $
+ * $Id: ThreadUtilsTest.java 1511 2011-04-24 03:36:26Z calvinxiu $
  * Copyright (c) 2010 by Ericsson, all rights reserved.
  */
 
@@ -85,7 +85,7 @@ public class ThreadUtilsTest {
         assertEquals("InterruptedException", appender.getFirstLog().getMessage());
     }
 
-    //@Test
+    @Test
     public void normalShutdown() throws InterruptedException {
 
         Logger logger = LoggerFactory.getLogger("test");
@@ -99,31 +99,7 @@ public class ThreadUtilsTest {
         pool.execute(task);
         ThreadUtils.normalShutdown(pool, 500, TimeUnit.MILLISECONDS);
         assertTrue(pool.isTerminated());
-        assertEquals("InterruptedException", appender.getFirstLog().getMessage());
-
-        //self thread interrupt while calling shutdown
-        appender.clearLogs();
-        final ExecutorService selfpool = Executors.newSingleThreadExecutor();
-        task = new Task(logger, 100000, 1000);
-        selfpool.execute(task);
-
-        final CountDownLatch lock = new CountDownLatch(1);
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                lock.countDown();
-                ThreadUtils.normalShutdown(selfpool, 200000, TimeUnit.MILLISECONDS);
-            }
-        });
-        thread.start();
-        lock.await();
-        thread.interrupt();
-
-        ThreadUtils.sleep(1000);
-
-        //System.out.println(appender.getFirstLog().getMessage());
-        // TODO
-        assertEquals("InterruptedException", appender.getFirstLog().getMessage());
+        assertEquals("InterruptedException", appender.getFirstMessage());
     }
 
     static class Task implements Runnable {

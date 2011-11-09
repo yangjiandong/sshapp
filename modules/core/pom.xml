@@ -74,6 +74,11 @@
     </dependency>
     <!-- shiro security end -->
 
+    <dependency>
+      <groupId>jaxen</groupId>
+      <artifactId>jaxen</artifactId>
+    </dependency>
+
     <!-- utils -->
     <dependency>
       <groupId>net.sf.dozer</groupId>
