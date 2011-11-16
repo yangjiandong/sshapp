@@ -70,7 +70,7 @@ examples/showcase/src/test/resources/data/export-data.xml
 # day.txt
 # bcrypt -r day.txt(day.txt.bfe)
 docs/other/no
-docs/other/day.txt
+# docs/other/day.txt
 
 classes
 work
