@@ -30,6 +30,7 @@
     <mysql.version>5.1.6</mysql.version>
     <mssql.jtds.version>1.2.2</mssql.jtds.version>
     <oracle.version>10.2.0.2.0</oracle.version>
+    <cache.version>5.0</cache.version>
     <quartz.version>1.8.5</quartz.version>
     <jackson.version>1.9.0</jackson.version>
     <slf4j.version>1.6.3</slf4j.version>
@@ -402,6 +403,13 @@
         <groupId>com.oracle</groupId>
         <artifactId>oracle</artifactId>
         <version>${oracle.version}</version>
+        <scope>runtime</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>com.cache</groupId>
+        <artifactId>cachedb</artifactId>
+        <version>${cache.version}</version>
         <scope>runtime</scope>
       </dependency>
 
@@ -798,6 +806,11 @@
         <artifactId>commons-lang</artifactId>
         <version>2.6</version>
       </dependency>
+      <dependency>
+		<groupId>org.apache.commons</groupId>
+		<artifactId>commons-lang3</artifactId>
+		<version>3.1</version>
+	  </dependency>
       <dependency>
         <groupId>commons-collections</groupId>
         <artifactId>commons-collections</artifactId>
