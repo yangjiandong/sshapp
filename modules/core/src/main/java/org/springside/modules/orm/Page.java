@@ -94,6 +94,10 @@ public class Page<T> {
 
         String limit = request.getParameter(GRID_PARAM_PAGESIZE);
         if (StringUtils.isEmpty(limit)) {
+            limit = (String)request.getAttribute(GRID_PARAM_PAGESIZE);
+        }
+
+        if (StringUtils.isEmpty(limit)) {
             if (this.isExport)
                 this.pageSize = 1000;
             else
