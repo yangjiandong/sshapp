@@ -17,7 +17,7 @@ public class GridMetaUtil {
         GridColumnMeta col = null;
 
         try {
-            Class c = Class.forName(className);
+            Class<?> c = Class.forName(className);
             Field[] fields = c.getDeclaredFields();
             for (Field field : fields) {
                 if (field.isAnnotationPresent(ViewField.class)) {
@@ -31,11 +31,13 @@ public class GridMetaUtil {
                     col.setFixed(vf.fixed());
                     col.setWidth(vf.width());
                     col.setAlign(vf.align());
+                    col.setSortByField(vf.sortByField());
+                    col.setIsMoney(vf.isMoney());
                     meta.add(col);
                 }
             }
 
-            Class superClass = c.getSuperclass();
+            Class<?> superClass = c.getSuperclass();
             while (superClass != Object.class) {
                 Field[] fields2 = superClass.getDeclaredFields();
                 //Field[] fields = c.getFields();
@@ -51,6 +53,8 @@ public class GridMetaUtil {
                         col.setFixed(vf.fixed());
                         col.setWidth(vf.width());
                         col.setAlign(vf.align());
+                        col.setSortByField(vf.sortByField());
+                        col.setIsMoney(vf.isMoney());
                         meta.add(col);
                     }
                 }
@@ -69,9 +73,8 @@ public class GridMetaUtil {
     /**
      * 从DBObject类中获取网格元数据信息，返回GridColumnMeta数组
      */
-    @SuppressWarnings("unchecked")
     public static GridColumnMeta[] getGridColumnMeta(String className) {
-        Class c;
+        Class<?> c;
         try {
             c = Class.forName(className);
         } catch (ClassNotFoundException e) {
@@ -104,6 +107,8 @@ public class GridMetaUtil {
                 col.setFixed(vf.fixed());
                 col.setWidth(vf.width());
                 col.setAlign(vf.align());
+                col.setSortByField(vf.sortByField());
+                col.setIsMoney(vf.isMoney());
 
                 meta[m++] = col;
             }

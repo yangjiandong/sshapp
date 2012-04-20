@@ -40,4 +40,10 @@ public @interface ViewField {
     // right
     // middle
     String align() default "left";
+
+    //虚拟字段指定排序字段
+    String sortByField() default "";
+
+    //是否为金额字段,进行前台格式化渲染
+    boolean isMoney() default false;
 }
