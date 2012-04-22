@@ -3,17 +3,11 @@ package org.springside.modules.orm.grid;
 public class GridColumnMeta {
 
     private String name;
-
     private String header;
-
     private boolean hidden;
-
     private boolean sortable;
-
     private String type;
-
     private String align;
-
     // string
     // int
     // float
@@ -21,8 +15,9 @@ public class GridColumnMeta {
     // date //type: 'date', dateFormat: 'Y.m.d'
 
     private boolean fixed;
-
     private int width;
+    private String sortByField;
+    private boolean isMoney;
 
     public void setType(String obj) {
         this.type = obj;
@@ -86,6 +81,22 @@ public class GridColumnMeta {
 
     public void setAlign(String align) {
         this.align = align;
+    }
+
+    public String getSortByField() {
+        return sortByField;
+    }
+
+    public void setSortByField(String sortByField) {
+        this.sortByField = sortByField;
+    }
+
+    public boolean isMoney() {
+        return isMoney;
+    }
+
+    public void setIsMoney(boolean isMoney) {
+        this.isMoney = isMoney;
     }
 
 } // EOP
